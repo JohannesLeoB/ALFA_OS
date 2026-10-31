@@ -1,7 +1,7 @@
 import Foundation
 import Hub
 
-struct TokenState: Equatable, Sendable {
+struct StoredToken: Equatable, Sendable {
     static let accessKey = "accessToken"
     static let refreshKey = "refreshToken"
     static let expiryKey = "expiresAt"

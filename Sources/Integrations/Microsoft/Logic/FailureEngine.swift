@@ -41,21 +41,6 @@ enum FailureEngine {
     }
 }
 
-enum Base64Engine {
-    static func encodeURL(_ data: Data) -> String {
-        data.base64EncodedString()
-            .replacingOccurrences(of: "+", with: "-")
-            .replacingOccurrences(of: "/", with: "_")
-            .replacingOccurrences(of: "=", with: "")
-    }
-
-    static func decodeURL(_ text: String) -> Data? {
-        var padded = text.replacingOccurrences(of: "-", with: "+").replacingOccurrences(of: "_", with: "/")
-        while padded.count % 4 != 0 { padded += "=" }
-        return Data(base64Encoded: padded)
-    }
-}
-
 enum FormBodyEngine {
     static func encode(_ values: [String: String]) -> Data {
         Data(values.map { key, value in "\(escape(key))=\(escape(value))" }.sorted().joined(separator: "&").utf8)
@@ -82,7 +67,7 @@ enum IdentityParser {
             }
         }
         let parts = idToken.split(separator: ".", omittingEmptySubsequences: false)
-        guard parts.count == 3, let data = Base64Engine.decodeURL(String(parts[1])),
+        guard parts.count == 3, let data = URLSafeEngine.decodeURL(String(parts[1])),
               let claims = try? JSONDecoder().decode(Claims.self, from: data) else { return nil }
         let candidates = [claims.email, claims.preferredUsername].compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
         guard let address = candidates.first(where: { $0.contains("@") }) else { return nil }

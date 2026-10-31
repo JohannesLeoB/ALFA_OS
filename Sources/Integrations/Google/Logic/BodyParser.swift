@@ -73,7 +73,7 @@ enum BodyParser {
     }
 
     private static func decode(_ data: String?, headers: [GmailHeader]?) -> String? {
-        guard let data, !data.isEmpty, let bytes = Base64Engine.decodeURL(data) else { return nil }
+        guard let data, !data.isEmpty, let bytes = URLSafeEngine.decodeURL(data) else { return nil }
         let contentType = headers?.first { $0.name.lowercased() == "content-type" }?.value
         return FlowedEngine.text(bytes, contentType: contentType)
     }

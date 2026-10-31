@@ -13,9 +13,9 @@ struct ProbeClient: ProbePort {
     let policy: RequestPolicy
 
     func probe(_ inlet: Inlet, _ grant: Grant) async throws -> ProbeResult {
-        let state: TokenState
+        let state: StoredToken
         do {
-            state = try TokenState(grant: grant)
+            state = try StoredToken(grant: grant)
         } catch {
             return ProbeResult(account: inlet.id, rejection: Hint(text: Self.grantKey, detail: String(describing: error)))
         }

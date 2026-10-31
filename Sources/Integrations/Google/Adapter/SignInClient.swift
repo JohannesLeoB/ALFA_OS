@@ -30,7 +30,7 @@ struct SignInClient: SignInPort {
                 throw SignInFailure.redirectStateMismatch
             }
             let token = try await oauth.exchange(code: code, verifier: params.pkce.verifier, redirectURI: redirectURI)
-            return TokenState(token: token, previousRefresh: nil, now: clock()).grant
+            return StoredToken(token: token, previousRefresh: nil, now: clock()).grant
         } catch {
             server.stop()
             throw error
@@ -38,10 +38,10 @@ struct SignInClient: SignInPort {
     }
 
     func renew(_ grant: Grant) async throws -> Grant {
-        let state = try TokenState(grant: grant)
+        let state = try StoredToken(grant: grant)
         guard let refreshToken = state.refreshToken else { throw SignInFailure.refreshUnavailable }
         let token = try await oauth.refresh(refreshToken: refreshToken)
-        return TokenState(token: token, previousRefresh: refreshToken, now: clock()).grant
+        return StoredToken(token: token, previousRefresh: refreshToken, now: clock()).grant
     }
 
     func signOut(_ inlet: Inlet) async throws {}

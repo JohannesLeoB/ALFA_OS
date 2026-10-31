@@ -122,7 +122,7 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
         struct Body: Decodable { var raw: String? }
         let url = try RequestClient.url(messages + "/\(messageID)", query: [URLQueryItem(name: "format", value: "raw")])
         guard let body = try? JSONDecoder().decode(Body.self, from: try await requests.send(url)), let raw = body.raw,
-              let data = Base64Engine.decodeURL(raw) else {
+              let data = URLSafeEngine.decodeURL(raw) else {
             throw GoogleFailure.decodingFailed
         }
         return data
@@ -147,7 +147,7 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
         guard let body = try? JSONDecoder().decode(Body.self, from: data), let raw = body.data else {
             throw GoogleFailure.decodingFailed
         }
-        return Base64Engine.decodeURL(raw) ?? Data()
+        return URLSafeEngine.decodeURL(raw) ?? Data()
     }
 
     func createDraft(_ draft: Draft) async throws -> SavedDraft {

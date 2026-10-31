@@ -87,12 +87,12 @@ struct OAuthClient: TokenRefreshPort {
 final class MailTokenClient: MailTokenPort, Sendable {
     static let expirySkew: TimeInterval = 60
 
-    private let state: Mutex<TokenState>
+    private let state: Mutex<StoredToken>
     private let refresher: any TokenRefreshPort
     private let clock: @Sendable () -> Date
     private let renewal: GrantRenewal
 
-    init(state: TokenState, refresher: any TokenRefreshPort, clock: @escaping @Sendable () -> Date,
+    init(state: StoredToken, refresher: any TokenRefreshPort, clock: @escaping @Sendable () -> Date,
          renewal: GrantRenewal = .ignoring) {
         self.state = Mutex(state)
         self.refresher = refresher
@@ -106,7 +106,7 @@ final class MailTokenClient: MailTokenPort, Sendable {
         do {
             guard let refreshToken = current.refreshToken else { throw SignInFailure.refreshUnavailable }
             let token = try await refresher.refresh(refreshToken: refreshToken)
-            let renewed = TokenState(token: token, identity: current.identity, previousRefresh: refreshToken, now: clock())
+            let renewed = StoredToken(token: token, identity: current.identity, previousRefresh: refreshToken, now: clock())
             state.withLock { $0 = renewed }
             renewal.renewed(renewed.grant)
             return renewed.accessToken
@@ -311,7 +311,7 @@ public struct OutlookAccess: ProviderPort {
         guard wantsChanges || key == ObjectIdentifier((any MailTransportPort).self) else {
             throw HubFailure.capabilityMissing(inlet.id, inlet.capabilities.first ?? .mail)
         }
-        let state = try TokenState(grant: grant)
+        let state = try StoredToken(grant: grant)
         let tokens = MailTokenClient(state: state, refresher: oauth, clock: clock, renewal: renewal)
         let made: Any = wantsChanges
             ? mail.changes(for: inlet.id, address: state.identity.address, name: state.identity.name,
@@ -341,9 +341,9 @@ struct ProbeClient: ProbePort {
     let clock: @Sendable () -> Date
 
     func probe(_ inlet: Inlet, _ grant: Grant) async throws -> ProbeResult {
-        let state: TokenState
+        let state: StoredToken
         do {
-            state = try TokenState(grant: grant)
+            state = try StoredToken(grant: grant)
         } catch {
             return ProbeResult(account: inlet.id, rejection: Hint(text: Self.grantKey, detail: String(describing: error)))
         }
@@ -388,7 +388,7 @@ struct SignInClient: SignInPort {
             }
             let token = try await oauth.exchange(code: code, verifier: params.pkce.verifier, redirectURI: redirectURI)
             guard let identity = token.idToken.flatMap(IdentityParser.parse) else { throw MicrosoftFailure.identityMissing }
-            return TokenState(token: token, identity: identity, previousRefresh: nil, now: clock()).grant
+            return StoredToken(token: token, identity: identity, previousRefresh: nil, now: clock()).grant
         } catch {
             server.stop()
             throw error
@@ -396,10 +396,10 @@ struct SignInClient: SignInPort {
     }
 
     func renew(_ grant: Grant) async throws -> Grant {
-        let state = try TokenState(grant: grant)
+        let state = try StoredToken(grant: grant)
         guard let refreshToken = state.refreshToken else { throw SignInFailure.refreshUnavailable }
         let token = try await oauth.refresh(refreshToken: refreshToken)
-        return TokenState(token: token, identity: state.identity, previousRefresh: refreshToken, now: clock()).grant
+        return StoredToken(token: token, identity: state.identity, previousRefresh: refreshToken, now: clock()).grant
     }
 
     func signOut(_ inlet: Inlet) async throws {}

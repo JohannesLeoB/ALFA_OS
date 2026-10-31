@@ -99,8 +99,8 @@ private final class FakeRedirect: RedirectPort, @unchecked Sendable {
 private let grantStart = Date(timeIntervalSince1970: 1_000_000)
 
 private func grant(expiresIn: TimeInterval = 3600, refresh: String? = "refresh") -> Grant {
-    var values = [TokenState.accessKey: "access", TokenState.expiryKey: String(grantStart.addingTimeInterval(expiresIn).timeIntervalSince1970)]
-    if let refresh { values[TokenState.refreshKey] = refresh }
+    var values = [StoredToken.accessKey: "access", StoredToken.expiryKey: String(grantStart.addingTimeInterval(expiresIn).timeIntervalSince1970)]
+    if let refresh { values[StoredToken.refreshKey] = refresh }
     return Grant(values: values)
 }
 
@@ -222,17 +222,17 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(RequestPolicy(firstDelay: .seconds(1)).delay(afterAttempt: 3), .seconds(4))
     }
 
-    func testTokenStateRoundTripsAndRejectsIncompleteGrants() throws {
-        let state = try TokenState(grant: grant())
+    func testStoredTokenRoundTripsAndRejectsIncompleteGrants() throws {
+        let state = try StoredToken(grant: grant())
         XCTAssertEqual(state.refreshToken, "refresh")
-        XCTAssertEqual(try TokenState(grant: state.grant), state)
-        XCTAssertThrowsError(try TokenState(grant: Grant(values: [:]))) {
-            XCTAssertEqual($0 as? SignInFailure, .grantIncomplete(TokenState.accessKey))
+        XCTAssertEqual(try StoredToken(grant: state.grant), state)
+        XCTAssertThrowsError(try StoredToken(grant: Grant(values: [:]))) {
+            XCTAssertEqual($0 as? SignInFailure, .grantIncomplete(StoredToken.accessKey))
         }
-        XCTAssertThrowsError(try TokenState(grant: Grant(values: [TokenState.accessKey: "a"]))) {
-            XCTAssertEqual($0 as? SignInFailure, .grantIncomplete(TokenState.expiryKey))
+        XCTAssertThrowsError(try StoredToken(grant: Grant(values: [StoredToken.accessKey: "a"]))) {
+            XCTAssertEqual($0 as? SignInFailure, .grantIncomplete(StoredToken.expiryKey))
         }
-        let renewed = TokenState(token: OAuthToken(accessToken: "n", expiresIn: nil, refreshToken: nil), previousRefresh: "keep",
+        let renewed = StoredToken(token: OAuthToken(accessToken: "n", expiresIn: nil, refreshToken: nil), previousRefresh: "keep",
                                  now: grantStart)
         XCTAssertEqual(renewed.refreshToken, "keep")
         XCTAssertEqual(renewed.expiresAt, grantStart.addingTimeInterval(3600))
@@ -240,7 +240,7 @@ final class GoogleTests: XCTestCase {
 
     func testAccessTokenClientUsesTheLiveTokenWithoutRefreshing() async throws {
         let refresher = StubRefresher(result: .failure(.decodingFailed))
-        let client = AccessTokenClient(state: try TokenState(grant: grant()), refresher: refresher, clock: { grantStart })
+        let client = AccessTokenClient(state: try StoredToken(grant: grant()), refresher: refresher, clock: { grantStart })
         let token = try await client.validAccessToken()
         XCTAssertEqual(token, "access")
         XCTAssertEqual(refresher.count.with { $0 }, 0)
@@ -251,13 +251,13 @@ final class GoogleTests: XCTestCase {
         let failed = Locked<Int>(0)
         let refresher = StubRefresher(result: .success(OAuthToken(accessToken: "fresh", expiresIn: 3600, refreshToken: nil)))
         let client = AccessTokenClient(
-            state: try TokenState(grant: grant(expiresIn: 30)), refresher: refresher, clock: { grantStart },
+            state: try StoredToken(grant: grant(expiresIn: 30)), refresher: refresher, clock: { grantStart },
             renewal: GrantRenewal(renewed: { grant in renewed.with { $0.append(grant) } }, failed: { _ in failed.with { $0 += 1 } }))
         let first = try await client.validAccessToken()
         let second = try await client.validAccessToken()
         XCTAssertEqual([first, second], ["fresh", "fresh"])
         XCTAssertEqual(refresher.count.with { $0 }, 1)
-        XCTAssertEqual(renewed.with { $0 }.first?.values[TokenState.refreshKey], "refresh")
+        XCTAssertEqual(renewed.with { $0 }.first?.values[StoredToken.refreshKey], "refresh")
         XCTAssertEqual(failed.with { $0 }, 0)
     }
 
@@ -265,7 +265,7 @@ final class GoogleTests: XCTestCase {
         let failed = Locked<Int>(0)
         let renewal = GrantRenewal(renewed: { _ in }, failed: { _ in failed.with { $0 += 1 } })
         func run(_ result: Result<OAuthToken, GoogleFailure>, refresh: String? = "refresh") async {
-            let client = AccessTokenClient(state: (try? TokenState(grant: grant(expiresIn: 0, refresh: refresh)))!,
+            let client = AccessTokenClient(state: (try? StoredToken(grant: grant(expiresIn: 0, refresh: refresh)))!,
                                            refresher: StubRefresher(result: result), clock: { grantStart }, renewal: renewal)
             _ = try? await client.validAccessToken()
         }
@@ -376,9 +376,9 @@ final class GoogleTests: XCTestCase {
             },
             clock: { grantStart })
         let result = try await signIn.signIn(inlet([.mail]), input: [:])
-        XCTAssertEqual(result.values[TokenState.accessKey], "a")
-        XCTAssertEqual(result.values[TokenState.refreshKey], "r")
-        XCTAssertEqual(result.values[TokenState.expiryKey], String(grantStart.addingTimeInterval(3600).timeIntervalSince1970))
+        XCTAssertEqual(result.values[StoredToken.accessKey], "a")
+        XCTAssertEqual(result.values[StoredToken.refreshKey], "r")
+        XCTAssertEqual(result.values[StoredToken.expiryKey], String(grantStart.addingTimeInterval(3600).timeIntervalSince1970))
         XCTAssertTrue(String(decoding: http.calls[0].body, as: UTF8.self).contains("code=the-code"))
     }
 
@@ -462,8 +462,8 @@ final class GoogleTests: XCTestCase {
         let signIn = SignInClient(oauth: OAuthClient(config: ClientConfig(clientID: "id", clientSecret: ""), http: http),
                                   openBrowser: { _ in true }, makeRedirect: { FakeRedirect { $0 } }, clock: { grantStart })
         let renewed = try await signIn.renew(grant())
-        XCTAssertEqual(renewed.values[TokenState.accessKey], "fresh")
-        XCTAssertEqual(renewed.values[TokenState.refreshKey], "refresh")
+        XCTAssertEqual(renewed.values[StoredToken.accessKey], "fresh")
+        XCTAssertEqual(renewed.values[StoredToken.refreshKey], "refresh")
         do {
             _ = try await signIn.renew(grant(refresh: nil))
             XCTFail("must throw")
@@ -986,7 +986,7 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(try json(http.calls[3]) as? [String: String], ["id": "d1"])
         let message = try XCTUnwrap(json(http.calls[0])["message"] as? [String: String])
         XCTAssertEqual(message["threadId"], "t1")
-        let raw = String(decoding: try XCTUnwrap(Base64Engine.decodeURL(try XCTUnwrap(message["raw"]))), as: UTF8.self)
+        let raw = String(decoding: try XCTUnwrap(URLSafeEngine.decodeURL(try XCTUnwrap(message["raw"]))), as: UTF8.self)
         XCTAssertTrue(raw.contains("To: ann@x.test"))
         XCTAssertTrue(raw.contains("Subject: Hi"))
         XCTAssertTrue(raw.contains("Message-ID: <abc@mail.gmail.com>"))
@@ -1007,13 +1007,13 @@ final class GoogleTests: XCTestCase {
     func testSentMessagesWithoutAThreadOmitTheThreadId() {
         let payload = DraftMimeEngine.payload(Draft(to: "a@x.test", subject: "S", body: "b", inReplyTo: "ref@x"))
         XCTAssertNil(payload["threadId"])
-        let raw = String(decoding: Base64Engine.decodeURL(payload["raw"] ?? "") ?? Data(), as: UTF8.self)
+        let raw = String(decoding: URLSafeEngine.decodeURL(payload["raw"] ?? "") ?? Data(), as: UTF8.self)
         XCTAssertTrue(raw.contains("In-Reply-To: <ref@x>"))
     }
 
     func testAttachmentsGoThroughTheMailBuilder() throws {
         let draft = Draft(to: "a@x.test", subject: "S", body: "b", attachments: [Attachment(filename: "a.txt", mimeType: "text/plain", data: Data("hi".utf8))])
-        let raw = String(decoding: Base64Engine.decodeURL(DraftMimeEngine.payload(draft)["raw"] ?? "") ?? Data(), as: UTF8.self)
+        let raw = String(decoding: URLSafeEngine.decodeURL(DraftMimeEngine.payload(draft)["raw"] ?? "") ?? Data(), as: UTF8.self)
         XCTAssertTrue(raw.contains("multipart/mixed"))
         XCTAssertTrue(raw.contains("filename=\"a.txt\""))
     }
@@ -1095,7 +1095,7 @@ final class GoogleTests: XCTestCase {
         XCTAssertNotNil(MessageParser.emailDate("Mon, 5 Jan 2026 10:00:00 +0100 (CET)"))
         XCTAssertNotNil(MessageParser.emailDate("5 Jan 2026 10:00 +0100"))
         XCTAssertNil(MessageParser.emailDate("soon"))
-        XCTAssertEqual(Base64Engine.decodeURL(Base64Engine.encodeURL(Data([251, 255, 254]))), Data([251, 255, 254]))
+        XCTAssertEqual(URLSafeEngine.decodeURL(URLSafeEngine.encodeURL(Data([251, 255, 254]))), Data([251, 255, 254]))
     }
 
     func testMessageCacheStoreExpires() async {
@@ -1495,7 +1495,7 @@ final class GoogleTests: XCTestCase {
             XCTAssertEqual($0 as? HubFailure, .capabilityMissing("g", .mail))
         }
         XCTAssertThrowsError(try google.adapter((any FilesPort).self, for: inlet([.files]), Grant(values: [:]), renewal: .ignoring)) {
-            XCTAssertEqual($0 as? SignInFailure, .grantIncomplete(TokenState.accessKey))
+            XCTAssertEqual($0 as? SignInFailure, .grantIncomplete(StoredToken.accessKey))
         }
     }
 
@@ -1508,7 +1508,7 @@ final class GoogleTests: XCTestCase {
         let mail = try google.adapter((any MailTransportPort).self, for: inlet([.mail]), grant(expiresIn: 0), renewal: GrantRenewal(
             renewed: { grant in renewed.with { $0.append(grant) } }, failed: { _ in }))
         _ = try await mail.listFolders()
-        XCTAssertEqual(renewed.with { $0 }.first?.values[TokenState.accessKey], "fresh")
+        XCTAssertEqual(renewed.with { $0 }.first?.values[StoredToken.accessKey], "fresh")
         XCTAssertEqual(http.calls.last?.authorization, "Bearer fresh")
         XCTAssertEqual(google.classify(GoogleFailure.notConnected(.gmail)).kind, .transient)
     }
@@ -1642,7 +1642,7 @@ extension GoogleTests {
         XCTAssertEqual(http.calls.map { $0.method + " " + $0.path }, ["GET /gmail/v1/users/me/settings/sendAs"])
         let draft = Draft(to: "ann@x.test", subject: "Hi", body: "text", messageID: "abc", from: Participant(name: "J\u{F6}", address: "c@x.test"))
         let message = DraftMimeEngine.payload(draft)
-        let raw = String(decoding: try XCTUnwrap(Base64Engine.decodeURL(try XCTUnwrap(message["raw"]))), as: UTF8.self)
+        let raw = String(decoding: try XCTUnwrap(URLSafeEngine.decodeURL(try XCTUnwrap(message["raw"]))), as: UTF8.self)
         XCTAssertTrue(raw.hasPrefix("From: =?UTF-8?B?"))
         XCTAssertTrue(raw.contains("<c@x.test>"))
     }

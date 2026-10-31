@@ -5,12 +5,12 @@ import Synchronization
 final class AccessTokenClient: AccessTokenPort, Sendable {
     static let expirySkew: TimeInterval = 60
 
-    private let state: Mutex<TokenState>
+    private let state: Mutex<StoredToken>
     private let refresher: any TokenRefreshPort
     private let clock: @Sendable () -> Date
     private let renewal: GrantRenewal
 
-    init(state: TokenState, refresher: any TokenRefreshPort, clock: @escaping @Sendable () -> Date,
+    init(state: StoredToken, refresher: any TokenRefreshPort, clock: @escaping @Sendable () -> Date,
          renewal: GrantRenewal = .ignoring) {
         self.state = Mutex(state)
         self.refresher = refresher
@@ -24,7 +24,7 @@ final class AccessTokenClient: AccessTokenPort, Sendable {
         do {
             guard let refreshToken = current.refreshToken else { throw SignInFailure.refreshUnavailable }
             let token = try await refresher.refresh(refreshToken: refreshToken)
-            let renewed = TokenState(token: token, previousRefresh: refreshToken, now: clock())
+            let renewed = StoredToken(token: token, previousRefresh: refreshToken, now: clock())
             state.withLock { $0 = renewed }
             renewal.renewed(renewed.grant)
             return renewed.accessToken

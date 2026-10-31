@@ -69,11 +69,11 @@ private let identity = MailIdentity(address: "me@outlook.com", name: "Me")
 
 private func idToken(_ claims: [String: String]) -> String {
     let payload = try? JSONSerialization.data(withJSONObject: claims)
-    return "e30." + Base64Engine.encodeURL(payload ?? Data()) + ".sig"
+    return "e30." + URLSafeEngine.encodeURL(payload ?? Data()) + ".sig"
 }
 
-private func state(expiresIn: TimeInterval = 3600, refresh: String? = "refresh") -> TokenState {
-    TokenState(accessToken: "access", refreshToken: refresh, expiresAt: start.addingTimeInterval(expiresIn), identity: identity)
+private func state(expiresIn: TimeInterval = 3600, refresh: String? = "refresh") -> StoredToken {
+    StoredToken(accessToken: "access", refreshToken: refresh, expiresAt: start.addingTimeInterval(expiresIn), identity: identity)
 }
 
 private func inlet() -> Inlet {
@@ -221,28 +221,28 @@ final class MicrosoftTests: XCTestCase {
         XCTAssertNil(IdentityParser.parse(idToken: "a.!!!.c"))
     }
 
-    func testTokenStateSurvivesAGrantRoundTrip() throws {
+    func testStoredTokenSurvivesAGrantRoundTrip() throws {
         let original = state()
-        XCTAssertEqual(try TokenState(grant: original.grant), original)
-        XCTAssertNil(try TokenState(grant: state(refresh: nil).grant).refreshToken)
+        XCTAssertEqual(try StoredToken(grant: original.grant), original)
+        XCTAssertNil(try StoredToken(grant: state(refresh: nil).grant).refreshToken)
     }
 
     func testIncompleteGrantsNameTheMissingKey() {
-        XCTAssertThrowsError(try TokenState(grant: Grant(values: [:]))) { error in
-            XCTAssertEqual(error as? SignInFailure, .grantIncomplete(TokenState.expiryKey))
+        XCTAssertThrowsError(try StoredToken(grant: Grant(values: [:]))) { error in
+            XCTAssertEqual(error as? SignInFailure, .grantIncomplete(StoredToken.expiryKey))
         }
         var values = state().grant.values
-        values[TokenState.addressKey] = nil
-        XCTAssertThrowsError(try TokenState(grant: Grant(values: values))) { error in
-            XCTAssertEqual(error as? SignInFailure, .grantIncomplete(TokenState.addressKey))
+        values[StoredToken.addressKey] = nil
+        XCTAssertThrowsError(try StoredToken(grant: Grant(values: values))) { error in
+            XCTAssertEqual(error as? SignInFailure, .grantIncomplete(StoredToken.addressKey))
         }
     }
 
     func testNewTokenKeepsTheOldRefreshTokenWhenNoneComesBack() {
         let token = OAuthToken(accessToken: "n", expiresIn: nil, refreshToken: nil, idToken: nil)
-        let renewed = TokenState(token: token, identity: identity, previousRefresh: "old", now: start)
+        let renewed = StoredToken(token: token, identity: identity, previousRefresh: "old", now: start)
         XCTAssertEqual(renewed.refreshToken, "old")
-        XCTAssertEqual(renewed.expiresAt, start.addingTimeInterval(TimeInterval(TokenState.defaultLifetime)))
+        XCTAssertEqual(renewed.expiresAt, start.addingTimeInterval(TimeInterval(StoredToken.defaultLifetime)))
     }
 
     func testMailTokenClientReusesAValidToken() async throws {
@@ -261,9 +261,9 @@ final class MicrosoftTests: XCTestCase {
         let token = try await tokens.accessToken()
         XCTAssertEqual(token, "fresh")
         let grant = try XCTUnwrap(renewed.with { $0 })
-        XCTAssertEqual(grant.values[TokenState.accessKey], "fresh")
-        XCTAssertEqual(grant.values[TokenState.refreshKey], "refresh")
-        XCTAssertEqual(grant.values[TokenState.addressKey], "me@outlook.com")
+        XCTAssertEqual(grant.values[StoredToken.accessKey], "fresh")
+        XCTAssertEqual(grant.values[StoredToken.refreshKey], "refresh")
+        XCTAssertEqual(grant.values[StoredToken.addressKey], "me@outlook.com")
     }
 
     func testMailTokenClientReportsARejectedRefresh() async {
@@ -321,10 +321,10 @@ final class MicrosoftTests: XCTestCase {
         }, redirect: { redirect })
         let grant = try await signIn.signIn(inlet(), input: [Input.expectedAccountKey: "me@outlook.com"])
         XCTAssertEqual(query(try XCTUnwrap(opened.with { $0 }))["login_hint"], "me@outlook.com")
-        XCTAssertEqual(grant.values[TokenState.accessKey], "a")
-        XCTAssertEqual(grant.values[TokenState.refreshKey], "r")
-        XCTAssertEqual(grant.values[TokenState.addressKey], "me@outlook.com")
-        XCTAssertEqual(grant.values[TokenState.nameKey], "Me")
+        XCTAssertEqual(grant.values[StoredToken.accessKey], "a")
+        XCTAssertEqual(grant.values[StoredToken.refreshKey], "r")
+        XCTAssertEqual(grant.values[StoredToken.addressKey], "me@outlook.com")
+        XCTAssertEqual(grant.values[StoredToken.nameKey], "Me")
         XCTAssertTrue(try XCTUnwrap(http.bodies.first).contains("code=the-code"))
         XCTAssertGreaterThanOrEqual(redirect.stopped.with { $0 }, 1)
     }
@@ -392,9 +392,9 @@ final class MicrosoftTests: XCTestCase {
         let http = FakeHttp { _ in (200, #"{"access_token":"b","expires_in":60}"#) }
         let signIn = signInClient(http, browser: { _ in true }, redirect: { FakeRedirect { URL(fileURLWithPath: "/") } })
         let grant = try await signIn.renew(state().grant)
-        XCTAssertEqual(grant.values[TokenState.accessKey], "b")
-        XCTAssertEqual(grant.values[TokenState.refreshKey], "refresh")
-        XCTAssertEqual(grant.values[TokenState.addressKey], "me@outlook.com")
+        XCTAssertEqual(grant.values[StoredToken.accessKey], "b")
+        XCTAssertEqual(grant.values[StoredToken.refreshKey], "refresh")
+        XCTAssertEqual(grant.values[StoredToken.addressKey], "me@outlook.com")
         do {
             _ = try await signIn.renew(state(refresh: nil).grant)
             XCTFail("expected a failure")

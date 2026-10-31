@@ -47,7 +47,7 @@ public struct AccessRouter: ProviderPort {
             throw HubFailure.capabilityMissing(inlet.id, inlet.capabilities.first ?? .mail)
         }
         guard inlet.capabilities.contains(capability) else { throw HubFailure.capabilityMissing(inlet.id, capability) }
-        let tokens = AccessTokenClient(state: try TokenState(grant: grant), refresher: oauth, clock: clock, renewal: renewal)
+        let tokens = AccessTokenClient(state: try StoredToken(grant: grant), refresher: oauth, clock: clock, renewal: renewal)
         guard let typed = make(key, inlet: inlet, tokens: tokens) as? P else {
             throw HubFailure.capabilityMissing(inlet.id, capability)
         }

@@ -1,6 +1,6 @@
 import Foundation
 
-enum Base64Engine {
+enum URLSafeEngine {
     static func encodeURL(_ data: Data) -> String {
         data.base64EncodedString()
             .replacingOccurrences(of: "+", with: "-")

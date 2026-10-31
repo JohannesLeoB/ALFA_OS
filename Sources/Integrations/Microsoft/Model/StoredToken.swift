@@ -2,7 +2,7 @@ import CryptoKit
 import Foundation
 import Hub
 
-struct TokenState: Equatable, Sendable {
+struct StoredToken: Equatable, Sendable {
     static let accessKey = "accessToken"
     static let refreshKey = "refreshToken"
     static let expiryKey = "expiresAt"
@@ -118,8 +118,8 @@ struct PkceChallenge: Sendable {
     static func generate() -> PkceChallenge {
         var bytes = [UInt8](repeating: 0, count: verifierBytes)
         _ = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
-        let verifier = Base64Engine.encodeURL(Data(bytes))
-        let challenge = Base64Engine.encodeURL(Data(SHA256.hash(data: Data(verifier.utf8))))
+        let verifier = URLSafeEngine.encodeURL(Data(bytes))
+        let challenge = URLSafeEngine.encodeURL(Data(SHA256.hash(data: Data(verifier.utf8))))
         return PkceChallenge(verifier: verifier, challenge: challenge)
     }
 }
