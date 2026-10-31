@@ -344,7 +344,7 @@ Which Swift file draws each element of the valid design master (Mail and Setting
 | Settings | Signature empty: note + accent "Signatur anlegen" | Einstellungen 254 | `App/Settings/MailStoreBlock.swift` |
 | Settings | "Konto entfernen" confirm | Einstellungen 269 | `App/Settings/AccountFlow.swift` |
 | Settings | Row with neutral "Konto hinzufügen" (label "", line false) | Einstellungen 270 | `App/Settings/AccountFlow.swift` |
-| Settings | Add form "Anbieter" pill: Gmail, GMX, IONOS, default "Wählen" | Einstellungen 272 | `App/Settings/AccountFlow.swift`, `Sources/Mail/Logic/ProviderPresets.swift` |
+| Settings | Add form "Anbieter" pill: Gmail, GMX, IONOS, default "Wählen" | Einstellungen 272 | `App/Settings/AccountFlow.swift`, `Sources/Mail/Logic/DiscoveryEngine.swift` |
 | Settings | Add form fields: Anzeigename, Server Eingang, Port, Verschlüsselung (Keine / SSL | Einstellungen 266, Einstellungen 272 | `App/Settings/AccountFlow.swift`, `Sources/Mail/Adapter/IMAPAccess.swift` |
 | Settings | Check result notice "Prüfung · Es fehlen: …" | Einstellungen 273, Einstellungen 277 | `App/Settings/AccountFlow.swift` |
 | Settings | Form buttons "Konto hinzufügen" accent + "Abbrechen" plain | Einstellungen 274 | `App/Settings/AccountFlow.swift` |
