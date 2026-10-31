@@ -44,6 +44,7 @@ enum MessageExport {
     static func savePDF(_ inbox: InboxState, _ id: String, settings: SettingsState) async {
         guard let document = await inbox.mailDocument(id, render: { render($0, settings: settings) }) else { return }
         let panel = NSSavePanel()
+        panel.appearance = ForeignContent.panel
         panel.allowedContentTypes = [.pdf]
         panel.isExtensionHidden = false
         panel.canSelectHiddenExtension = true

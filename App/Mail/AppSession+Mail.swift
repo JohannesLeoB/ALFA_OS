@@ -79,6 +79,7 @@ extension AppSession {
 
     func attachFiles(to id: UUID) {
         let panel = NSOpenPanel()
+        panel.appearance = ForeignContent.panel
         panel.allowsMultipleSelection = true
         panel.canChooseDirectories = false
         guard panel.runModal() == .OK else { return }

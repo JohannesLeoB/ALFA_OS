@@ -29,6 +29,7 @@ enum AttachmentExport {
     static func savePDF(_ data: Data, name: String) -> Bool {
         guard let document = pdf(data, name: name) else { return false }
         let panel = NSSavePanel()
+        panel.appearance = ForeignContent.panel
         panel.allowedContentTypes = [.pdf]
         panel.isExtensionHidden = false
         panel.canSelectHiddenExtension = true
@@ -39,6 +40,7 @@ enum AttachmentExport {
 
     static func save(_ data: Data, name: String) -> Bool {
         let panel = NSSavePanel()
+        panel.appearance = ForeignContent.panel
         let type = UTType(filenameExtension: (name as NSString).pathExtension)
         if let type { panel.allowedContentTypes = [type] }
         panel.allowsOtherFileTypes = true

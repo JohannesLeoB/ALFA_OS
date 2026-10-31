@@ -224,6 +224,7 @@ extension AppSession {
     func attachToAssistant() {
         guard assistantFiles else { return }
         let panel = NSOpenPanel()
+        panel.appearance = ForeignContent.panel
         panel.allowsMultipleSelection = true
         panel.canChooseDirectories = false
         guard panel.runModal() == .OK else { return }
