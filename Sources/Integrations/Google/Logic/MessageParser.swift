@@ -1,3 +1,4 @@
+import Core
 import Foundation
 import Mail
 
@@ -186,5 +187,193 @@ enum MessageParser {
             attachments: BodyParser.attachments(in: resource.payload?.parts ?? []),
             messageIDHeader: header("Message-ID") ?? "",
             likelyAttachments: (header("Content-Type") ?? "").lowercased().hasPrefix("multipart/mixed"))
+    }
+}
+
+enum BodyParser {
+    static func plain(from data: Data) -> String {
+        guard let resource = try? JSONDecoder().decode(GmailMessageResource.self, from: data) else { return "" }
+        return plain(of: resource)
+    }
+
+    static func plain(of resource: GmailMessageResource) -> String {
+        if let text = firstPart(resource.payload, mime: "text/plain") { return text }
+        if let html = firstPart(resource.payload, mime: "text/html") { return HTMLEngine.plain(html) }
+        return resource.snippet ?? ""
+    }
+
+    static func html(of resource: GmailMessageResource) -> String? {
+        firstPart(resource.payload, mime: "text/html")
+    }
+
+    static func mailBody(from data: Data) -> GmailMailBody {
+        guard let resource = try? JSONDecoder().decode(GmailMessageResource.self, from: data) else {
+            return GmailMailBody()
+        }
+        let text = firstPart(resource.payload, mime: "text/plain")
+        let html = firstPart(resource.payload, mime: "text/html")
+        var inline: [String: String] = [:]
+        collectInlineImages(resource.payload?.parts ?? [], into: &inline)
+        let attachments = attachments(in: resource.payload?.parts ?? [])
+        let headers = resource.payload?.headers ?? []
+        func header(_ name: String) -> String? { headers.first { $0.name.lowercased() == name }?.value }
+        return GmailMailBody(text: text == nil && html == nil ? resource.snippet : text, html: html, inlineImages: inline,
+                             attachments: attachments, listUnsubscribe: header("list-unsubscribe"),
+                             listUnsubscribePost: header("list-unsubscribe-post"))
+    }
+
+    static func attachments(in parts: [GmailPart]) -> [GmailAttachment] {
+        var result: [GmailAttachment] = []
+        for part in parts {
+            if let subParts = part.parts { result += attachments(in: subParts) }
+            guard let filename = part.filename, !filename.isEmpty,
+                  let attachmentID = part.body?.attachmentId, !attachmentID.isEmpty else { continue }
+            result.append(GmailAttachment(attachmentID: attachmentID, filename: filename,
+                                          mimeType: part.mimeType ?? "application/octet-stream",
+                                          sizeBytes: part.body?.size ?? 0))
+        }
+        return result
+    }
+
+    private static func collectInlineImages(_ parts: [GmailPart], into map: inout [String: String]) {
+        for part in parts {
+            if let sub = part.parts { collectInlineImages(sub, into: &map) }
+            guard let attachmentID = part.body?.attachmentId, !attachmentID.isEmpty else { continue }
+            let cid = part.headers?.first(where: { $0.name.lowercased() == "content-id" })?.value
+                .trimmingCharacters(in: CharacterSet(charactersIn: "<> "))
+            if let cid, !cid.isEmpty { map[cid] = attachmentID }
+        }
+    }
+
+    private static func firstPart(_ payload: GmailPayload?, mime: String) -> String? {
+        guard let payload else { return nil }
+        if payload.mimeType == mime, let decoded = decode(payload.body?.data, headers: payload.headers) { return decoded }
+        for part in payload.parts ?? [] {
+            if let found = firstPart(in: part, mime: mime) { return found }
+        }
+        return nil
+    }
+
+    private static func firstPart(in part: GmailPart, mime: String) -> String? {
+        if part.mimeType == mime, let decoded = decode(part.body?.data, headers: part.headers) { return decoded }
+        for sub in part.parts ?? [] {
+            if let found = firstPart(in: sub, mime: mime) { return found }
+        }
+        return nil
+    }
+
+    private static func decode(_ data: String?, headers: [GmailHeader]?) -> String? {
+        guard let data, !data.isEmpty, let bytes = URLSafeEngine.decodeURL(data) else { return nil }
+        let contentType = headers?.first { $0.name.lowercased() == "content-type" }?.value
+        return FlowedEngine.text(bytes, contentType: contentType)
+    }
+}
+
+enum SenderParser {
+    static let acceptedStatus = "accepted"
+
+    static func senders(from data: Data) -> [Participant] {
+        struct Entry: Decodable {
+            var sendAsEmail: String?
+            var displayName: String?
+            var isDefault: Bool?
+            var verificationStatus: String?
+        }
+        struct Response: Decodable { var sendAs: [Entry]? }
+        guard let decoded = try? JSONDecoder().decode(Response.self, from: data) else { return [] }
+        let usable = (decoded.sendAs ?? []).filter {
+            $0.sendAsEmail?.isEmpty == false && ($0.verificationStatus == nil || $0.verificationStatus == acceptedStatus)
+        }
+        let ordered = usable.filter { $0.isDefault == true } + usable.filter { $0.isDefault != true }
+        return ordered.enumerated().map { index, entry in
+            Participant(id: index, name: entry.displayName ?? "", address: entry.sendAsEmail ?? "")
+        }
+    }
+}
+
+enum DraftParser {
+    struct Content: Equatable {
+        struct AttachmentRef: Equatable {
+            var attachmentID: String
+            var filename: String
+            var mimeType: String
+        }
+
+        var messageID: String
+        var to: String?
+        var cc: String?
+        var bcc: String?
+        var subject: String
+        var body: String
+        var bodyHTML: String?
+        var attachmentRefs: [AttachmentRef]
+        var threadID: String?
+        var inReplyTo: String?
+        var receiptTo: String?
+        var from: Participant?
+
+        func draft(with attachments: [Attachment]) -> Draft {
+            Draft(to: to, cc: cc, bcc: bcc, subject: subject, body: body, attachments: attachments,
+                  inReplyTo: inReplyTo, threadID: threadID, bodyHTML: bodyHTML, receiptTo: receiptTo, from: from)
+        }
+    }
+
+    static func content(from data: Data) -> Content? {
+        struct Response: Decodable { var message: GmailMessageResource? }
+        guard let decoded = try? JSONDecoder().decode(Response.self, from: data),
+              let message = decoded.message else { return nil }
+        let headers = message.payload?.headers ?? []
+        func header(_ name: String) -> String? {
+            let value = headers.first(where: { $0.name.lowercased() == name.lowercased() })?.value
+            return value?.isEmpty == false ? value : nil
+        }
+        let refs = BodyParser.attachments(in: message.payload?.parts ?? []).map {
+            Content.AttachmentRef(attachmentID: $0.attachmentID, filename: $0.filename, mimeType: $0.mimeType)
+        }
+        let thread = message.threadId?.trimmingCharacters(in: .whitespacesAndNewlines)
+        return Content(
+            messageID: message.id, to: header("To"), cc: header("Cc"), bcc: header("Bcc"),
+            subject: header("Subject") ?? "", body: BodyParser.plain(of: message), bodyHTML: BodyParser.html(of: message), attachmentRefs: refs,
+            threadID: thread?.isEmpty == false ? thread : nil,
+            inReplyTo: header("In-Reply-To") ?? header("References"),
+            receiptTo: MessageEngine.receiptAddress(header("Disposition-Notification-To")),
+            from: MessageEngine.sender(header("From")))
+    }
+
+    static func idMap(from data: Data) -> [String: String] {
+        struct Message: Decodable { var id: String? }
+        struct Reference: Decodable {
+            var id: String?
+            var message: Message?
+        }
+        struct Response: Decodable { var drafts: [Reference]? }
+        guard let decoded = try? JSONDecoder().decode(Response.self, from: data) else { return [:] }
+        var map: [String: String] = [:]
+        for reference in decoded.drafts ?? [] {
+            if let draftID = reference.id, let messageID = reference.message?.id { map[messageID] = draftID }
+        }
+        return map
+    }
+
+    static func saved(from data: Data) -> SavedDraft? {
+        struct Message: Decodable { var id: String? }
+        struct Response: Decodable {
+            var id: String?
+            var message: Message?
+        }
+        guard let response = try? JSONDecoder().decode(Response.self, from: data), let id = response.id else { return nil }
+        return SavedDraft(id: id, mirrorID: response.message?.id ?? id)
+    }
+}
+
+enum DraftMimeEngine {
+    static let messageIDDomain = "mail.gmail.com"
+
+    static func payload(_ draft: Draft) -> [String: String] {
+        var message = ["raw": URLSafeEngine.encodeURL(MessageEngine.buildRaw(draft, domain: messageIDDomain))]
+        if let thread = draft.threadID?.trimmingCharacters(in: .whitespacesAndNewlines), !thread.isEmpty {
+            message["threadId"] = thread
+        }
+        return message
     }
 }

@@ -74,3 +74,41 @@ enum FailureEngine {
                         extra: extra)
     }
 }
+
+enum ScopeEngine {
+    static func scopes(for capabilities: Set<Capability>) -> [OAuthScope] {
+        var scopes: [OAuthScope] = [.userinfoEmail, .userinfoProfile]
+        if capabilities.contains(.mail) { scopes.append(.gmailModify) }
+        if capabilities.contains(.calendar) { scopes += [.calendarReadonly, .calendarEvents] }
+        if capabilities.contains(.contacts) { scopes += [.contacts, .directoryReadonly] }
+        if capabilities.contains(.files) { scopes.append(.drive) }
+        return scopes
+    }
+}
+
+enum URLSafeEngine {
+    static func encodeURL(_ data: Data) -> String {
+        data.base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+    }
+
+    static func decodeURL(_ text: String) -> Data? {
+        var padded = text.replacingOccurrences(of: "-", with: "+").replacingOccurrences(of: "_", with: "/")
+        while padded.count % 4 != 0 { padded += "=" }
+        return Data(base64Encoded: padded)
+    }
+}
+
+enum FormBodyEngine {
+    static func encode(_ values: [String: String]) -> Data {
+        Data(values.map { key, value in "\(escape(key))=\(escape(value))" }.sorted().joined(separator: "&").utf8)
+    }
+
+    private static func escape(_ value: String) -> String {
+        var allowed = CharacterSet.alphanumerics
+        allowed.insert(charactersIn: "-._~")
+        return value.addingPercentEncoding(withAllowedCharacters: allowed) ?? value
+    }
+}

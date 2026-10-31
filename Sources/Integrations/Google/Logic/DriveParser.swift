@@ -77,3 +77,117 @@ enum DriveParser {
         (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
     }
 }
+
+enum CalendarParser {
+    private struct EventList: Decodable { var items: [EventEntry] }
+
+    private struct EventEntry: Decodable {
+        var id: String
+        var summary: String?
+        var location: String?
+        var start: EventTime?
+        var end: EventTime?
+    }
+
+    private struct EventTime: Decodable {
+        var date: String?
+        var dateTime: String?
+    }
+
+    private struct CalendarList: Decodable { var items: [CalendarItem] }
+
+    private struct CalendarItem: Decodable {
+        var id: String
+        var summary: String?
+        var summaryOverride: String?
+    }
+
+    static func events(from data: Data, calendarID: String) throws -> [CalendarEvent] {
+        guard let decoded = try? JSONDecoder().decode(EventList.self, from: data) else {
+            throw GoogleFailure.decodingFailed
+        }
+        return decoded.items.map { entry in
+            CalendarEvent(
+                id: "\(calendarID)#\(entry.id)",
+                title: entry.summary ?? "",
+                startsAt: date(entry.start),
+                endsAt: date(entry.end),
+                isAllDay: entry.start?.dateTime == nil,
+                location: entry.location,
+                calendarID: calendarID)
+        }
+    }
+
+    static func calendars(from data: Data) throws -> [EventCalendar] {
+        guard let decoded = try? JSONDecoder().decode(CalendarList.self, from: data) else {
+            throw GoogleFailure.decodingFailed
+        }
+        return decoded.items.map { EventCalendar(id: $0.id, title: $0.summaryOverride ?? $0.summary ?? $0.id) }
+    }
+
+    private static func date(_ time: EventTime?) -> Date? {
+        if let raw = time?.dateTime {
+            let fractional = ISO8601DateFormatter()
+            fractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            let plain = ISO8601DateFormatter()
+            plain.formatOptions = [.withInternetDateTime]
+            return fractional.date(from: raw) ?? plain.date(from: raw)
+        }
+        if let raw = time?.date {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            formatter.timeZone = TimeZone(identifier: "UTC")
+            return formatter.date(from: raw)
+        }
+        return nil
+    }
+}
+
+enum ContactParser {
+    private struct SearchResponse: Decodable { var results: [Result]? }
+
+    private struct ListResponse: Decodable {
+        var connections: [Person]?
+        var nextPageToken: String?
+    }
+
+    private struct Result: Decodable { var person: Person? }
+
+    private struct Person: Decodable {
+        var resourceName: String?
+        var names: [Name]?
+        var emailAddresses: [Value]?
+        var phoneNumbers: [Value]?
+        var organizations: [Organization]?
+    }
+
+    private struct Name: Decodable { var displayName: String? }
+
+    private struct Value: Decodable { var value: String? }
+
+    private struct Organization: Decodable { var name: String? }
+
+    static func contacts(from data: Data) throws -> [Contact] {
+        guard let decoded = try? JSONDecoder().decode(SearchResponse.self, from: data) else {
+            throw GoogleFailure.decodingFailed
+        }
+        return (decoded.results ?? []).map { contact($0.person) }
+    }
+
+    static func page(from data: Data) throws -> (contacts: [Contact], next: String?) {
+        guard let decoded = try? JSONDecoder().decode(ListResponse.self, from: data) else {
+            throw GoogleFailure.decodingFailed
+        }
+        let next = decoded.nextPageToken.flatMap { $0.isEmpty ? nil : $0 }
+        return ((decoded.connections ?? []).map { contact($0) }, next)
+    }
+
+    private static func contact(_ person: Person?) -> Contact {
+        Contact(
+            id: person?.resourceName ?? UUID().uuidString,
+            displayName: person?.names?.first?.displayName ?? "",
+            email: person?.emailAddresses?.first?.value,
+            phone: person?.phoneNumbers?.first?.value,
+            organization: person?.organizations?.first?.name)
+    }
+}
