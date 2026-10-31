@@ -1,5 +1,6 @@
 import Assistant
 import Foundation
+import Hub
 
 public struct ClickUpClient: ReadPort, WritePort {
     static let endpoint = "https://api.clickup.com/api/v2"
@@ -224,4 +225,107 @@ public struct ClickUpClient: ReadPort, WritePort {
     private static func milliseconds(_ date: Date) -> Int {
         Int(date.timeIntervalSince1970 * 1000)
     }
+}
+
+public struct TaskBoardClient: TaskBoardPort {
+    private let read: any ReadPort
+    private let write: any WritePort
+
+    public init(read: any ReadPort, write: any WritePort) {
+        self.read = read
+        self.write = write
+    }
+
+    public func openTasks(listID: String) async throws -> [TaskItem] {
+        try await translated {
+            try await read.tasks(listID: listID).map {
+                TaskItem(id: $0.id, name: $0.name, status: $0.status, isUrgent: $0.isUrgent, dueDate: $0.dueDate,
+                         assignee: $0.assignee)
+            }
+        }
+    }
+
+    public func members(listID: String) async throws -> [TaskMember] {
+        try await translated {
+            try await read.listMembers(listID: listID).map { TaskMember(id: $0.id, username: $0.username) }
+        }
+    }
+
+    @discardableResult
+    public func apply(_ draft: ClickUpChangeDraft) async throws -> String {
+        try await translated {
+            switch draft.intent {
+            case .create:
+                let id = try await write.createTask(listID: draft.listID, name: draft.taskName, content: nil)
+                if let due = draft.dueDate { try await write.updateTask(taskID: id, name: nil, dueDate: due, priority: nil) }
+                return id
+            case .status:
+                let id = try Self.taskID(draft)
+                try await write.setStatus(taskID: id, status: draft.status ?? "")
+                return id
+            case .dueDate:
+                let id = try Self.taskID(draft)
+                try await write.updateTask(taskID: id, name: nil, dueDate: draft.dueDate, priority: nil)
+                return id
+            case .assign:
+                let id = try Self.taskID(draft)
+                try await write.assign(taskID: id, memberID: draft.memberID ?? "")
+                return id
+            }
+        }
+    }
+
+    private static func taskID(_ draft: ClickUpChangeDraft) throws -> String {
+        guard let id = draft.taskID, id.isEmpty == false else { throw ClickUpFailure.invalidResponse }
+        return id
+    }
+
+    private func translated<T>(_ work: () async throws -> T) async throws -> T {
+        do {
+            return try await work()
+        } catch ClickUpFailure.notConnected {
+            throw PortFailure.notConnected
+        } catch let failure as ClickUpFailure {
+            throw PortFailure.failed(failure.detail)
+        }
+    }
+}
+
+public struct ConnectionCheck: ConnectionCheckPort {
+    private let http: any HttpPort
+
+    public init(http: any HttpPort) {
+        self.http = http
+    }
+
+    public var integration: String { "clickup" }
+
+    public func check(_ values: KeyValues) async throws -> String? {
+        let client = ClickUpClient(credentials: HeldCredentials(credentials: Credentials(token: values["token"])), http: http)
+        do {
+            return try await client.currentUser().username
+        } catch let failure as ClickUpFailure {
+            throw Self.translate(failure)
+        }
+    }
+
+    static func translate(_ failure: ClickUpFailure) -> any Error {
+        switch failure {
+        case .http(let code): StatusFailure(status: code)
+        case .invalidResponse, .decoding: ShapeFailure()
+        default: failure
+        }
+    }
+
+    private struct HeldCredentials: CredentialsPort {
+        let credentials: Credentials
+
+        func load() throws -> Credentials? { credentials }
+    }
+
+    private struct StatusFailure: StatusErrorPort {
+        let status: Int
+    }
+
+    private struct ShapeFailure: ShapeErrorPort {}
 }
