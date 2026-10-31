@@ -9,3 +9,14 @@ protocol BookingPort: Sendable {
     func updateText(id: Int, text: String, confirmed: Bool) async throws
     func setBillable(id: Int, billable: Bool, confirmed: Bool) async throws
 }
+
+protocol MasterDataPort: Sendable {
+    func customers() async throws -> [TimeCustomer]
+    func projects() async throws -> [TimeProject]
+    func activities() async throws -> [TimeActivity]
+    func entries(since: Date, until: Date, userID: Int?) async throws -> [TimeEntry]
+}
+
+public protocol CredentialsPort: Sendable {
+    func load() throws -> Credentials?
+}
