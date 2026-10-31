@@ -77,6 +77,12 @@
             "state" : "translated",
             "value" : "Offen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open"
+          }
         }
       }
     },
@@ -10217,6 +10223,12 @@
             "state" : "translated",
             "value" : "Die Gestaltungswerte fehlen im Bau."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The design values are missing from the build."
+          }
         }
       }
     },
@@ -10670,6 +10682,12 @@
             "state" : "translated",
             "value" : "Kommunikation"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Communication"
+          }
         }
       }
     },
@@ -10680,6 +10698,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Core"
           }
         }
       }
@@ -10946,6 +10970,12 @@
             "state" : "translated",
             "value" : "Unbekannt"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
         }
       }
     },
@@ -10955,6 +10985,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine Antwort"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No response"
           }
         }
       }
@@ -10966,6 +11002,12 @@
             "state" : "translated",
             "value" : "Angaben ungültig"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details invalid"
+          }
         }
       }
     },
@@ -10975,6 +11017,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schlüssel abgelehnt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Key rejected"
           }
         }
       }
@@ -10987,6 +11035,12 @@
             "state" : "translated",
             "value" : "Schlüsselbund unlesbar"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain unreadable"
+          }
         }
       }
     },
@@ -10997,6 +11051,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schlüsselbund Fehler"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain error"
           }
         }
       }
@@ -11092,6 +11152,12 @@
             "state" : "translated",
             "value" : "Unbekannt"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
         }
       }
     },
@@ -11119,6 +11185,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fehler"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
           }
         }
       }
@@ -11148,6 +11220,12 @@
             "state" : "translated",
             "value" : "Unbekannt"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
         }
       }
     },
@@ -11158,6 +11236,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anmeldung abgelaufen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign-in expired"
           }
         }
       }
@@ -11405,6 +11489,12 @@
             "state" : "translated",
             "value" : "Breite der linken Bahn"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Width of left lane"
+          }
         }
       }
     },
@@ -11416,6 +11506,12 @@
             "state" : "translated",
             "value" : "Breite der rechten Bahn"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Width of right lane"
+          }
         }
       }
     },
@@ -11423,6 +11519,12 @@
       "comment" : "roh",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld pt"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld pt"
@@ -15968,6 +16070,12 @@
             "state" : "translated",
             "value" : "Anmeldung im Browser"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign-in in browser"
+          }
         }
       }
     },
@@ -15978,6 +16086,12 @@
             "state" : "translated",
             "value" : "%@ · für die Firma"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · for the company"
+          }
         }
       }
     },
@@ -15987,6 +16101,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "E-Mail und Schlüssel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email and key"
           }
         }
       }
@@ -16014,6 +16134,12 @@
             "state" : "translated",
             "value" : "Benutzer und Passwort"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User and password"
+          }
         }
       }
     },
@@ -16023,6 +16149,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ · persönlich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · personal"
           }
         }
       }
@@ -16290,6 +16422,12 @@
             "state" : "translated",
             "value" : "Verbinden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connect"
+          }
         }
       }
     },
@@ -16463,6 +16601,12 @@
             "state" : "translated",
             "value" : "Immer hell"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Always light"
+          }
         }
       }
     },
@@ -16490,6 +16634,12 @@
             "state" : "translated",
             "value" : "Hell"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
         }
       }
     },
@@ -16500,6 +16650,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Automatisch"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic"
           }
         }
       }
@@ -16543,6 +16699,12 @@
             "state" : "translated",
             "value" : "Jede Stunde"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every hour"
+          }
         }
       }
     },
@@ -16552,6 +16714,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Manuell"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manual"
           }
         }
       }
@@ -16563,6 +16731,12 @@
             "state" : "translated",
             "value" : "Jede Minute"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every minute"
+          }
         }
       }
     },
@@ -16572,6 +16746,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle 15 Minuten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 15 minutes"
           }
         }
       }
@@ -16583,6 +16763,12 @@
             "state" : "translated",
             "value" : "Alle 30 Minuten"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 30 minutes"
+          }
         }
       }
     },
@@ -16592,6 +16778,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle 5 Minuten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 5 minutes"
           }
         }
       }
@@ -16603,6 +16795,12 @@
             "state" : "translated",
             "value" : "Aus"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
+          }
         }
       }
     },
@@ -16612,6 +16810,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle 30 Sekunden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 30 seconds"
           }
         }
       }
@@ -16800,6 +17004,12 @@
             "state" : "translated",
             "value" : "Halten zum %@"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold to %@"
+          }
         }
       }
     },
@@ -16809,6 +17019,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
           }
         }
       }
@@ -16836,6 +17052,12 @@
             "state" : "translated",
             "value" : "Fertig"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
         }
       }
     },
@@ -16846,6 +17068,12 @@
             "state" : "translated",
             "value" : "Bearbeiten"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
+          }
         }
       }
     },
@@ -16855,6 +17083,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sichern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
           }
         }
       }
@@ -16882,6 +17116,12 @@
             "state" : "translated",
             "value" : "Neuer Kontakt"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Contact"
+          }
         }
       }
     },
@@ -16891,6 +17131,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Adresse fehlt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address missing"
           }
         }
       }
@@ -16998,6 +17244,12 @@
             "state" : "translated",
             "value" : "Vorgeschlagen · aus Absendern"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggested · from senders"
+          }
         }
       }
     },
@@ -17007,6 +17259,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ohne Namen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No name"
           }
         }
       }
@@ -17034,6 +17292,12 @@
             "state" : "translated",
             "value" : "%@ trennen?"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnect %@?"
+          }
         }
       }
     },
@@ -17060,6 +17324,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die App nutzt %@ danach nicht mehr."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app will no longer use %@."
           }
         }
       }
@@ -17103,6 +17373,12 @@
             "state" : "translated",
             "value" : "Der Assistent bleibt aus, bis die Verbindung wieder steht."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The assistant stays off until the connection is back."
+          }
         }
       }
     },
@@ -17113,6 +17389,12 @@
             "state" : "translated",
             "value" : "Fehler · %@"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error · %@"
+          }
         }
       }
     },
@@ -17122,6 +17404,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine Antwort"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No response"
           }
         }
       }
@@ -17198,6 +17486,12 @@
             "state" : "translated",
             "value" : "Verbindungen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connections"
+          }
         }
       }
     },
@@ -17225,6 +17519,12 @@
             "state" : "translated",
             "value" : "Ich"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Me"
+          }
         }
       }
     },
@@ -17235,6 +17535,12 @@
             "state" : "translated",
             "value" : "Schutz und System"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protection and System"
+          }
         }
       }
     },
@@ -17244,6 +17550,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Halten zum Entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold to remove"
           }
         }
       }
@@ -17593,6 +17905,12 @@
             "state" : "translated",
             "value" : "Verbunden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connected"
+          }
         }
       }
     },
@@ -17602,6 +17920,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verbindet …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connecting …"
           }
         }
       }
@@ -17613,6 +17937,12 @@
             "state" : "translated",
             "value" : "Fehler"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
         }
       }
     },
@@ -17622,6 +17952,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nicht verbunden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not connected"
           }
         }
       }
@@ -17633,6 +17969,12 @@
             "state" : "translated",
             "value" : "Schlüsselbund nicht lesbar"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain unreadable"
+          }
         }
       }
     },
@@ -17642,6 +17984,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gleicht ab …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Syncing …"
           }
         }
       }
@@ -17669,6 +18017,12 @@
             "state" : "translated",
             "value" : "Sofort"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Immediately"
+          }
         }
       }
     },
@@ -17678,6 +18032,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1 Minute"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 minute"
           }
         }
       }
@@ -17689,6 +18049,12 @@
             "state" : "translated",
             "value" : "15 Minuten Pause"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "15 minutes idle"
+          }
         }
       }
     },
@@ -17698,6 +18064,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "5 Minuten Pause"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 minutes idle"
           }
         }
       }
@@ -17982,6 +18354,12 @@
             "state" : "translated",
             "value" : "✓"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "✓"
+          }
         }
       }
     },
@@ -18040,6 +18418,12 @@
             "state" : "translated",
             "value" : "Beim Anbieter geprüft · %@"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checked with provider · %@"
+          }
         }
       }
     },
@@ -18049,6 +18433,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Letzter Fehler %@ · letzter Erfolg %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last error %@ · last success %@"
           }
         }
       }
@@ -18060,6 +18450,12 @@
             "state" : "translated",
             "value" : "Letzter Fehler %@"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last error %@"
+          }
         }
       }
     },
@@ -18069,6 +18465,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anmeldung läuft"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signing in"
           }
         }
       }
@@ -18113,6 +18515,12 @@
             "state" : "translated",
             "value" : "Freigaben für den Assistenten"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistant permissions"
+          }
         }
       }
     },
@@ -18123,6 +18531,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kalender"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar"
           }
         }
       }
@@ -18135,6 +18549,12 @@
             "state" : "translated",
             "value" : "Kataloge und Kalkulation"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalogs and calculation"
+          }
         }
       }
     },
@@ -18145,6 +18565,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gesprächsverlauf"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat history"
           }
         }
       }
@@ -18157,6 +18583,12 @@
             "state" : "translated",
             "value" : "Aufgaben (ClickUp)"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasks (ClickUp)"
+          }
         }
       }
     },
@@ -18168,6 +18600,12 @@
             "state" : "translated",
             "value" : "Kontakte"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contacts"
+          }
         }
       }
     },
@@ -18178,6 +18616,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dateien (Drive)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Files (Drive)"
           }
         }
       }
@@ -18207,6 +18651,12 @@
             "state" : "translated",
             "value" : "Notizen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notes"
+          }
         }
       }
     },
@@ -18217,6 +18667,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Studiowissen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Studio knowledge"
           }
         }
       }
@@ -18229,6 +18685,12 @@
             "state" : "translated",
             "value" : "Aufgaben"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasks"
+          }
         }
       }
     },
@@ -18239,6 +18701,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zeiterfassung (Clockodo)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time tracking (Clockodo)"
           }
         }
       }
@@ -18539,6 +19007,12 @@
             "state" : "translated",
             "value" : "Darstellung"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
         }
       }
     },
@@ -18564,6 +19038,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Firmendaten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Company Data"
           }
         }
       }
@@ -18591,6 +19071,12 @@
             "state" : "translated",
             "value" : "Kontakte"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contacts"
+          }
         }
       }
     },
@@ -18617,6 +19103,12 @@
             "state" : "translated",
             "value" : "Identität"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identity"
+          }
         }
       }
     },
@@ -18627,6 +19119,12 @@
             "state" : "translated",
             "value" : "Name, Rolle, Kürzel im Team"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name, role, initials in the team"
+          }
         }
       }
     },
@@ -18636,6 +19134,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Impressum"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imprint"
           }
         }
       }
@@ -18680,6 +19184,12 @@
             "state" : "translated",
             "value" : "Schlüssel-Inventar"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Key Inventory"
+          }
         }
       }
     },
@@ -18690,6 +19200,12 @@
             "state" : "translated",
             "value" : "Datenschutz"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy"
+          }
         }
       }
     },
@@ -18697,6 +19213,12 @@
       "comment" : "roh",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "System"
@@ -18791,6 +19313,12 @@
             "state" : "translated",
             "value" : "Projekte"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projects"
+          }
         }
       }
     },
@@ -18801,12 +19329,24 @@
             "state" : "translated",
             "value" : "Zwischenspeicher"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cache"
+          }
         }
       }
     },
     "settings.service.airtable.field.base" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Base"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Base"
@@ -18821,12 +19361,24 @@
             "state" : "translated",
             "value" : "Zugriffsschlüssel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Access key"
+          }
         }
       }
     },
     "settings.service.airtable.name" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Airtable"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Airtable"
@@ -18889,6 +19441,12 @@
             "state" : "translated",
             "value" : "Claude"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude"
+          }
         }
       }
     },
@@ -18898,6 +19456,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Assistent"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistant"
           }
         }
       }
@@ -18909,6 +19473,12 @@
             "state" : "translated",
             "value" : "Phasen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phases"
+          }
         }
       }
     },
@@ -18918,6 +19488,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aufgabenfelder"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task fields"
           }
         }
       }
@@ -18929,12 +19505,24 @@
             "state" : "translated",
             "value" : "Zugriffsschlüssel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Access key"
+          }
         }
       }
     },
     "settings.service.clickup.name" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ClickUp"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "ClickUp"
@@ -18949,6 +19537,12 @@
             "state" : "translated",
             "value" : "Aufgaben"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasks"
+          }
         }
       }
     },
@@ -18958,6 +19552,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "E-Mail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email"
           }
         }
       }
@@ -18985,12 +19585,24 @@
             "state" : "translated",
             "value" : "Clockodo-Nutzer"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clockodo user"
+          }
         }
       }
     },
     "settings.service.clockodo.name" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clockodo"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clockodo"
@@ -19004,6 +19616,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time entries"
           }
         }
       }
@@ -19239,6 +19857,12 @@
             "state" : "translated",
             "value" : "DHL Versand"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DHL Shipping"
+          }
         }
       }
     },
@@ -19248,6 +19872,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Etiketten erstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create labels"
           }
         }
       }
@@ -19259,6 +19889,12 @@
             "state" : "translated",
             "value" : "Kontakte"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contacts"
+          }
         }
       }
     },
@@ -19268,6 +19904,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dateien"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Files"
           }
         }
       }
@@ -19295,12 +19937,24 @@
             "state" : "translated",
             "value" : "Drive-Ordner der Projekte"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drive folders of the projects"
+          }
         }
       }
     },
     "settings.service.google.name" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Google"
@@ -19314,6 +19968,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mail, Dateien, Kalender, Kontakte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail, files, calendar, contacts"
           }
         }
       }
@@ -19341,6 +20001,12 @@
             "state" : "translated",
             "value" : "Persönlich"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personal"
+          }
         }
       }
     },
@@ -19367,6 +20033,12 @@
             "state" : "translated",
             "value" : "Happa Happa"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Happa Happa"
+          }
         }
       }
     },
@@ -19376,6 +20048,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Speiseplan"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu"
           }
         }
       }
@@ -19403,6 +20081,12 @@
             "state" : "translated",
             "value" : "Mail-Konten"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail Accounts"
+          }
         }
       }
     },
@@ -19429,12 +20113,24 @@
             "state" : "translated",
             "value" : "Zugriffsschlüssel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Access key"
+          }
         }
       }
     },
     "settings.service.sevdesk.name" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sevDesk"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "sevDesk"
@@ -19642,6 +20338,12 @@
             "state" : "translated",
             "value" : "Anmelden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign In"
+          }
         }
       }
     },
@@ -19732,6 +20434,12 @@
             "state" : "translated",
             "value" : "Letzter Abgleich %@"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last sync %@"
+          }
         }
       }
     },
@@ -19774,6 +20482,12 @@
             "state" : "translated",
             "value" : "Noch nicht abgeglichen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not synced yet"
+          }
         }
       }
     },
@@ -19784,6 +20498,12 @@
             "state" : "translated",
             "value" : "Jetzt abgleichen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync now"
+          }
         }
       }
     },
@@ -19791,6 +20511,12 @@
       "comment" : "roh",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ · %@"
@@ -19833,6 +20559,12 @@
     "settings.system.version.format" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (%@)"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ (%@)"
@@ -20423,12 +21155,24 @@
             "state" : "translated",
             "value" : "Nicht eingetragen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not entered"
+          }
         }
       }
     },
     "settings.value.masked" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "••••••••••••"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "••••••••••••"
@@ -21692,6 +22436,12 @@
             "state" : "translated",
             "value" : "Abgleich fehlgeschlagen. Zum Wiederholen drücken."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync failed. Press to retry."
+          }
         }
       }
     },
@@ -21703,6 +22453,12 @@
             "state" : "translated",
             "value" : "Neu laden · Gerade abgeglichen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reload · Just synced"
+          }
         }
       }
     },
@@ -21713,6 +22469,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gleicht ab …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Syncing …"
           }
         }
       }
@@ -21761,6 +22523,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prüfen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check"
           }
         }
       }

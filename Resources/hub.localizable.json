@@ -416,6 +416,806 @@
   "settings.toast.mailStoreMove": {
    "de": "Ablage konnte nicht verschoben werden.",
    "en": "Could not move the local storage."
+  },
+  "hint.inlet.unknown": {
+   "de": "Unbekannt",
+   "en": "Unknown"
+  },
+  "hint.key.failed": {
+   "de": "Keine Antwort",
+   "en": "No response"
+  },
+  "hint.key.fields.invalid": {
+   "de": "Angaben ungültig",
+   "en": "Details invalid"
+  },
+  "hint.key.rejected": {
+   "de": "Schlüssel abgelehnt",
+   "en": "Key rejected"
+  },
+  "hint.keychain.unreadable": {
+   "de": "Schlüsselbund unlesbar",
+   "en": "Keychain unreadable"
+  },
+  "hint.keychain.unwritable": {
+   "de": "Schlüsselbund Fehler",
+   "en": "Keychain error"
+  },
+  "hint.port.unknown": {
+   "de": "Unbekannt",
+   "en": "Unknown"
+  },
+  "hint.provider.failed": {
+   "de": "Fehler",
+   "en": "Error"
+  },
+  "hint.provider.unknown": {
+   "de": "Unbekannt",
+   "en": "Unknown"
+  },
+  "hint.signin.expired": {
+   "de": "Anmeldung abgelaufen",
+   "en": "Sign-in expired"
+  },
+  "settings.access.browser": {
+   "de": "Anmeldung im Browser",
+   "en": "Sign-in in browser"
+  },
+  "settings.access.company": {
+   "de": "%@ · für die Firma",
+   "en": "%@ · for the company"
+  },
+  "settings.access.emailKey": {
+   "de": "E-Mail und Schlüssel",
+   "en": "Email and key"
+  },
+  "settings.access.key": {
+   "de": "Schlüssel",
+   "en": "Keys"
+  },
+  "settings.access.password": {
+   "de": "Benutzer und Passwort",
+   "en": "User and password"
+  },
+  "settings.access.personal": {
+   "de": "%@ · persönlich",
+   "en": "%@ · personal"
+  },
+  "settings.account.show": {
+   "de": "Angezeigt als",
+   "en": "Shown as"
+  },
+  "settings.account.show.own": {
+   "de": "Eigener Name",
+   "en": "Own name"
+  },
+  "settings.accounts.head": {
+   "de": "Postfächer",
+   "en": "Mailboxes"
+  },
+  "settings.accounts.none.title": {
+   "de": "Noch kein Mail-Konto.",
+   "en": "No mail account yet."
+  },
+  "settings.action.connect": {
+   "de": "Verbinden",
+   "en": "Connect"
+  },
+  "settings.action.disconnect": {
+   "de": "Trennen",
+   "en": "Disconnect"
+  },
+  "settings.action.foldColumn": {
+   "de": "Spalte falten",
+   "en": "Collapse Column"
+  },
+  "settings.action.more": {
+   "de": "Mehr",
+   "en": "More"
+  },
+  "settings.action.reconnect": {
+   "de": "Erneut verbinden",
+   "en": "Reconnect"
+  },
+  "settings.action.reenter": {
+   "de": "Neu eintragen",
+   "en": "Enter Again"
+  },
+  "settings.appearance.dark": {
+   "de": "Dunkel",
+   "en": "Dark"
+  },
+  "settings.appearance.foreign": {
+   "de": "Fremde Inhalte",
+   "en": "Remote content"
+  },
+  "settings.appearance.foreign.value": {
+   "de": "Immer hell",
+   "en": "Always light"
+  },
+  "settings.appearance.label": {
+   "de": "Erscheinung",
+   "en": "Appearance"
+  },
+  "settings.appearance.light": {
+   "de": "Hell",
+   "en": "Light"
+  },
+  "settings.appearance.system": {
+   "de": "Automatisch",
+   "en": "Automatic"
+  },
+  "settings.cadence.hour1": {
+   "de": "Jede Stunde",
+   "en": "Every hour"
+  },
+  "settings.cadence.manual": {
+   "de": "Manuell",
+   "en": "Manual"
+  },
+  "settings.cadence.minute1": {
+   "de": "Jede Minute",
+   "en": "Every minute"
+  },
+  "settings.cadence.minutes15": {
+   "de": "Alle 15 Minuten",
+   "en": "Every 15 minutes"
+  },
+  "settings.cadence.minutes30": {
+   "de": "Alle 30 Minuten",
+   "en": "Every 30 minutes"
+  },
+  "settings.cadence.minutes5": {
+   "de": "Alle 5 Minuten",
+   "en": "Every 5 minutes"
+  },
+  "settings.cadence.off": {
+   "de": "Aus",
+   "en": "Off"
+  },
+  "settings.cadence.seconds30": {
+   "de": "Alle 30 Sekunden",
+   "en": "Every 30 seconds"
+  },
+  "settings.company.row.address": {
+   "de": "Anschrift",
+   "en": "Address"
+  },
+  "settings.company.row.mail": {
+   "de": "Mail",
+   "en": "Email"
+  },
+  "settings.company.row.name": {
+   "de": "Firma",
+   "en": "Company"
+  },
+  "settings.company.row.phone": {
+   "de": "Telefon",
+   "en": "Phone"
+  },
+  "settings.company.row.web": {
+   "de": "Web",
+   "en": "Web"
+  },
+  "settings.confirm.hold": {
+   "de": "Halten zum %@",
+   "en": "Hold to %@"
+  },
+  "settings.contacts.add": {
+   "de": "Hinzufügen",
+   "en": "Add"
+  },
+  "settings.contacts.address": {
+   "de": "Adresse",
+   "en": "Address"
+  },
+  "settings.contacts.done": {
+   "de": "Fertig",
+   "en": "Done"
+  },
+  "settings.contacts.edit": {
+   "de": "Bearbeiten",
+   "en": "Edit"
+  },
+  "settings.contacts.keep": {
+   "de": "Sichern",
+   "en": "Save"
+  },
+  "settings.contacts.name": {
+   "de": "Name",
+   "en": "Name"
+  },
+  "settings.contacts.new": {
+   "de": "Neuer Kontakt",
+   "en": "New Contact"
+  },
+  "settings.contacts.noAddress": {
+   "de": "Adresse fehlt",
+   "en": "Address missing"
+  },
+  "settings.contacts.remove": {
+   "de": "Entfernen",
+   "en": "Remove"
+  },
+  "settings.contacts.suggested": {
+   "de": "Vorgeschlagen · aus Absendern",
+   "en": "Suggested · from senders"
+  },
+  "settings.contacts.unnamed": {
+   "de": "Ohne Namen",
+   "en": "No name"
+  },
+  "settings.disconnect.ask": {
+   "de": "%@ trennen?",
+   "en": "Disconnect %@?"
+  },
+  "settings.disconnect.text": {
+   "de": "Die App nutzt %@ danach nicht mehr.",
+   "en": "The app will no longer use %@."
+  },
+  "settings.failed.body": {
+   "de": "Der Assistent bleibt aus, bis die Verbindung wieder steht.",
+   "en": "The assistant stays off until the connection is back."
+  },
+  "settings.failed.title": {
+   "de": "Fehler · %@",
+   "en": "Error · %@"
+  },
+  "settings.failed.unknown": {
+   "de": "Keine Antwort",
+   "en": "No response"
+  },
+  "settings.folders.data": {
+   "de": "Projektdaten",
+   "en": "Project data"
+  },
+  "settings.folders.projects": {
+   "de": "Projektordner",
+   "en": "Project folder"
+  },
+  "settings.folders.templates": {
+   "de": "Vorlagen",
+   "en": "Templates"
+  },
+  "settings.group.company": {
+   "de": "Firma",
+   "en": "Company"
+  },
+  "settings.group.connections": {
+   "de": "Verbindungen",
+   "en": "Connections"
+  },
+  "settings.group.me": {
+   "de": "Ich",
+   "en": "Me"
+  },
+  "settings.group.protection": {
+   "de": "Schutz und System",
+   "en": "Protection and System"
+  },
+  "settings.hold.remove": {
+   "de": "Halten zum Entfernen",
+   "en": "Hold to remove"
+  },
+  "settings.identity.account": {
+   "de": "Konto",
+   "en": "Account"
+  },
+  "settings.identity.birthdays": {
+   "de": "Geburtstag im Team zeigen",
+   "en": "Show team birthdays"
+  },
+  "settings.identity.code": {
+   "de": "Kürzel",
+   "en": "Initials"
+  },
+  "settings.identity.name": {
+   "de": "Name",
+   "en": "Name"
+  },
+  "settings.identity.phone": {
+   "de": "Telefon",
+   "en": "Phone"
+  },
+  "settings.identity.role": {
+   "de": "Rolle",
+   "en": "Role"
+  },
+  "settings.identity.signOut": {
+   "de": "Auf diesem Mac abmelden",
+   "en": "Sign out on this Mac"
+  },
+  "settings.identity.signOut.action": {
+   "de": "Abmelden",
+   "en": "Sign Out"
+  },
+  "settings.imprint.row.author": {
+   "de": "Urheber",
+   "en": "Author"
+  },
+  "settings.imprint.row.rights": {
+   "de": "Rechte",
+   "en": "Rights"
+  },
+  "settings.imprint.row.signature": {
+   "de": "Signatur",
+   "en": "Signature"
+  },
+  "settings.label.branch": {
+   "de": "Zweig",
+   "en": "Branch"
+  },
+  "settings.label.database": {
+   "de": "Datenbank",
+   "en": "Database"
+  },
+  "settings.label.diagnosis": {
+   "de": "Diagnose",
+   "en": "Diagnostics"
+  },
+  "settings.label.version": {
+   "de": "Version",
+   "en": "Version"
+  },
+  "settings.link.connected": {
+   "de": "Verbunden",
+   "en": "Connected"
+  },
+  "settings.link.connecting": {
+   "de": "Verbindet …",
+   "en": "Connecting …"
+  },
+  "settings.link.failed": {
+   "de": "Fehler",
+   "en": "Error"
+  },
+  "settings.link.notConnected": {
+   "de": "Nicht verbunden",
+   "en": "Not connected"
+  },
+  "settings.link.unreadable": {
+   "de": "Schlüsselbund nicht lesbar",
+   "en": "Keychain unreadable"
+  },
+  "settings.link.working": {
+   "de": "Gleicht ab …",
+   "en": "Syncing …"
+  },
+  "settings.lock.after": {
+   "de": "Sperren nach",
+   "en": "Lock after"
+  },
+  "settings.lock.delay.immediately": {
+   "de": "Sofort",
+   "en": "Immediately"
+  },
+  "settings.lock.delay.minute1": {
+   "de": "1 Minute",
+   "en": "1 minute"
+  },
+  "settings.lock.delay.minutes15": {
+   "de": "15 Minuten Pause",
+   "en": "15 minutes idle"
+  },
+  "settings.lock.delay.minutes5": {
+   "de": "5 Minuten Pause",
+   "en": "5 minutes idle"
+  },
+  "settings.lock.label": {
+   "de": "App-Sperre",
+   "en": "App lock"
+  },
+  "settings.menu.check": {
+   "de": "✓",
+   "en": "✓"
+  },
+  "settings.note.checked": {
+   "de": "Beim Anbieter geprüft · %@",
+   "en": "Checked with provider · %@"
+  },
+  "settings.note.failed": {
+   "de": "Letzter Fehler %@ · letzter Erfolg %@",
+   "en": "Last error %@ · last success %@"
+  },
+  "settings.note.failedOnly": {
+   "de": "Letzter Fehler %@",
+   "en": "Last error %@"
+  },
+  "settings.note.signingIn": {
+   "de": "Anmeldung läuft",
+   "en": "Signing in"
+  },
+  "settings.privacy.assistantOff": {
+   "de": "Assistent ganz aus",
+   "en": "Turn off assistant completely"
+  },
+  "settings.privacy.categories": {
+   "de": "Freigaben für den Assistenten",
+   "en": "Assistant permissions"
+  },
+  "settings.privacy.category.calendar": {
+   "de": "Kalender",
+   "en": "Calendar"
+  },
+  "settings.privacy.category.catalogCalculation": {
+   "de": "Kataloge und Kalkulation",
+   "en": "Catalogs and calculation"
+  },
+  "settings.privacy.category.chat": {
+   "de": "Gesprächsverlauf",
+   "en": "Chat history"
+  },
+  "settings.privacy.category.clickUp": {
+   "de": "Aufgaben (ClickUp)",
+   "en": "Tasks (ClickUp)"
+  },
+  "settings.privacy.category.contacts": {
+   "de": "Kontakte",
+   "en": "Contacts"
+  },
+  "settings.privacy.category.drive": {
+   "de": "Dateien (Drive)",
+   "en": "Files (Drive)"
+  },
+  "settings.privacy.category.mail": {
+   "de": "Mail",
+   "en": "Mail"
+  },
+  "settings.privacy.category.notes": {
+   "de": "Notizen",
+   "en": "Notes"
+  },
+  "settings.privacy.category.studioKnowledge": {
+   "de": "Studiowissen",
+   "en": "Studio knowledge"
+  },
+  "settings.privacy.category.tasks": {
+   "de": "Aufgaben",
+   "en": "Tasks"
+  },
+  "settings.privacy.category.time": {
+   "de": "Zeiterfassung (Clockodo)",
+   "en": "Time tracking (Clockodo)"
+  },
+  "settings.privacy.chatFiles": {
+   "de": "Dateien im Chat",
+   "en": "Files in chat"
+  },
+  "settings.privacy.images": {
+   "de": "Bilder in Mails laden",
+   "en": "Load images in messages"
+  },
+  "settings.row.access": {
+   "de": "Anmeldung",
+   "en": "Sign-in"
+  },
+  "settings.row.state": {
+   "de": "Zustand",
+   "en": "Status"
+  },
+  "settings.section.appearance": {
+   "de": "Darstellung",
+   "en": "Appearance"
+  },
+  "settings.section.appearance.detail": {
+   "de": "Erscheinung, Startansicht, App-Sperre",
+   "en": "Appearance, start view, app lock"
+  },
+  "settings.section.companyData": {
+   "de": "Firmendaten",
+   "en": "Company Data"
+  },
+  "settings.section.companyData.detail": {
+   "de": "Firma, Anschrift, Kontakt",
+   "en": "Company, address, contact"
+  },
+  "settings.section.contacts": {
+   "de": "Kontakte",
+   "en": "Contacts"
+  },
+  "settings.section.identity": {
+   "de": "Identität",
+   "en": "Identity"
+  },
+  "settings.section.identity.detail": {
+   "de": "Name, Rolle, Kürzel im Team",
+   "en": "Name, role, initials in the team"
+  },
+  "settings.section.imprint": {
+   "de": "Impressum",
+   "en": "Imprint"
+  },
+  "settings.section.imprint.detail": {
+   "de": "Urheber, Rechte, Signatur",
+   "en": "Author, rights, signature"
+  },
+  "settings.section.integrations": {
+   "de": "Integrationen",
+   "en": "Integrations"
+  },
+  "settings.section.keyInventory": {
+   "de": "Schlüssel-Inventar",
+   "en": "Key Inventory"
+  },
+  "settings.section.privacy": {
+   "de": "Datenschutz",
+   "en": "Privacy"
+  },
+  "settings.section.system": {
+   "de": "System",
+   "en": "System"
+  },
+  "settings.section.system.detail": {
+   "de": "Version, Build, Datenbank",
+   "en": "Version, build, database"
+  },
+  "settings.section.templates": {
+   "de": "Vorlagen",
+   "en": "Templates"
+  },
+  "settings.section.templates.detail": {
+   "de": "Noch keine Vorlage",
+   "en": "No template yet"
+  },
+  "settings.service.airtable.area.projects": {
+   "de": "Projekte",
+   "en": "Projects"
+  },
+  "settings.service.airtable.extra.cache": {
+   "de": "Zwischenspeicher",
+   "en": "Cache"
+  },
+  "settings.service.airtable.field.base": {
+   "de": "Base",
+   "en": "Base"
+  },
+  "settings.service.airtable.field.token": {
+   "de": "Zugriffsschlüssel",
+   "en": "Access key"
+  },
+  "settings.service.airtable.name": {
+   "de": "Airtable",
+   "en": "Airtable"
+  },
+  "settings.service.claude.field.key": {
+   "de": "Schlüssel",
+   "en": "Keys"
+  },
+  "settings.service.claude.field.model": {
+   "de": "Modell",
+   "en": "Model"
+  },
+  "settings.service.claude.name": {
+   "de": "Claude",
+   "en": "Claude"
+  },
+  "settings.service.claude.use": {
+   "de": "Assistent",
+   "en": "Assistant"
+  },
+  "settings.service.clickup.area.phases": {
+   "de": "Phasen",
+   "en": "Phases"
+  },
+  "settings.service.clickup.area.taskFields": {
+   "de": "Aufgabenfelder",
+   "en": "Task fields"
+  },
+  "settings.service.clickup.field.token": {
+   "de": "Zugriffsschlüssel",
+   "en": "Access key"
+  },
+  "settings.service.clickup.name": {
+   "de": "ClickUp",
+   "en": "ClickUp"
+  },
+  "settings.service.clickup.use": {
+   "de": "Aufgaben",
+   "en": "Tasks"
+  },
+  "settings.service.clockodo.field.email": {
+   "de": "E-Mail",
+   "en": "Email"
+  },
+  "settings.service.clockodo.field.key": {
+   "de": "Schlüssel",
+   "en": "Keys"
+  },
+  "settings.service.clockodo.field.user": {
+   "de": "Clockodo-Nutzer",
+   "en": "Clockodo user"
+  },
+  "settings.service.clockodo.name": {
+   "de": "Clockodo",
+   "en": "Clockodo"
+  },
+  "settings.service.clockodo.use": {
+   "de": "Zeiten",
+   "en": "Time entries"
+  },
+  "settings.service.dhlship.field.billing": {
+   "de": "Abrechnungsnummer",
+   "en": "Billing number"
+  },
+  "settings.service.dhlship.field.key": {
+   "de": "Schlüssel",
+   "en": "Keys"
+  },
+  "settings.service.dhlship.field.password": {
+   "de": "Passwort",
+   "en": "Password"
+  },
+  "settings.service.dhlship.field.secret": {
+   "de": "Geheimnis",
+   "en": "Secret"
+  },
+  "settings.service.dhlship.field.sender": {
+   "de": "Absender",
+   "en": "Sender"
+  },
+  "settings.service.dhlship.field.user": {
+   "de": "Benutzer",
+   "en": "User"
+  },
+  "settings.service.dhlship.name": {
+   "de": "DHL Versand",
+   "en": "DHL Shipping"
+  },
+  "settings.service.dhlship.use": {
+   "de": "Etiketten erstellen",
+   "en": "Create labels"
+  },
+  "settings.service.google.area.contacts": {
+   "de": "Kontakte",
+   "en": "Contacts"
+  },
+  "settings.service.google.area.files": {
+   "de": "Dateien",
+   "en": "Files"
+  },
+  "settings.service.google.area.mail": {
+   "de": "Mail",
+   "en": "Mail"
+  },
+  "settings.service.google.extra.driveFolders": {
+   "de": "Drive-Ordner der Projekte",
+   "en": "Drive folders of the projects"
+  },
+  "settings.service.google.name": {
+   "de": "Google",
+   "en": "Google"
+  },
+  "settings.service.google.use": {
+   "de": "Mail, Dateien, Kalender, Kontakte",
+   "en": "Mail, files, calendar, contacts"
+  },
+  "settings.service.group.company": {
+   "de": "Firma",
+   "en": "Company"
+  },
+  "settings.service.group.personal": {
+   "de": "Persönlich",
+   "en": "Personal"
+  },
+  "settings.service.happa.field.key": {
+   "de": "Schlüssel",
+   "en": "Keys"
+  },
+  "settings.service.happa.name": {
+   "de": "Happa Happa",
+   "en": "Happa Happa"
+  },
+  "settings.service.happa.use": {
+   "de": "Speiseplan",
+   "en": "Menu"
+  },
+  "settings.service.mailaccounts.name": {
+   "de": "Mail-Konten",
+   "en": "Mail Accounts"
+  },
+  "settings.service.sevdesk.field.token": {
+   "de": "Zugriffsschlüssel",
+   "en": "Access key"
+  },
+  "settings.service.sevdesk.name": {
+   "de": "sevDesk",
+   "en": "sevDesk"
+  },
+  "settings.signin": {
+   "de": "Anmelden",
+   "en": "Sign In"
+  },
+  "settings.start.label": {
+   "de": "Beim Öffnen",
+   "en": "On launch"
+  },
+  "settings.start.lastOpen": {
+   "de": "Zuletzt offen",
+   "en": "Last Opened"
+  },
+  "settings.start.mail": {
+   "de": "Mail",
+   "en": "Mail"
+  },
+  "settings.start.settings": {
+   "de": "Einstellungen",
+   "en": "Settings"
+  },
+  "settings.sync.head": {
+   "de": "Abgleich",
+   "en": "Sync"
+  },
+  "settings.sync.last": {
+   "de": "Letzter Abgleich %@",
+   "en": "Last sync %@"
+  },
+  "settings.sync.never": {
+   "de": "Noch nicht abgeglichen",
+   "en": "Not synced yet"
+  },
+  "settings.sync.now": {
+   "de": "Jetzt abgleichen",
+   "en": "Sync now"
+  },
+  "settings.system.branch.format": {
+   "de": "%@ · %@",
+   "en": "%@ · %@"
+  },
+  "settings.system.copy": {
+   "de": "Kopieren",
+   "en": "Copy"
+  },
+  "settings.system.version.format": {
+   "de": "%@ (%@)",
+   "en": "%@ (%@)"
+  },
+  "settings.templates.none": {
+   "de": "Noch keine Vorlage.",
+   "en": "No template yet."
+  },
+  "settings.tiles.integrations": {
+   "de": "Integrationen",
+   "en": "Integrations"
+  },
+  "settings.tiles.keys": {
+   "de": "Schlüssel",
+   "en": "Keys"
+  },
+  "settings.toast.copied": {
+   "de": "In die Zwischenablage kopiert",
+   "en": "Copied to clipboard"
+  },
+  "settings.unreadable.body": {
+   "de": "Der Schlüssel ist gespeichert, die App kommt nicht an ihn heran. Einmal neu eintragen.",
+   "en": "The key is stored, but the app can’t access it. Enter it once more."
+  },
+  "settings.unreadable.title": {
+   "de": "Der Schlüsselbund kann nicht gelesen werden.",
+   "en": "The keychain can’t be read."
+  },
+  "settings.value.default": {
+   "de": "Standard",
+   "en": "Default"
+  },
+  "settings.value.empty": {
+   "de": "Nicht eingetragen",
+   "en": "Not entered"
+  },
+  "settings.value.masked": {
+   "de": "••••••••••••",
+   "en": "••••••••••••"
+  },
+  "text.settings.action.addAccount": {
+   "de": "Konto hinzufügen",
+   "en": "Add Account"
+  },
+  "text.settings.action.check": {
+   "de": "Prüfen",
+   "en": "Check"
+  },
+  "text.settings.action.remove": {
+   "de": "Entfernen",
+   "en": "Remove"
   }
  }
 }
