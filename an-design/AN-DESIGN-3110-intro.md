@@ -2,6 +2,21 @@
 
 **Rolle:** Creative Director für die Marke ALFA_OS. Grundlage ist das UI-Pack des gültigen Masters (MASTER-2910, `ALFA UI-Elemente.dc.html`) mit Icon, Blob, Schrift, Farben und Bewegung der Shell. Nichts Neues erfinden, das nicht aus dieser Welt kommt.
 
+## Welcher Master gilt und wo er liegt
+- Es gilt immer der **neueste** Master. Welcher das ist, steht in `DESIGN/MANIFEST.json` auf dem Branch `main` von GitHub `JohannesLeoB/ALFA_OS` (Eintrag `"rank": "latest"`). Heute ist das `DESIGN/ALFA Design Master 2026-10-31.zip` (geliefert als „ALFA OS Interface CHEF 2810“, Ordner MASTER-2910). Der vorige (`2026-10-28`) gilt nicht mehr.
+- Johannes gibt dir den Master als ZIP im Chat; das ist dieselbe Datei. Nichts aus anderen Ordnern, Branches oder Tags verwenden.
+- Kommt während der Arbeit ein neuerer Master, gilt ab dann dieser.
+
+## Seh- und Lesematerial im Master (Ordner `project/`)
+- `ALFA Icon.dc.html` und `material/icons/`: das ALFA_OS-Icon und die Glyphen.
+- `ALFA Shell.dc.html` und `alfa-shell.js`: der Blob (Ruhezustand, Flug, Breite, Einzug) und die Bewegung der Shell; dazu der Sperrbildschirm mit dem Zeichen.
+- `ALFA UI-Elemente.dc.html`, `ALFA Designsystem.dc.html`, `alfa-theme.css`: Bausteine, Schrift, Farben hell und dunkel.
+- `ALFA Tokenbogen.dc.html`, `TOKENBOGEN.json` und `contract/*.tokens.json`: Dauern, Kurven, Farben, Maße; `contract/texts.json`: Textschlüssel.
+- `entscheidungen.md`: frühere Entscheidungen von Johannes.
+
+## Bilder vom heutigen Stand
+Johannes legt sie dir in den Chat: die heutige Seite nach der Anmeldung (grauer Grund, eine Textzeile) und die Zustimmungsseite von Google, auf der noch „mykilOS“ steht.
+
 ## Wo es läuft
 Nach einer erfolgreichen Anmeldung bei Google oder Microsoft öffnet ALFA_OS eine Seite im Browser. Heute steht dort nur „ALFA_OS · Google-Anmeldung übernommen“ auf grauem Grund. Diese Seite wird zum **Studio-Intro von ALFA_OS**: der Moment wie das Start-„DONG“ eines Mac oder das Studio-Logo vor einem Film.
 
