@@ -58,3 +58,97 @@ public struct DriveLink: Codable, Sendable, Equatable, Identifiable {
         self.subtitle = subtitle
     }
 }
+
+public struct CalendarEntry: Sendable, Equatable {
+    public let id: String
+    public let title: String
+    public let startsAt: Date?
+    public let isAllDay: Bool
+    public let location: String?
+    var calendarTitle: String
+
+    public init(id: String, title: String, startsAt: Date?, isAllDay: Bool = false, location: String? = nil,
+                calendarTitle: String = "") {
+        self.id = id
+        self.title = title
+        self.startsAt = startsAt
+        self.isAllDay = isAllDay
+        self.location = location
+        self.calendarTitle = calendarTitle
+    }
+}
+
+public struct CalendarRef: Sendable, Equatable {
+    public let id: String
+    public let title: String
+
+    public init(id: String, title: String) {
+        self.id = id
+        self.title = title
+    }
+}
+
+public struct MailHit: Sendable, Equatable {
+    public let id: String
+    public let subject: String
+    public let from: String
+    public let receivedAt: Date?
+    public let labels: [String]
+    public let snippet: String
+    public let attachmentNames: [String]
+
+    public init(id: String, subject: String, from: String, receivedAt: Date?, labels: [String] = [],
+                snippet: String = "", attachmentNames: [String] = []) {
+        self.id = id
+        self.subject = subject
+        self.from = from
+        self.receivedAt = receivedAt
+        self.labels = labels
+        self.snippet = snippet
+        self.attachmentNames = attachmentNames
+    }
+}
+
+public struct Contact: Sendable, Equatable, Identifiable {
+    public let id: String
+    public var name: String
+    public var organization: String?
+    public var email: String?
+    public var phone: String?
+    public var address: String?
+    public var category: String?
+    public var project: String?
+
+    public init(id: String, name: String, organization: String? = nil, email: String? = nil, phone: String? = nil,
+                address: String? = nil, category: String? = nil, project: String? = nil) {
+        self.id = id
+        self.name = name
+        self.organization = organization
+        self.email = email
+        self.phone = phone
+        self.address = address
+        self.category = category
+        self.project = project
+    }
+
+    func matches(_ query: String) -> Bool {
+        let lowered = query.lowercased()
+        return name.lowercased().contains(lowered)
+            || (organization?.lowercased().contains(lowered) ?? false)
+            || (project?.lowercased().contains(lowered) ?? false)
+    }
+}
+
+public struct GoogleContact: Sendable, Equatable {
+    public let displayName: String
+    public let organization: String?
+    public let email: String?
+    public let phone: String?
+
+    public init(displayName: String, organization: String? = nil, email: String? = nil, phone: String? = nil) {
+        self.displayName = displayName
+        self.organization = organization
+        self.email = email
+        self.phone = phone
+    }
+}

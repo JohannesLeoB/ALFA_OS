@@ -358,3 +358,171 @@ enum ToolAccessEngine {
         Set(allowed(tools, privacy: privacy).map(\.name))
     }
 }
+
+enum MemoryEngine {
+    static let windowDays = 28
+    static let maxMessages = 120
+    static let tailSize = 8
+    static let minBatch = 12
+
+    enum Plan: Equatable {
+        case passthrough
+        case reuse(tail: [Message], summary: String)
+        case distill(tail: [Message], batch: [Message], existing: String?, coveredThrough: String)
+    }
+
+    static func window(_ messages: [Message], now: Date) -> [Message] {
+        let cutoff = now.addingTimeInterval(-Double(windowDays) * 24 * 3600)
+        var windowed = messages.filter { $0.createdAt >= cutoff }
+        if windowed.count > maxMessages { windowed = Array(windowed.suffix(maxMessages)) }
+        return trimToUserStart(windowed)
+    }
+
+    static func trimToUserStart(_ messages: [Message]) -> [Message] {
+        var trimmed = messages
+        while let first = trimmed.first, first.role != .user { trimmed.removeFirst() }
+        return trimmed
+    }
+
+    static func plan(windowed: [Message], existing: MemorySummary?) -> Plan {
+        guard windowed.count > tailSize else { return .passthrough }
+        let tailStart = windowed.count - tailSize
+        let coveredIndex = existing.flatMap { summary in
+            windowed.firstIndex { $0.id.uuidString == summary.coveredThroughMessageID }
+        } ?? -1
+        let batch = coveredIndex + 1 < tailStart ? Array(windowed[(coveredIndex + 1)..<tailStart]) : []
+        let tail = trimToUserStart(Array(windowed[tailStart...]))
+        if batch.count >= minBatch, let last = batch.last {
+            return .distill(tail: tail, batch: batch, existing: existing?.summaryText, coveredThrough: last.id.uuidString)
+        }
+        if let existing { return .reuse(tail: tail, summary: existing.summaryText) }
+        return .passthrough
+    }
+
+    static func transcript(_ batch: [Message], text: any TextPort) -> String {
+        batch.map { message in
+            let role = text.text(message.role == .user ? "assistant.memory.roleUser" : "assistant.memory.roleAssistant", [])
+            return "\(role): \(message.text)"
+        }.joined(separator: "\n")
+    }
+}
+
+enum ModelRouter {
+    static let haiku = "claude-haiku-4-5-20251001"
+    static let sonnet = "claude-sonnet-4-6"
+    static let opus = "claude-opus-4-8"
+
+    static let estimationKeywords = [
+        "sch\u{E4}tz", "schaetz", "kalkul", "budget", "marge", "kostenvoranschlag",
+        "was kostet", "wieviel kostet", "kosten f\u{FC}r", "preis pro", "\u{20AC}", "euro",
+    ]
+
+    static let complexKeywords = [
+        "warum", "erkl\u{E4}re", "erkl\u{E4}r", "vergleich", "analys",
+        "strategie", "begr\u{FC}nd", "schritt f\u{FC}r schritt", "plane ",
+    ]
+
+    static let complexWordLimit = 40
+
+    static func model(latestUserText: String, toolsEnabled: Bool) -> String {
+        let text = latestUserText.lowercased()
+        if mentionsEstimation(text) { return opus }
+        if toolsEnabled { return sonnet }
+        if isComplex(text) { return sonnet }
+        return haiku
+    }
+
+    static func mentionsEstimation(_ text: String) -> Bool {
+        estimationKeywords.contains { text.contains($0) }
+    }
+
+    static func isComplex(_ text: String) -> Bool {
+        if text.split(whereSeparator: { $0 == " " || $0 == "\n" }).count > complexWordLimit { return true }
+        return complexKeywords.contains { text.contains($0) }
+    }
+}
+
+enum ThreadEngine {
+    static func turns(_ messages: [Message]) -> [ChatTurn] {
+        messages.map(turn)
+    }
+
+    static func turn(_ message: Message) -> ChatTurn {
+        let failure: String? = if case .failed(let reason) = message.status { reason } else { nil }
+        var blocks = message.blocks.flatMap(blocks).filter { block in
+            guard case .text(let value) = block else { return true }
+            return value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false && value != failure
+        }
+        if message.role == .user {
+            blocks = blocks.filter(\.isFile) + blocks.filter { $0.isFile == false }
+        }
+        return ChatTurn(id: message.id, kind: kind(message, failed: failure != nil), blocks: blocks)
+    }
+
+    static func kind(_ message: Message, failed: Bool) -> ChatTurn.Kind {
+        if failed { return .failed }
+        if message.status == .streaming { return .streaming }
+        return message.role == .user ? .user : .assistant
+    }
+
+    static func blocks(_ block: ContentBlock) -> [TurnBlock] {
+        switch block {
+        case .text(let value): [.text(value)]
+        case .toolUse, .toolResult: []
+        case .toolActivity(let label, let isError): [.activity(label: label, failed: isError)]
+        case .calendarLink(let url): [.draft(DraftSummary(kind: .calendar, title: url))]
+        case .contactDraft(let draft): [.draft(DraftSummary(kind: .contact, title: draft.displayName, line: draft.organization ?? draft.email))]
+        case .mailDraft(let draft): [.draft(DraftSummary(kind: .mail, title: draft.subject, line: draft.to))]
+        case .driveFiles(let links): links.map { .file($0.name) }
+        case .estimate(_, _, let minNet, let maxNet, _, _, _): [.estimate(minNet: minNet, maxNet: maxNet)]
+        case .estimateBreakdown(_, let lines, _): [.breakdown(lines: lines.count)]
+        case .airtableContactDraft(let draft): [.draft(DraftSummary(kind: .contact, title: draft.name, line: draft.organization ?? draft.email))]
+        case .taskChangeDraft(let draft): [.draft(DraftSummary(kind: .task, title: draft.taskName, line: draft.projectNumber))]
+        case .appointmentDraft(let draft): [.draft(DraftSummary(kind: .appointment, title: draft.title, line: draft.location))]
+        case .cartDraft(let draft): [.draft(DraftSummary(kind: .cart, title: draft.label, line: draft.articleNumber))]
+        case .fileDraft(let draft): [.draft(DraftSummary(kind: .file, title: draft.fileName, line: draft.projectNumber))]
+        case .image(let ref), .document(let ref): [.file(ref.fileName)]
+        case .unreadable: [.unreadable]
+        }
+    }
+
+    static func attachments(_ message: Message) -> [AttachmentRef] {
+        message.blocks.compactMap { block in
+            switch block {
+            case .image(let ref), .document(let ref): ref
+            default: nil
+            }
+        }
+    }
+}
+
+public enum UsageEngine {
+    static let million = 1_000_000.0
+    static let secondsPerDay = 86_400.0
+
+    public static func price(_ text: String) -> Double? {
+        let cleaned = text.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: ",", with: ".")
+        guard let value = Double(cleaned), value > 0 else { return nil }
+        return value
+    }
+
+    public static func estimate(_ totals: UsageTotals, input: String, output: String) -> Double? {
+        guard let inputPrice = price(input), let outputPrice = price(output) else { return nil }
+        let cost = Double(totals.input) / million * inputPrice + Double(totals.output) / million * outputPrice
+        return (cost * 2).rounded() / 2
+    }
+
+    public static func days(since: Date, now: Date) -> Int {
+        max(0, Int((now.timeIntervalSince(since) / secondsPerDay).rounded(.down)))
+    }
+
+    public static func scaled(_ tokens: Int) -> (amount: String, millions: Bool) {
+        let value = Double(tokens)
+        if value >= million { return (String(format: "%.1f", locale: Locale(identifier: "de"), value / million), true) }
+        return (String(Int((value / 1000).rounded())), false)
+    }
+
+    public static func money(_ amount: Double) -> String {
+        String(format: "%.2f", locale: Locale(identifier: "de"), amount)
+    }
+}

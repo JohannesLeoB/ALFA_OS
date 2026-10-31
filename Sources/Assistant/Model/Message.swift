@@ -1,5 +1,6 @@
 import Calculation
 import Foundation
+import Hub
 
 public enum MessageRole: String, Codable, Sendable, Equatable {
     case user
@@ -94,5 +95,138 @@ public struct Message: Codable, Sendable, Equatable, Identifiable {
 
     public var text: String {
         blocks.compactMap { if case .text(let value) = $0 { value } else { nil } }.joined(separator: "\n")
+    }
+}
+
+public struct ChatTurn: Identifiable, Equatable, Sendable {
+    public enum Kind: Equatable, Sendable {
+        case user
+        case assistant
+        case streaming
+        case failed
+    }
+
+    public let id: UUID
+    public let kind: Kind
+    public let blocks: [TurnBlock]
+}
+
+public enum TurnBlock: Equatable, Sendable {
+    case activity(label: String, failed: Bool)
+    case text(String)
+    case draft(DraftSummary)
+    case estimate(minNet: Double, maxNet: Double)
+    case breakdown(lines: Int)
+    case file(String)
+    case unreadable
+
+    var isFile: Bool {
+        if case .file = self { true } else { false }
+    }
+}
+
+public struct DraftSummary: Equatable, Sendable {
+    public enum Kind: String, Equatable, Sendable {
+        case mail
+        case contact
+        case task
+        case appointment
+        case cart
+        case file
+        case calendar
+    }
+
+    public let kind: Kind
+    public let title: String
+    public let line: String?
+
+    init(kind: Kind, title: String, line: String? = nil) {
+        self.kind = kind
+        self.title = title
+        self.line = line.flatMap { $0.isEmpty ? nil : $0 }
+    }
+}
+
+public struct MemorySummary: Sendable, Equatable {
+    let scopeKey: String
+    let summaryText: String
+    let coveredThroughMessageID: String
+    let updatedAt: Date
+
+    init(scopeKey: String, summaryText: String, coveredThroughMessageID: String, updatedAt: Date) {
+        self.scopeKey = scopeKey
+        self.summaryText = summaryText
+        self.coveredThroughMessageID = coveredThroughMessageID
+        self.updatedAt = updatedAt
+    }
+}
+
+public struct ConversationContext: Sendable {
+    var focusedProjectID: String?
+    var focusedDriveFolderID: String?
+    var focusedTaskListID: String?
+    var signals: [Signal]
+    var projects: [ProjectEntry]
+    var profile: UserProfile?
+    var actorUserID: String
+
+    public init(focusedProjectID: String? = nil, focusedDriveFolderID: String? = nil, focusedTaskListID: String? = nil,
+                signals: [Signal] = [], projects: [ProjectEntry] = [], profile: UserProfile? = nil,
+                actorUserID: String = "assistant") {
+        self.focusedProjectID = focusedProjectID
+        self.focusedDriveFolderID = focusedDriveFolderID
+        self.focusedTaskListID = focusedTaskListID
+        self.signals = signals
+        self.projects = projects
+        self.profile = profile
+        self.actorUserID = actorUserID
+    }
+
+    var scope: ToolScope {
+        ToolScope(projectID: focusedProjectID, driveFolderID: focusedDriveFolderID, taskListID: focusedTaskListID)
+    }
+}
+
+public enum Signal: Sendable, Equatable {
+    case projectFocused(projectID: String)
+    case driveFileAdded(projectID: String, fileName: String)
+    case offerDetected(projectID: String, label: String)
+    case drawingDetected(projectID: String, label: String)
+    case reviewSuggested(projectID: String, label: String)
+    case budgetThresholdCrossed(projectID: String, ratio: Double)
+    case deadlineNear(projectID: String, days: Int)
+    case taskDueSoon(projectID: String, taskName: String, days: Int)
+
+    var projectNumber: String {
+        switch self {
+        case .projectFocused(let id),
+             .driveFileAdded(let id, _),
+             .offerDetected(let id, _),
+             .drawingDetected(let id, _),
+             .reviewSuggested(let id, _),
+             .budgetThresholdCrossed(let id, _),
+             .deadlineNear(let id, _),
+             .taskDueSoon(let id, _, _):
+            id
+        }
+    }
+}
+
+public struct ProjectEntry: Sendable, Equatable {
+    let projectNumber: String
+    let title: String
+    let customerName: String?
+    let driveFolderID: String?
+    let phase: String?
+    let budget: Double?
+
+    init(projectNumber: String, title: String, customerName: String? = nil, driveFolderID: String? = nil,
+         phase: String? = nil, budget: Double? = nil) {
+        self.projectNumber = projectNumber
+        self.title = title
+        self.customerName = customerName
+        self.driveFolderID = driveFolderID
+        self.phase = phase
+        self.budget = budget
     }
 }
