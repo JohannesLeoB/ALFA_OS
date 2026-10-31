@@ -555,7 +555,7 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(try json(calls[0]) as? [String: [String]], ["removeLabelIds": ["INBOX"]])
         XCTAssertEqual(calls[1].body, Data())
         XCTAssertEqual(try json(calls[2]) as? [String: [String]], ["addLabelIds": ["SPAM"], "removeLabelIds": ["INBOX"]])
-        XCTAssertEqual(try json(calls[3]) as? [String: [String]], ["addLabelIds": ["Label_7"], "removeLabelIds": ["INBOX"]])
+        XCTAssertEqual(try json(calls[3]) as? [String: [String]], ["addLabelIds": ["Label_7"], "removeLabelIds": ["INBOX", "SPAM"]])
         XCTAssertEqual(try json(calls[6]) as? [String: [String]], ["addLabelIds": ["INBOX"], "removeLabelIds": ["SPAM"]])
     }
 
