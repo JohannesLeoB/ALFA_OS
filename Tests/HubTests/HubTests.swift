@@ -263,6 +263,16 @@ private struct GivenSignIn: SignInPort {
     func signOut(_ inlet: Inlet) async throws {}
 }
 
+private final class SwitchedSignIn: SignInPort, Sendable {
+    let grant = Locked(Grant(values: [:]))
+
+    func signIn(_ inlet: Inlet, input: [Field.ID: String]) async throws -> Grant { grant.with { $0 } }
+
+    func renew(_ grant: Grant) async throws -> Grant { grant }
+
+    func signOut(_ inlet: Inlet) async throws {}
+}
+
 private struct StuckSignIn: SignInPort {
     func signIn(_ inlet: Inlet, input: [Field.ID: String]) async throws -> Grant {
         try await Task.sleep(for: .seconds(3600))
@@ -1010,6 +1020,18 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(renewed.id, inlet.id)
         XCTAssertEqual(renewed.account, "b@x")
         XCTAssertEqual(rig.connections.setup.inlets.map(\.id), [inlet.id])
+    }
+
+    @MainActor
+    func testRenewalDropsKeySlotsTheNewGrantNoLongerHolds() async throws {
+        let signIn = SwitchedSignIn()
+        signIn.grant.with { $0 = Grant(values: ["token": "t1", "password": "p1"]) }
+        let rig = try Rig.make(provider: FakeProvider(capabilities: [.mail], signIn: signIn))
+        let inlet = try await rig.connect("a@x")
+        XCTAssertEqual(Set(rig.keychain.slots.map(\.name)), ["token", "password"])
+        signIn.grant.with { $0 = Grant(values: ["token": "t2"]) }
+        _ = try await rig.connections.setup.add(Rig.offer, input: .fields(["address": "a@x", Input.renewsKey: inlet.id]))
+        XCTAssertEqual(Set(rig.keychain.slots.map(\.name)), ["token"])
     }
 
     @MainActor

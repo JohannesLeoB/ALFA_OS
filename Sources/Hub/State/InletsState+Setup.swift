@@ -91,6 +91,10 @@ extension InletsState: SetupPort {
             for (name, value) in SetupEngine.sorted(grant) {
                 try configuration.keychain.put(value, at: KeySlot(inlet: existing.id, name: name))
             }
+            let kept = Set(grant.values.keys)
+            for name in (try? inletStore.slots(of: existing.id)) ?? [] where !kept.contains(name) {
+                try? configuration.keychain.delete(KeySlot(inlet: existing.id, name: name))
+            }
             var inlet = existing
             if let account { inlet.account = account }
             inlet.state = .connected(probed: configuration.clock())
