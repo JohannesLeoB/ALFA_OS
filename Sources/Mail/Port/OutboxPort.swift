@@ -13,7 +13,7 @@ public protocol OutboxPort: AnyObject {
     func loadDraft(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> StoredDraft
     func deleteDraft(_ inlet: Inlet.ID, draftID: String) async throws(HubFailure)
     func send(_ inlet: Inlet.ID, _ draft: Draft) async -> SendOutcome
-    func sendDraft(_ inlet: Inlet.ID, draftID: String, _ draft: Draft) async -> SendOutcome
+    func sendDraft(_ inlet: Inlet.ID, draftID: String, mirrorID: String?, _ draft: Draft) async -> SendOutcome
     func resend(_ id: OutboxItem.ID, _ draft: Draft, draftID: String?) async -> SendOutcome?
     func confirm(_ id: OutboxItem.ID) async
     @discardableResult func discard(_ id: OutboxItem.ID) -> Bool

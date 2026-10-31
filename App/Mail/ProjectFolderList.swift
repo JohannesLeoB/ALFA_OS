@@ -15,7 +15,7 @@ enum ProjectFolderList {
 
     static func save(_ session: AppSession, appearance: Appearance, message id: String, anchor: AnchorBox) {
         projects(session, appearance: appearance, title: "mail.saveMail.chooseProject", rootTitle: "mail.saveMail.menu", anchor: anchor) { project in
-            Task { await session.inbox.mailToProjectFolder(id, project: project, render: MessageExport.render) }
+            Task { await session.inbox.mailToProjectFolder(id, project: project, render: { MessageExport.render($0, settings: session.settings) }) }
         }
     }
 

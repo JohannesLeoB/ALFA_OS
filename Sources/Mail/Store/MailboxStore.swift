@@ -28,6 +28,7 @@ public final class MailboxStore: MailboxPort {
     var offerings: [Inlet.ID: MailOffering] = [:]
     var sendLimits: [Inlet.ID: Int] = [:]
     var progresses: [String: SyncProgress] = [:]
+    var fetched: [Inlet.ID: SyncProgress] = [:]
 
     public init(access: any AccessPort, database: SQLiteStore, outbox: OutboxStore, events: Broadcast<MailboxEvent>,
                 now: @escaping @Sendable () -> Date = { Date() },

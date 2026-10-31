@@ -82,7 +82,7 @@ extension MessageCard {
             if case .draft(let id) = inbox.frontRef {
                 moreAnchor.showMenu(MenuLine.entries(MenuEngine.draftMore(receipt: inbox.asksReceipt(id)), appearance: appearance) { action in
                     switch action {
-                    case .print: MessageExport.printDraft(inbox, id)
+                    case .print: MessageExport.printDraft(inbox, id, settings: session.settings)
                     case .laterSend: moreAnchor.showMenu(planEntries(id))
                     default: inbox.toggleReceipt(id)
                     }

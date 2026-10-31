@@ -63,8 +63,10 @@ public final class OutboxStore: OutboxPort {
         await submit(OutboxItem(inlet: inlet, draft: draft))
     }
 
-    public func sendDraft(_ inlet: Inlet.ID, draftID: String, _ draft: Draft) async -> SendOutcome {
-        await submit(OutboxItem(inlet: inlet, draft: draft, draftID: draftID))
+    public func sendDraft(_ inlet: Inlet.ID, draftID: String, mirrorID: String?, _ draft: Draft) async -> SendOutcome {
+        var item = OutboxItem(inlet: inlet, draft: draft, draftID: draftID)
+        item.mirrorID = mirrorID
+        return await submit(item)
     }
 
     public func resend(_ id: OutboxItem.ID, _ draft: Draft, draftID: String?) async -> SendOutcome? {
@@ -193,8 +195,10 @@ public final class OutboxStore: OutboxPort {
         var item = queued
         let inlet = queued.inlet
         switch await DeliveryEngine.deliver(&item, verify: false, byUser: false, access: access,
-                                            folder: { MailboxStore.folderID(self.database, inlet, role: $0) }) {
+                                            folder: { MailboxStore.folderID(self.database, inlet, role: $0) },
+                                            stored: recorder(inlet)) {
         case .sent:
+            dropSent(inlet, item.mirrorID)
             return .sent
         case .transient:
             store(item)
@@ -226,12 +230,13 @@ public final class OutboxStore: OutboxPort {
             guard let now = items.firstIndex(where: { $0.id == id }) else { return }
             items[now].proceed()
             events.emit(.outboxChanged)
-        })
+        }, stored: recorder(inlet))
         guard let current = items.firstIndex(where: { $0.id == id }) else { return }
         items[current].draftID = item.draftID
         items[current].mirrorID = item.mirrorID
         switch result {
         case .sent:
+            dropSent(inlet, item.mirrorID)
             items.remove(at: current)
             unsaved.remove(id)
             finish(id)
@@ -246,6 +251,19 @@ public final class OutboxStore: OutboxPort {
             persist(id)
         }
         events.emit(.outboxChanged)
+    }
+
+    private func recorder(_ inlet: Inlet.ID) -> (SavedDraft, Draft, String?) -> Void {
+        { [weak self] saved, draft, previous in
+            guard let self, let target = MailboxStore.folderID(database, inlet, role: .drafts) else { return }
+            try? mirror?.record(saved, of: draft, replacing: previous, inlet: inlet, folder: target)
+        }
+    }
+
+    private func dropSent(_ inlet: Inlet.ID, _ mirrorID: String?) {
+        guard let mirrorID, let target = MailboxStore.folderID(database, inlet, role: .drafts) else { return }
+        try? mirror?.drop(inlet, target, ids: [mirrorID])
+        mirror?.announceChange(inlet, target)
     }
 
     private func store(_ item: OutboxItem) {

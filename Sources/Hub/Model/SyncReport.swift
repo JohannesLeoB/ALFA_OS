@@ -44,7 +44,7 @@ public struct RunProgress: Equatable, Sendable {
 public struct SyncReporter: Sendable {
     private let deliver: @Sendable (RunProgress) -> Void
 
-    init(_ deliver: @escaping @Sendable (RunProgress) -> Void) {
+    public init(_ deliver: @escaping @Sendable (RunProgress) -> Void) {
         self.deliver = deliver
     }
 

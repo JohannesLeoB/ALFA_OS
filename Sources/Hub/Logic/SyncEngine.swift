@@ -8,7 +8,7 @@ enum SyncEngine {
         inlet + "|" + capability.rawValue
     }
 
-    static func isRunning(_ inlet: Inlet.ID, in running: Set<String>) -> Bool {
+    static func isRunning<Keys: Sequence>(_ inlet: Inlet.ID, in running: Keys) -> Bool where Keys.Element == String {
         running.contains { $0.hasPrefix(inlet + "|") }
     }
 

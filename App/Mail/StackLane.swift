@@ -73,7 +73,7 @@ struct StackLane: View {
 
     private func perform(_ action: Action) {
         if action == .print, case .draft(let id) = inbox.frontRef {
-            MessageExport.printDraft(inbox, id)
+            MessageExport.printDraft(inbox, id, settings: session.settings)
             return
         }
         switch SlotRouter.route(action, front: inbox.frontRef) {

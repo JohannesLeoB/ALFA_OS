@@ -375,7 +375,7 @@ extension InboxState {
         if let outboxID = card.outboxID, let again = await outboxPort.resend(outboxID, card.draft, draftID: card.remoteID) {
             outcome = again
         } else if let remoteID = card.remoteID {
-            outcome = await outboxPort.sendDraft(card.inlet, draftID: remoteID, card.draft)
+            outcome = await outboxPort.sendDraft(card.inlet, draftID: remoteID, mirrorID: card.mirrorID, card.draft)
         } else {
             outcome = await outboxPort.send(card.inlet, card.draft)
         }
@@ -386,6 +386,7 @@ extension InboxState {
             drafts[now].state = .sent
             dropLocal(id)
             if let mirrorID = card.mirrorID { goneDrafts[card.inlet, default: []].insert(mirrorID) }
+            refreshCounts()
             refreshAfterDraftChange(card.inlet, roles: [.drafts, .sent])
             if announce { post(.outboxSent) }
         case .queued(let outboxID):
@@ -423,6 +424,7 @@ extension InboxState {
                 drafts[index].state = .sent
                 dropLocal(drafts[index].id)
                 if let mirrorID = drafts[index].mirrorID { goneDrafts[drafts[index].inlet, default: []].insert(mirrorID) }
+                refreshCounts()
                 refreshAfterDraftChange(drafts[index].inlet, roles: [.drafts, .sent])
                 continue
             }

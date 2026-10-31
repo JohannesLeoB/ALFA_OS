@@ -112,18 +112,20 @@ extension MailboxStore {
 
     private func execute(_ inlet: Inlet.ID, _ folder: String, older: Bool, narrowed: Bool) async -> Result<Void, HubFailure> {
         running[inlet, default: 0] += 1
-        let outcome: Result<Void, HubFailure>
-        do {
-            try await pass(inlet, folder, older: older, narrowed: narrowed)
-            await expire(inlet, folder)
-            outcome = .success(())
-        } catch {
-            outcome = .failure(error)
+        let outcome = await access.track(inlet, .mail) { reporter -> Result<Void, HubFailure> in
+            do throws(HubFailure) {
+                try await self.pass(inlet, folder, older: older, narrowed: narrowed, reporter: reporter)
+                await self.expire(inlet, folder)
+                return .success(())
+            } catch {
+                return .failure(error)
+            }
         }
         running[inlet, default: 1] -= 1
         if running[inlet] == 0 {
             running[inlet] = nil
             dirty[inlet] = nil
+            fetched[inlet] = nil
         }
         passes[Self.key(inlet, folder)] = nil
         if Task.isCancelled, case .failure = outcome { return .success(()) }
@@ -137,7 +139,7 @@ extension MailboxStore {
         try? await port.expire(policy, now: now())
     }
 
-    private func pass(_ inlet: Inlet.ID, _ folder: String, older: Bool, narrowed: Bool) async throws(HubFailure) {
+    private func pass(_ inlet: Inlet.ID, _ folder: String, older: Bool, narrowed: Bool, reporter: SyncReporter) async throws(HubFailure) {
         let transport = try transport(inlet)
         guard let mirror = transport as? any MirrorPort, !mirror.ranges.isEmpty else {
             throw HubFailure.capabilityMissing(inlet, .mail)
@@ -172,7 +174,7 @@ extension MailboxStore {
         let missing = mirror.fillsPreviews ? unpreviewedIDs(inlet, folder) : []
         let fetching = plan.unknown + listing.ids.filter { missing.contains($0) }
         var done = 0
-        if !fetching.isEmpty { setProgress(inlet, folder, SyncProgress(done: 0, total: fetching.count)) }
+        if !fetching.isEmpty { setProgress(inlet, folder, SyncProgress(done: 0, total: fetching.count), reporter: reporter) }
         for chunk in MirrorEngine.chunks(fetching, size: MirrorEngine.chunkSize) {
             let found = try await remote(inlet) { try await mirror.fetchSummaries(folderID: folder, ids: chunk) }
             guard !Task.isCancelled else { return }
@@ -182,7 +184,7 @@ extension MailboxStore {
             fresh += MirrorEngine.newerThan(kept, newest: newest)
             done += chunk.count
             announceChange(inlet, folder)
-            setProgress(inlet, folder, SyncProgress(done: done, total: fetching.count))
+            setProgress(inlet, folder, SyncProgress(done: done, total: fetching.count), reporter: reporter)
         }
         let marked = cursor(inlet, Self.refusedKey(folder))
         if let reason = MirrorEngine.refusal(plan: plan, stored: stored.count, added: added, validityChanged: changed,

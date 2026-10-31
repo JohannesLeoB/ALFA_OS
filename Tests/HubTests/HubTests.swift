@@ -793,6 +793,75 @@ final class HubTests: XCTestCase {
         await run.value
     }
 
+    @MainActor
+    func testTrackedWorkShowsWorkingAndProgressThenRestoresWithoutStoringAnything() async throws {
+        let info = IntegrationInfo(id: "fake", access: .password, companyOwned: false, fields: [],
+                                   areas: [IntegrationArea(id: "mail", capability: .mail)], extras: [],
+                                   listsAccounts: true, providers: ["fake"], logo: nil)
+        let rig = try Rig.make()
+        let inlet = try await rig.connect("a@x")
+        let access = rig.connections.access
+        let gate = Gate()
+        let tracked = Task { @MainActor in
+            await access.track(inlet.id, .mail) { report in
+                report(done: 40, total: 200)
+                await gate.wait()
+                return 7
+            }
+        }
+        let reported = await until { rig.connections.rules.progress(inlet.id, .mail) != nil }
+        XCTAssertTrue(reported)
+        XCTAssertEqual(rig.connections.setup.inlets[0].state, .working)
+        let during = IntegrationReadEngine.read(info, setup: rig.connections.setup, rules: rig.connections.rules)
+        XCTAssertEqual(during.note, .working(areaKey: info.areaKey(info.areas[0]), done: 40, total: 200))
+        XCTAssertNotEqual(try InletStore(database: rig.database).load()[0].state, .working)
+        rig.connections.rules.setCadence(inlet.id, .mail, .manual)
+        XCTAssertNotEqual(try InletStore(database: rig.database).load()[0].state, .working)
+        await gate.release()
+        let value = await tracked.value
+        XCTAssertEqual(value, 7)
+        XCTAssertTrue(rig.connections.setup.inlets[0].state.isConnected)
+        XCTAssertNotEqual(rig.connections.setup.inlets[0].state, .working)
+        XCTAssertNil(rig.connections.rules.progress(inlet.id, .mail))
+        XCTAssertTrue(rig.connections.access.inlets(for: .mail).contains { $0.id == inlet.id })
+    }
+
+    @MainActor
+    func testOverlappingTracksKeepWorkingUntilTheLastEndsAndNeverBlockAHubSync() async throws {
+        let rig = try Rig.make()
+        let inlet = try await rig.connect("a@x")
+        let access = rig.connections.access
+        let first = Gate()
+        let second = Gate()
+        let one = Task { @MainActor in
+            await access.track(inlet.id, .mail) { report in
+                report(done: 1, total: 4)
+                await first.wait()
+            }
+        }
+        let two = Task { @MainActor in
+            await access.track(inlet.id, .mail) { report in
+                report(done: 3, total: 4)
+                await second.wait()
+            }
+        }
+        let started = await until { rig.connections.rules.progress(inlet.id, .mail) != nil }
+        XCTAssertTrue(started)
+        try await Task.sleep(for: .milliseconds(20))
+        let report = await rig.cadence.trigger(inlet.id, .mail)
+        guard case .finished = report.result else { return XCTFail("report \(report.result)") }
+        XCTAssertEqual(rig.connections.setup.inlets[0].state, .working)
+        XCTAssertNotNil(rig.connections.rules.progress(inlet.id, .mail))
+        await first.release()
+        await one.value
+        XCTAssertEqual(rig.connections.setup.inlets[0].state, .working)
+        XCTAssertNotNil(rig.connections.rules.progress(inlet.id, .mail))
+        await second.release()
+        await two.value
+        XCTAssertNotEqual(rig.connections.setup.inlets[0].state, .working)
+        XCTAssertNil(rig.connections.rules.progress(inlet.id, .mail))
+    }
+
     func testRunProgressRefusesAnUnknownTotalAndKeepsDoneInsideIt() {
         XCTAssertNil(RunProgress(done: 3, total: 0))
         XCTAssertNil(RunProgress(done: 3, total: -1))

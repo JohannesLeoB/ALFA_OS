@@ -6,10 +6,9 @@ import UniformTypeIdentifiers
 
 @MainActor
 enum MessageExport {
-    static func render(_ message: OpenMessage) -> Data? {
+    static func render(_ message: OpenMessage, settings: SettingsState) -> Data? {
         let info = NSPrintInfo.shared
-        let store = TemplateStore()
-        guard let template = store.current.flatMap(store.text),
+        guard let template = settings.currentTemplateText,
               let html = MessagePDF.html(template: template, message: message).data(using: .utf8),
               let styled = try? NSAttributedString(data: html, options: [.documentType: NSAttributedString.DocumentType.html,
                                                                          .characterEncoding: String.Encoding.utf8.rawValue],
@@ -19,13 +18,13 @@ enum MessageExport {
         return MessagePDF.render(styled, page: info.paperSize, margin: info.leftMargin)
     }
 
-    static func printMail(_ inbox: InboxState, _ id: String) async {
-        guard let document = await inbox.mailDocument(id, render: render) else { return }
+    static func printMail(_ inbox: InboxState, _ id: String, settings: SettingsState) async {
+        guard let document = await inbox.mailDocument(id, render: { render($0, settings: settings) }) else { return }
         if !printPDF(document.data, name: document.name, scaling: .pageScaleNone) { inbox.documentFailed(id) }
     }
 
-    static func printDraft(_ inbox: InboxState, _ id: UUID) {
-        guard let document = inbox.draftDocument(id, render: render) else { return }
+    static func printDraft(_ inbox: InboxState, _ id: UUID, settings: SettingsState) {
+        guard let document = inbox.draftDocument(id, render: { render($0, settings: settings) }) else { return }
         if !printPDF(document.data, name: document.name, scaling: .pageScaleNone) { inbox.announce(.pdfFailed) }
     }
 
@@ -42,8 +41,8 @@ enum MessageExport {
         return true
     }
 
-    static func savePDF(_ inbox: InboxState, _ id: String) async {
-        guard let document = await inbox.mailDocument(id, render: render) else { return }
+    static func savePDF(_ inbox: InboxState, _ id: String, settings: SettingsState) async {
+        guard let document = await inbox.mailDocument(id, render: { render($0, settings: settings) }) else { return }
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.pdf]
         panel.isExtensionHidden = false

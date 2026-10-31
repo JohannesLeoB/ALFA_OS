@@ -20,6 +20,7 @@ final class InletsState: RulesPort {
     @ObservationIgnored let watchers: FolderChanges
     @ObservationIgnored var grants: [Inlet.ID: Grant] = [:]
     @ObservationIgnored var running: Set<String> = []
+    @ObservationIgnored var tracking: [String: Int] = [:]
     @ObservationIgnored var resting: [Inlet.ID: InletState] = [:]
     @ObservationIgnored var probes: Set<Inlet.ID> = []
     @ObservationIgnored var feeds: [DataKind: [any StockFeedPort]] = [:]

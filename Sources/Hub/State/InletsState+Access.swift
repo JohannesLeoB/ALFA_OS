@@ -71,7 +71,7 @@ extension InletsState: AccessPort {
         begin(inletID)
         defer {
             running.remove(key)
-            progresses[key] = nil
+            if tracking[key] == nil { progresses[key] = nil }
             queue.removeAll { $0 == job }
             end(inletID)
         }
@@ -112,10 +112,23 @@ extension InletsState: AccessPort {
         }
     }
 
+    func track<T>(_ inlet: Inlet.ID, _ capability: Capability, body: @MainActor (SyncReporter) async -> T) async -> T {
+        let key = SyncEngine.key(inlet, capability)
+        tracking[key, default: 0] += 1
+        begin(inlet)
+        defer {
+            let left = (tracking[key] ?? 1) - 1
+            tracking[key] = left > 0 ? left : nil
+            if left <= 0, !running.contains(key) { progresses[key] = nil }
+            end(inlet)
+        }
+        return await body(reporter(key))
+    }
+
     private func reporter(_ key: String) -> SyncReporter {
         SyncReporter { [weak self] progress in
             Task { @MainActor in
-                guard let self, self.running.contains(key) else { return }
+                guard let self, self.running.contains(key) || self.tracking[key] != nil else { return }
                 self.progresses[key] = progress
             }
         }

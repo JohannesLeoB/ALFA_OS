@@ -39,6 +39,8 @@ public final class SettingsState {
 
     public var currentTemplate: TemplateStore.Template? { templates.first }
 
+    public var currentTemplateText: String? { currentTemplate.flatMap(templateStore.text) }
+
     public func addTemplate(from url: URL) -> Bool {
         let added = (try? templateStore.add(from: url)) != nil
         templates = templateStore.templates

@@ -11,13 +11,19 @@ extension MailboxStore {
         progresses[Self.key(inlet, folder)]
     }
 
-    func setProgress(_ inlet: Inlet.ID, _ folder: String, _ value: SyncProgress) {
+    func setProgress(_ inlet: Inlet.ID, _ folder: String, _ value: SyncProgress, reporter: SyncReporter) {
         progresses[Self.key(inlet, folder)] = value
+        let prefix = inlet + "\n"
+        let current = progresses.filter { $0.key.hasPrefix(prefix) }.values
+        let finished = fetched[inlet] ?? SyncProgress(done: 0, total: 0)
+        reporter(done: finished.done + current.reduce(0) { $0 + $1.done }, total: finished.total + current.reduce(0) { $0 + $1.total })
         eventBus.emit(.progress(inlet, folder: folder))
     }
 
     func endProgress(_ inlet: Inlet.ID, _ folder: String) {
-        guard progresses.removeValue(forKey: Self.key(inlet, folder)) != nil else { return }
+        guard let ended = progresses.removeValue(forKey: Self.key(inlet, folder)) else { return }
+        let finished = fetched[inlet] ?? SyncProgress(done: 0, total: 0)
+        fetched[inlet] = SyncProgress(done: finished.done + ended.done, total: finished.total + ended.total)
         eventBus.emit(.progress(inlet, folder: folder))
     }
 

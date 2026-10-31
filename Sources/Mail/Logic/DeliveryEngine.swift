@@ -55,7 +55,7 @@ enum DeliveryEngine {
     }
 
     static func deliver(_ item: inout OutboxItem, verify: Bool, byUser: Bool, access: any AccessPort, folder: (FolderRole) -> String?,
-                        checked: () -> Void = {}) async -> Delivery {
+                        checked: () -> Void = {}, stored: (SavedDraft, Draft, String?) -> Void = { _, _, _ in }) async -> Delivery {
         let transport: any MailTransportPort
         do {
             transport = try access.port((any MailTransportPort).self, for: item.inlet)
@@ -77,6 +77,7 @@ enum DeliveryEngine {
         do {
             if let draftID = item.draftID {
                 let saved = try await transport.saveDraft(outgoing, replacing: draftID, into: folder(.drafts))
+                stored(saved, outgoing, item.mirrorID)
                 item.draftID = saved.id
                 item.mirrorID = saved.mirrorID
                 try await transport.sendDraft(id: saved.id)

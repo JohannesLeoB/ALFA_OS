@@ -12,8 +12,12 @@ extension InletsState {
         return record(id).map { InletStore.durable($0.state) }
     }
 
+    func isWorking(_ id: Inlet.ID) -> Bool {
+        SyncEngine.isRunning(id, in: running) || SyncEngine.isRunning(id, in: tracking.keys)
+    }
+
     func isBusy(_ id: Inlet.ID) -> Bool {
-        probes.contains(id) || SyncEngine.isRunning(id, in: running)
+        probes.contains(id) || isWorking(id)
     }
 
     func begin(_ id: Inlet.ID) {
@@ -67,7 +71,7 @@ extension InletsState {
         switch base {
         case _ where probes.contains(id): shown = .connecting
         case .failed, .keychainUnreadable: shown = base
-        case _ where SyncEngine.isRunning(id, in: running): shown = .working
+        case _ where isWorking(id): shown = .working
         default: shown = base
         }
         update(id, persist: false) { $0.state = shown }

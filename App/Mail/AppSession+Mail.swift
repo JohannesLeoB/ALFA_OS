@@ -10,8 +10,8 @@ extension AppSession {
     func perform(_ action: Action, message id: String, undoable: Bool = true, fromMenu: Bool = false) {
         if ActionRouter(state: inbox).message(action, id, undoable: undoable, fromMenu: fromMenu) { return }
         switch action {
-        case .print: Task { await MessageExport.printMail(inbox, id) }
-        case .pdf: Task { await MessageExport.savePDF(inbox, id) }
+        case .print: Task { await MessageExport.printMail(inbox, id, settings: settings) }
+        case .pdf: Task { await MessageExport.savePDF(inbox, id, settings: settings) }
         default: break
         }
     }

@@ -182,6 +182,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
     }
 
     func sendDraft(id: String) async throws {
+        await hold("sendDraft")
         try note("sendDraft")
         if let error = sendDraftFailure.with({ $0 }) { throw error }
         removeServerDraft(id)
@@ -311,6 +312,17 @@ private final class FakeAccess: AccessPort {
                          account: "me@example.com", state: .connected(probed: Date()))]
     private var stocks: [String: Any] = [:]
     private var listeners: [AsyncStream<InletEvent>.Continuation] = []
+    let reported = Locked<[RunProgress]>([])
+    let tracks = Locked<[Capability]>([])
+    let open = Locked<Int>(0)
+
+    func track<T>(_ inlet: Inlet.ID, _ capability: Capability, body: @MainActor (SyncReporter) async -> T) async -> T {
+        tracks.with { $0.append(capability) }
+        open.with { $0 += 1 }
+        defer { open.with { $0 -= 1 } }
+        let sink = reported
+        return await body(SyncReporter { progress in sink.with { $0.append(progress) } })
+    }
 
     func stock<T: Item>(_ kind: DataKind, as type: T.Type) -> StockState<T> {
         let key = kind.rawValue
@@ -1737,6 +1749,55 @@ final class MailTests: XCTestCase {
         let outcome = await rig.outbox.resend(id, Draft(to: "x@y.de", subject: "s", body: "fixed"), draftID: nil)
         XCTAssertEqual(outcome, .sent)
         XCTAssertTrue(rig.outbox.outbox.isEmpty)
+    }
+
+    @MainActor
+    func testSendingASavedDraftShowsTheNewMirrorRowAtOnceAndLeavesNoRowAfterwards() async throws {
+        let (rig, _) = try await draftRig(count: 3, separateIDs: true)
+        rig.transport.holds.with { $0 = ["sendDraft"] }
+        let sending = Task { @MainActor in
+            await rig.outbox.sendDraft("a", draftID: "draft:1:0:Drafts", mirrorID: "1:0:Drafts", Draft(to: "x@y.de", subject: "s", body: "b"))
+        }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        XCTAssertEqual(rig.mailbox.draftIDs("a"), ["1:1:Drafts", "1:2:Drafts", "1:9:Drafts"])
+        rig.transport.release()
+        let outcome = await sending.value
+        XCTAssertEqual(outcome, .sent)
+        XCTAssertEqual(rig.mailbox.draftIDs("a"), ["1:1:Drafts", "1:2:Drafts"])
+    }
+
+    @MainActor
+    func testSendingAPlannedMailNowSwapsAndThenDropsItsMirrorRow() async throws {
+        let (rig, _) = try await draftRig(count: 3, separateIDs: true)
+        let id = rig.outbox.plan("a", Draft(to: "x@y.de", subject: "s", body: "b"), draftID: "draft:1:0:Drafts",
+                                 mirrorID: "1:0:Drafts", at: Date().addingTimeInterval(3_600))
+        rig.transport.holds.with { $0 = ["sendDraft"] }
+        let sending = Task { @MainActor in await rig.outbox.sendNow(id) }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        XCTAssertEqual(rig.mailbox.draftIDs("a"), ["1:1:Drafts", "1:2:Drafts", "1:9:Drafts"])
+        rig.transport.release()
+        let outcome = await sending.value
+        XCTAssertEqual(outcome, .sent)
+        XCTAssertTrue(rig.outbox.outbox.isEmpty)
+        XCTAssertEqual(rig.mailbox.draftIDs("a"), ["1:1:Drafts", "1:2:Drafts"])
+    }
+
+    @MainActor
+    func testATransientFailureAfterSavingKeepsExactlyOneMirrorRowUntilTheRetrySends() async throws {
+        let (rig, _) = try await draftRig(count: 3, separateIDs: true)
+        rig.transport.sendDraftFailure.with { $0 = MailFailure.connectionClosed }
+        let outcome = await rig.outbox.sendDraft("a", draftID: "draft:1:0:Drafts", mirrorID: "1:0:Drafts",
+                                                 Draft(to: "x@y.de", subject: "s", body: "b"))
+        guard case .queued = outcome else { return XCTFail() }
+        XCTAssertEqual(rig.mailbox.draftIDs("a"), ["1:1:Drafts", "1:2:Drafts", "1:9:Drafts"])
+        XCTAssertEqual(rig.outbox.outbox.first?.mirrorID, "1:9:Drafts")
+        rig.transport.sendDraftFailure.with { $0 = MailFailure.connectionClosed }
+        await rig.outbox.pass("a")
+        XCTAssertEqual(rig.mailbox.draftIDs("a"), ["1:1:Drafts", "1:2:Drafts", "1:10:Drafts"])
+        rig.transport.sendDraftFailure.with { $0 = nil }
+        await rig.outbox.pass("a")
+        XCTAssertTrue(rig.outbox.outbox.isEmpty)
+        XCTAssertEqual(rig.mailbox.draftIDs("a"), ["1:1:Drafts", "1:2:Drafts"])
     }
 
     @MainActor
@@ -3382,6 +3443,35 @@ final class MailTests: XCTestCase {
     }
 
     @MainActor
+    func testEveryMirrorPassRunsTrackedAndReportsTheSumOverTheFoldersFetchingAtOnce() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 5, from: Self.epoch)
+        rig.fill("Archive", count: 3, from: Self.epoch)
+        rig.transport.holds.with { $0 = ["fetchSummaries"] }
+        let inbox = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "INBOX") }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        rig.transport.holds.with { $0 = [] }
+        try await rig.mailbox.refresh("a", folder: "Archive")
+        XCTAssertEqual(rig.access.open.with { $0 }, 1)
+        XCTAssertEqual(rig.access.reported.with { $0.map(\.total).max() }, 8)
+        XCTAssertEqual(rig.access.reported.with { $0.last }, RunProgress(done: 3, total: 8))
+        rig.transport.release()
+        try await inbox.value
+        XCTAssertEqual(rig.access.reported.with { $0.last }, RunProgress(done: 8, total: 8))
+        XCTAssertEqual(rig.access.reported.with { $0.map(\.done) }, rig.access.reported.with { $0.map(\.done) }.sorted())
+        XCTAssertEqual(rig.access.open.with { $0 }, 0)
+        XCTAssertEqual(Set(rig.access.tracks.with { $0 }), [.mail])
+        rig.transport.holds.with { $0 = ["fetchSummaries"] }
+        rig.fill("INBOX", count: 7, from: Self.epoch)
+        let again = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "INBOX") }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        XCTAssertEqual(rig.access.reported.with { $0.last }, RunProgress(done: 0, total: 2))
+        rig.transport.release()
+        try await again.value
+    }
+
+    @MainActor
     func testTheLoadingPlaceholderCarriesTheFetchProgress() async throws {
         let rig = try mirrored()
         try await rig.mailbox.refreshFolders("a")
@@ -3712,7 +3802,8 @@ final class MailTests: XCTestCase {
             XCTAssertEqual(draftBadge(state), 3)
             await state.send(opened)
             XCTAssertEqual(draftBadge(state), 2)
-            XCTAssertEqual(state.goneDrafts["a"], ["1:0:Drafts"])
+            XCTAssertEqual(rig.mailbox.draftIDs("a").count, 2)
+            XCTAssertTrue(state.goneDrafts["a"]?.isEmpty ?? true)
             try await mirrorPass(rig, state)
             XCTAssertEqual(draftBadge(state), 2)
             XCTAssertTrue(state.goneDrafts["a"]?.isEmpty ?? true)
