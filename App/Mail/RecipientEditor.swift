@@ -11,6 +11,7 @@ struct RecipientEditor: View {
     @Binding var showCopy: Bool
     @Binding var expanded: Bool
     @State private var input = ""
+    @State private var rejected = false
     @FocusState private var focused: Bool
 
     private var people: [Participant] { card.people(field) }
@@ -76,7 +77,7 @@ struct RecipientEditor: View {
     private var inputField: some View {
         TextField(text: $input, prompt: placeholder) { label }
             .textFieldStyle(.plain)
-            .designText(\.ink, size: Tokens.TextSize.body)
+            .designText(rejected ? \.signal : \.ink, size: Tokens.TextSize.body)
             .frame(minWidth: CGFloat(Tokens.Size.recipientInputMinWidth))
             .padding(.leading, CGFloat(Tokens.Spacing.step4))
             .autocorrectionDisabled()
@@ -87,6 +88,7 @@ struct RecipientEditor: View {
                 if !now { commitTyped() }
             }
             .onChange(of: input) { _, value in
+                rejected = false
                 if let last = value.last, last == "," || last == ";" || (last == " " && value.contains("@")) {
                     input = String(value.dropLast())
                     commit()
@@ -104,10 +106,11 @@ struct RecipientEditor: View {
         guard !value.isEmpty else { return }
         if value.contains("@") {
             inbox.addRecipient(card.id, field, entry: value)
+        } else if let first = inbox.suggestions(card.id, field, query: value).first {
+            inbox.addRecipient(card.id, field, entry: first.entry)
         } else {
-            let found = inbox.suggestions(card.id, field, query: value)
-            guard found.count == 1, let only = found.first else { return }
-            inbox.addRecipient(card.id, field, entry: only.entry)
+            rejected = true
+            return
         }
         input = ""
     }
