@@ -89,7 +89,10 @@ extension AppSession {
         let inbox = self.inbox
         Task {
             for url in urls {
-                guard let data = try? await Task.detached(operation: { try Data(contentsOf: url) }).value else { continue }
+                guard let data = try? await Task.detached(operation: { try Data(contentsOf: url) }).value else {
+                    inbox.announce(.attachmentFailed)
+                    continue
+                }
                 let mime = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType ?? "application/octet-stream"
                 inbox.attach(id, filename: url.lastPathComponent, mimeType: mime, data: data)
             }
