@@ -216,13 +216,13 @@ struct DeskLane: View {
     private var tools: some View {
         let open = desk.widths.all.filter { $0 > desk.measure.laneFolded }.count
         let name = self.name.string(appearance)
-        if open > 1 {
-            SymbolButton(help: appearance.format("mail.fold.named", name), glyph: .minus, pressed: lane != .center) { desk.toggleFold(lane) }
-        }
         if lane == .center {
             let maxed = desk.laneMode(desk.currentID).maximized == .center
             SymbolButton(help: maxed ? appearance.string("mail.lane.back") : appearance.format("mail.grow.named", name),
                          glyph: maxed ? .shrink : .expand, pressed: false) { desk.toggleMaximize(.center) }
+        }
+        if open > 1 {
+            SymbolButton(help: appearance.format("mail.fold.named", name), glyph: .minus, pressed: lane != .center) { desk.toggleFold(lane) }
         }
     }
 }
