@@ -1,4 +1,5 @@
 import AppKit
+import Design
 import Hub
 import Mail
 import SwiftUI
@@ -96,5 +97,167 @@ struct MailStoreBlock: View {
                 state.notify("settings.toast.mailStoreMove", failed: true)
             }
         }
+    }
+}
+
+struct MailboxDisplayRow: View {
+    @Environment(\.appearance) private var appearance
+    let state: SettingsState
+    let inlet: Inlet
+
+    var body: some View {
+        let current = state.display(inlet.id)
+        SettingsRow(label: appearance.text("settings.account.show")) {
+            ChoiceButton(label: label(current)) {
+                MailboxDisplay.allCases.map { option in
+                    .row(MenuItem(id: option.rawValue, label: label(option),
+                                  check: option == current ? appearance.text(SettingsKeys.menuCheck) : nil) {
+                        state.setDisplay(option, for: inlet.id)
+                    })
+                }
+            }
+        }
+    }
+
+    private func label(_ option: MailboxDisplay) -> Text {
+        option.choice(title: state.mailboxName(inlet.id), account: inlet.account).map { Text(verbatim: $0) } ?? appearance.text("settings.account.show.own")
+    }
+}
+
+struct MailboxImagesRow: View {
+    @Environment(\.appearance) private var appearance
+    let state: SettingsState
+    let inlet: Inlet
+
+    var body: some View {
+        SettingsRow(label: appearance.text("settings.privacy.images")) {
+            ToggleSwitch(isOn: Binding(get: { state.loadImages(inlet.id) }, set: { state.setLoadImages($0, for: inlet.id) }),
+                         labelKey: "settings.privacy.images")
+        }
+    }
+}
+
+struct MailboxNameRow: View {
+    @Environment(\.appearance) private var appearance
+    let state: SettingsState
+    let inlet: Inlet
+
+    var body: some View {
+        SettingsRow(label: appearance.text("settings.account.name")) {
+            ValueField(
+                text: Binding(get: { state.mailboxName(inlet.id) }, set: { state.setMailboxName($0, for: inlet.id) }),
+                labelKey: "settings.account.name", prompt: appearance.text("settings.account.name.prompt"))
+        }
+    }
+}
+
+struct MailboxRangeRow: View {
+    @Environment(\.appearance) private var appearance
+    let state: SettingsState
+    let inbox: InboxState
+    let inlet: Inlet
+    var named = false
+
+    var body: some View {
+        let offered = inbox.ranges(inlet.id)
+        if offered.count > 1 {
+            let current = state.range(inlet.id).resolved(in: offered)
+            SettingsRow(label: label) {
+                ChoiceButton(label: appearance.text(current.key)) {
+                    offered.map { option in
+                        .row(MenuItem(id: option.rawValue, label: appearance.text(option.key),
+                                      check: option == current ? appearance.text(SettingsKeys.menuCheck) : nil) {
+                            choose(option)
+                        })
+                    }
+                }
+            }
+        }
+    }
+
+    private var label: Text {
+        let name = appearance.string("settings.mailStore.period")
+        guard named else { return Text(verbatim: name) }
+        let account = inlet.account.isEmpty ? appearance.string(inlet.title) : inlet.account
+        return Text(verbatim: appearance.format("settings.area.account", name, account))
+    }
+
+    private func choose(_ option: MailboxRange) {
+        state.setRange(option, for: inlet.id)
+        Task { await inbox.rangeChanged(inlet.id) }
+    }
+}
+
+struct MailboxServerCopyRow: View {
+    @Environment(\.appearance) private var appearance
+    let state: SettingsState
+    let inbox: InboxState
+    let inlet: Inlet
+
+    var body: some View {
+        if inbox.inboxOnly(inlet.id) {
+            let current = state.serverCopy(inlet.id)
+            SettingsRow(label: appearance.text("settings.account.serverCopy")) {
+                ChoiceButton(label: appearance.text(current.key)) {
+                    ServerCopy.allCases.map { option in
+                        .row(MenuItem(id: option.rawValue, label: appearance.text(option.key),
+                                      check: option == current ? appearance.text(SettingsKeys.menuCheck) : nil) {
+                            state.setServerCopy(option, for: inlet.id)
+                        })
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct SignatureBlock: View {
+    @Environment(\.appearance) private var appearance
+    let state: SettingsState
+    let inlet: Inlet
+
+    private var who: String { inlet.account.isEmpty ? appearance.string(inlet.title) : inlet.account }
+
+    var body: some View {
+        Text(verbatim: appearance.format("settings.signature.head", who))
+            .font(.face(Tokens.TextSize.small))
+            .foregroundStyle(appearance.color(\.inkTertiary))
+            .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
+            .padding(.bottom, CGFloat(Tokens.Spacing.step8))
+            .frame(maxWidth: .infinity, minHeight: CGFloat(Tokens.Spacing.step36), alignment: .bottomLeading)
+        if let signature = state.signature(inlet.id) {
+            editor(signature)
+            SettingsRow(label: appearance.text("settings.signature.new"), sub: appearance.text("settings.signature.new.sub")) {
+                ToggleSwitch(isOn: Binding(get: { signature.onNew }, set: { state.setSignatureOnNew($0, for: inlet.id) }),
+                             labelKey: "settings.signature.new")
+            }
+            SettingsRow(label: appearance.text("settings.signature.above")) {
+                ToggleSwitch(isOn: Binding(get: { signature.aboveQuote }, set: { state.setSignatureAboveQuote($0, for: inlet.id) }),
+                             labelKey: "settings.signature.above")
+            }
+            SettingsRow(label: Text(verbatim: ""), line: false) {
+                TextButton(label: appearance.text("settings.signature.remove"), kind: .plain) { state.removeSignature(for: inlet.id) }
+            }
+        } else {
+            BlockNote(text: appearance.text("settings.signature.empty"))
+            SettingsRow(label: Text(verbatim: ""), line: false) {
+                TextButton(label: appearance.text("settings.signature.create"), kind: .accent) { state.setSignature("", for: inlet.id) }
+            }
+        }
+    }
+
+    private func editor(_ signature: MailboxSignature) -> some View {
+        TextEditor(text: Binding(get: { signature.text }, set: { state.setSignature($0, for: inlet.id) }))
+            .scrollContentBackground(.hidden)
+            .font(.face(Tokens.TextSize.body))
+            .foregroundStyle(appearance.color(\.ink))
+            .accessibilityLabel(Text(verbatim: appearance.format("settings.signature.area", who)))
+            .padding(.vertical, CGFloat(Tokens.Spacing.step8))
+            .padding(.horizontal, CGFloat(Tokens.Spacing.step12))
+            .frame(minHeight: CGFloat(Tokens.Size.signatureEditorMinHeight))
+            .background(RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.notice)).fill(appearance.color(\.well)))
+            .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
+            .padding(.top, CGFloat(Tokens.Spacing.step4))
+            .padding(.bottom, CGFloat(Tokens.Spacing.step8))
     }
 }

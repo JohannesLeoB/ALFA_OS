@@ -284,89 +284,89 @@ Which Swift file draws each element of the valid design master (Mail and Setting
 | Settings | Click on a group | Einstellungen 390 (go: setState({cat | `Sources/Hub/State/SettingsState.swift` |
 | Settings | Centre header title = category / active tile group | Einstellungen 39, Einstellungen 403- | `App/Settings/SettingsPane.swift`, `App/Settings/IntegrationList.swift` |
 | Settings | Strip marks of folded lanes | Einstellungen 365-375 | `App/Settings/SettingsPane.swift` |
-| Settings | Scrollbars of tiles, centre rows, card content | Einstellungen 47, Einstellungen 49,  | `App/Settings/IntegrationList.swift`, `App/Settings/SettingsPane.swift`, `App/Settings/SettingsStack.swift` |
+| Settings | Scrollbars of tiles, centre rows, card content | Einstellungen 47, Einstellungen 49,  | `App/Settings/IntegrationList.swift`, `App/Settings/SettingsPane.swift` |
 | Settings | Tile group label (0 high for first group, 24 for others, fades when active) | Einstellungen 47, Einstellungen 404 | `App/Settings/IntegrationList.swift` |
 | Settings | Last group min height 100cqh+32 | Einstellungen 404 | `App/Settings/IntegrationList.swift` |
-| Settings | Tile grid auto-fill minmax(settingsTileMinWidth), gap 8 | Einstellungen 47 | `App/Settings/TileFlowLayout.swift`, `App/Settings/IntegrationList.swift` |
+| Settings | Tile grid auto-fill minmax(settingsTileMinWidth), gap 8 | Einstellungen 47 | `App/Settings/IntegrationList.swift` |
 | Settings | Settings tile body (112 high, pad 8, radius row, well / selected ink+lane, name  | Einstellungen 47, Einstellungen 401 | `App/Settings/SettingsTile.swift` |
 | Settings | Tile hover | Einstellungen 47 style-hover: box-sh | `App/Settings/SettingsTile.swift` |
 | Settings | Tile press scale .98 | Einstellungen 47 | `App/Settings/SettingsTile.swift` |
 | Settings | Tile mark 28 circle, logo on #fff, initial, ring lane/line-strong | Einstellungen 47, Einstellungen 401 | `App/Settings/SettingsTile.swift` |
 | Settings | Service "DHL" (one tile; fields Tracking-Schlüssel, Versand-Schlüssel, Secret, B | Bausteine 43 | `Sources/Hub/Store/InletStore.swift` |
 | Settings | Service "Happa Happa" (Speiseplan, Schlüssel) | Bausteine 44 | `Sources/Hub/Store/InletStore.swift` |
-| Settings | Service purpose line (hero subtitle) | Bausteine 37, :41, :42, :43 | `App/Settings/IntegrationHero.swift` |
+| Settings | Service purpose line (hero subtitle) | Bausteine 37, :41, :42, :43 | `App/Settings/SettingsTile.swift` |
 | Settings | Keys tile "Schlüssel-Inventar", sub empty | Einstellungen 236 (schluessel: ["Sch | `App/Settings/IntegrationList.swift` |
-| Settings | Profile tile (pad 16, radius row, well / selected inv, no ring, press .99) | Einstellungen 50, Einstellungen 416 | `App/Settings/ProfileTile.swift` |
-| Settings | Profile mark 56 (title size, tracking-mark) | Einstellungen 51 | `App/Settings/ProfileTile.swift` |
-| Settings | Profile name (title size, line-height heading 24, no letter-spacing) | Einstellungen 51 | `App/Settings/ProfileTile.swift` |
+| Settings | Profile tile (pad 16, radius row, well / selected inv, no ring, press .99) | Einstellungen 50, Einstellungen 416 | `App/Settings/SettingsTile.swift` |
+| Settings | Profile mark 56 (title size, tracking-mark) | Einstellungen 51 | `App/Settings/SettingsTile.swift` |
+| Settings | Profile name (title size, line-height heading 24, no letter-spacing) | Einstellungen 51 | `App/Settings/SettingsTile.swift` |
 | Settings | "Bild wählen" capsule button in profile tile | Einstellungen 51 | not built |
-| Settings | Facts grid (Kürzel, Telefon, Teams; minmax(140px,1fr), gap 12/16; value in tile  | Einstellungen 52, Einstellungen 416 | `App/Settings/ProfileTile.swift` |
+| Settings | Facts grid (Kürzel, Telefon, Teams; minmax(140px,1fr), gap 12/16; value in tile  | Einstellungen 52, Einstellungen 416 | `App/Settings/SettingsTile.swift` |
 | Settings | Fact "Teams" | Einstellungen 416 | not built |
-| Settings | "Adressen" list | Einstellungen 53 | `App/Settings/ProfileTile.swift` |
-| Settings | Section rows (message-row: mark 28, pad 12/8, gap 20, two lines, separator from  | Einstellungen 58-75, Einstellungen 4 | `App/Settings/SectionRow.swift`, `App/Components/MessageRow.swift` |
-| Settings | Row value slot ("Automatisch" on Darstellung) | Einstellungen 70, Einstellungen 410 | `App/Settings/SectionRow.swift`, `App/Settings/SettingsPane.swift` |
+| Settings | "Adressen" list | Einstellungen 53 | `App/Settings/SettingsTile.swift` |
+| Settings | Section rows (message-row: mark 28, pad 12/8, gap 20, two lines, separator from  | Einstellungen 58-75, Einstellungen 4 | `App/Settings/SettingsPane.swift`, `App/Components/MessageRow.swift` |
+| Settings | Row value slot ("Automatisch" on Darstellung) | Einstellungen 70, Einstellungen 410 | `App/Settings/SettingsPane.swift` |
 | Settings | Row "Ordnerschema" (detail "") in Dateiordner | Einstellungen 236 (einrichtung: ["Or | `Sources/Hub/Model/IntegrationInfo.swift` |
-| Settings | Stack command head: Verbinden/Erneut verbinden (link), Trennen (close, signal),  | Einstellungen 86-90, Einstellungen 4 | `App/Settings/SettingsCommandHead.swift` |
+| Settings | Stack command head: Verbinden/Erneut verbinden (link), Trennen (close, signal),  | Einstellungen 86-90, Einstellungen 4 | `App/Settings/SettingsPane.swift` |
 | Settings | Empty stack card "Leere Karte" | Einstellungen 92 | `App/Components/CardStack.swift` |
-| Settings | Card face (border-radius:0, box-shadow:none, no glaze) | Einstellungen 94, Einstellungen 427- | `App/Settings/SettingsStack.swift` |
-| Settings | Card top: content starts directly (no header row) | Einstellungen 94-98 (article holds o | `App/Settings/SettingsStack.swift` |
-| Settings | Card content: pad 4/8, bottom corners masked (radius-row, 8 inset) | Einstellungen 98 | `App/Settings/SettingsStack.swift` |
-| Settings | Card overview (Klein/Mittel/Groß, tiles with mark, title, close, sub, state) | Einstellungen 139-164, Einstellungen | `App/Settings/SettingsStack.swift` |
-| Settings | Service hero (56 well/logo box, radius contextMenu, name title + line-height hea | Einstellungen 100, Einstellungen 302 | `App/Settings/IntegrationHero.swift` |
-| Settings | Block head (list-section-header-3, 36, pad 0/16/8) | Einstellungen 101 | `App/Settings/BlockHead.swift` |
-| Settings | Note | Einstellungen 102 | `App/Settings/BlockHead.swift` |
+| Settings | Card face (border-radius:0, box-shadow:none, no glaze) | Einstellungen 94, Einstellungen 427- | `App/Settings/SettingsPane.swift` |
+| Settings | Card top: content starts directly (no header row) | Einstellungen 94-98 (article holds o | `App/Settings/SettingsPane.swift` |
+| Settings | Card content: pad 4/8, bottom corners masked (radius-row, 8 inset) | Einstellungen 98 | `App/Settings/SettingsPane.swift` |
+| Settings | Card overview (Klein/Mittel/Groß, tiles with mark, title, close, sub, state) | Einstellungen 139-164, Einstellungen | `App/Settings/SettingsPane.swift` |
+| Settings | Service hero (56 well/logo box, radius contextMenu, name title + line-height hea | Einstellungen 100, Einstellungen 302 | `App/Settings/SettingsTile.swift` |
+| Settings | Block head (list-section-header-3, 36, pad 0/16/8) | Einstellungen 101 | `App/Settings/SettingsRow.swift` |
+| Settings | Note | Einstellungen 102 | `App/Settings/SettingsRow.swift` |
 | Settings | Card notice | Einstellungen 104-109, Bausteine 184 | `App/Settings/IntegrationCard.swift`, `App/Components/Notice.swift` |
 | Settings | Field row (min 44, pad 8/8/8/16, label min fieldLabelMinWidth, hairline inset 16 | Einstellungen 113-117, Einstellungen | `App/Settings/SettingsRow.swift` |
-| Settings | Spacing between trailing controls (row gap: step12; status text padding-right: s | Einstellungen 113, Einstellungen 121 | `App/Settings/SettingsRow.swift`, `App/Settings/SettingsDetail.swift`, `App/Settings/AccountBlock.swift` |
+| Settings | Spacing between trailing controls (row gap: step12; status text padding-right: s | Einstellungen 113, Einstellungen 121 | `App/Settings/SettingsRow.swift`, `App/Settings/SettingsDetail.swift`, `App/Settings/AccountFlow.swift` |
 | Settings | Overflow of trailing values (input/value/pill max-width:60%, ellipsis, one line) | Einstellungen 124-127 | `App/Settings/SettingsRow.swift` |
 | Settings | Value size 12px for secrets and Version/Zweig | Einstellungen 312 (vSize: "12px"), E | `App/Settings/SettingsRow.swift` |
-| Settings | Input field (right-aligned, h 28, pad-right 12) | Einstellungen 124 | `App/Settings/ValueField.swift`, `App/Settings/AddEditor.swift` |
+| Settings | Input field (right-aligned, h 28, pad-right 12) | Einstellungen 124 | `App/Settings/SettingsRow.swift`, `App/Settings/AccountFlow.swift` |
 | Settings | Choice pill (h 28, pad 0/8/0/12, ring line-strong, chevron 12/1.5) | Einstellungen 127 | `App/Settings/SettingsRow.swift` |
 | Settings | Segmented control | Einstellungen 128 | `App/Components/SegmentedControl.swift` |
-| Settings | Confirm pill in row (96 wide, -offset) | Einstellungen 129 | `App/Settings/View+RowPill.swift` |
+| Settings | Confirm pill in row (96 wide, -offset) | Einstellungen 129 | `App/Settings/SettingsRow.swift` |
 | Settings | Toggle 32×20, knob 16 | Einstellungen 129, Bausteine 183 | `App/Components/ToggleSwitch.swift` |
 | Settings | Text buttons accent/neutral/signal/plain | Einstellungen 107, Einstellungen 130 | `App/Components/TextButton.swift` |
 | Settings | Connection status (dot 8, ring, spinner, colours per state) | Einstellungen 65-68, Einstellungen 1 | `App/Components/ConnectionStatus.swift` |
-| Settings | Toast capsule over the right lane | Einstellungen 170, Einstellungen 516 | `App/Settings/SettingsToast.swift`, `App/Components/ToastView.swift`, `App/Shell/Frame.swift` |
+| Settings | Toast capsule over the right lane | Einstellungen 170, Einstellungen 516 | `App/Settings/SettingsPane.swift`, `App/Components/ToastView.swift`, `App/Shell/Frame.swift` |
 | Settings | Anchored menu (pad 4, rows 28, check column 12, head 24, separator) | Einstellungen 174-180, Bausteine 114 | `App/Components/AnchoredMenu.swift`, `Sources/Shell/Logic/MenuWidthEngine.swift` |
 | Settings | Row "Zustand" with status and sub (geprüft / Fehler / Anmeldung läuft) | Einstellungen 301, Einstellungen 304 | `App/Settings/IntegrationCard.swift` |
 | Settings | Sub "Projekte 412 von 1.280" while working | Einstellungen 301 | not built |
 | Settings | Failure notice "Fehler · …" + "Erneut verbinden" | Einstellungen 305 | `App/Settings/IntegrationCard.swift` |
 | Settings | Keychain notice + "Neu eintragen" | Einstellungen 306 | `App/Settings/IntegrationCard.swift` |
 | Settings | Disconnect notice "X trennen?" + Trennen / Abbrechen | Einstellungen 307 | `App/Settings/IntegrationCard.swift` |
-| Settings | Head "Postfächer" | Einstellungen 268 | `App/Settings/AccountBlock.swift` |
-| Settings | Notice "Noch kein Mail-Konto." + accent "Konto hinzufügen" | Einstellungen 270 | `App/Settings/AccountBlock.swift` |
-| Settings | Account row (label display name, sub provider, status, line false) | Einstellungen 269 | `App/Settings/AccountBlock.swift` |
-| Settings | "Name in Mail" input | Einstellungen 292 | `App/Settings/MailboxNameRow.swift` |
-| Settings | "Angezeigt als" pill (own name / local@ / @domain) | Einstellungen 293 | `App/Settings/MailboxDisplayRow.swift` |
-| Settings | "Bilder in Mails laden" toggle per account (and for Google) | Einstellungen 269, Einstellungen 309 | `App/Settings/MailboxImagesRow.swift`, `App/Settings/AccountBlock.swift`, `App/Settings/IntegrationCard.swift` |
-| Settings | Signature block (head "Signatur · …", textarea, 2 toggles, "Signatur entfernen"  | Einstellungen 111, Einstellungen 251 | `App/Settings/SignatureBlock.swift` |
-| Settings | Signature empty: note + accent "Signatur anlegen" | Einstellungen 254 | `App/Settings/SignatureBlock.swift` |
-| Settings | "Konto entfernen" confirm | Einstellungen 269 | `App/Settings/AccountBlock.swift` |
-| Settings | Row with neutral "Konto hinzufügen" (label "", line false) | Einstellungen 270 | `App/Settings/AccountBlock.swift` |
-| Settings | Add form "Anbieter" pill: Gmail, GMX, IONOS, default "Wählen" | Einstellungen 272 | `App/Settings/AddEditor.swift`, `Sources/Mail/Logic/ProviderPresets.swift` |
-| Settings | Add form fields: Anzeigename, Server Eingang, Port, Verschlüsselung (Keine / SSL | Einstellungen 266, Einstellungen 272 | `App/Settings/AddEditor.swift`, `Sources/Mail/Adapter/IMAPAccess.swift` |
-| Settings | Check result notice "Prüfung · Es fehlen: …" | Einstellungen 273, Einstellungen 277 | `App/Settings/AddEditor.swift` |
-| Settings | Form buttons "Konto hinzufügen" accent + "Abbrechen" plain | Einstellungen 274 | `App/Settings/AddEditor.swift` |
+| Settings | Head "Postfächer" | Einstellungen 268 | `App/Settings/AccountFlow.swift` |
+| Settings | Notice "Noch kein Mail-Konto." + accent "Konto hinzufügen" | Einstellungen 270 | `App/Settings/AccountFlow.swift` |
+| Settings | Account row (label display name, sub provider, status, line false) | Einstellungen 269 | `App/Settings/AccountFlow.swift` |
+| Settings | "Name in Mail" input | Einstellungen 292 | `App/Settings/MailStoreBlock.swift` |
+| Settings | "Angezeigt als" pill (own name / local@ / @domain) | Einstellungen 293 | `App/Settings/MailStoreBlock.swift` |
+| Settings | "Bilder in Mails laden" toggle per account (and for Google) | Einstellungen 269, Einstellungen 309 | `App/Settings/MailStoreBlock.swift`, `App/Settings/AccountFlow.swift`, `App/Settings/IntegrationCard.swift` |
+| Settings | Signature block (head "Signatur · …", textarea, 2 toggles, "Signatur entfernen"  | Einstellungen 111, Einstellungen 251 | `App/Settings/MailStoreBlock.swift` |
+| Settings | Signature empty: note + accent "Signatur anlegen" | Einstellungen 254 | `App/Settings/MailStoreBlock.swift` |
+| Settings | "Konto entfernen" confirm | Einstellungen 269 | `App/Settings/AccountFlow.swift` |
+| Settings | Row with neutral "Konto hinzufügen" (label "", line false) | Einstellungen 270 | `App/Settings/AccountFlow.swift` |
+| Settings | Add form "Anbieter" pill: Gmail, GMX, IONOS, default "Wählen" | Einstellungen 272 | `App/Settings/AccountFlow.swift`, `Sources/Mail/Logic/ProviderPresets.swift` |
+| Settings | Add form fields: Anzeigename, Server Eingang, Port, Verschlüsselung (Keine / SSL | Einstellungen 266, Einstellungen 272 | `App/Settings/AccountFlow.swift`, `Sources/Mail/Adapter/IMAPAccess.swift` |
+| Settings | Check result notice "Prüfung · Es fehlen: …" | Einstellungen 273, Einstellungen 277 | `App/Settings/AccountFlow.swift` |
+| Settings | Form buttons "Konto hinzufügen" accent + "Abbrechen" plain | Einstellungen 274 | `App/Settings/AccountFlow.swift` |
 | Settings | Block "Lokale Ablage": Zeitraum (30 Tage/90 Tage/1 Jahr/Alles), Anhänge lokal, O | Einstellungen 257-264, Einstellungen | not built |
 | Settings | Row "Anmeldung" (… · persönlich / · für die Firma) | Einstellungen 311 | `App/Settings/IntegrationCard.swift` |
 | Settings | Field value rows (masked / "Nicht eingetragen") | Einstellungen 312 | `App/Settings/IntegrationCard.swift` |
 | Settings | "Modell" pill Standard/Sonnet/Haiku/Opus | Einstellungen 312 | `App/Settings/IntegrationCard.swift` |
-| Settings | "Zähler" with confirm pill "Zurücksetzen?" | Einstellungen 291 | `App/Settings/UsageBlock.swift` |
-| Settings | Verbrauch: tokens row, two price inputs, "Geschätzt" | Einstellungen 283-290 | `App/Settings/UsageBlock.swift` |
+| Settings | "Zähler" with confirm pill "Zurücksetzen?" | Einstellungen 291 | `App/Settings/IntegrationCard.swift` |
+| Settings | Verbrauch: tokens row, two price inputs, "Geschätzt" | Einstellungen 283-290 | `App/Settings/IntegrationCard.swift` |
 | Settings | Google: Name in Mail, Angezeigt als, signature after the fields | Einstellungen 315 | `App/Settings/IntegrationCard.swift` |
 | Settings | Abgleich rows: sub, cadence pill, "Jetzt abgleichen" | Einstellungen 316-320 | `App/Settings/IntegrationCard.swift`, `Sources/Hub/Model/Inlet.swift` |
-| Settings | "Projektordner" pill and drive menu (head "Laufwerk", Mein Drive / Geteiltes Dri | Einstellungen 321, Bausteine 134, Ba | `App/Settings/ProjectRootRows.swift` |
-| Settings | "Drive-Ordner der Projekte" + "Jetzt abgleichen" (after a folder is chosen) | Einstellungen 321 | `App/Settings/ProjectRootRows.swift` |
+| Settings | "Projektordner" pill and drive menu (head "Laufwerk", Mein Drive / Geteiltes Dri | Einstellungen 321, Bausteine 134, Ba | `App/Settings/IntegrationCard.swift` |
+| Settings | "Drive-Ordner der Projekte" + "Jetzt abgleichen" (after a folder is chosen) | Einstellungen 321 | `App/Settings/IntegrationCard.swift` |
 | Settings | "Zwischenspeicher" + "Leeren", toast "Zwischenspeicher · geleert" | Einstellungen 321 | `App/Settings/IntegrationCard.swift` |
-| Settings | Identität: Name, Rolle, Kürzel, Telefon as read-only values | Einstellungen 327 | `App/Settings/IdentityCard.swift` |
-| Settings | "Geburtstag im Team zeigen" toggle | Einstellungen 327 | `App/Settings/IdentityCard.swift` |
-| Settings | Head "Konto", "Auf diesem Mac abmelden" with sub and confirm | Einstellungen 295, Einstellungen 327 | `App/Settings/IdentityCard.swift` |
-| Settings | "Erscheinung" segmented Hell/Dunkel/Automatisch (pill when narrow) | Einstellungen 330, Einstellungen 458 | `App/Settings/AppearanceCard.swift` |
-| Settings | "Fremde Inhalte · Immer hell" (line false) | Einstellungen 330 | `App/Settings/AppearanceCard.swift` |
-| Settings | "Beim Öffnen" pill (line false) | Einstellungen 331 | `App/Settings/AppearanceCard.swift` |
-| Settings | "App-Sperre" toggle | Einstellungen 332 | `App/Settings/AppearanceCard.swift` |
-| Settings | "Sperren nach" pill (line false, last row) | Einstellungen 332 | `App/Settings/AppearanceCard.swift` |
+| Settings | Identität: Name, Rolle, Kürzel, Telefon as read-only values | Einstellungen 327 | `App/Settings/SettingsDetail.swift` |
+| Settings | "Geburtstag im Team zeigen" toggle | Einstellungen 327 | `App/Settings/SettingsDetail.swift` |
+| Settings | Head "Konto", "Auf diesem Mac abmelden" with sub and confirm | Einstellungen 295, Einstellungen 327 | `App/Settings/SettingsDetail.swift` |
+| Settings | "Erscheinung" segmented Hell/Dunkel/Automatisch (pill when narrow) | Einstellungen 330, Einstellungen 458 | `App/Settings/SettingsDetail.swift` |
+| Settings | "Fremde Inhalte · Immer hell" (line false) | Einstellungen 330 | `App/Settings/SettingsDetail.swift` |
+| Settings | "Beim Öffnen" pill (line false) | Einstellungen 331 | `App/Settings/SettingsDetail.swift` |
+| Settings | "App-Sperre" toggle | Einstellungen 332 | `App/Settings/SettingsDetail.swift` |
+| Settings | "Sperren nach" pill (line false, last row) | Einstellungen 332 | `App/Settings/SettingsDetail.swift` |
 | Settings | Datenschutz "Bilder in Mails laden" with explanation sub (on / off text) | Einstellungen 329 | `App/Settings/SettingsDetail.swift` |
 | Settings | "Assistent ganz aus", "Dateien im Chat" | Einstellungen 329 | `App/Settings/SettingsDetail.swift` |
 | Settings | "Eigene Daten exportieren" + "Exportieren", toast "Export gespeichert." | Einstellungen 329 | not built |
@@ -375,8 +375,8 @@ Which Swift file draws each element of the valid design master (Mail and Setting
 | Settings | Ordnerschema values Projektordner / Projektdaten / Vorlagen | Einstellungen 335 | `App/Settings/SettingsDetail.swift` |
 | Settings | Row "Einrichtung" + "Erneut durchgehen" | Einstellungen 335 | not built |
 | Settings | Vorlagen: template rows with remove confirm, "Vorlage anlegen" + "Anlegen" | Einstellungen 341, contract/views.js | `App/Settings/SettingsDetail.swift` |
-| Settings | System: Version, Zweig, Datenbank, Diagnose + "Kopieren", toast | Einstellungen 336 | `App/Settings/SystemCard.swift` |
+| Settings | System: Version, Zweig, Datenbank, Diagnose + "Kopieren", toast | Einstellungen 336 | `App/Settings/SettingsDetail.swift` |
 | Settings | Schlüssel-Inventar: status per service + "Entfernen" plain | Einstellungen 343 | `App/Settings/SettingsDetail.swift` |
-| Settings | Project folder toasts: chosen "Projektordner · ‹Laufwerk› · ‹Ordner›"; synced "P | Einstellungen 321, Bausteine 140, Ba | `App/Settings/ProjectRootRows.swift`, `App/Settings/SettingsToast.swift` |
-| Settings | Toast "Abgemeldet · die App startet neu" | Einstellungen 327 | `App/Settings/IdentityCard.swift` |
+| Settings | Project folder toasts: chosen "Projektordner · ‹Laufwerk› · ‹Ordner›"; synced "P | Einstellungen 321, Bausteine 140, Ba | `App/Settings/IntegrationCard.swift`, `App/Settings/SettingsPane.swift` |
+| Settings | Toast "Abgemeldet · die App startet neu" | Einstellungen 327 | `App/Settings/SettingsDetail.swift` |
 | Settings | Area badge = failed services | Einstellungen 507 | `App/Settings/SettingsPane.swift` |

@@ -1,6 +1,8 @@
+import Assistant
 import Design
 import Google
 import Hub
+import Mail
 import Shell
 import SwiftUI
 
@@ -170,6 +172,253 @@ struct SettingsMarkList: View {
                 return [StripMarkItem(id: "card." + id, face: .text(item.mark), help: Text(verbatim: item.title), selected: false,
                                       dot: false) { state.open(id) }]
             } ?? []
+        }
+    }
+}
+
+@MainActor
+struct SettingsContext {
+    let state: SettingsState
+    let catalog: IntegrationCatalogStore
+    let setup: any SetupPort
+    let rules: any RulesPort
+    let keychain: any KeychainPort
+    let flow: AccountFlow
+    let privacy: AssistantPrivacy
+    let inbox: InboxState
+    let desk: DeskState
+    let conversation: ChatState
+    let tiles: TileFocus
+    let access: any AccessPort
+    let roots: DriveRootStore
+    let clearCache: () -> Void
+
+    var readings: [IntegrationReading] { IntegrationReadEngine.readAll(catalog, setup: setup, rules: rules) }
+
+    func syncNow(_ inlet: Inlet.ID, _ capability: Capability) async -> SyncReport.Result {
+        await rules.syncNow(inlet, capability).result
+    }
+}
+
+enum SettingsKeys {
+    static let failedUnknown = "settings.failed.unknown"
+    static let valueEmpty = "settings.value.empty"
+    static let menuCheck = "settings.menu.check"
+}
+
+struct SettingsFace: Identifiable {
+    let id: String
+    let title: String
+    let meta: String
+    let mark: String
+    let detail: String
+    let preview: String
+
+    @MainActor
+    init(id: String, readings: [IntegrationReading], appearance: Appearance, state: SettingsState) {
+        self.id = id
+        if let reading = readings.first(where: { $0.info.id == id }) {
+            let name = appearance.string(reading.info.nameKey)
+            title = name
+            meta = appearance.string(reading.state.key)
+            mark = String(name.prefix(1))
+            detail = appearance.string(reading.info.useKey)
+            preview = meta
+        } else if let section = SettingsSection(rawValue: id) {
+            let name = appearance.string(section.key)
+            title = name
+            meta = state.detailKey(of: section).map { appearance.string($0) } ?? ""
+            mark = String(name.prefix(1))
+            detail = meta
+            preview = ""
+        } else {
+            title = id
+            meta = ""
+            mark = String(id.prefix(1))
+            detail = ""
+            preview = ""
+        }
+    }
+}
+
+struct SettingsToast: View {
+    @Environment(\.appearance) private var appearance
+    let state: SettingsState
+
+    var body: some View {
+        if let key = state.toast {
+            ToastView(message: state.toastName.map { Text(verbatim: appearance.format(key, $0)) } ?? appearance.text(key),
+                      undoLabel: state.toastRetry == nil ? nil : appearance.text("settings.toast.retry"),
+                      onUndo: state.toastRetry.map { retry in { state.dismissToast(); retry() } },
+                      failed: state.toastFailed,
+                      onDismiss: { state.dismissToast() })
+                .id(state.toastSerial)
+        }
+    }
+}
+
+struct SectionRow: View {
+    @Environment(\.appearance) private var appearance
+    let section: SettingsSection
+    let value: String?
+    let detailKey: String?
+    let selected: Bool
+    let separated: Bool
+    let action: () -> Void
+    @State private var hovering = false
+
+    var body: some View {
+        let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row))
+        let ink = InkSet.of(selected)
+        Button(action: action) {
+            MessageRow(fill: selected ? appearance.color(\.inverse) : (hovering ? appearance.color(\.lane) : Color.clear),
+                       ring: hovering && !selected ? appearance.color(\.lineStrong) : nil, separated: separated) {
+                Mark(inverted: selected) { Text(verbatim: String(appearance.string(section.key).prefix(1))) }
+            } content: {
+                HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+                    appearance.text(section.key)
+                        .lineLimit(1)
+                        .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
+                        .foregroundStyle(appearance.color(selected ? \.onInverse : \.ink))
+                    Spacer(minLength: 0)
+                    if let value {
+                        Text(verbatim: value)
+                            .font(.face(Tokens.TextSize.small))
+                            .monospacedDigit()
+                            .foregroundStyle(appearance.color(ink.tertiary))
+                    }
+                }
+                .frame(height: CGFloat(Tokens.LineHeight.notice))
+                (detailKey.map { appearance.text($0) } ?? Text(verbatim: ""))
+                    .lineLimit(1)
+                    .font(.face(Tokens.TextSize.body))
+                    .foregroundStyle(appearance.color(ink.tertiary))
+                    .frame(height: CGFloat(Tokens.LineHeight.notice), alignment: .leading)
+            }
+            .contentShape(shape)
+        }
+        .buttonStyle(.plain)
+        .onHover { hovering = $0 }
+        .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+}
+
+struct SettingsCommandHead: View {
+    @Environment(\.appearance) private var appearance
+    let context: SettingsContext
+    let readings: [IntegrationReading]
+    let width: Double
+    @Binding var disconnecting: String?
+
+    private var state: SettingsState { context.state }
+
+    private var reading: IntegrationReading? {
+        state.front.flatMap { id in readings.first { $0.info.id == id } }
+    }
+
+    private var openLanes: Int {
+        context.desk.widths.all.filter { $0 > context.desk.measure.laneFolded }.count
+    }
+
+    var body: some View {
+        let reading = reading
+        var main: [CommandSlot<SettingsCommand>] = []
+        if let reading {
+            if !reading.info.listsAccounts {
+                main.append(CommandSlot(id: "connect", action: .connect, off: reading.state == .connecting))
+            }
+            if reading.state.canDisconnect {
+                main.append(CommandSlot(id: "disconnect", action: .disconnect, signal: true))
+            }
+        }
+        let fold = openLanes > 1 ? [CommandSlot<SettingsCommand>(id: "fold", action: .fold)] : []
+        let plan = CommandBarEngine.plan(main: main, tail: [], fan: [], fold: fold, staticMore: false, width: width - Tokens.Size.edge)
+        return CommandHead(plan: plan, moreHelp: appearance.string("settings.action.more"), glyph: glyph, help: help, perform: perform, more: more) {
+            EmptyView()
+        }
+    }
+
+    private func glyph(_ command: SettingsCommand) -> Icon? {
+        switch command {
+        case .connect: .link
+        case .disconnect: .close
+        case .fold: .minus
+        }
+    }
+
+    private func help(_ command: SettingsCommand) -> String {
+        switch command {
+        case .connect: appearance.string(reading?.asksReconnect == true ? "settings.action.reconnect" : "settings.action.connect")
+        case .disconnect: appearance.string("settings.action.disconnect")
+        case .fold: appearance.string("settings.action.foldColumn")
+        }
+    }
+
+    private func perform(_ command: SettingsCommand) {
+        switch command {
+        case .connect: if let reading { context.flow.perform(reading.step, for: reading.info.id) }
+        case .disconnect: disconnecting = reading?.info.id
+        case .fold: context.desk.toggleFold(.trailing)
+        }
+    }
+
+    private func more(_ commands: [SettingsCommand]) -> [MenuEntry] {
+        commands.enumerated().map { index, command in
+            .row(MenuItem(id: String(index), label: Text(verbatim: help(command))) { perform(command) })
+        }
+    }
+}
+
+enum SettingsCommand: Equatable, Sendable {
+    case connect
+    case disconnect
+    case fold
+}
+
+struct SettingsStack: View {
+    @Environment(\.appearance) private var appearance
+    let context: SettingsContext
+    @State private var disconnecting: String?
+
+    private var state: SettingsState { context.state }
+
+    var body: some View {
+        let readings = context.readings
+        GeometryReader { proxy in
+            VStack(spacing: 0) {
+                SettingsCommandHead(context: context, readings: readings, width: proxy.size.width, disconnecting: $disconnecting)
+                if let front = state.front {
+                    ScrollView {
+                        SettingsDetail(context: context, id: front, disconnecting: disconnecting == front, endDisconnect: { disconnecting = nil })
+                            .padding(.top, CGFloat(Tokens.Spacing.step4))
+                            .padding(.bottom, CGFloat(Tokens.Spacing.step8))
+                    }
+                    .mask { CardContentMask() }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    .background(appearance.color(\.lane))
+                    .environment(\.narrowCard, proxy.size.width < Tokens.Size.breakpointNarrowCard)
+                } else {
+                    RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.card))
+                        .fill(appearance.color(\.lane))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.card))
+                                .strokeBorder(appearance.color(\.line), lineWidth: CGFloat(Tokens.Size.hairline))
+                        }
+                }
+            }
+        }
+        .onChange(of: state.front) { disconnecting = nil }
+    }
+}
+
+private struct CardContentMask: View {
+    var body: some View {
+        let inset = CGFloat(Tokens.Spacing.step8)
+        let radius = CGFloat(Tokens.Radius.row)
+        HStack(spacing: 0) {
+            Rectangle().frame(width: inset)
+            UnevenRoundedRectangle(topLeadingRadius: radius, topTrailingRadius: radius)
+            Rectangle().frame(width: inset)
         }
     }
 }
