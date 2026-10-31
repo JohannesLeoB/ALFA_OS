@@ -55,3 +55,8 @@ Alles als neuer Master-ZIP über Johannes.
 - Nachgebaut aus `ALFA Shell.dc.html`: voller Ring in currentColor, Lider (`size.blobLidOffset`, öffnen mit `duration.blobEyes`), Augen folgen der Maus nach der Formel der Shell (Zeile 202, `blobEyeFollowDistance`, `blobEyeFollowRamp`, `blobEyeTravelX/Y`), Schrift Geist aus dem App-Bundle, Label 13 px/500. Der erfundene Hover ist entfernt.
 - **Widerspruch im Master:** Die Pille im Dunkelmodus ist in `contract/theme-dark.tokens.json` #f5f5f5 (Code folgt dem), in `project/alfa-theme.css` aber #2e2e2e. Welcher Wert gilt?
 - **Weiter erfunden:** Skalierung des Blobs ×2 auf der Seite, alle Startzeitpunkte, Lider-Startwert scaleY .45, Blinzeln scaleY .1 einmal bei 1,7 s statt im Zufallsintervall der Shell, Label-Breite 200 px, der Zweiklang.
+
+## F · Nachtrag: „Nutzerkonto stilllegen“ unter Ich (`main` be703d6b, Auftrag von Johannes)
+- Neue Zeile im Block „Konto“ unter „Auf diesem Mac abmelden“, gleiche Form (Halte-Bestätigung). Sie zieht die Freigabe von ALFA_OS bei Google zurück und löscht alle Schlüssel auf diesem Mac; Mails und Einstellungen bleiben. Lehnt ein Anbieter ab (z. B. offline), bleibt alles unverändert. Danach startet die App neu wie beim Abmelden.
+- **Ohne Bogen, Texte ohne Master-Key:** `settings.identity.retire` „Nutzerkonto stilllegen“, `settings.identity.retire.sub` „Zieht die Freigabe von ALFA_OS bei Google zurück und löscht alle Schlüssel auf diesem Mac. Mails und Einstellungen bleiben.“, `settings.identity.retire.action` „Stilllegen“, `settings.retire.question` „Stilllegen?“, `settings.retire.done` „Stillgelegt · die App startet neu“. Bitte Bogen und Wortlaut liefern.
+- „Trennen“ einzelner Dienste bleibt unverändert und löscht nur die Daten auf dem Mac (Johannes 31.10.).
