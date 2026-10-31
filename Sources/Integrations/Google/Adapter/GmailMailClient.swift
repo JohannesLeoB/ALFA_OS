@@ -2,7 +2,7 @@ import Foundation
 import Hub
 import Mail
 
-struct GmailMailClient: GmailPort, SourcePort, LabelPort, SenderPort {
+struct GmailMailClient: GmailPort, SourcePort, LabelPort, SenderPort, UntrashPort {
     typealias Backend = GmailFetchPort & GmailWritePort & GmailDraftPort & GmailLabelPort & GmailSenderPort
 
     static let allMail = "ALL"
@@ -85,6 +85,10 @@ struct GmailMailClient: GmailPort, SourcePort, LabelPort, SenderPort {
 
     func markSpam(messageID: String, folderID: String?) async throws {
         try await gmail.markSpam(messageID: messageID)
+    }
+
+    func untrash(messageID: String) async throws {
+        try await gmail.untrashMessage(messageID: messageID)
     }
 
     var usesLabels: Bool { true }

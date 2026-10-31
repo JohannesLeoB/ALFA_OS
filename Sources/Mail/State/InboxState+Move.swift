@@ -72,7 +72,7 @@ extension InboxState {
         refreshCounts()
         var undo: (@MainActor () async -> Void)?
         if undoable, let landed, let origin {
-            undo = { [weak self] in await self?.restore([(id, landed, inlet, origin)]) }
+            undo = { [weak self] in await self?.restore([(id, landed, inlet, origin)], fromTrash: move == .trash) }
         }
         switch move {
         case .archive: post(.archived, undo: undo)
@@ -166,12 +166,16 @@ extension InboxState {
         return summary.folderIDs.first { !$0.hasPrefix("local:") }
     }
 
-    func restore(_ moved: [(id: String, landed: String?, inlet: Inlet.ID, origin: String?)]) async {
+    func restore(_ moved: [(id: String, landed: String?, inlet: Inlet.ID, origin: String?)], fromTrash: Bool = false) async {
         var failed = false
         for entry in moved {
             guard let landed = entry.landed, let target = entry.origin else { continue }
             do {
-                _ = try await mailbox.move(entry.inlet, messageID: landed, toFolder: target)
+                if fromTrash {
+                    _ = try await mailbox.untrash(entry.inlet, messageID: landed, toFolder: target)
+                } else {
+                    _ = try await mailbox.move(entry.inlet, messageID: landed, toFolder: target)
+                }
             } catch {
                 failed = true
             }

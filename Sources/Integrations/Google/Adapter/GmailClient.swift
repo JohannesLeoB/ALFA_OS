@@ -204,6 +204,10 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
         try await requests.send(RequestClient.url(messages + "/\(messageID)/trash"), method: "POST")
     }
 
+    func untrashMessage(messageID: String) async throws {
+        try await requests.send(RequestClient.url(messages + "/\(messageID)/untrash"), method: "POST")
+    }
+
     func listLabels() async throws -> [GmailLabel] {
         MessageParser.labels(from: try await requests.send(RequestClient.url(Self.root + "/labels")))
     }

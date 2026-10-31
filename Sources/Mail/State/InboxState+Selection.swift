@@ -88,7 +88,7 @@ extension InboxState {
             }
             let entries = moved
             let undo: @MainActor () async -> Void = { [weak self] in
-                await self?.restore(entries)
+                await self?.restore(entries, fromTrash: kind == .trash)
             }
             let undoable = moved.contains { $0.landed != nil }
             post(kind == .archive ? .bulkArchived(count: moved.count) : .bulkTrashed(count: moved.count), undo: undoable ? undo : nil)

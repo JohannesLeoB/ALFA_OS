@@ -29,6 +29,7 @@ public protocol MailboxPort: AnyObject {
     func setFlags(_ inlet: Inlet.ID, messageID: String, add: Set<Flag>, remove: Set<Flag>) async throws(HubFailure)
     @discardableResult func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> String?
     @discardableResult func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubFailure) -> String?
+    @discardableResult func untrash(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubFailure) -> String?
     @discardableResult func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> String?
     @discardableResult func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> String?
     func canPurge(_ inlet: Inlet.ID) -> Bool

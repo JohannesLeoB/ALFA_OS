@@ -544,12 +544,14 @@ final class GoogleTests: XCTestCase {
         try await mail.move(messageID: "m1", toFolderID: "TRASH")
         try await mail.move(messageID: "m1", toFolderID: "ALL")
         try await mail.move(messageID: "m1", toFolderID: "INBOX")
+        try await mail.untrash(messageID: "m1")
         let calls = http.calls
         XCTAssertEqual(calls.map { $0.method + " " + $0.path }, [
             "POST \(messages)/m1/modify", "POST \(messages)/m1/trash", "POST \(messages)/m1/modify",
             "POST \(messages)/m1/modify", "POST \(messages)/m1/trash", "POST \(messages)/m1/modify",
-            "POST \(messages)/m1/modify",
+            "POST \(messages)/m1/modify", "POST \(messages)/m1/untrash",
         ])
+        XCTAssertEqual(calls[7].body, Data())
         XCTAssertEqual(try json(calls[0]) as? [String: [String]], ["removeLabelIds": ["INBOX"]])
         XCTAssertEqual(calls[1].body, Data())
         XCTAssertEqual(try json(calls[2]) as? [String: [String]], ["addLabelIds": ["SPAM"], "removeLabelIds": ["INBOX"]])

@@ -3,6 +3,7 @@ import Mail
 protocol GmailLabelPort: Sendable {
     func modifyLabels(messageID: String, add: [String], remove: [String]) async throws
     func trashMessage(messageID: String) async throws
+    func untrashMessage(messageID: String) async throws
     func listLabels() async throws -> [GmailLabel]
     func labelCount(id: String) async throws -> FolderCount?
 }

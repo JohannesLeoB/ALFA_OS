@@ -257,8 +257,18 @@ public final class MailboxStore: MailboxPort {
 
     @discardableResult
     public func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubFailure) -> String? {
+        try await transfer(inlet, messageID: messageID, toFolder: toFolder, untrash: false)
+    }
+
+    @discardableResult
+    public func untrash(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubFailure) -> String? {
+        try await transfer(inlet, messageID: messageID, toFolder: toFolder, untrash: true)
+    }
+
+    private func transfer(_ inlet: Inlet.ID, messageID: String, toFolder: String, untrash: Bool) async throws(HubFailure) -> String? {
         let header = header(inlet, messageID: messageID)
         let (touched, landed) = try await perform(inlet) { transport in
+            if untrash, let restoring = transport as? any UntrashPort { try await restoring.untrash(messageID: messageID) }
             try await transport.move(messageID: messageID, toFolderID: toFolder)
             let touched = try self.remove(inlet, messageID: messageID, folder: nil)
             return (touched, await Self.landed(transport, messageID, header: header, folder: toFolder))
