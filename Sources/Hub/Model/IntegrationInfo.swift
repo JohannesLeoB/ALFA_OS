@@ -1,3 +1,5 @@
+import Foundation
+
 public struct IntegrationInfo: Identifiable, Equatable, Sendable {
     public let id: String
     public let access: IntegrationAccess
@@ -101,4 +103,141 @@ public struct IntegrationValues: Equatable, Sendable {
     public var text: [String: String]
 
     public static let none = IntegrationValues(text: [:])
+}
+
+public enum IntegrationExtraKind: Sendable {
+    case projectRoot
+    case clear
+}
+
+public struct IntegrationReading: Identifiable, Equatable, Sendable {
+    public var info: IntegrationInfo
+    public var state: LinkState
+    public var note: LinkNote?
+    public var hint: Hint?
+    public var inlets: [Inlet]
+    public var offers: [Offer]
+    public var areas: [AreaReading]
+    public var heldSlots: Set<String> = []
+
+    public var id: String { info.id }
+
+    public var asksReconnect: Bool { state.isActive }
+
+    public var lead: Inlet? { inlets.first { LinkState($0.state) == state } ?? inlets.first }
+
+    public var leadAddress: String? {
+        guard let lead, lead.capabilities.contains(.mail), !lead.account.isEmpty else { return nil }
+        return lead.account
+    }
+
+    public var step: IntegrationStep {
+        let lead = lead
+        switch state {
+        case .connected, .working, .failed, .unreadable:
+            return lead.map { .renew($0.id) } ?? .none
+        case .notConnected:
+            return offers.isEmpty ? .none : .add(offers)
+        case .connecting:
+            return .none
+        }
+    }
+}
+
+public enum IntegrationStep: Equatable, Sendable {
+    case add([Offer])
+    case renew(Inlet.ID)
+    case none
+}
+
+public struct AreaReading: Identifiable, Equatable, Sendable {
+    public var area: IntegrationArea
+    public var inlet: Inlet.ID
+    public var account: String
+    public var capability: Capability
+    public var choice: CadenceChoice
+    public var lastSync: Date?
+    public var running: Bool
+
+    public var id: String { inlet + "|" + area.id }
+}
+
+public enum SettingsSection: String, CaseIterable, Sendable, Identifiable {
+    case identity
+    case appearance
+    case companyData
+    case folders
+    case templates
+    case integrations
+    case keyInventory
+    case contacts
+    case privacy
+    case system
+    case imprint
+
+    public var id: String { rawValue }
+
+    var group: SettingsGroup {
+        switch self {
+        case .identity, .appearance: .me
+        case .companyData: .company
+        case .folders, .templates: .folders
+        case .integrations, .keyInventory, .contacts: .connections
+        case .privacy, .system, .imprint: .protection
+        }
+    }
+
+    public var key: String { "settings.section." + rawValue }
+
+    public var detailKey: String? {
+        switch self {
+        case .folders, .keyInventory, .contacts, .privacy: nil
+        default: "settings.section." + rawValue + ".detail"
+        }
+    }
+}
+
+public enum SettingsGroup: String, CaseIterable, Sendable {
+    case me
+    case company
+    case folders
+    case connections
+    case protection
+
+    public var key: String { "settings.group." + rawValue }
+
+    public var symbol: String {
+        switch self {
+        case .me: "person"
+        case .company: "building"
+        case .folders: "folder"
+        case .connections: "plug"
+        case .protection: "system"
+        }
+    }
+
+    public var opening: String {
+        switch self {
+        case .me: SettingsSection.identity.rawValue
+        case .company: SettingsSection.companyData.rawValue
+        case .folders: SettingsSection.folders.rawValue
+        case .connections: "google"
+        case .protection: SettingsSection.privacy.rawValue
+        }
+    }
+
+    public var sections: [SettingsSection] { SettingsSection.allCases.filter { $0.group == self } }
+}
+
+public enum SettingsLabel: String, CaseIterable, Sendable {
+    case version
+    case branch
+    case database
+    case diagnosis
+
+    public var key: String { "settings.label." + rawValue }
+}
+
+public enum SettingsTarget: Equatable, Codable, Sendable {
+    case inlet(String)
 }

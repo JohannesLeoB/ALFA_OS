@@ -292,8 +292,8 @@ Which Swift file draws each element of the valid design master (Mail and Setting
 | Settings | Tile hover | Einstellungen 47 style-hover: box-sh | `App/Settings/SettingsTile.swift` |
 | Settings | Tile press scale .98 | Einstellungen 47 | `App/Settings/SettingsTile.swift` |
 | Settings | Tile mark 28 circle, logo on #fff, initial, ring lane/line-strong | Einstellungen 47, Einstellungen 401 | `App/Settings/SettingsTile.swift` |
-| Settings | Service "DHL" (one tile; fields Tracking-Schlüssel, Versand-Schlüssel, Secret, B | Bausteine 43 | `Sources/Hub/Store/IntegrationCatalogStore.swift` |
-| Settings | Service "Happa Happa" (Speiseplan, Schlüssel) | Bausteine 44 | `Sources/Hub/Store/IntegrationCatalogStore.swift` |
+| Settings | Service "DHL" (one tile; fields Tracking-Schlüssel, Versand-Schlüssel, Secret, B | Bausteine 43 | `Sources/Hub/Store/InletStore.swift` |
+| Settings | Service "Happa Happa" (Speiseplan, Schlüssel) | Bausteine 44 | `Sources/Hub/Store/InletStore.swift` |
 | Settings | Service purpose line (hero subtitle) | Bausteine 37, :41, :42, :43 | `App/Settings/IntegrationHero.swift` |
 | Settings | Keys tile "Schlüssel-Inventar", sub empty | Einstellungen 236 (schluessel: ["Sch | `App/Settings/IntegrationList.swift` |
 | Settings | Profile tile (pad 16, radius row, well / selected inv, no ring, press .99) | Einstellungen 50, Einstellungen 416 | `App/Settings/ProfileTile.swift` |
@@ -305,7 +305,7 @@ Which Swift file draws each element of the valid design master (Mail and Setting
 | Settings | "Adressen" list | Einstellungen 53 | `App/Settings/ProfileTile.swift` |
 | Settings | Section rows (message-row: mark 28, pad 12/8, gap 20, two lines, separator from  | Einstellungen 58-75, Einstellungen 4 | `App/Settings/SectionRow.swift`, `App/Components/MessageRow.swift` |
 | Settings | Row value slot ("Automatisch" on Darstellung) | Einstellungen 70, Einstellungen 410 | `App/Settings/SectionRow.swift`, `App/Settings/SettingsPane.swift` |
-| Settings | Row "Ordnerschema" (detail "") in Dateiordner | Einstellungen 236 (einrichtung: ["Or | `Sources/Hub/Model/SettingsSection.swift` |
+| Settings | Row "Ordnerschema" (detail "") in Dateiordner | Einstellungen 236 (einrichtung: ["Or | `Sources/Hub/Model/IntegrationInfo.swift` |
 | Settings | Stack command head: Verbinden/Erneut verbinden (link), Trennen (close, signal),  | Einstellungen 86-90, Einstellungen 4 | `App/Settings/SettingsCommandHead.swift` |
 | Settings | Empty stack card "Leere Karte" | Einstellungen 92 | `App/Components/CardStack.swift` |
 | Settings | Card face (border-radius:0, box-shadow:none, no glaze) | Einstellungen 94, Einstellungen 427- | `App/Settings/SettingsStack.swift` |
@@ -355,7 +355,7 @@ Which Swift file draws each element of the valid design master (Mail and Setting
 | Settings | "Zähler" with confirm pill "Zurücksetzen?" | Einstellungen 291 | `App/Settings/UsageBlock.swift` |
 | Settings | Verbrauch: tokens row, two price inputs, "Geschätzt" | Einstellungen 283-290 | `App/Settings/UsageBlock.swift` |
 | Settings | Google: Name in Mail, Angezeigt als, signature after the fields | Einstellungen 315 | `App/Settings/IntegrationCard.swift` |
-| Settings | Abgleich rows: sub, cadence pill, "Jetzt abgleichen" | Einstellungen 316-320 | `App/Settings/IntegrationCard.swift`, `Sources/Hub/Model/Cadence.swift` |
+| Settings | Abgleich rows: sub, cadence pill, "Jetzt abgleichen" | Einstellungen 316-320 | `App/Settings/IntegrationCard.swift`, `Sources/Hub/Model/Inlet.swift` |
 | Settings | "Projektordner" pill and drive menu (head "Laufwerk", Mein Drive / Geteiltes Dri | Einstellungen 321, Bausteine 134, Ba | `App/Settings/ProjectRootRows.swift` |
 | Settings | "Drive-Ordner der Projekte" + "Jetzt abgleichen" (after a folder is chosen) | Einstellungen 321 | `App/Settings/ProjectRootRows.swift` |
 | Settings | "Zwischenspeicher" + "Leeren", toast "Zwischenspeicher · geleert" | Einstellungen 321 | `App/Settings/IntegrationCard.swift` |
