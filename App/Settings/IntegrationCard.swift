@@ -24,6 +24,8 @@ struct IntegrationCard: View {
 
     private var name: String { appearance.string(info.nameKey) }
 
+    private var adding: Bool { flow.form.map { info.providers.contains($0.provider) } ?? false }
+
     var body: some View {
         let reading = reading
         VStack(spacing: 0) {
@@ -34,6 +36,11 @@ struct IntegrationCard: View {
             }
             notices(reading)
             if disconnecting { disconnectNotice(reading) }
+            if reading.state == .notConnected, !info.listsAccounts, !adding {
+                SettingsRow(label: Text(verbatim: "")) {
+                    TextButton(label: appearance.text("settings.action.connect"), kind: .accent, disabled: flow.busy) { perform(reading.step) }
+                }
+            }
             if info.listsAccounts { AccountBlock(context: context, info: info, reading: reading) }
             if reading.state != .notConnected, !info.listsAccounts {
                 ForEach(reading.inlets.filter(AccountBlock.hasMailbox)) { inlet in

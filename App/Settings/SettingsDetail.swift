@@ -69,7 +69,7 @@ struct TemplatesCard: View {
 
     private func add() {
         let panel = NSOpenPanel()
-        panel.appearance = state.appearance.panel
+        panel.appearance = ForeignContent.panel
         panel.allowedContentTypes = TemplateStore.extensions.compactMap { UTType(filenameExtension: $0) }
         panel.allowsMultipleSelection = false
         guard panel.runModal() == .OK, let url = panel.url else { return }
@@ -153,17 +153,44 @@ struct KeyCard: View {
         let readings = context.readings.filter { !$0.info.listsAccounts }
         VStack(spacing: 0) {
             ForEach(readings) { reading in
-                SettingsRow(label: appearance.text(reading.info.nameKey)) {
-                    ConnectionStatus(state: reading.state.connection, label: appearance.text(reading.state.key))
-                    if reading.state != .notConnected {
-                        TextButton(label: appearance.text("text.settings.action.remove"), kind: .plain, disabled: reading.inlets.isEmpty) {
-                            context.flow.claim(nil)
-                            Task { await context.flow.remove(reading.inlets.map(\.id)) }
-                        }
-                    }
-                }
+                row(reading)
             }
         }
+    }
+
+    private func row(_ reading: IntegrationReading) -> some View {
+        let flow = context.flow
+        let failure = flow.actedOn == reading.info.id ? flow.failure : nil
+        return SettingsRow(label: appearance.text(reading.info.nameKey),
+                           sub: failure.map { Text(verbatim: appearance.format("settings.failed.title", $0.line(appearance))) }) {
+            ConnectionStatus(state: reading.state.connection, label: appearance.text(reading.state.key))
+            if reading.state == .notConnected {
+                TextButton(label: appearance.text("settings.action.connect"), kind: .accent, disabled: flow.busy) {
+                    context.state.open(reading.info.id)
+                    flow.perform(reading.step, for: reading.info.id)
+                }
+            } else if !reading.inlets.isEmpty {
+                ConfirmPill(
+                    label: appearance.text("text.settings.action.remove"),
+                    question: Text(verbatim: question(reading)),
+                    yes: appearance.text("text.settings.action.remove"),
+                    no: appearance.text("confirm.no"),
+                    holdHint: appearance.text("settings.hold.remove"),
+                    showsProgress: false,
+                    onYes: {
+                        flow.claim(reading.info.id)
+                        Task { await flow.remove(reading.inlets.map(\.id)) }
+                    }
+                )
+                .rowPill()
+            }
+        }
+    }
+
+    private func question(_ reading: IntegrationReading) -> String {
+        [appearance.format("settings.disconnect.ask", appearance.string(reading.info.nameKey)),
+         AccountBlock.waiting(reading.inlets.map(\.id), context: context, appearance: appearance)]
+            .compactMap { $0 }.joined(separator: " ")
     }
 }
 
@@ -212,7 +239,7 @@ struct PrivacyCard: View {
 
     private func chooseExport() {
         let panel = NSSavePanel()
-        panel.appearance = state.appearance.panel
+        panel.appearance = ForeignContent.panel
         panel.allowedContentTypes = [.zip]
         panel.nameFieldStringValue = exporter.fileName
         guard panel.runModal() == .OK, let url = panel.url else { return }
@@ -302,13 +329,10 @@ extension AppearanceChoice {
         }
     }
 
-    var panel: NSAppearance? {
-        switch self {
-        case .light: NSAppearance(named: .aqua)
-        case .dark: NSAppearance(named: .darkAqua)
-        case .system: nil
-        }
-    }
+}
+
+enum ForeignContent {
+    static var panel: NSAppearance? { NSAppearance(named: .aqua) }
 }
 
 struct ContactCard: View {
@@ -467,18 +491,25 @@ struct IdentityCard: View {
             }
             context.state.notify(retiring ? "settings.retire.done" : "settings.signOut.done")
             try? await Task.sleep(for: .seconds(Tokens.Duration.toast))
-            await AppRelaunch.run()
+            if let error = await AppRelaunch.run() {
+                refused = Hint(text: SettingsKeys.failedUnknown, detail: error.localizedDescription)
+            }
         }
     }
 }
 
 enum AppRelaunch {
     @MainActor
-    static func run() async {
+    static func run() async -> (any Error)? {
         let configuration = NSWorkspace.OpenConfiguration()
         configuration.createsNewApplicationInstance = true
-        _ = try? await NSWorkspace.shared.openApplication(at: Bundle.main.bundleURL, configuration: configuration)
+        do {
+            _ = try await NSWorkspace.shared.openApplication(at: Bundle.main.bundleURL, configuration: configuration)
+        } catch {
+            return error
+        }
         NSApp.terminate(nil)
+        return nil
     }
 }
 

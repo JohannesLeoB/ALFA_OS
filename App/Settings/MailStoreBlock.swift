@@ -75,7 +75,7 @@ struct MailStoreBlock: View {
 
     private func choose() {
         let panel = NSOpenPanel()
-        panel.appearance = state.appearance.panel
+        panel.appearance = ForeignContent.panel
         panel.canChooseFiles = false
         panel.canChooseDirectories = true
         panel.canCreateDirectories = true
