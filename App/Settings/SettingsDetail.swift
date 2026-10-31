@@ -157,6 +157,7 @@ struct KeyCard: View {
                     ConnectionStatus(state: reading.state.connection, label: appearance.text(reading.state.key))
                     if reading.state != .notConnected {
                         TextButton(label: appearance.text("text.settings.action.remove"), kind: .plain, disabled: reading.inlets.isEmpty) {
+                            context.flow.claim(nil)
                             Task { await context.flow.remove(reading.inlets.map(\.id)) }
                         }
                     }

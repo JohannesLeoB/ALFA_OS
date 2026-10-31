@@ -14,7 +14,6 @@ struct IntegrationCard: View {
     let info: IntegrationInfo
     var disconnecting = false
     var endDisconnect: () -> Void = {}
-    @State private var started = false
     @State private var held = IntegrationValues.none
 
     private var flow: AccountFlow { context.flow }
@@ -35,7 +34,7 @@ struct IntegrationCard: View {
             }
             notices(reading)
             if disconnecting { disconnectNotice(reading) }
-            if info.listsAccounts { AccountBlock(context: context, info: info, reading: reading, started: $started) }
+            if info.listsAccounts { AccountBlock(context: context, info: info, reading: reading) }
             if reading.state != .notConnected, !info.listsAccounts {
                 ForEach(reading.inlets.filter(AccountBlock.hasMailbox)) { inlet in
                     MailboxImagesRow(state: context.state, inlet: inlet)
@@ -138,7 +137,7 @@ struct IntegrationCard: View {
 
     @ViewBuilder
     private var progress: some View {
-        if started || flow.actedOn == info.id, flow.form == nil {
+        if flow.actedOn == info.id, flow.form == nil {
             if flow.busy {
                 HStack(spacing: CGFloat(Tokens.Spacing.step12)) {
                     appearance.text("settings.link.connecting").designText(\.inkTertiary, size: Tokens.TextSize.small)
@@ -188,7 +187,7 @@ struct IntegrationCard: View {
         ) {
             TextButton(label: appearance.text("settings.action.disconnect"), kind: .signal, disabled: flow.busy) {
                 endDisconnect()
-                started = true
+                flow.claim(info.id)
                 Task { await flow.remove(removed) }
             }
             TextButton(label: appearance.text("text.common.cancel"), kind: .plain) { endDisconnect() }
@@ -275,7 +274,6 @@ struct IntegrationCard: View {
     }
 
     private func perform(_ step: IntegrationStep) {
-        started = true
         flow.perform(step, for: info.id)
     }
 }

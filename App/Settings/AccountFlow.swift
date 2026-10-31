@@ -136,8 +136,12 @@ final class AccountFlow {
         values = kept
     }
 
-    func perform(_ step: IntegrationStep, for id: String) {
+    func claim(_ id: String?) {
         actedOn = id
+    }
+
+    func perform(_ step: IntegrationStep, for id: String) {
+        claim(id)
         checked = nil
         switch step {
         case .add(let offers):
@@ -218,6 +222,7 @@ final class AccountFlow {
 
     func signOut(retiring: Bool = false) async -> Bool {
         guard !busy else { return false }
+        claim(nil)
         busy = true
         failure = nil
         let failed = retiring ? await SignOutEngine.retire(setup: setup) : await SignOutEngine.run(setup: setup)
@@ -471,7 +476,6 @@ struct AccountBlock: View {
     let context: SettingsContext
     let info: IntegrationInfo
     let reading: IntegrationReading
-    @Binding var started: Bool
 
     private var flow: AccountFlow { context.flow }
 
@@ -492,7 +496,7 @@ struct AccountBlock: View {
                             line: !Self.hasMailbox(inlet)) {
                     ConnectionStatus(state: LinkState(inlet.state).connection, label: appearance.text(LinkState(inlet.state).key))
                     TextButton(label: appearance.text("text.settings.action.check"), kind: .plain, disabled: flow.busy) {
-                        started = true
+                        flow.claim(info.id)
                         Task { await flow.probe(inlet.id) }
                     }
                 }
@@ -514,7 +518,7 @@ struct AccountBlock: View {
                         holdHint: appearance.text("settings.hold.remove"),
                         showsProgress: false,
                         onYes: {
-                            started = true
+                            flow.claim(info.id)
                             Task { await flow.remove([inlet.id]) }
                         }
                     )
@@ -561,7 +565,7 @@ struct AccountBlock: View {
 
     private func addAccount(kind: TextButtonKind) -> some View {
         TextButton(label: appearance.text("text.settings.action.addAccount"), kind: kind, disabled: flow.busy || reading.offers.isEmpty) {
-            started = true
+            flow.claim(info.id)
             flow.open(reading.offers)
         }
     }
