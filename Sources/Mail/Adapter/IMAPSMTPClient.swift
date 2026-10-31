@@ -1,5 +1,6 @@
 import Core
 import Foundation
+import Hub
 
 struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort, SendLimitPort {
     typealias PasswordSource = @Sendable () async throws -> String
@@ -439,5 +440,161 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort, S
         let value = try await credential()
         guard !value.isEmpty else { throw MailFailure.credentialsMissing }
         return value
+    }
+}
+
+extension IMAPSMTPClient: MirrorPort {
+    private static let sinceSlack: TimeInterval = 86_400
+    private static let flagChunk = 1_000
+
+    var ranges: [MailboxRange] { MailboxRange.allCases }
+
+    var fillsPreviews: Bool { true }
+
+    func startCursor() async throws -> String? { nil }
+
+    func listIDs(folderID: String, since: Date?, limit: Int?) async throws -> MirrorListing {
+        try await withIncoming { session in
+            let selection = try await session.select(folderID, readOnly: true)
+            let live: [IMAPArgument] = [.raw("UNDELETED")]
+            let boundary = since.map { DateEngine.formatSearchDate($0.addingTimeInterval(-Self.sinceSlack)) }
+            let found = try await session.searchUIDs(live + (boundary.map { [.raw("SINCE"), .raw($0)] } ?? []))
+            var wanted = found
+            var older = false
+            if let limit {
+                older = found.count > limit
+                wanted = Array(found.suffix(limit))
+            } else if let boundary {
+                older = try await session.countMatches(live + [.raw("BEFORE"), .raw(boundary)]) > 0
+            }
+            let ids = wanted.reversed().map {
+                IMAPMessageReference(folder: folderID, uidValidity: selection.uidValidity, uid: $0).encoded
+            }
+            return MirrorListing(ids: ids, hasOlder: older, validity: String(selection.uidValidity))
+        }
+    }
+
+    func fetchSummaries(folderID: String, ids: [String]) async throws -> [MessageSummary] {
+        let references = try ids.map(IMAPMessageReference.decode)
+        return try await withIncoming { session in
+            let selection = try await session.select(folderID, readOnly: true)
+            let uids = references.filter { $0.uidValidity == selection.uidValidity }.map(\.uid)
+            let fetched = try await session.fetch(uids: uids, items: Self.summaryItems)
+            let previews = await Self.previews(fetched, session: session)
+            return fetched.reversed().compactMap { entry -> MessageSummary? in
+                guard let uid = entry.uid else { return nil }
+                return Self.summary(entry, uid: uid, folder: folderID, uidValidity: selection.uidValidity, snippet: previews[uid] ?? "")
+            }
+        }
+    }
+
+    func refreshFlags(folderID: String, known: [String], cursor: String?) async throws -> FlagRefresh {
+        let references = try known.map(IMAPMessageReference.decode)
+        return try await withIncoming { session in
+            let selection = try await session.select(folderID, readOnly: true)
+            let uids = references.filter { $0.uidValidity == selection.uidValidity }.map(\.uid)
+            var flags: [String: Set<Flag>] = [:]
+            for chunk in MirrorEngine.chunks(uids, size: Self.flagChunk) {
+                for entry in try await session.fetch(uids: chunk, items: ["UID", "FLAGS"]) {
+                    guard let uid = entry.uid else { continue }
+                    let id = IMAPMessageReference(folder: folderID, uidValidity: selection.uidValidity, uid: uid).encoded
+                    flags[id] = Set(entry.flags.compactMap { Flag(imapName: $0) })
+                }
+            }
+            return FlagRefresh(flags: flags)
+        }
+    }
+}
+
+extension IMAPSMTPClient: UnseenCountPort {
+    func unseen(folderID: String) async throws -> FolderCount? {
+        try await withIncoming { session in try await session.status(folderID) }
+    }
+}
+
+extension IMAPSMTPClient: SenderPort {
+    func senders() async throws -> [Participant] {
+        [Participant(name: account.displayName == account.address ? "" : account.displayName, address: account.address)]
+    }
+}
+
+extension IMAPSMTPClient {
+    private struct PreviewSource: Hashable {
+        var section: String
+        var encoding: String
+        var charset: String?
+        var html: Bool
+        var limit: Int
+    }
+
+    static let previewTextBytes = 4_096
+    static let previewHTMLBytes = 16_384
+    static let previewWideHTMLBytes = 131_072
+    static let previewCharacters = 600
+    static let previewEmpty = " "
+
+    static func previews(_ entries: [IMAPFetched], session: IMAPClient) async -> [Int: String] {
+        var pending: [Int: [PreviewSource]] = [:]
+        for entry in entries {
+            guard let uid = entry.uid, let structure = entry.structure else { continue }
+            pending[uid] = sources(structure)
+        }
+        var result: [Int: String] = [:]
+        while !pending.isEmpty {
+            var groups: [PreviewSource: [Int]] = [:]
+            for (uid, list) in pending {
+                if let next = list.first {
+                    groups[next, default: []].append(uid)
+                } else {
+                    result[uid] = previewEmpty
+                    pending[uid] = nil
+                }
+            }
+            for (source, uids) in groups {
+                let item = "BODY.PEEK[\(source.section)]<0.\(source.limit)>"
+                guard let fetched = try? await session.fetch(uids: uids, items: ["UID", item]) else {
+                    for uid in uids { pending[uid] = nil }
+                    continue
+                }
+                var found: [Int: String] = [:]
+                for entry in fetched {
+                    guard let uid = entry.uid, let raw = entry.sections[source.section.uppercased()] else { continue }
+                    let decoded = MIME.truncatedString(from: MIME.decodeTransfer(raw, encoding: source.encoding), charset: source.charset)
+                    found[uid] = snippet(decoded, html: source.html)
+                }
+                for uid in uids {
+                    if let text = found[uid], !PreviewEngine.text(text).isEmpty {
+                        result[uid] = text
+                        pending[uid] = nil
+                    } else {
+                        pending[uid]?.removeFirst()
+                    }
+                }
+            }
+        }
+        return result
+    }
+
+    static func snippet(_ decoded: String, html: Bool) -> String {
+        let text = html ? HTMLEngine.plain(decoded) : decoded
+        let cut = String(text.trimmingCharacters(in: .whitespacesAndNewlines).prefix(previewCharacters))
+        return cut.isEmpty ? previewEmpty : cut
+    }
+
+    private static func sources(_ structure: IMAPBodyPart) -> [PreviewSource] {
+        var list: [PreviewSource] = []
+        if let part = structure.firstPlainText {
+            list.append(PreviewSource(section: part.section, encoding: part.encoding, charset: part.charset, html: false,
+                                      limit: previewTextBytes))
+        }
+        if let part = structure.firstHTML {
+            list.append(PreviewSource(section: part.section, encoding: part.encoding, charset: part.charset, html: true,
+                                      limit: previewHTMLBytes))
+            if part.size > previewHTMLBytes {
+                list.append(PreviewSource(section: part.section, encoding: part.encoding, charset: part.charset, html: true,
+                                          limit: previewWideHTMLBytes))
+            }
+        }
+        return list
     }
 }
