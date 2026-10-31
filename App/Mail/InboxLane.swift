@@ -16,8 +16,8 @@ struct InboxLane: View {
     private var content: some View {
         switch lane {
         case .leading: FolderLane(session: session)
-        case .center: MessageLane(session: session).switchGlass(session.mailboxSwitching)
-        case .trailing: StackLane(session: session).switchGlass(session.mailboxSwitching)
+        case .center: MessageLane(session: session).switchGlass()
+        case .trailing: StackLane(session: session).switchGlass()
         }
     }
 }

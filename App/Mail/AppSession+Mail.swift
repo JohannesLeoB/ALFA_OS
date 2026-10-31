@@ -44,11 +44,11 @@ extension AppSession {
             Task { await inbox.selectAccount(id) }
             return
         }
-        withAnimation(appearance.ease(Tokens.Duration.switchIn, Tokens.Easing.glassIn)) { mailboxSwitching = true }
+        mailboxSwitching = true
         Task {
             try? await Task.sleep(for: .seconds(Tokens.Duration.switchIn + Tokens.Duration.glassDelay))
             let swapped = inbox.swapAccount(id)
-            withAnimation(appearance.ease(Tokens.Duration.switchOut, Tokens.Easing.glassOut)) { mailboxSwitching = false }
+            mailboxSwitching = false
             if swapped { await inbox.loadSelection() }
         }
     }

@@ -26,7 +26,7 @@ struct FolderLane: View {
                 head
                 list
             }
-            .switchGlass(session.mailboxSwitching)
+            .switchGlass()
             AccountDeck(session: session)
         }
     }
