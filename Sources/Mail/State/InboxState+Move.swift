@@ -33,7 +33,10 @@ extension InboxState {
         do {
             try await mailbox.purge(inlet, messageID: id)
         } catch {
-            post(.deleteFailed, undo: { [weak self] in await self?.purge(id) })
+            post(.deleteFailed, undo: { [weak self] in
+                guard self?.selectedInlet == inlet else { return }
+                await self?.purge(id)
+            })
             return
         }
         if selectedInlet == inlet { summaries.removeAll { $0.id == id } }
@@ -52,7 +55,7 @@ extension InboxState {
 
     func relocate(_ id: String, _ move: MoveTarget, undoable: Bool = false, toast: ToastKind = .trashed) async {
         guard let inlet = selectedInlet, let held = summary(id) else { return }
-        let origin = Self.serverFolder(selectedFolder, of: held)
+        let origin = Self.serverFolder(selectedFolder, of: held, in: folders, inboxFirst: move == .archive)
         let staysListed = move == .archive && folders.first { $0.id == selectedFolder }?.role == .all
         let lifted = lift([id], in: inlet, keepListed: staysListed)
         let opening = reopen(lifted.next)
@@ -66,7 +69,10 @@ extension InboxState {
         } catch {
             putBack(lifted.entries, in: inlet, folder: selectedFolder)
             await opening?.value
-            post(Self.relocateFailure(move), undo: { [weak self] in await self?.relocate(id, move, undoable: undoable, toast: toast) })
+            post(Self.relocateFailure(move), undo: { [weak self] in
+                guard self?.selectedInlet == inlet else { return }
+                await self?.relocate(id, move, undoable: undoable, toast: toast)
+            })
             return
         }
         refreshCounts()
@@ -117,7 +123,7 @@ extension InboxState {
     }
 
     public var offersSpam: Bool {
-        folderActions && folders.contains { $0.role == .spam }
+        folderActions && currentFolder?.role != .spam && folders.contains { $0.role == .spam }
     }
 
     public func original(_ id: String) async -> String? {
@@ -138,7 +144,7 @@ extension InboxState {
 
     func move(_ id: String, to folder: String) async {
         guard let inlet = selectedInlet, let held = summary(id) else { return }
-        let origin = Self.serverFolder(selectedFolder, of: held)
+        let origin = Self.serverFolder(selectedFolder, of: held, in: folders)
         let lifted = lift([id], in: inlet)
         let opening = reopen(lifted.next)
         let landed: String?
@@ -147,7 +153,10 @@ extension InboxState {
         } catch {
             putBack(lifted.entries, in: inlet, folder: selectedFolder)
             await opening?.value
-            post(.moveFailed, undo: { [weak self] in await self?.move(id, to: folder) })
+            post(.moveFailed, undo: { [weak self] in
+                guard self?.selectedInlet == inlet else { return }
+                await self?.move(id, to: folder)
+            })
             return
         }
         refreshCounts()
@@ -161,9 +170,16 @@ extension InboxState {
 
     private static let fixedRoles: Set<FolderRole> = [.drafts, .sent, .starred, .all]
 
-    static func serverFolder(_ selected: String?, of summary: MessageSummary) -> String? {
-        guard let selected, selected.hasPrefix("local:") else { return selected }
-        return summary.folderIDs.first { !$0.hasPrefix("local:") }
+    static func serverFolder(_ selected: String?, of summary: MessageSummary, in folders: [Folder] = [], inboxFirst: Bool = false) -> String? {
+        let real = folders.filter { !$0.id.hasPrefix("local:") && $0.role != .all && $0.role != .starred }.map(\.id)
+        guard !real.isEmpty else {
+            guard let selected, selected.hasPrefix("local:") else { return selected }
+            return summary.folderIDs.first { !$0.hasPrefix("local:") }
+        }
+        let inbox = folders.first { $0.role == .inbox }.map(\.id).flatMap { summary.folderIDs.contains($0) ? $0 : nil }
+        if inboxFirst, let inbox { return inbox }
+        if let selected, real.contains(selected) { return selected }
+        return inbox ?? summary.folderIDs.first { real.contains($0) }
     }
 
     func restore(_ moved: [(id: String, landed: String?, inlet: Inlet.ID, origin: String?)], fromTrash: Bool = false) async {

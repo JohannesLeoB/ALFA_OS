@@ -31,7 +31,9 @@ public final class LoopbackServer: Sendable {
     }
 
     public func start() async throws -> String {
-        let listener = try NWListener(using: .tcp, on: .any)
+        let parameters = NWParameters.tcp
+        parameters.requiredInterfaceType = .loopback
+        let listener = try NWListener(using: parameters, on: .any)
         let startup = Startup()
         let failure = startupFailure
         listener.newConnectionHandler = { [weak self, weak listener] connection in

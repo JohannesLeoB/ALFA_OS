@@ -844,7 +844,7 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(http.calls.count, 1)
     }
 
-    func testGmailFlagRefreshFallsBackToTheNewestHundredWhenTheCursorIsMissingOrTooOld() async throws {
+    func testGmailFlagRefreshReadsEveryKnownMailWhenTheCursorIsTooOld() async throws {
         let known = (0..<150).map { "m\($0)" }
         let tooOld = FakeHttp { call in
             if call.path.hasSuffix("/history") { return (404, #"{"error":{"code":404,"message":"Requested entity was not found."}}"#) }
@@ -853,10 +853,10 @@ final class GoogleTests: XCTestCase {
         }
         let refresh = try await mailClient(tooOld).refreshFlags(folderID: "INBOX", known: known, cursor: "5")
         XCTAssertEqual(refresh.cursor, "300")
-        XCTAssertEqual(refresh.flags.count, 100)
+        XCTAssertEqual(refresh.flags.count, 150)
         XCTAssertEqual(refresh.flags["m0"], [.seen])
-        XCTAssertNil(refresh.flags["m100"])
-        XCTAssertEqual(tooOld.calls.count, 102)
+        XCTAssertEqual(refresh.flags["m149"], [.seen])
+        XCTAssertEqual(tooOld.calls.count, 152)
         let fresh = FakeHttp { call in
             call.path.hasSuffix("/profile") ? (200, #"{"historyId":"310"}"#) : (200, Self.metadata(call))
         }

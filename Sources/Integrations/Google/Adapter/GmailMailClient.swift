@@ -233,12 +233,12 @@ extension GmailMailClient: MirrorPort, EverywhereSearchPort {
                 return try await newestFlags(known)
             }
         }
-        return try await newestFlags(known)
+        return try await newestFlags(Array(known.prefix(Self.historyFallback)))
     }
 
-    private func newestFlags(_ known: [String]) async throws -> FlagRefresh {
+    private func newestFlags(_ ids: [String]) async throws -> FlagRefresh {
         let cursor = try await gmail.currentHistoryID()
-        return FlagRefresh(flags: try await labelFlags(Array(known.prefix(Self.historyFallback))), cursor: cursor)
+        return FlagRefresh(flags: try await labelFlags(ids), cursor: cursor)
     }
 
     private func labelFlags(_ ids: [String]) async throws -> [String: Set<Flag>] {

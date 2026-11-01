@@ -272,7 +272,8 @@ extension InboxState {
         case .archive, .trash:
             guard let inlet = selectedInlet else { return }
             let origin = selectedFolder
-            let lifted = lift(list.map(\.id), in: inlet)
+            let staysListed = kind == .archive && folders.first { $0.id == origin }?.role == .all
+            let lifted = lift(list.map(\.id), in: inlet, keepListed: staysListed)
             let opening = reopen(lifted.next)
             picked = []
             var moved: [(id: String, landed: String?, inlet: Inlet.ID, origin: String?)] = []
@@ -285,7 +286,7 @@ extension InboxState {
                     } else {
                         landed = try await mailbox.trash(inlet, messageID: entry.id)
                     }
-                    moved.append((entry.id, landed, inlet, Self.serverFolder(origin, of: entry)))
+                    moved.append((entry.id, landed, inlet, Self.serverFolder(origin, of: entry, in: folders, inboxFirst: kind == .archive)))
                 } catch {
                     failed.append(lifted.entries.first { $0.summary.id == entry.id } ?? (entry, summaries.count))
                 }

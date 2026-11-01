@@ -152,6 +152,7 @@ extension InboxState {
     func saveContact(from messageID: String) -> ToastKind? {
         guard let summary = summary(messageID) else { return nil }
         let party = Self.sender(summary)
+        guard !party.address.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return nil }
         return contacts.save(name: party.name, address: party.address)
     }
 

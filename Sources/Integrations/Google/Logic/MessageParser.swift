@@ -340,19 +340,22 @@ enum DraftParser {
             from: MessageEngine.sender(header("From")))
     }
 
-    static func idMap(from data: Data) -> [String: String] {
+    static func idPage(from data: Data) throws(GoogleFailure) -> (map: [String: String], nextPageToken: String?) {
         struct Message: Decodable { var id: String? }
         struct Reference: Decodable {
             var id: String?
             var message: Message?
         }
-        struct Response: Decodable { var drafts: [Reference]? }
-        guard let decoded = try? JSONDecoder().decode(Response.self, from: data) else { return [:] }
+        struct Response: Decodable {
+            var drafts: [Reference]?
+            var nextPageToken: String?
+        }
+        guard let decoded = try? JSONDecoder().decode(Response.self, from: data) else { throw .decodingFailed }
         var map: [String: String] = [:]
         for reference in decoded.drafts ?? [] {
             if let draftID = reference.id, let messageID = reference.message?.id { map[messageID] = draftID }
         }
-        return map
+        return (map, decoded.nextPageToken?.isEmpty == false ? decoded.nextPageToken : nil)
     }
 
     static func saved(from data: Data) -> SavedDraft? {

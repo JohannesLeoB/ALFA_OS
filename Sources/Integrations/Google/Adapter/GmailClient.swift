@@ -190,8 +190,16 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
     }
 
     func listDraftIDMap() async throws -> [String: String] {
-        let url = try RequestClient.url(drafts, query: [URLQueryItem(name: "maxResults", value: Self.draftListSize)])
-        return DraftParser.idMap(from: try await requests.send(url))
+        var map: [String: String] = [:]
+        var token: String?
+        repeat {
+            var items = [URLQueryItem(name: "maxResults", value: Self.draftListSize)]
+            if let token { items.append(URLQueryItem(name: "pageToken", value: token)) }
+            let page = try DraftParser.idPage(from: try await requests.send(RequestClient.url(drafts, query: items)))
+            map.merge(page.map) { first, _ in first }
+            token = page.nextPageToken
+        } while token != nil
+        return map
     }
 
     func modifyLabels(messageID: String, add: [String], remove: [String]) async throws {
