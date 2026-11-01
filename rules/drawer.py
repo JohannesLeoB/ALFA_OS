@@ -40,8 +40,8 @@ RUNNERS: Dict[str, Runner] = {
                (260, 285, 310, 335, 360, 385, 410, 435, 460, 485, 510, 535, 560),
                (11, 16), 42, 10, 3, (30,), ("SRC-BLUM-005", "SRC-BLUM-009")),
         Runner("blum_tandem_560f", "Blum", "TANDEM", "560F", "full",
-               (250, 270, 300, 320, 350, 380, 400, 420, 450, 480, 500, 520, 550, 600),
-               (17, 19), 49, 10, 3, (30,), ("SRC-BLUM-006",)),
+               (250, 270, 300, 350, 400, 450, 500, 550, 600),
+               (17, 19), 49, 10, 3, (30,), ("SRC-BLUM-006", "SRC-STUDIO-001")),
         Runner("blum_movento_760h", "Blum", "MOVENTO", "760H", "full",
                (250, 270, 300, 320, 350, 380, 400, 420, 450, 480, 500, 520, 550, 600),
                (None, 16), 42, 10, 3, (40,), ("SRC-BLUM-010", "SRC-BLUM-011"), True),
@@ -52,10 +52,10 @@ RUNNERS: Dict[str, Runner] = {
 }
 
 DEPTH_EXTRAS_MM: Dict[str, Tuple[float, str, Tuple[str, ...]]] = {
-    "runner_fixed_before_assembly": (1, "verified", ("SRC-BLUM-010", "SRC-BLUM-011")),
-    "side_stabilisation": (12, "verified", ("SRC-BLUM-010", "SRC-BLUM-011")),
-    "depth_adjustment": (3, "verified", ("SRC-BLUM-010", "SRC-BLUM-011")),
-    "posistop": (2, "verified", ("SRC-BLUM-005", "SRC-BLUM-009")),
+    "runner_fixed_before_assembly": (1, "extracted", ("SRC-BLUM-010", "SRC-BLUM-011")),
+    "side_stabilisation": (12, "extracted", ("SRC-BLUM-010", "SRC-BLUM-011")),
+    "depth_adjustment": (3, "extracted", ("SRC-BLUM-010", "SRC-BLUM-011")),
+    "posistop": (2, "extracted", ("SRC-BLUM-005", "SRC-BLUM-009")),
 }
 
 INNER_DRAWER_EXTRA_MM = {"soft_close": 3, "push_to_open": 7}
@@ -94,7 +94,7 @@ def depth_requirement(key: str, nominal_length_mm: int, extras: Tuple[str, ...] 
         amount, _, extra_sources = DEPTH_EXTRAS_MM[name]
         total += amount
         sources.extend(s for s in extra_sources if s not in sources)
-    return Value(total, "verified", tuple(sources))
+    return Value(total, "extracted", tuple(sources))
 
 
 def select_nominal_length(key: str, inside_depth_mm: float, extras: Tuple[str, ...] = ()) -> Value:
@@ -116,8 +116,8 @@ def wooden_drawer(key: str, inside_width_mm: float, nominal_length_mm: int,
         raise ValueError(f"{key} takes drawer sides of {low} to {high} mm, not {side_thickness_mm} mm")
     inside = inside_width_mm - item.inside_width_deduction_mm
     return {
-        "drawer_inside_width": Value(inside, "verified", item.sources, (-1.5, 0.0)),
-        "drawer_length": Value(nominal_length_mm - item.length_deduction_mm, "verified", item.sources),
+        "drawer_inside_width": Value(inside, "extracted", item.sources, (-1.5, 0.0)),
+        "drawer_length": Value(nominal_length_mm - item.length_deduction_mm, "extracted", item.sources),
         "drawer_outside_width": Value(inside + 2 * side_thickness_mm, "interpretation", item.sources),
         "depth_requirement": depth_requirement(key, nominal_length_mm),
     }
@@ -133,14 +133,14 @@ def legrabox_parts(height: str, inside_width_mm: float, nominal_length_mm: int,
     if back not in ("wood", "steel"):
         raise ValueError(f"unknown back '{back}'")
     parts = {
-        "side_height": Value(LEGRABOX_SIDE_HEIGHT_MM[height], "verified", LEGRABOX_SOURCES),
+        "side_height": Value(LEGRABOX_SIDE_HEIGHT_MM[height], "extracted", LEGRABOX_SOURCES),
         "bottom_width": Value(inside_width_mm - 35, "derived", LEGRABOX_SOURCES),
         "bottom_length": Value(nominal_length_mm - (10 if back == "wood" else 21), "derived", LEGRABOX_SOURCES),
-        "depth_requirement": Value(nominal_length_mm + 3, "verified", LEGRABOX_SOURCES),
+        "depth_requirement": Value(nominal_length_mm + 3, "extracted", LEGRABOX_SOURCES),
     }
     if back == "wood":
         parts["back_width"] = Value(inside_width_mm - 38, "derived", LEGRABOX_SOURCES)
         if height in LEGRABOX_WOOD_BACK_HEIGHT_MM:
             parts["back_height"] = Value(LEGRABOX_WOOD_BACK_HEIGHT_MM[height],
-                                         "derived" if height == "N" else "verified", LEGRABOX_SOURCES)
+                                         "derived" if height == "N" else "extracted", LEGRABOX_SOURCES)
     return parts

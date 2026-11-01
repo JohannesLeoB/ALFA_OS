@@ -10,9 +10,11 @@ sys.path.insert(0, str(root / "rules"))
 
 import drawer  # noqa: E402
 
-EVIDENCE = ["verified", "derived", "master_data", "interpretation", "uncertain"]
+EVIDENCE = ["verified", "extracted", "derived", "master_data", "owner", "interpretation", "uncertain"]
 EVIDENCE_LABEL = {
     "verified": "verified",
+    "extracted": "extracted",
+    "owner": "owner",
     "derived": "derived",
     "master_data": "master data",
     "interpretation": "interpretation",
@@ -25,7 +27,7 @@ LIMITS = [
     ("Drawings", "The Blum drilling drawings were read as text only. Hole positions are not assigned to parts yet."),
     ("Licence", "Blum gives no terms of use for technical data. Vendor entries stay setup_only."),
     ("Approval", "No value is decided yet. Johannes confirms the studio values first."),
-    ("Skill", "No skill package is built yet. The export to Draws and to Claude is the next step."),
+    ("Skill", "No skill package is built yet. This branch is preparatory work for the Fusion kitchen skill."),
 ]
 
 
@@ -228,6 +230,7 @@ header{{display:grid;gap:14px}}
 .bar i,.legend i{{display:block;height:100%}}
 .ev-verified{{background:var(--ev-verified)}}.ev-derived{{background:var(--ev-derived)}}.ev-master_data{{background:var(--ev-master)}}
 .ev-interpretation{{background:var(--ev-interp)}}.ev-uncertain{{background:var(--ev-uncertain)}}
+.ev-extracted{{background:var(--ev-derived);opacity:.6}}.ev-owner{{background:var(--signal)}}
 .legend{{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:var(--ink-3)}}
 .legend span{{display:inline-flex;align-items:center;gap:6px}}
 .legend i{{width:14px;height:6px;border-radius:3px}}

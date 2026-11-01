@@ -16,7 +16,7 @@
         "properties": {
           "value": {},
           "status": {"enum": ["decided", "proposed", "open"]},
-          "evidence": {"enum": ["verified", "derived", "uncertain", "master_data", "interpretation"]},
+          "evidence": {"enum": ["verified", "extracted", "derived", "uncertain", "master_data", "owner", "interpretation"]},
           "atom": {"type": "string", "pattern": "^ATM-[A-Z]{3}-[0-9]{4}$"},
           "note": {"type": "string"}
         }

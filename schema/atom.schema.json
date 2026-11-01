@@ -24,7 +24,7 @@
     "rule": {"type": "string", "pattern": "^rules/[a-z_]+\\.py:[a-z_]+$"},
     "stage": {"enum": ["design", "production"]},
     "status": {"enum": ["decided", "proposed", "open"]},
-    "evidence": {"enum": ["verified", "derived", "uncertain", "master_data", "interpretation"]},
+    "evidence": {"enum": ["verified", "extracted", "derived", "uncertain", "master_data", "owner", "interpretation"]},
     "sources": {
       "type": "array",
       "items": {

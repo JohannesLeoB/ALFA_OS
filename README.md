@@ -1,10 +1,8 @@
 # ALFA Knowledge: Kitchen and Joinery
 
-This branch holds technical knowledge for kitchen and cabinet design and production. It is the single source for these consumers:
+This branch holds technical knowledge for kitchen and cabinet design and production.
 
-- ALFA_OS Draws (design stage, approximate values).
-- ALFA_OS Calculation (counts and types only, never prices).
-- The Fusion kitchen skill and Claude agents (production stage, exact values).
+It is preparatory work of the kitchen session for the Fusion kitchen skill. It collects sources, concepts and learning material. It does not set requirements for the ALFA_OS code. Johannes decides later who uses this knowledge and how.
 
 This branch has no shared history with `main`. The rules of `main` (`AGENTS.md`, `utils/check.py`) do not apply here. The rules for this branch are in [AGENTS.md](AGENTS.md).
 

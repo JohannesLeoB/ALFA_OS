@@ -9,7 +9,7 @@
     "extension": "full",
     "mounting": "coupling",
     "load_kg": 30,
-    "nominal_lengths_mm": [250, 270, 300, 320, 350, 380, 400, 420, 450, 480, 500, 520, 550, 600],
+    "nominal_lengths_mm": [250, 270, 300, 350, 400, 450, 500, 550, 600],
     "drawer_side_thickness_min_mm": 17,
     "drawer_side_thickness_max_mm": 19,
     "drawer_drilling_diameter_mm": 6
@@ -18,8 +18,10 @@
   "status": "unchecked",
   "sharing": "setup_only",
   "sources": [
-    {"id": "SRC-BLUM-006", "locator": "TD-131/3"}
+    {"id": "SRC-BLUM-006", "locator": "TD-131/3"},
+    {"id": "SRC-STUDIO-001", "locator": "lib_woodendrawerunderfloorsliders, maker base set, file 'Blum Tandem - 560F - B', nine articles 560F2500B to 560F6000B"}
   ],
   "added": "2026-11-01",
-  "note": "The source gives the range 250 to 600 for the nominal lengths. The single steps are taken from 560H. Check them in TD-131/3."
+  "checked": "2026-11-01",
+  "note": "The nominal lengths come from the interiorcad maker base set. The steps 320, 380, 420, 480 and 520 of 560H do not exist for 560F there."
 }
