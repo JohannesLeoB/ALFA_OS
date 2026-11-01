@@ -294,8 +294,8 @@
    "en": "Signed out · the app restarts"
   },
   "settings.section.folders": {
-   "de": "Ordnerschema",
-   "en": "Folder scheme"
+   "de": "Dateiordner",
+   "en": "File folders"
   },
   "settings.projectRoot.synced": {
    "de": "Projektordner abgeglichen · gerade eben",

@@ -19709,13 +19709,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ordnerschema"
+            "value" : "Dateiordner"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Folder scheme"
+            "value" : "File folders"
           }
         }
       }
