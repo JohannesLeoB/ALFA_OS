@@ -242,7 +242,7 @@ extension AppSession {
             openAssistantSettings()
             return
         }
-        openMailService(card)
+        openSettingsCard(card)
     }
 
     private func answered(_ complete: Bool) {

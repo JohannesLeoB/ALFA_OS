@@ -217,7 +217,7 @@ struct MessageLane: View {
     }
 
     private func openExpired() {
-        if let service = inbox.fixService(in: session.assembly.catalog) { session.openMailService(service) } else { session.openMailCard(of: inbox.selectedAccount) }
+        if let service = inbox.fixCard(in: session.assembly.catalog) { session.openSettingsCard(service) } else { session.openMailCard(of: inbox.selectedAccount) }
     }
 
     @ViewBuilder

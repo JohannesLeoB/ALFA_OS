@@ -26,7 +26,7 @@ extension AppSession {
         case .editContact:
             guard let contact = inbox.contact(address) else { return }
             inbox.contacts.editing = contact.id
-            openMailService(SettingsSection.contacts.rawValue)
+            openSettingsCard(SettingsSection.contacts.rawValue)
         default: break
         }
     }
@@ -54,7 +54,7 @@ extension AppSession {
     }
 
     func openMailCard(of account: Inlet?) {
-        openMailService(account.flatMap { assembly.catalog.info(forProvider: $0.provider)?.id } ?? Self.accountsCard)
+        openSettingsCard(account.flatMap { assembly.catalog.info(forProvider: $0.provider)?.id } ?? Self.accountsCard)
     }
 
     private static let accountsCard = "mailaccounts"
@@ -64,7 +64,7 @@ extension AppSession {
             || !DriveConfigStore.load(in: assembly.directory).projectsRoot.isEmpty
     }
 
-    func openMailService(_ id: String) {
+    func openSettingsCard(_ id: String) {
         settings.group = .connections
         settings.open(id)
         desk.select("settings")

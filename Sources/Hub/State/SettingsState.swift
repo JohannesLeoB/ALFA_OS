@@ -29,7 +29,7 @@ public final class SettingsState {
     private(set) var mailboxImages: [Inlet.ID: Bool] = [:]
     private(set) var mailboxNames: [Inlet.ID: String] = [:]
     private(set) var mailboxSignatures: [Inlet.ID: String] = [:]
-    private(set) var signaturesOnNew: [Inlet.ID: Bool] = [:]
+    private(set) var signaturesOnCompose: [Inlet.ID: Bool] = [:]
     private(set) var signaturesAbove: [Inlet.ID: Bool] = [:]
 
     @ObservationIgnored private let settings: SettingStore
@@ -100,9 +100,9 @@ public final class SettingsState {
                 mailboxSignatures[String(key.dropFirst(SettingsKey.mailboxSignaturePrefix.count))] = signature
             }
         }
-        for key in stored.keys where key.hasPrefix(SettingsKey.mailboxSignatureNewPrefix) {
+        for key in stored.keys where key.hasPrefix(SettingsKey.mailboxSignatureComposePrefix) {
             if let value = flag(key) {
-                signaturesOnNew[String(key.dropFirst(SettingsKey.mailboxSignatureNewPrefix.count))] = value
+                signaturesOnCompose[String(key.dropFirst(SettingsKey.mailboxSignatureComposePrefix.count))] = value
             }
         }
         for key in stored.keys where key.hasPrefix(SettingsKey.mailboxSignatureAbovePrefix) {
@@ -227,7 +227,7 @@ public final class SettingsState {
 
     public func signature(_ inlet: Inlet.ID) -> MailboxSignature? {
         mailboxSignatures[inlet].map {
-            MailboxSignature(text: $0, onNew: signaturesOnNew[inlet] ?? true, aboveQuote: signaturesAbove[inlet] ?? false)
+            MailboxSignature(text: $0, onCompose: signaturesOnCompose[inlet] ?? true, aboveQuote: signaturesAbove[inlet] ?? false)
         }
     }
 
@@ -236,9 +236,9 @@ public final class SettingsState {
         save(SettingsKey.mailboxSignature(inlet), value)
     }
 
-    public func setSignatureOnNew(_ value: Bool, for inlet: Inlet.ID) {
-        signaturesOnNew[inlet] = value
-        save(SettingsKey.mailboxSignatureNew(inlet), value)
+    public func setSignatureOnCompose(_ value: Bool, for inlet: Inlet.ID) {
+        signaturesOnCompose[inlet] = value
+        save(SettingsKey.mailboxSignatureCompose(inlet), value)
     }
 
     public func setSignatureAboveQuote(_ value: Bool, for inlet: Inlet.ID) {
@@ -252,10 +252,10 @@ public final class SettingsState {
 
     private func clearSignature(_ inlet: Inlet.ID) {
         mailboxSignatures[inlet] = nil
-        signaturesOnNew[inlet] = nil
+        signaturesOnCompose[inlet] = nil
         signaturesAbove[inlet] = nil
         erase(SettingsKey.mailboxSignature(inlet))
-        erase(SettingsKey.mailboxSignatureNew(inlet))
+        erase(SettingsKey.mailboxSignatureCompose(inlet))
         erase(SettingsKey.mailboxSignatureAbove(inlet))
     }
 

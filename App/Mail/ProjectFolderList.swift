@@ -104,7 +104,7 @@ enum ProjectFolderList {
         anchor.showMenu([
             .head(id: "head", label: appearance.text(title)),
             note("mail.projectFiles.noRoot", appearance: appearance),
-            .row(MenuItem(id: "chooseRoot", label: appearance.text("mail.projectFiles.chooseRoot")) { session.openMailService("google") }),
+            .row(MenuItem(id: "chooseRoot", label: appearance.text("mail.projectFiles.chooseRoot")) { session.openSettingsCard("google") }),
         ])
     }
 

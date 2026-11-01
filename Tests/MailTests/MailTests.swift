@@ -803,9 +803,9 @@ final class MailTests: XCTestCase {
 
     func testSignatureRespectsTheNewMailSwitchAndTheNoneChoice() {
         var draft = Draft(subject: "", body: "")
-        draft.resign(to: MailboxSignature(text: "Jonas", onNew: false))
+        draft.resign(to: MailboxSignature(text: "Jonas", onCompose: false))
         XCTAssertEqual(draft.body, "")
-        draft.resign(to: MailboxSignature(text: "Jonas", onNew: false), explicit: true)
+        draft.resign(to: MailboxSignature(text: "Jonas", onCompose: false), explicit: true)
         XCTAssertEqual(draft.body, "\n\nJonas")
         draft.bodyHTML = "<div><br></div><div><br></div><div>Jonas</div>"
         draft.signatureOff = true
@@ -2686,7 +2686,7 @@ final class MailTests: XCTestCase {
         let setting = Locked(MailStoreSettings(attachments: true))
         let store = MailboxStore(access: rig.access, database: rig.database, outbox: rig.outbox, events: rig.events,
                                  now: { Self.epoch }, range: { _ in rig.chosen.with { $0 } },
-                                 attachmentBase: base, attachmentSettings: { setting.with { $0 } })
+                                 attachmentDirectory: base, attachmentSettings: { setting.with { $0 } })
         try await store.refreshFolders("a")
         rig.transport.corpus.with {
             $0["INBOX"] = (0..<40).map { index in

@@ -73,7 +73,7 @@ final class Assembly {
                                        SenderNames(chosen: settings.mailboxName(inlet), profile: settings.profile.name)
                                    },
                                    serverCopy: { [settings] inlet in settings.serverCopy(inlet) },
-                                   attachmentBase: directory,
+                                   attachmentDirectory: directory,
                                    attachmentSettings: { [settings] in settings.mailStore })
         let inbox = InboxState(mailbox: mailbox, outbox: outbox, contacts: ContactState(defaults: defaults),
                                directory: ContactSourceState(settings: settingStore),

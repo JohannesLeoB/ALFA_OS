@@ -124,9 +124,9 @@ enum SettingsKey {
 
     static func mailboxSignature(_ inlet: String) -> String { mailboxSignaturePrefix + inlet }
 
-    static let mailboxSignatureNewPrefix = "settings.mailbox.signatureNew."
+    static let mailboxSignatureComposePrefix = "settings.mailbox.signatureNew."
 
-    static func mailboxSignatureNew(_ inlet: String) -> String { mailboxSignatureNewPrefix + inlet }
+    static func mailboxSignatureCompose(_ inlet: String) -> String { mailboxSignatureComposePrefix + inlet }
 
     static let mailboxSignatureAbovePrefix = "settings.mailbox.signatureAbove."
 
@@ -253,12 +253,12 @@ public enum MailboxRange: String, CaseIterable, Sendable {
 
 public struct MailboxSignature: Equatable, Sendable {
     public var text: String
-    public var onNew: Bool
+    public var onCompose: Bool
     public var aboveQuote: Bool
 
-    public init(text: String, onNew: Bool = true, aboveQuote: Bool = false) {
+    public init(text: String, onCompose: Bool = true, aboveQuote: Bool = false) {
         self.text = text
-        self.onNew = onNew
+        self.onCompose = onCompose
         self.aboveQuote = aboveQuote
     }
 

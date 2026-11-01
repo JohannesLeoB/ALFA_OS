@@ -78,7 +78,7 @@ extension Draft {
     }
 
     mutating func resign(to signature: MailboxSignature?, explicit: Bool = false) {
-        let target = signatureOff || !(explicit || signature?.onNew == true) ? nil : signature?.block
+        let target = signatureOff || !(explicit || signature?.onCompose == true) ? nil : signature?.block
         guard target != signed else { return }
         if let signed {
             let next: String?

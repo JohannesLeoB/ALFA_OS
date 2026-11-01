@@ -1724,12 +1724,12 @@ final class HubTests: XCTestCase {
         let state = try SettingsState(settings: store, templates: emptyTemplates())
         XCTAssertNil(state.signature("a"))
         state.setSignature("Jonas\nStudio", for: "a")
-        XCTAssertEqual(state.signature("a"), MailboxSignature(text: "Jonas\nStudio", onNew: true, aboveQuote: false))
-        state.setSignatureOnNew(false, for: "a")
+        XCTAssertEqual(state.signature("a"), MailboxSignature(text: "Jonas\nStudio", onCompose: true, aboveQuote: false))
+        state.setSignatureOnCompose(false, for: "a")
         state.setSignatureAboveQuote(true, for: "a")
         state.setSignature("", for: "b")
         let again = try SettingsState(settings: store, templates: emptyTemplates())
-        XCTAssertEqual(again.signature("a"), MailboxSignature(text: "Jonas\nStudio", onNew: false, aboveQuote: true))
+        XCTAssertEqual(again.signature("a"), MailboxSignature(text: "Jonas\nStudio", onCompose: false, aboveQuote: true))
         XCTAssertNil(again.signature("b")?.block)
         XCTAssertEqual(again.signature("a")?.name, "Jonas")
         state.forget("a")
@@ -1737,7 +1737,7 @@ final class HubTests: XCTestCase {
         let gone = try SettingsState(settings: store, templates: emptyTemplates())
         XCTAssertNil(gone.signature("a"))
         XCTAssertNil(gone.signature("b"))
-        XCTAssertNil(try store.value(SettingsKey.mailboxSignatureNew("a"), as: Bool.self))
+        XCTAssertNil(try store.value(SettingsKey.mailboxSignatureCompose("a"), as: Bool.self))
     }
 
     func testMailboxDisplayShowsNameOrAddressPart() {

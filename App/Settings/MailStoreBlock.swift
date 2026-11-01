@@ -235,7 +235,7 @@ struct SignatureBlock: View {
         if let signature {
             editor(signature)
             SettingsRow(label: appearance.text("settings.signature.new"), sub: appearance.text("settings.signature.new.sub")) {
-                ToggleSwitch(isOn: Binding(get: { signature.onNew }, set: { state.setSignatureOnNew($0, for: inlet.id) }),
+                ToggleSwitch(isOn: Binding(get: { signature.onCompose }, set: { state.setSignatureOnCompose($0, for: inlet.id) }),
                              labelKey: "settings.signature.new")
             }
             SettingsRow(label: appearance.text("settings.signature.above")) {

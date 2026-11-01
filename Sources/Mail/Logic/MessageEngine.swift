@@ -44,7 +44,7 @@ public enum MessageEngine {
         head.append("Subject: \(encodeHeader(clean(draft.subject)))")
         head.append("Message-ID: <\(messageID)@\(domain)>")
         head += threading(draft) + receipt(draft)
-        let data = assemble(draft, head: head, boundaryBase: boundaryBase(messageID))
+        let data = assemble(draft, head: head, boundaryStem: boundaryStem(messageID))
         return OutgoingMessage(data: data, sender: sender.address, recipients: recipients)
     }
 
@@ -59,10 +59,10 @@ public enum MessageEngine {
         head.append("Subject: \(encodeHeader(clean(draft.subject)))")
         if let id = draft.messageID { head.append("Message-ID: <\(id)@\(domain)>") }
         head += threading(draft) + receipt(draft)
-        return assemble(draft, head: head, boundaryBase: boundaryBase(draft.messageID ?? UUID().uuidString.lowercased()))
+        return assemble(draft, head: head, boundaryStem: boundaryStem(draft.messageID ?? UUID().uuidString.lowercased()))
     }
 
-    private static func boundaryBase(_ messageID: String) -> String {
+    private static func boundaryStem(_ messageID: String) -> String {
         messageID.replacingOccurrences(of: "-", with: "")
     }
 
@@ -84,17 +84,17 @@ public enum MessageEngine {
         return ["In-Reply-To: \(wrapped)", "References: \(wrapped)"]
     }
 
-    private static func assemble(_ draft: Draft, head: [String], boundaryBase: String) -> Data {
+    private static func assemble(_ draft: Draft, head: [String], boundaryStem: String) -> Data {
         var lines = head
         lines.append("MIME-Version: 1.0")
         if draft.attachments.isEmpty {
-            lines += bodyLines(draft, boundary: "alt_\(boundaryBase)")
+            lines += bodyLines(draft, boundary: "alt_\(boundaryStem)")
         } else {
-            let mixed = "mixed_\(boundaryBase)"
+            let mixed = "mixed_\(boundaryStem)"
             lines.append("Content-Type: multipart/mixed; boundary=\"\(mixed)\"")
             lines.append("")
             lines.append("--\(mixed)")
-            lines += bodyLines(draft, boundary: "alt_\(boundaryBase)")
+            lines += bodyLines(draft, boundary: "alt_\(boundaryStem)")
             for attachment in draft.attachments {
                 lines.append("--\(mixed)")
                 lines += attachmentLines(attachment)
