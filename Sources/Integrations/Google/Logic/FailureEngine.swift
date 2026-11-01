@@ -86,29 +86,3 @@ enum ScopeEngine {
     }
 }
 
-enum URLSafeEngine {
-    static func encodeURL(_ data: Data) -> String {
-        data.base64EncodedString()
-            .replacingOccurrences(of: "+", with: "-")
-            .replacingOccurrences(of: "/", with: "_")
-            .replacingOccurrences(of: "=", with: "")
-    }
-
-    static func decodeURL(_ text: String) -> Data? {
-        var padded = text.replacingOccurrences(of: "-", with: "+").replacingOccurrences(of: "_", with: "/")
-        while padded.count % 4 != 0 { padded += "=" }
-        return Data(base64Encoded: padded)
-    }
-}
-
-enum FormBodyEngine {
-    static func encode(_ values: [String: String]) -> Data {
-        Data(values.map { key, value in "\(escape(key))=\(escape(value))" }.sorted().joined(separator: "&").utf8)
-    }
-
-    private static func escape(_ value: String) -> String {
-        var allowed = CharacterSet.alphanumerics
-        allowed.insert(charactersIn: "-._~")
-        return value.addingPercentEncoding(withAllowedCharacters: allowed) ?? value
-    }
-}

@@ -1,4 +1,4 @@
-import CryptoKit
+import Core
 import Foundation
 import Hub
 
@@ -105,22 +105,6 @@ struct OAuthToken: Decodable, Equatable, Sendable {
         case expiresIn = "expires_in"
         case refreshToken = "refresh_token"
         case idToken = "id_token"
-    }
-}
-
-struct PkceChallenge: Sendable {
-    static let method = "S256"
-    private static let verifierBytes = 64
-
-    let verifier: String
-    let challenge: String
-
-    static func generate() throws -> PkceChallenge {
-        var bytes = [UInt8](repeating: 0, count: verifierBytes)
-        guard SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes) == errSecSuccess else { throw SignInFailure.randomUnavailable }
-        let verifier = URLSafeEngine.encodeURL(Data(bytes))
-        let challenge = URLSafeEngine.encodeURL(Data(SHA256.hash(data: Data(verifier.utf8))))
-        return PkceChallenge(verifier: verifier, challenge: challenge)
     }
 }
 

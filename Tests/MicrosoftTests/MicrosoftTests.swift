@@ -1,4 +1,5 @@
 import Assistant
+import Core
 import Foundation
 import Hub
 import Mail
@@ -139,9 +140,9 @@ final class MicrosoftTests: XCTestCase {
     }
 
     func testPkceChallengeIsTheHashOfTheVerifier() throws {
-        let pkce = try PkceChallenge.generate()
+        let pkce = try PkceChallenge.generate(unavailable: SignInFailure.randomUnavailable)
         XCTAssertGreaterThanOrEqual(pkce.verifier.count, 43)
-        XCTAssertNotEqual(pkce.verifier, try PkceChallenge.generate().verifier)
+        XCTAssertNotEqual(pkce.verifier, try PkceChallenge.generate(unavailable: SignInFailure.randomUnavailable).verifier)
         XCTAssertFalse(pkce.challenge.contains("="))
     }
 

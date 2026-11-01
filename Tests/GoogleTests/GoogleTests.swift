@@ -319,10 +319,10 @@ final class GoogleTests: XCTestCase {
     }
 
     func testPkceChallengeIsTheSha256OfTheVerifier() throws {
-        let pkce = try PkceChallenge.generate()
+        let pkce = try PkceChallenge.generate(unavailable: SignInFailure.randomUnavailable)
         XCTAssertGreaterThanOrEqual(pkce.verifier.count, 43)
         XCTAssertFalse(pkce.verifier.contains("="))
-        XCTAssertNotEqual(try PkceChallenge.generate().verifier, pkce.verifier)
+        XCTAssertNotEqual(try PkceChallenge.generate(unavailable: SignInFailure.randomUnavailable).verifier, pkce.verifier)
     }
 
     func testTokenRequestsCarryTheSecretOnlyWhenConfigured() async throws {
