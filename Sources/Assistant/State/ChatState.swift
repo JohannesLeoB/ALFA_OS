@@ -7,6 +7,7 @@ public final class ChatState {
     public enum Note: Equatable, Sendable {
         case cleared
         case rejected(AttachmentFailure)
+        case privacyUnreadable
     }
 
     public struct Pending: Identifiable, Equatable, Sendable {
@@ -151,9 +152,10 @@ public final class ChatState {
     private func run(_ text: String, files: [AttachmentRef], choices: PrivacyChoices, profile: UserProfile?) async -> Bool {
         load()
         busy = true
-        let settings = (try? privacy.load()) ?? PrivacySettings()
+        let reading = privacy.current()
+        if reading.readable == false { show(.privacyUnreadable) }
         await engine.send(text, scope: scope, context: ConversationContext(profile: profile),
-                          privacy: PrivacySnapshot(choices: choices, settings: settings), attachments: files)
+                          privacy: PrivacySnapshot(choices: choices, settings: reading.settings), attachments: files)
         busy = false
         guard let last = chat.messages(for: scope).last else { return false }
         return last.role == .assistant && last.status == .complete

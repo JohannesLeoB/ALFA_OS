@@ -223,6 +223,8 @@ public struct PrivacySettings: Codable, Equatable, Sendable {
         self.disabled = disabled
     }
 
+    public static let closed = PrivacySettings(disabled: Set(PrivacyCategory.allCases))
+
     public func shares(_ category: PrivacyCategory) -> Bool {
         disabled.contains(category) == false
     }

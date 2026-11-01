@@ -273,6 +273,20 @@ final class AssistantTests: XCTestCase {
         XCTAssertTrue(none.isEmpty)
     }
 
+    func testUnreadablePrivacyClosesEveryCategory() throws {
+        struct Unreadable: PrivacyPort {
+            func load() throws -> PrivacySettings { throw CocoaError(.fileReadCorruptFile) }
+        }
+        let reading = Unreadable().current()
+        XCTAssertFalse(reading.readable)
+        XCTAssertTrue(PrivacyCategory.allCases.allSatisfy { reading.settings.shares($0) == false })
+        let tools = try makeTools(database: SQLiteStore.inMemory())
+        XCTAssertTrue(ToolAccessEngine.allowed(tools, privacy: PrivacySnapshot(settings: reading.settings)).isEmpty)
+        let stored = PrivacyStore(database: try SQLiteStore.inMemory()).current()
+        XCTAssertTrue(stored.readable)
+        XCTAssertEqual(stored.settings, PrivacySettings())
+    }
+
     func testLocalizationFileCoversEveryKeyInSourceAndEveryTool() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         let data = try Data(contentsOf: root.appendingPathComponent("Resources/assistant.localizable.json"))

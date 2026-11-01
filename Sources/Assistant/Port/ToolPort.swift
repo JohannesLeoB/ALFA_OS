@@ -36,6 +36,16 @@ public protocol PrivacyPort: Sendable {
     func load() throws -> PrivacySettings
 }
 
+extension PrivacyPort {
+    public func current() -> (settings: PrivacySettings, readable: Bool) {
+        do {
+            return (try load(), true)
+        } catch {
+            return (.closed, false)
+        }
+    }
+}
+
 public protocol AlarmPort: Sendable {
     func reschedule(_ todo: Todo) async
     func cancel(todoID: String) async

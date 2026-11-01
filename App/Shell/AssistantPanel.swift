@@ -360,6 +360,9 @@ struct AssistantToast: View {
             case .rejected(let failure):
                 ToastView(message: Text(verbatim: message(failure)), failed: true, onDismiss: conversation.dismiss)
                     .id(conversation.noteSerial)
+            case .privacyUnreadable:
+                ToastView(message: appearance.text("assistant.failure.generic"), failed: true, onDismiss: conversation.dismiss)
+                    .id(conversation.noteSerial)
             }
         }
     }

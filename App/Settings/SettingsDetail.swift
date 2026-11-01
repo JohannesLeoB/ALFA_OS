@@ -234,6 +234,9 @@ struct PrivacyCard: View {
                                  labelKey: category.key)
                 }
             }
+            if !privacy.readable {
+                BlockNotice(kind: .failure, title: appearance.text(SettingsKeys.failedUnknown), text: nil)
+            }
         }
     }
 
@@ -584,12 +587,13 @@ struct SystemCard: View {
 @Observable
 final class AssistantPrivacy {
     private(set) var settings: PrivacySettings
+    private(set) var readable: Bool
 
     @ObservationIgnored private let store: PrivacyStore
 
     init(store: PrivacyStore) {
         self.store = store
-        settings = (try? store.load()) ?? PrivacySettings()
+        (settings, readable) = store.current()
     }
 
     func shares(_ category: PrivacyCategory) -> Bool { settings.shares(category) }
@@ -599,5 +603,6 @@ final class AssistantPrivacy {
         if shares { next.disabled.remove(category) } else { next.disabled.insert(category) }
         try store.save(next)
         settings = next
+        readable = true
     }
 }
