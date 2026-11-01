@@ -77,10 +77,10 @@ public final class LockState {
         available = port.available
         lastInput = now()
         observers = [
-            center.addObserver(forName: resigned, object: nil, queue: nil) { [weak self] _ in
+            center.addObserver(forName: resigned, object: nil, queue: .main) { [weak self] _ in
                 MainActor.assumeIsolated { self?.resign() }
             },
-            center.addObserver(forName: became, object: nil, queue: nil) { [weak self] _ in
+            center.addObserver(forName: became, object: nil, queue: .main) { [weak self] _ in
                 MainActor.assumeIsolated { self?.arrive() }
             }
         ]
