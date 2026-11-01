@@ -1,0 +1,117 @@
+import Synchronization
+
+public enum Deadline {
+    public static func run<T: Sendable>(_ limit: Duration, _ work: @escaping @Sendable () async throws -> T) async throws -> T {
+        let race = Race<T>()
+        return try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<T, any Error>) in
+                race.install(continuation)
+                let worker = Task {
+                    do { race.finish(.success(try await work())) } catch { race.finish(.failure(error)) }
+                }
+                let timer = Task {
+                    try? await Task.sleep(for: limit)
+                    race.finish(.failure(DeadlineExpired()))
+                }
+                race.attach([worker, timer])
+            }
+        } onCancel: {
+            race.finish(.failure(CancellationError()))
+        }
+    }
+}
+
+public struct DeadlineExpired: Error, Equatable {
+    public init() {}
+}
+
+private final class Race<T: Sendable>: Sendable {
+    private struct State {
+        var continuation: CheckedContinuation<T, any Error>?
+        var outcome: Result<T, any Error>?
+        var finished = false
+        var tasks: [Task<Void, Never>] = []
+    }
+
+    private let state = Mutex(State())
+
+    func install(_ continuation: CheckedContinuation<T, any Error>) {
+        let ready: Result<T, any Error>? = state.withLock { current in
+            if let outcome = current.outcome { return outcome }
+            current.continuation = continuation
+            return nil
+        }
+        if let ready { continuation.resume(with: ready) }
+    }
+
+    func attach(_ tasks: [Task<Void, Never>]) {
+        let stale: Bool = state.withLock { current in
+            current.tasks = tasks
+            return current.finished
+        }
+        if stale { tasks.forEach { $0.cancel() } }
+    }
+
+    func finish(_ result: Result<T, any Error>) {
+        let (waiting, running): (CheckedContinuation<T, any Error>?, [Task<Void, Never>]) = state.withLock { current in
+            guard !current.finished else { return (nil, []) }
+            current.finished = true
+            current.outcome = result
+            let waiting = current.continuation
+            current.continuation = nil
+            return (waiting, current.tasks)
+        }
+        running.forEach { $0.cancel() }
+        waiting?.resume(with: result)
+    }
+}
+
+public final class RefreshFlight<Value: Sendable>: Sendable {
+    static var remembered: Int { 64 }
+
+    private struct Book {
+        var running: [String: Task<Value, any Error>] = [:]
+        var latest: [String: Value] = [:]
+    }
+
+    private enum Step {
+        case ready(Value)
+        case waiting(Task<Value, any Error>)
+    }
+
+    private let book = Mutex(Book())
+
+    public init() {}
+
+    public func recent(_ key: String) -> Value? {
+        book.withLock { $0.latest[key] }
+    }
+
+    public func run(_ key: String, reuse: @escaping @Sendable (Value) -> Bool,
+                    _ work: @escaping @Sendable () async throws -> Value) async throws -> Value {
+        let step = book.withLock { book -> Step in
+            if let known = book.latest[key], reuse(known) { return .ready(known) }
+            if let running = book.running[key] { return .waiting(running) }
+            let started = Task { try await work() }
+            book.running[key] = started
+            return .waiting(started)
+        }
+        switch step {
+        case .ready(let known):
+            return known
+        case .waiting(let task):
+            do {
+                let value = try await task.value
+                book.withLock { book in
+                    book.latest[key] = value
+                    if book.running[key] == task { book.running[key] = nil }
+                    if book.latest.count > Self.remembered { book.latest = book.latest.filter { reuse($0.value) } }
+                }
+                return value
+            } catch {
+                book.withLock { book in if book.running[key] == task { book.running[key] = nil } }
+                throw error
+            }
+        }
+    }
+}

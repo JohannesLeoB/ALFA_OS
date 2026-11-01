@@ -266,17 +266,12 @@ public final class ConversationEngine {
         let timeout = toolTimeout
         let scope = turn.scope
         let allowed = turn.allowed
-        return await withTaskGroup(of: ToolResult.self) { group in
-            group.addTask {
+        do {
+            return try await Deadline.run(timeout) {
                 await registry.run(name: use.name, inputJSON: use.inputJSON, scope: scope, allowed: allowed)
             }
-            group.addTask {
-                try? await Task.sleep(for: timeout)
-                return .failure("assistant.engine.toolTimeout")
-            }
-            let first = await group.next() ?? .failure("assistant.engine.noResponse")
-            group.cancelAll()
-            return first
+        } catch {
+            return .failure("assistant.engine.toolTimeout")
         }
     }
 

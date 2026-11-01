@@ -142,7 +142,8 @@ final class BlockingStream: ByteStreamPort, @unchecked Sendable {
 
     private let input: InputStream
     private let output: OutputStream
-    private let queue = DispatchQueue(label: "mail.blocking.stream")
+    private let reading = DispatchQueue(label: "mail.blocking.read")
+    private let writing = DispatchQueue(label: "mail.blocking.write")
     private let handle: Int32?
     private let closeLock = NSLock()
     private var isClosed = false
@@ -212,7 +213,7 @@ final class BlockingStream: ByteStreamPort, @unchecked Sendable {
         do {
             return try await withTaskCancellationHandler {
                 try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) in
-                    queue.async {
+                    reading.async {
                         var buffer = [UInt8](repeating: 0, count: Self.chunk)
                         let count = self.input.read(&buffer, maxLength: buffer.count)
                         if count > 0 {
@@ -237,7 +238,7 @@ final class BlockingStream: ByteStreamPort, @unchecked Sendable {
 
     func send(_ data: Data) async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            queue.async {
+            writing.async {
                 let bytes = [UInt8](data)
                 var offset = 0
                 while offset < bytes.count {
@@ -258,7 +259,8 @@ final class BlockingStream: ByteStreamPort, @unchecked Sendable {
 
     func upgradeToTLS() async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            queue.async {
+            reading.async {
+                self.writing.sync {}
                 let level = StreamSocketSecurityLevel.negotiatedSSL
                 let inputSet = self.input.setProperty(level, forKey: .socketSecurityLevelKey)
                 let outputSet = self.output.setProperty(level, forKey: .socketSecurityLevelKey)
@@ -278,10 +280,8 @@ final class BlockingStream: ByteStreamPort, @unchecked Sendable {
         }
         guard first else { return }
         if let handle { shutdown(handle, SHUT_RDWR) }
-        queue.async {
-            self.input.close()
-            self.output.close()
-        }
+        reading.async { self.input.close() }
+        writing.async { self.output.close() }
     }
 }
 #endif

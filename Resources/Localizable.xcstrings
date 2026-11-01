@@ -2155,13 +2155,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zeitüberschreitung — das Tool hat nicht rechtzeitig geantwortet."
+            "value" : "Zeitüberschreitung — das Tool hat nicht rechtzeitig geantwortet. Ob es etwas ausgeführt hat, ist unklar; nicht wiederholen, ohne den Nutzer zu fragen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Timeout — the tool did not answer in time."
+            "value" : "Timeout — the tool did not answer in time. Whether it did anything is unknown; do not retry without asking the user."
           }
         }
       }

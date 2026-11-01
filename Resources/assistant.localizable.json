@@ -518,8 +518,8 @@
    "en": "Tool not allowed or unknown: {1}"
   },
   "assistant.engine.toolTimeout": {
-   "de": "Zeitüberschreitung — das Tool hat nicht rechtzeitig geantwortet.",
-   "en": "Timeout — the tool did not answer in time."
+   "de": "Zeitüberschreitung — das Tool hat nicht rechtzeitig geantwortet. Ob es etwas ausgeführt hat, ist unklar; nicht wiederholen, ohne den Nutzer zu fragen.",
+   "en": "Timeout — the tool did not answer in time. Whether it did anything is unknown; do not retry without asking the user."
   },
   "assistant.estimate.failed": {
    "de": "Schätzung fehlgeschlagen: {1}",
