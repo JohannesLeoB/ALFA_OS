@@ -31,3 +31,8 @@ Anheften (`mail.symbolButton.pin.aria`), Stapel-Knopf (`mail.button.s015`), Als 
 - Sind die Datenschutz-Einstellungen nicht lesbar, ist alles gesperrt statt offen (`e04136c0`). Dafür fehlt der Text aus A 3.
 - Kategorie „Dateiordner“ heißt im Code jetzt so (`settings.section.folders`); Schlüssel `mail.deck.showNew` heißt `mail.deck.showUnread`, der Text ist gleich.
 - Kein neuer Bau seit 1024; der nächste Bau kommt nur auf Johannes' Wort.
+
+## F · Nachtrag Textabgleich (01.11. abends)
+- 349 von 422 Master-Texten sind in der App (gleicher Schlüssel oder gleichlautender Alias); 72 gehören zu nicht gebauten Elementen oder sind Beispieldaten. Deutsch blieb unverändert, Englisch an 8 Schlüsseln angeglichen (`cfd793d1`).
+- Vermutlich Fehler im Master: `shell.assistantCard.kind.appointment` hat als Englisch „Termin“. Die App behält „Appointment“.
+- Bewusst abweichend: `mail.toast.projectSaved` und `mail.attachment.copied` nennen im Master Unterordner („Korrespondenz“, „Anhänge“), die der Code nicht anlegt. Gibt es diese Unterordner, oder gilt der Projektordner selbst?
