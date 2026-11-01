@@ -51,8 +51,8 @@ public struct DriveRootStore: Sendable {
         return root
     }
 
-    public func choose(_ root: DriveRoot) {
-        try? settings.store(root, forKey: Self.key)
+    public func choose(_ root: DriveRoot) throws {
+        try settings.store(root, forKey: Self.key)
     }
 }
 

@@ -62,7 +62,8 @@ final class Assembly {
                                       database: database,
                                       openBrowser: openBrowser),
             keychain: keychain, cadence: TimerCadence(), cost: CostStore(database: database), catalog: Self.ports(),
-            cadences: Self.cadences)
+            cadences: Self.cadences,
+            writeFailed: { [settings] in settings.notify(SettingsKeys.failedUnknown, failed: true) })
         let connections = try Connections.make(configuration, database: database)
 
         let events = Broadcast<MailboxEvent>()

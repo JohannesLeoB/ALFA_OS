@@ -377,21 +377,34 @@ public final class ContactSourceState {
 
     public func isOn(_ id: String) -> Bool { switches[id] ?? true }
 
-    public func set(_ id: String, on: Bool) {
+    public func set(_ id: String, on: Bool) throws {
+        let before = switches[id]
         switches[id] = on
-        try? settings?.store(on, forKey: SettingsKey.contactSource(id))
+        do {
+            try settings?.store(on, forKey: SettingsKey.contactSource(id))
+        } catch {
+            switches[id] = before
+            throw error
+        }
     }
 
     public var people: [ContactPerson] {
         ContactMergeEngine.merge(feeds.filter { isOn($0.source.id) }.map { cached[$0.source.id] ?? [] })
     }
 
-    public func refresh() async {
+    @discardableResult
+    public func refresh() async -> Bool {
+        var saved = true
         for feed in feeds where isOn(feed.source.id) {
             guard let fetched = try? await feed.port.people() else { continue }
             cached[feed.source.id] = fetched
-            try? settings?.store(fetched, forKey: SettingsKey.contactCache(feed.source.id))
+            do {
+                try settings?.store(fetched, forKey: SettingsKey.contactCache(feed.source.id))
+            } catch {
+                saved = false
+            }
         }
+        return saved
     }
 
     private func load(_ id: String) {

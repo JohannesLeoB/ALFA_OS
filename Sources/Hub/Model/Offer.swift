@@ -155,11 +155,13 @@ public struct Configuration {
     var deadlines: Deadlines
     var reportLimit: Int
     var cadences: [Capability: Cadence]
+    var writeFailed: @MainActor @Sendable () -> Void
 
     public init(person: Person, company: CompanySetup, providers: [any ProviderPort], keychain: any KeychainPort,
                 cadence: any CadencePort, cost: any CostPort, catalog: PortRegistry = PortRegistry(),
                 clock: @escaping @Sendable () -> Date = { Date() }, deadlines: Deadlines = .standard,
-                reportLimit: Int = 100, cadences: [Capability: Cadence] = [:]) {
+                reportLimit: Int = 100, cadences: [Capability: Cadence] = [:],
+                writeFailed: @escaping @MainActor @Sendable () -> Void = {}) {
         self.person = person
         self.company = company
         self.providers = providers
@@ -171,6 +173,7 @@ public struct Configuration {
         self.deadlines = deadlines
         self.reportLimit = max(1, reportLimit)
         self.cadences = cadences
+        self.writeFailed = writeFailed
     }
 }
 

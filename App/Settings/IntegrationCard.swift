@@ -464,7 +464,12 @@ struct ProjectRootRows: View {
     private func choose(_ folder: FileEntry, in drive: FileFolder) {
         let label = appearance.format("settings.projectRoot.path", name(of: drive), folder.name)
         let chosen = DriveRoot(id: folder.id, name: label)
-        context.roots.choose(chosen)
+        do {
+            try context.roots.choose(chosen)
+        } catch {
+            context.state.notify(SettingsKeys.failedUnknown, failed: true)
+            return
+        }
         root = chosen
         context.state.notify("settings.toast.rootChosen", name: label)
     }

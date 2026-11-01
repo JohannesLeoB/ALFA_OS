@@ -107,7 +107,7 @@ final class InletsState: RulesPort {
     }
 
     func persist<V: Encodable>(_ key: String, _ value: V) {
-        try? settingStore.store(value, forKey: key)
+        do { try settingStore.store(value, forKey: key) } catch { configuration.writeFailed() }
     }
 
     func emit(_ event: InletEvent) {
@@ -117,7 +117,9 @@ final class InletsState: RulesPort {
     func update(_ id: Inlet.ID, persist: Bool, _ change: (inout Inlet) -> Void) {
         guard let index = records.firstIndex(where: { $0.id == id }) else { return }
         change(&records[index])
-        if persist { try? inletStore.save(records[index]) }
+        if persist {
+            do { try inletStore.save(records[index]) } catch { configuration.writeFailed() }
+        }
         emit(.inletChanged(id))
     }
 
@@ -131,7 +133,7 @@ final class InletsState: RulesPort {
     }
 
     private func store(_ entry: ReportEntry) {
-        try? inletStore.append(entry, limit: configuration.reportLimit)
+        do { try inletStore.append(entry, limit: configuration.reportLimit) } catch { configuration.writeFailed() }
         reports[entry.inlet] = ReportEngine.appended(entry, to: reports[entry.inlet] ?? [], limit: configuration.reportLimit)
     }
 
@@ -260,7 +262,7 @@ extension InletsState {
     private func save(_ id: Inlet.ID, _ state: InletState) {
         guard var inlet = record(id) else { return }
         inlet.state = state
-        try? inletStore.save(inlet)
+        do { try inletStore.save(inlet) } catch { configuration.writeFailed() }
     }
 }
 

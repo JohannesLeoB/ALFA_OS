@@ -405,8 +405,17 @@ struct ContactCard: View {
     }
 
     private func turn(_ source: ContactSource, _ on: Bool) {
-        directory.set(source.id, on: on)
-        if on { Task { await directory.refresh() } }
+        do {
+            try directory.set(source.id, on: on)
+        } catch {
+            context.state.notify(SettingsKeys.failedUnknown, failed: true)
+            return
+        }
+        if on {
+            Task {
+                if await !directory.refresh() { context.state.notify(SettingsKeys.failedUnknown, failed: true) }
+            }
+        }
     }
 
     private func notify(_ kind: ToastKind) {

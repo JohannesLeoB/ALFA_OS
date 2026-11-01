@@ -1530,7 +1530,7 @@ final class GoogleTests: XCTestCase {
     func testChosenProjectsRootReplacesTheConfiguredOne() async throws {
         let roots = DriveRootStore(settings: SettingStore(database: try SQLiteStore.inMemory()))
         XCTAssertNil(roots.current())
-        roots.choose(DriveRoot(id: "chosen", name: "Projekte"))
+        try roots.choose(DriveRoot(id: "chosen", name: "Projekte"))
         XCTAssertEqual(roots.current(), DriveRoot(id: "chosen", name: "Projekte"))
         let http = FakeHttp { _ in (200, #"{"files":[{"id":"f1","name":"A","mimeType":"application\/vnd.google-apps.folder"}]}"#) }
         let google = AccessRouter(config: ClientConfig(clientID: "id", clientSecret: ""), drive: driveConfig, http: http,
