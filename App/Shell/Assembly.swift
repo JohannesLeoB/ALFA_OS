@@ -324,9 +324,3 @@ extension ToolShelf {
         return feeds
     }
 }
-
-extension IntegrationCatalogStore: @retroactive CardLookupPort {
-    public func cardID(forProvider provider: String) -> String? {
-        info(forProvider: provider)?.id
-    }
-}
