@@ -105,23 +105,6 @@ extension TextButton where Glyph == EmptyView {
     }
 }
 
-struct TextMenuButton: View {
-    let label: Text
-    var kind = TextButtonKind.neutral
-    var disabled = false
-    let entries: () -> [MenuEntry]
-    @State private var anchor = AnchorBox()
-
-    var body: some View {
-        TextButton(label: label, kind: kind, disabled: disabled, action: open)
-            .background(AnchorMarker(box: anchor))
-    }
-
-    private func open() {
-        anchor.showMenu(entries())
-    }
-}
-
 enum SymbolHover {
     case ring
     case fill
