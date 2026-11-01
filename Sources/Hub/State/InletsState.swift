@@ -14,10 +14,10 @@ final class InletsState: RulesPort {
     var progresses: [String: RunProgress] = [:]
 
     @ObservationIgnored let configuration: Configuration
-    @ObservationIgnored let inletStore: InletStore
-    @ObservationIgnored let settingStore: SettingStore
+    @ObservationIgnored let inletStore: any InletPort
+    @ObservationIgnored let settingStore: any SettingPort
     @ObservationIgnored let router: ProviderRouter
-    @ObservationIgnored let watchers: FolderChanges
+    @ObservationIgnored let watchers: any FolderWatchPort
     @ObservationIgnored var grants: [Inlet.ID: Grant] = [:]
     @ObservationIgnored var running: Set<String> = []
     @ObservationIgnored var tracking: [String: Int] = [:]
@@ -29,12 +29,12 @@ final class InletsState: RulesPort {
     @ObservationIgnored let broadcast = Broadcast<InletEvent>()
     @ObservationIgnored var cadences: [String: Cadence] = [:]
 
-    init(_ configuration: Configuration, inlets: InletStore, settings: SettingStore) throws {
+    init(_ configuration: Configuration, inlets: any InletPort, settings: any SettingPort, watchers: any FolderWatchPort) throws {
         self.configuration = configuration
         inletStore = inlets
         settingStore = settings
         router = ProviderRouter(configuration.providers)
-        watchers = FolderChanges(firstPause: configuration.deadlines.watchPause)
+        self.watchers = watchers
         records = try inlets.load()
         reports = try inlets.loadReports()
         try loadSettings()
@@ -97,9 +97,9 @@ final class InletsState: RulesPort {
             let pair = parts[1] + "|" + parts[2]
             switch parts[0] + "|" {
             case Self.cadencePrefix:
-                if let value = SettingStore.decoded(data, as: Cadence.self) { cadences[pair] = value }
+                if let value = SettingEngine.decoded(data, as: Cadence.self) { cadences[pair] = value }
             case Self.lastSyncPrefix:
-                if let value = SettingStore.decoded(data, as: Date.self) { syncedAt[pair] = value }
+                if let value = SettingEngine.decoded(data, as: Date.self) { syncedAt[pair] = value }
             default:
                 break
             }
@@ -189,7 +189,7 @@ enum Persist {
 extension InletsState {
     func restingState(_ id: Inlet.ID) -> InletState? {
         if let held = resting[id] { return held }
-        return record(id).map { InletStore.durable($0.state) }
+        return record(id).map { SettingEngine.durable($0.state) }
     }
 
     func isWorking(_ id: Inlet.ID) -> Bool {
@@ -212,7 +212,7 @@ extension InletsState {
 
     func rest(_ id: Inlet.ID, as state: InletState, persist: Persist) {
         guard record(id) != nil else { return }
-        let target = state.isTransient ? InletStore.durable(state) : state
+        let target = state.isTransient ? SettingEngine.durable(state) : state
         let before = restingState(id)
         resting[id] = target
         if target.isStorable {

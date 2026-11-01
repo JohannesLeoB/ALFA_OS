@@ -66,7 +66,7 @@ public final class TimerCadence: CadencePort {
     }
 }
 
-final class FolderChanges: Sendable {
+final class FolderChanges: FolderWatchPort {
     static let longestPause: Duration = .seconds(300)
 
     private let firstPause: Duration

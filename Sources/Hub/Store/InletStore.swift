@@ -5,7 +5,7 @@ import LocalAuthentication
 import Security
 import Storage
 
-final class InletStore: Sendable {
+final class InletStore: InletPort {
     private let database: SQLiteStore
 
     init(database: SQLiteStore) {
@@ -17,27 +17,19 @@ final class InletStore: Sendable {
             try Row.fetchAll(db, sql: "SELECT json FROM inlet ORDER BY rowid").compactMap { row in
                 let data: Data = row["json"]
                 guard var inlet = try? JSONDecoder().decode(Inlet.self, from: data) else { return nil }
-                inlet.state = Self.durable(inlet.state)
+                inlet.state = SettingEngine.durable(inlet.state)
                 return inlet
             }
-        }
-    }
-
-    static func durable(_ state: InletState) -> InletState {
-        switch state {
-        case .working: .connected(probed: .distantPast)
-        case .connecting: .created
-        default: state
         }
     }
 
     func save(_ inlet: Inlet, slots: [String]? = nil) throws {
         try database.write { db in
             var row = inlet
-            if row.state != Self.durable(row.state) {
+            if row.state != SettingEngine.durable(row.state) {
                 let old = try Data.fetchOne(db, sql: "SELECT json FROM inlet WHERE id = ?", arguments: [inlet.id])
                 let stored = old.flatMap { try? JSONDecoder().decode(Inlet.self, from: $0) }
-                row.state = Self.durable(stored?.state ?? row.state)
+                row.state = SettingEngine.durable(stored?.state ?? row.state)
             }
             let data = try JSONEncoder().encode(row)
             try db.execute(sql: "INSERT INTO inlet (id, json) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET json = excluded.json",
@@ -91,8 +83,8 @@ final class InletStore: Sendable {
     }
 }
 
-public struct IntegrationCatalogStore: Sendable {
-    let entries: [IntegrationInfo]
+public struct IntegrationCatalogStore: IntegrationCatalogPort {
+    public let entries: [IntegrationInfo]
 
     init(entries: [IntegrationInfo]) {
         self.entries = entries

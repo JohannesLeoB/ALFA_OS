@@ -11,7 +11,7 @@ public struct KeyAccess: ProviderPort {
         probe = KeyCheck(connection: connection)
     }
 
-    public static func all(checks: [any ConnectionCheckPort], catalog: IntegrationCatalogStore) -> [KeyAccess] {
+    public static func all(checks: [any ConnectionCheckPort], catalog: any IntegrationCatalogPort) -> [KeyAccess] {
         checks.sorted { $0.integration < $1.integration }.compactMap { check in
             catalog.info(check.integration).map { KeyAccess(KeyConnection(info: $0, check: check)) }
         }

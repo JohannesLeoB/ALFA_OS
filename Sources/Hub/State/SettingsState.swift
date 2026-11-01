@@ -17,7 +17,7 @@ public final class SettingsState {
     public private(set) var lockOn = true
     public private(set) var lockDelay: LockDelay = .minutes5
     public private(set) var privacy = PrivacyChoices()
-    public private(set) var templates: [TemplateStore.Template] = []
+    public private(set) var templates: [TemplateFile] = []
     public private(set) var profile = UserProfile()
     public private(set) var company: [String: String] = [:]
     public private(set) var imprint: [String: String] = [:]
@@ -32,12 +32,12 @@ public final class SettingsState {
     private(set) var signaturesOnCompose: [Inlet.ID: Bool] = [:]
     private(set) var signaturesAbove: [Inlet.ID: Bool] = [:]
 
-    @ObservationIgnored private let settings: SettingStore
-    @ObservationIgnored private let templateStore: TemplateStore
+    @ObservationIgnored private let settings: any SettingPort
+    @ObservationIgnored private let templateStore: any TemplatePort
 
     public var hasTemplates: Bool { !templates.isEmpty }
 
-    public var currentTemplate: TemplateStore.Template? { templates.first }
+    public var currentTemplate: TemplateFile? { templates.first }
 
     public var currentTemplateText: String? { currentTemplate.flatMap(templateStore.text) }
 
@@ -47,7 +47,7 @@ public final class SettingsState {
         return added
     }
 
-    public func removeTemplate(_ template: TemplateStore.Template) -> Bool {
+    public func removeTemplate(_ template: TemplateFile) -> Bool {
         let removed = (try? templateStore.remove(template)) != nil
         templates = templateStore.templates
         return removed
@@ -57,14 +57,14 @@ public final class SettingsState {
         section == .templates && hasTemplates ? nil : section.detailKey
     }
 
-    public init(settings: SettingStore, templates: TemplateStore) throws {
+    public init(settings: any SettingPort, templates: any TemplatePort) throws {
         self.settings = settings
         templateStore = templates
         self.templates = templates.templates
         front = group.opening
         let stored = try settings.all()
-        func text(_ key: String) -> String? { SettingStore.decoded(stored[key], as: String.self) }
-        func flag(_ key: String) -> Bool? { SettingStore.decoded(stored[key], as: Bool.self) }
+        func text(_ key: String) -> String? { SettingEngine.decoded(stored[key], as: String.self) }
+        func flag(_ key: String) -> Bool? { SettingEngine.decoded(stored[key], as: Bool.self) }
         appearance = text(SettingsKey.appearance).flatMap(AppearanceChoice.init(rawValue:)) ?? .system
         destination = StartDestination.stored(text(SettingsKey.startDestination))
         lockOn = flag(SettingsKey.lockOn) ?? true
@@ -81,7 +81,7 @@ public final class SettingsState {
         mailStore = MailStoreSettings(
             attachments: flag(SettingsKey.mailStoreAttachments) ?? false,
             limit: text(SettingsKey.mailStoreLimit).flatMap(MailStoreLimit.init(rawValue:)) ?? .standard,
-            folder: SettingStore.decoded(stored[SettingsKey.mailStoreFolder], as: Data.self))
+            folder: SettingEngine.decoded(stored[SettingsKey.mailStoreFolder], as: Data.self))
         undoSend = text(SettingsKey.undoSend).flatMap(UndoSend.init(rawValue:)) ?? .standard
         for entry in CompanyEntry.allCases { company[entry.rawValue] = text(entry.storageKey) ?? "" }
         for entry in ImprintEntry.allCases { imprint[entry.rawValue] = text(entry.storageKey) ?? "" }
@@ -358,9 +358,9 @@ public final class ContactSourceState {
     private var switches: [String: Bool] = [:]
     private var cached: [String: [ContactPerson]] = [:]
 
-    @ObservationIgnored private let settings: SettingStore?
+    @ObservationIgnored private let settings: (any SettingPort)?
 
-    public init(settings: SettingStore? = nil) {
+    public init(settings: (any SettingPort)? = nil) {
         self.settings = settings
         load(ContactSource.mail.id)
     }
@@ -405,7 +405,7 @@ public final class ExportState {
 
     @ObservationIgnored private let port: any ExportPort
 
-    public init(port: any ExportPort = ExportStore()) {
+    public init(port: any ExportPort) {
         self.port = port
     }
 

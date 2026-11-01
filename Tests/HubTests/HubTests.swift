@@ -942,8 +942,8 @@ final class HubTests: XCTestCase {
                             listsAccounts: true, providers: ["fake"], logo: nil),
             setup: old.connections.setup, rules: old.connections.rules)
         XCTAssertNil(reading.note)
-        XCTAssertEqual(InletStore.durable(.working), .connected(probed: .distantPast))
-        XCTAssertEqual(InletStore.durable(.connecting), .created)
+        XCTAssertEqual(SettingEngine.durable(.working), .connected(probed: .distantPast))
+        XCTAssertEqual(SettingEngine.durable(.connecting), .created)
     }
 
     @MainActor
@@ -1366,7 +1366,7 @@ final class HubTests: XCTestCase {
 
     func testKeyChecksMapStatusShapeAndFieldFailures() async throws {
         func provider(_ body: @escaping @Sendable (KeyValues) async throws -> String?) throws -> KeyAccess {
-            try XCTUnwrap(KeyAccess.all(checks: [StubCheck(integration: "clickup", body: body)], catalog: .standard).first)
+            try XCTUnwrap(KeyAccess.all(checks: [StubCheck(integration: "clickup", body: body)], catalog: IntegrationCatalogStore.standard).first)
         }
         let inlet = Inlet(id: "i", provider: "clickup", capabilities: [], owner: .company, title: "t", account: "old")
         let grant = Grant(values: ["token": "abc"])
@@ -1426,7 +1426,7 @@ final class HubTests: XCTestCase {
             }),
             StubCheck(integration: "unknown", body: { _ in nil }),
         ]
-        let providers = KeyAccess.all(checks: checks, catalog: .standard)
+        let providers = KeyAccess.all(checks: checks, catalog: IntegrationCatalogStore.standard)
         XCTAssertEqual(providers.map(\.id), ["airtable", "clickup"])
         let rig = try Rig.make(offers: [], providers: providers)
         let offers = rig.connections.setup.offers
@@ -1448,7 +1448,7 @@ final class HubTests: XCTestCase {
         let company = try await rig.connections.setup.add(offers[0], input: .fields(["base": "appABCDEFGHIJKLMN", "token": "t"]))
         XCTAssertEqual(company.owner, .company)
         XCTAssertEqual(company.account, "airtable")
-        let readings = IntegrationReadEngine.readAll(.standard, setup: rig.connections.setup, rules: rig.connections.rules)
+        let readings = IntegrationReadEngine.readAll(IntegrationCatalogStore.standard, setup: rig.connections.setup, rules: rig.connections.rules)
         XCTAssertEqual(readings.map(\.state).filter { $0 == .connected }.count, 2)
         XCTAssertEqual(IntegrationReadEngine.badCount(readings), 0)
         let held = IntegrationReadEngine.values(of: try XCTUnwrap(readings.first { $0.info.id == "airtable" }), keychain: rig.keychain)
@@ -1458,7 +1458,7 @@ final class HubTests: XCTestCase {
 
     @MainActor
     func testClaudeCredentialReadsTheKeyAndFallsBackToTheDefaultModel() async throws {
-        let providers = KeyAccess.all(checks: [StubCheck(integration: "claude", body: { _ in nil })], catalog: .standard)
+        let providers = KeyAccess.all(checks: [StubCheck(integration: "claude", body: { _ in nil })], catalog: IntegrationCatalogStore.standard)
         let rig = try Rig.make(offers: [], providers: providers)
         let credential = ClaudeCredential(setup: rig.connections.setup, keychain: rig.keychain)
         XCTAssertNil(credential.current())
@@ -1938,9 +1938,9 @@ final class HubTests: XCTestCase {
         try store.remove(key: "ax")
         XCTAssertEqual(Set(try store.all().keys), ["axb|1", "z"])
         try store.store(5, forKey: "n")
-        XCTAssertEqual(SettingStore.decoded(try store.all()["n"], as: Int.self), 5)
-        XCTAssertNil(SettingStore.decoded(Data("x".utf8), as: Int.self))
-        XCTAssertNil(SettingStore.decoded(nil, as: Int.self))
+        XCTAssertEqual(SettingEngine.decoded(try store.all()["n"], as: Int.self), 5)
+        XCTAssertNil(SettingEngine.decoded(Data("x".utf8), as: Int.self))
+        XCTAssertNil(SettingEngine.decoded(nil, as: Int.self))
     }
 
     func testDeadlineEndsOnceAndExpires() async throws {
@@ -2102,11 +2102,11 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(try InletStore(database: database).load().map(\.id), ["g1"])
         XCTAssertEqual(try InletStore(database: database).slots(of: "g1"), ["token"])
         let values = try SettingStore(database: database).all()
-        XCTAssertEqual(SettingStore.decoded(values[SettingsKey.appearance], as: String.self), "dark")
-        XCTAssertEqual(SettingStore.decoded(values[SettingsKey.lockOn], as: Bool.self), false)
-        XCTAssertEqual(SettingStore.decoded(values[CompanyEntry.name.storageKey], as: String.self), "Firm")
+        XCTAssertEqual(SettingEngine.decoded(values[SettingsKey.appearance], as: String.self), "dark")
+        XCTAssertEqual(SettingEngine.decoded(values[SettingsKey.lockOn], as: Bool.self), false)
+        XCTAssertEqual(SettingEngine.decoded(values[CompanyEntry.name.storageKey], as: String.self), "Firm")
         XCTAssertNil(values[SettingsKey.assistantOff])
-        XCTAssertEqual(SettingStore.decoded(values[SettingsKey.legacyImportDone], as: LegacyImportResult.self), first)
+        XCTAssertEqual(SettingEngine.decoded(values[SettingsKey.legacyImportDone], as: LegacyImportResult.self), first)
         defaults.set("light", forKey: SettingsKey.appearance)
         try legacy.write { db in try db.execute(sql: "INSERT INTO key_slot (inlet, name) VALUES ('g1', 'extra')") }
         let again = try store.run()

@@ -95,7 +95,7 @@ public enum IntegrationReadEngine {
     }
 
     @MainActor
-    public static func readAll(_ catalog: IntegrationCatalogStore, setup: any SetupPort, rules: any RulesPort) -> [IntegrationReading] {
+    public static func readAll(_ catalog: any IntegrationCatalogPort, setup: any SetupPort, rules: any RulesPort) -> [IntegrationReading] {
         catalog.entries.map { read($0, setup: setup, rules: rules) }
     }
 

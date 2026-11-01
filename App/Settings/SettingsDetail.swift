@@ -76,7 +76,7 @@ struct TemplatesCard: View {
         failed = !state.addTemplate(from: url)
     }
 
-    private func remove(_ template: TemplateStore.Template) {
+    private func remove(_ template: TemplateFile) {
         failed = !state.removeTemplate(template)
     }
 }
@@ -199,7 +199,7 @@ struct PrivacyCard: View {
     let state: SettingsState
     let privacy: AssistantPrivacy
     let conversation: ChatState
-    @State private var exporter = ExportState()
+    @State private var exporter = ExportState(port: ExportStore())
 
     private var categories: [PrivacyCategory] {
         PrivacyCategory.allCases.filter { conversation.availableCategories.contains($0) || !privacy.shares($0) }

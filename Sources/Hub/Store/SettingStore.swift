@@ -3,14 +3,14 @@ import Foundation
 import GRDB
 import Storage
 
-public final class SettingStore: Sendable {
+public final class SettingStore: SettingPort {
     private let database: SQLiteStore
 
     public init(database: SQLiteStore) {
         self.database = database
     }
 
-    func all() throws -> [String: Data] {
+    public func all() throws -> [String: Data] {
         try database.read { db in
             var result: [String: Data] = [:]
             for row in try Row.fetchAll(db, sql: "SELECT key, value FROM setting") {
@@ -30,37 +30,27 @@ public final class SettingStore: Sendable {
         let data: Data? = try database.read { db in
             try Data.fetchOne(db, sql: "SELECT value FROM setting WHERE key = ?", arguments: [key])
         }
-        return Self.decoded(data, as: type)
+        return SettingEngine.decoded(data, as: type)
     }
 
     public func store<V: Encodable>(_ value: V, forKey key: String) throws {
         try put(key, JSONEncoder().encode(value))
     }
 
-    func remove(key: String) throws {
+    public func remove(key: String) throws {
         try database.write { db in
             try db.execute(sql: "DELETE FROM setting WHERE key = ?", arguments: [key])
         }
     }
 
-    func remove(withPrefix prefix: String) throws {
+    public func remove(withPrefix prefix: String) throws {
         try database.write { db in
             try db.execute(sql: "DELETE FROM setting WHERE instr(key, ?) = 1", arguments: [prefix])
         }
     }
-
-    static func decoded<V: Decodable>(_ data: Data?, as type: V.Type) -> V? {
-        data.flatMap { try? JSONDecoder().decode(type, from: $0) }
-    }
 }
 
-public struct TemplateStore: Sendable {
-    public struct Template: Identifiable, Equatable, Sendable {
-        public let id: String
-        public let name: String
-        let url: URL
-    }
-
+public struct TemplateStore: TemplatePort {
     public static let extensions = ["html", "htm", "mustache"]
 
     private let directory: URL
@@ -69,23 +59,23 @@ public struct TemplateStore: Sendable {
         self.directory = directory
     }
 
-    public var templates: [Template] {
+    public var templates: [TemplateFile] {
         let keys: Set<URLResourceKey> = [.creationDateKey]
         let files = (try? FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: Array(keys))) ?? []
         return files.filter { Self.extensions.contains($0.pathExtension.lowercased()) }
             .map { url in (url, (try? url.resourceValues(forKeys: keys).creationDate) ?? .distantPast) }
             .sorted { ($0.1, $0.0.lastPathComponent) < ($1.1, $1.0.lastPathComponent) }
-            .map { Template(id: $0.0.lastPathComponent, name: $0.0.deletingPathExtension().lastPathComponent, url: $0.0) }
+            .map { TemplateFile(id: $0.0.lastPathComponent, name: $0.0.deletingPathExtension().lastPathComponent, url: $0.0) }
     }
 
-    public var current: Template? { templates.first }
+    public var current: TemplateFile? { templates.first }
 
-    public func text(_ template: Template) -> String? {
+    public func text(_ template: TemplateFile) -> String? {
         try? String(contentsOf: template.url, encoding: .utf8)
     }
 
     @discardableResult
-    public func add(from source: URL) throws -> Template {
+    public func add(from source: URL) throws -> TemplateFile {
         let suffix = source.pathExtension.lowercased()
         guard Self.extensions.contains(suffix) else { throw CocoaError(.fileReadUnsupportedScheme) }
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -97,10 +87,10 @@ public struct TemplateStore: Sendable {
             number += 1
         }
         try FileManager.default.copyItem(at: source, to: target)
-        return Template(id: target.lastPathComponent, name: target.deletingPathExtension().lastPathComponent, url: target)
+        return TemplateFile(id: target.lastPathComponent, name: target.deletingPathExtension().lastPathComponent, url: target)
     }
 
-    public func remove(_ template: Template) throws {
+    public func remove(_ template: TemplateFile) throws {
         try FileManager.default.removeItem(at: template.url)
     }
 }
@@ -268,7 +258,7 @@ public final class LegacyImportStore {
             try Data.fetchOne(db, sql: "SELECT value FROM setting WHERE key = ?", arguments: [SettingsKey.legacyImportDone])
         }
         guard let data else { return nil }
-        return SettingStore.decoded(data, as: LegacyImportResult.self) ?? LegacyImportResult(outcome: .none)
+        return SettingEngine.decoded(data, as: LegacyImportResult.self) ?? LegacyImportResult(outcome: .none)
     }
 
     private func collectPreferences(_ skipped: inout [String]) -> [(String, Data)] {
