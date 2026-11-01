@@ -14,6 +14,8 @@ struct DraftEditor: View {
     @State private var expanded = false
     @State private var box = TextBox()
     @State private var dropOver = false
+    @State private var reveal = 0
+    private static let attachmentStrip = "draft.attachments"
 
     private var inbox: InboxState { session.inbox }
     private var account: Inlet? { inbox.accounts.first { $0.id == card.inlet } }
@@ -22,10 +24,13 @@ struct DraftEditor: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView {
-                fields
+            ScrollViewReader { proxy in
+                ScrollView {
+                    fields
+                }
+                .scrollIndicators(.automatic)
+                .onChange(of: reveal) { proxy.scrollTo(Self.attachmentStrip, anchor: .bottom) }
             }
-            .scrollIndicators(.automatic)
             if inbox.formatting { FormatRow(box: box) }
         }
         .onDrop(of: [UTType.fileURL], isTargeted: $dropOver) { providers in
@@ -70,7 +75,7 @@ struct DraftEditor: View {
             } else if card.tooLarge {
                 Notice(kind: .failure, title: appearance.text("mail.notice.tooLarge.title"), text: appearance.text("mail.notice.tooLarge.text"),
                        glyph: { Glyph(.alert) },
-                       actions: { TextButton(label: appearance.text("mail.notice.tooLarge.act"), kind: .accent) { inbox.dismissTooLarge(card.id) } })
+                       actions: { TextButton(label: appearance.text("mail.notice.tooLarge.act"), kind: .accent) { reveal += 1 } })
                     .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                     .padding(.top, CGFloat(Tokens.Spacing.step8))
             } else if card.failedToSend {
@@ -110,7 +115,7 @@ struct DraftEditor: View {
             }
             subjectRow
             bodySheet
-            if !card.draft.attachments.isEmpty { attachments }
+            if !card.draft.attachments.isEmpty { attachments.id(Self.attachmentStrip) }
         }
     }
 

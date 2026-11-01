@@ -474,11 +474,6 @@ extension InboxState {
         edit(id) { $0.attachments.append(Attachment(filename: filename, mimeType: mimeType, data: data)) }
     }
 
-    public func dismissTooLarge(_ id: UUID) {
-        guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
-        drafts[index].tooLarge = false
-    }
-
     public func removeAttachment(_ id: UUID, at index: Int) {
         edit(id) { draft in
             guard draft.attachments.indices.contains(index) else { return }
