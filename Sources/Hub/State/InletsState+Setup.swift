@@ -108,7 +108,9 @@ extension InletsState: SetupPort {
                 try? configuration.keychain.delete(KeySlot(inlet: existing.id, name: name))
             }
             grants[inlet.id] = grant
+            if let index = records.firstIndex(where: { $0.id == inlet.id }) { records[index] = inlet }
             rest(inlet.id, as: inlet.state, persist: .never)
+            emit(.inletChanged(inlet.id))
             for capability in inlet.capabilities { plan(inlet.id, capability) }
             return inlet
         } catch {
