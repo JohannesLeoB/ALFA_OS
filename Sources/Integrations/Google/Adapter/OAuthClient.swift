@@ -170,6 +170,7 @@ final class AccessTokenClient: AccessTokenPort, Sendable {
     private let refresher: any TokenRefreshPort
     private let clock: @Sendable () -> Date
     private let renewal: GrantRenewal
+    private let flight = SingleFlight<String>()
 
     init(state: StoredToken, refresher: any TokenRefreshPort, clock: @escaping @Sendable () -> Date,
          renewal: GrantRenewal = .ignoring) {
@@ -180,6 +181,12 @@ final class AccessTokenClient: AccessTokenPort, Sendable {
     }
 
     func validAccessToken() async throws -> String {
+        let current = state.withLock { $0 }
+        if current.expiresAt.timeIntervalSince(clock()) > Self.expirySkew { return current.accessToken }
+        return try await flight.run { [self] in try await refreshed() }
+    }
+
+    private func refreshed() async throws -> String {
         let current = state.withLock { $0 }
         if current.expiresAt.timeIntervalSince(clock()) > Self.expirySkew { return current.accessToken }
         do {
