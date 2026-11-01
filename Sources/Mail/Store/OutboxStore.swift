@@ -13,6 +13,10 @@ public final class OutboxStore: OutboxPort {
     private var items: [OutboxItem]
     private var unsaved: Set<OutboxItem.ID> = []
     private var unremoved: Set<OutboxItem.ID> = []
+    private var unmarked: Set<OutboxItem.ID> = []
+    private var unkept: [UUID: KeptDraft] = [:]
+    private var undropped: Set<UUID> = []
+    private var sentRowsStale = false
     private let clock: @Sendable () -> Date
     private var timer: Task<Void, Never>?
 
@@ -23,9 +27,7 @@ public final class OutboxStore: OutboxPort {
         self.events = events
         self.clock = clock
         items = Self.load(database)
-        _ = try? database.write { db in
-            try db.execute(sql: "DELETE FROM mail_outbox WHERE state = 'sent'")
-        }
+        sentRowsStale = !Self.clearSent(database)
         let now = clock()
         for index in items.indices {
             guard case .planned(let date) = items[index].state, date <= now else { continue }
@@ -37,7 +39,7 @@ public final class OutboxStore: OutboxPort {
 
     public var outbox: [OutboxItem] { items }
 
-    public var unsavedCount: Int { unsaved.count }
+    public var unsavedCount: Int { unsaved.count + unmarked.count + unkept.count + undropped.count + (sentRowsStale ? 1 : 0) }
 
     public func resave() {
         flush()
@@ -273,8 +275,15 @@ public final class OutboxStore: OutboxPort {
     }
 
     private func flush() {
-        for id in unremoved where (try? delete(id)) != nil { unremoved.remove(id) }
+        for id in unremoved where (try? delete(id)) != nil {
+            unremoved.remove(id)
+            unmarked.remove(id)
+        }
+        for id in unmarked where markSent(id) { unmarked.remove(id) }
         for id in unsaved { persist(id) }
+        for kept in unkept.values { keep(kept) }
+        for id in undropped { dropKept(id) }
+        if sentRowsStale { sentRowsStale = !Self.clearSent(database) }
     }
 
     private func persist(_ id: OutboxItem.ID) {
@@ -296,9 +305,29 @@ public final class OutboxStore: OutboxPort {
             unremoved.remove(id)
         } catch {
             unremoved.insert(id)
-            _ = try? database.write { db in
+            if !markSent(id) { unmarked.insert(id) }
+        }
+    }
+
+    private func markSent(_ id: OutboxItem.ID) -> Bool {
+        do {
+            try database.write { db in
                 try db.execute(sql: "UPDATE mail_outbox SET state = 'sent' WHERE id = ?", arguments: [id.uuidString])
             }
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    nonisolated private static func clearSent(_ database: SQLiteStore) -> Bool {
+        do {
+            try database.write { db in
+                try db.execute(sql: "DELETE FROM mail_outbox WHERE state = 'sent'")
+            }
+            return true
+        } catch {
+            return false
         }
     }
 
@@ -377,22 +406,38 @@ extension OutboxStore {
     }
 
     public func keep(_ kept: KeptDraft) {
-        guard let data = try? JSONEncoder().encode(kept.draft) else { return }
+        guard let data = try? JSONEncoder().encode(kept.draft) else {
+            unkept[kept.id] = kept
+            return
+        }
         let id = kept.id.uuidString
         let inlet = kept.inlet
         let remoteID = kept.remoteID
         let mirrorID = kept.mirrorID
         let at = kept.updatedAt.timeIntervalSince1970
-        _ = try? database.write { db in
-            try db.execute(sql: "INSERT OR REPLACE INTO mail_draft (id, inlet, draft, remoteID, mirrorID, updatedAt) VALUES (?, ?, ?, ?, ?, ?)",
-                           arguments: [id, inlet, data, remoteID, mirrorID, at])
+        do {
+            try database.write { db in
+                try db.execute(sql: "INSERT OR REPLACE INTO mail_draft (id, inlet, draft, remoteID, mirrorID, updatedAt) VALUES (?, ?, ?, ?, ?, ?)",
+                               arguments: [id, inlet, data, remoteID, mirrorID, at])
+            }
+            unkept[kept.id] = nil
+        } catch {
+            unkept[kept.id] = kept
+            events.emit(.outboxChanged)
         }
     }
 
     public func dropKept(_ id: UUID) {
         let key = id.uuidString
-        _ = try? database.write { db in
-            try db.execute(sql: "DELETE FROM mail_draft WHERE id = ?", arguments: [key])
+        unkept[id] = nil
+        do {
+            try database.write { db in
+                try db.execute(sql: "DELETE FROM mail_draft WHERE id = ?", arguments: [key])
+            }
+            undropped.remove(id)
+        } catch {
+            undropped.insert(id)
+            events.emit(.outboxChanged)
         }
     }
 
