@@ -742,6 +742,22 @@
         }
       }
     },
+    "assistant.calendar.partial" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WICHTIG: Diese Kalender konnten nicht gelesen werden: {1}. Sage das dem Nutzer dazu. Behaupte NICHT, dort gebe es keine Termine."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IMPORTANT: These calendars could not be read: {1}. Tell the user this as well. Do NOT claim they have no appointments."
+          }
+        }
+      }
+    },
     "assistant.cart.ambiguous" : {
       "localizations" : {
         "de" : {

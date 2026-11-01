@@ -276,6 +276,7 @@ extension InboxState {
             let lifted = lift(list.map(\.id), in: inlet, keepListed: staysListed)
             let opening = reopen(lifted.next)
             picked = []
+            let known = folders
             var moved: [(id: String, landed: String?, inlet: Inlet.ID, origin: String?)] = []
             var failed: [(summary: MessageSummary, index: Int)] = []
             for entry in list {
@@ -286,7 +287,7 @@ extension InboxState {
                     } else {
                         landed = try await mailbox.trash(inlet, messageID: entry.id)
                     }
-                    moved.append((entry.id, landed, inlet, Self.serverFolder(origin, of: entry, in: folders, inboxFirst: kind == .archive)))
+                    moved.append((entry.id, landed, inlet, Self.serverFolder(origin, of: entry, in: known, inboxFirst: kind == .archive)))
                 } catch {
                     failed.append(lifted.entries.first { $0.summary.id == entry.id } ?? (entry, summaries.count))
                 }

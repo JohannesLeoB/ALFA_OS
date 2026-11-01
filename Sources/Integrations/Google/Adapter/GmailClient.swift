@@ -197,6 +197,7 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
             if let token { items.append(URLQueryItem(name: "pageToken", value: token)) }
             let page = try DraftParser.idPage(from: try await requests.send(RequestClient.url(drafts, query: items)))
             map.merge(page.map) { first, _ in first }
+            guard page.nextPageToken != token else { break }
             token = page.nextPageToken
         } while token != nil
         return map

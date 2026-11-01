@@ -24,7 +24,8 @@ public struct ListEventsTool: ToolPort {
         var teamFailed = false
         if calendar.hasTeamCalendars {
             do {
-                return result(try await acrossCalendars(query: query, days: days), days: days, ownOnly: false)
+                let across = try await acrossCalendars(query: query, days: days)
+                return result(across.entries, days: days, ownOnly: false, missing: across.missing)
             } catch PortFailure.notConnected {
                 return .failure("assistant.calendar.notConnected")
             } catch {
@@ -41,9 +42,10 @@ public struct ListEventsTool: ToolPort {
         }
     }
 
-    private func result(_ events: [CalendarEntry], days: Int, ownOnly: Bool) -> ToolResult {
+    private func result(_ events: [CalendarEntry], days: Int, ownOnly: Bool, missing: [String] = []) -> ToolResult {
         var lines: [Phrase] = events.isEmpty ? [.make("assistant.calendar.empty", String(days))] : events.map(Self.row)
         if ownOnly { lines += [.raw(""), .make("assistant.calendar.ownOnly")] }
+        if !missing.isEmpty { lines += [.raw(""), .make("assistant.calendar.partial", missing.joined(separator: ", "))] }
         return ToolResult(lines: lines)
     }
 
@@ -60,35 +62,38 @@ public struct ListEventsTool: ToolPort {
         return .join(parts, "")
     }
 
-    private func acrossCalendars(query: String?, days: Int) async throws -> [CalendarEntry] {
+    private func acrossCalendars(query: String?, days: Int) async throws -> (entries: [CalendarEntry], missing: [String]) {
         let calendars = try await calendar.calendars()
         let port = calendar
         var perCalendar: [[CalendarEntry]] = []
         var failure: (any Error)?
-        await withTaskGroup(of: Result<[CalendarEntry], any Error>.self) { group in
+        var missing: [String] = []
+        await withTaskGroup(of: (String, Result<[CalendarEntry], any Error>).self) { group in
             for ref in calendars.prefix(Self.maxCalendars) {
                 group.addTask {
                     do {
                         let raw = try await port.events(calendarID: ref.id, query: query, withinDays: days)
-                        return .success(raw.map { entry in
+                        return (ref.title, .success(raw.map { entry in
                             var copy = entry
                             copy.calendarTitle = ref.title
                             return copy
-                        })
+                        }))
                     } catch {
-                        return .failure(error)
+                        return (ref.title, .failure(error))
                     }
                 }
             }
-            for await part in group {
+            for await (title, part) in group {
                 switch part {
                 case .success(let entries): perCalendar.append(entries)
-                case .failure(let error): failure = failure ?? error
+                case .failure(let error):
+                    failure = failure ?? error
+                    missing.append(title)
                 }
             }
         }
-        if let failure { throw failure }
-        return Self.merge(perCalendar)
+        if let failure, perCalendar.isEmpty { throw failure }
+        return (Self.merge(perCalendar), missing.sorted())
     }
 
     static func merge(_ perCalendar: [[CalendarEntry]]) -> [CalendarEntry] {

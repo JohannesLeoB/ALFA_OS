@@ -165,6 +165,10 @@
    "de": "WICHTIG: Es konnte NUR der eigene Kalender gelesen werden — die Team-Kalender nicht (die Kalenderlisten-Freigabe fehlt; in den Einstellungen erneut mit Google verbinden). Sage das dem Nutzer dazu. Behaupte NICHT, es gebe keine weiteren Termine.",
    "en": "IMPORTANT: ONLY the own calendar could be read — not the team calendars (the calendar list permission is missing; connect with Google again in Settings). Tell the user this as well. Do NOT claim there are no further appointments."
   },
+  "assistant.calendar.partial": {
+   "de": "WICHTIG: Diese Kalender konnten nicht gelesen werden: {1}. Sage das dem Nutzer dazu. Behaupte NICHT, dort gebe es keine Termine.",
+   "en": "IMPORTANT: These calendars could not be read: {1}. Tell the user this as well. Do NOT claim they have no appointments."
+  },
   "assistant.cart.ambiguous": {
    "de": "Mehrere Artikel passen auf \"{1}\": {2}. Bitte genauer benennen.",
    "en": "Several items match \"{1}\": {2}. Please be more specific."

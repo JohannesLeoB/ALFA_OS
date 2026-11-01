@@ -230,10 +230,39 @@ extension GmailMailClient: MirrorPort, EverywhereSearchPort {
                 let touched = known.filter { changes.ids.contains($0) }
                 return FlagRefresh(flags: try await labelFlags(touched), cursor: changes.historyID)
             } catch GoogleFailure.api(_, let fault) where fault.status == GmailClient.missingStatus {
-                return try await newestFlags(known)
+                return try await listedFlags(folderID: folderID, known: known)
             }
         }
         return try await newestFlags(Array(known.prefix(Self.historyFallback)))
+    }
+
+    private func listedFlags(folderID: String, known: [String]) async throws -> FlagRefresh {
+        let cursor = try await gmail.currentHistoryID()
+        let scope = try await labelQuery(folderID)
+        let unread = try await everyID(Self.join(scope, "is:unread"))
+        let starred = try await everyID(Self.join(scope, "is:starred"))
+        let drafts = try await everyID(Self.join(scope, "in:drafts"))
+        var flags: [String: Set<Flag>] = [:]
+        for id in known {
+            var set: Set<Flag> = []
+            if !unread.contains(id) { set.insert(.seen) }
+            if starred.contains(id) { set.insert(.flagged) }
+            if drafts.contains(id) { set.insert(.draft) }
+            flags[id] = set
+        }
+        return FlagRefresh(flags: flags, cursor: cursor)
+    }
+
+    private func everyID(_ query: String) async throws -> Set<String> {
+        var ids = Set<String>()
+        var token: String?
+        repeat {
+            let page = try await gmail.listIDs(query: query, maxResults: Self.idPage, pageToken: token)
+            ids.formUnion(page.ids)
+            guard page.nextPageToken != token else { break }
+            token = page.nextPageToken
+        } while token != nil
+        return ids
     }
 
     private func newestFlags(_ ids: [String]) async throws -> FlagRefresh {

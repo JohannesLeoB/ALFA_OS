@@ -849,14 +849,18 @@ final class GoogleTests: XCTestCase {
         let tooOld = FakeHttp { call in
             if call.path.hasSuffix("/history") { return (404, #"{"error":{"code":404,"message":"Requested entity was not found."}}"#) }
             if call.path.hasSuffix("/profile") { return (200, #"{"historyId":"300"}"#) }
-            return (200, Self.metadata(call, labels: ""))
+            guard call.path.hasSuffix("/messages") else { return (404, "") }
+            if call.query.contains("is:unread") { return (200, Self.idsJSON(0..<10)) }
+            if call.query.contains("is:starred") { return (200, Self.idsJSON(140..<141)) }
+            return (200, #"{"resultSizeEstimate":0}"#)
         }
         let refresh = try await mailClient(tooOld).refreshFlags(folderID: "INBOX", known: known, cursor: "5")
         XCTAssertEqual(refresh.cursor, "300")
         XCTAssertEqual(refresh.flags.count, 150)
-        XCTAssertEqual(refresh.flags["m0"], [.seen])
+        XCTAssertEqual(refresh.flags["m0"], [])
+        XCTAssertEqual(refresh.flags["m140"], [.seen, .flagged])
         XCTAssertEqual(refresh.flags["m149"], [.seen])
-        XCTAssertEqual(tooOld.calls.count, 152)
+        XCTAssertEqual(tooOld.calls.count, 5)
         let fresh = FakeHttp { call in
             call.path.hasSuffix("/profile") ? (200, #"{"historyId":"310"}"#) : (200, Self.metadata(call))
         }

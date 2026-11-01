@@ -334,6 +334,10 @@ extension InboxState {
         case .sending, .sent, .queuedInOutbox: return
         default: break
         }
+        if let refusal = Self.refusal(drafts[now].draft) {
+            post(refusal)
+            return
+        }
         if let limit, MessageEngine.encodedSize(drafts[now].draft) > limit {
             drafts[now].tooLarge = true
             return

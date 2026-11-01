@@ -179,7 +179,8 @@ extension InboxState {
         let inbox = folders.first { $0.role == .inbox }.map(\.id).flatMap { summary.folderIDs.contains($0) ? $0 : nil }
         if inboxFirst, let inbox { return inbox }
         if let selected, real.contains(selected) { return selected }
-        return inbox ?? summary.folderIDs.first { real.contains($0) }
+        let reachable = folders.filter { real.contains($0.id) && !fixedRoles.contains($0.role) }.map(\.id)
+        return inbox ?? summary.folderIDs.first { reachable.contains($0) }
     }
 
     func restore(_ moved: [(id: String, landed: String?, inlet: Inlet.ID, origin: String?)], fromTrash: Bool = false) async {
