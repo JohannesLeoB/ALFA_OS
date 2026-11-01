@@ -70,14 +70,28 @@ for module in $names; do
 done
 for module in $names; do
   test_class=${module}Tests
+  test_file=Tests/$test_class/$test_class.swift
+  test_classes=(${(f)"$(sed -nE 's/^[[:space:]]*(public |internal |private |fileprivate |final )*class ([A-Za-z0-9_]+)[[:space:]]*:[[:space:]]*XCTestCase.*/\2/p' $test_file)"})
+  if (( ${#test_classes} == 0 )); then
+    echo "check_modules: $module has no XCTestCase class"
+    exit 1
+  fi
   mkdir -p $OUT/$module
-  print -r -- "import XCTest
-let suite = XCTestSuite(forTestCaseClass: $test_class.self)
-suite.run()
-exit(suite.testRun!.hasSucceeded ? 0 : 1)" > $OUT/$module/main.swift
+  {
+    print -r -- "import XCTest"
+    print -r -- "var passed = true"
+    for name in $test_classes; do
+      print -r -- "do {"
+      print -r -- "  let suite = XCTestSuite(forTestCaseClass: $name.self)"
+      print -r -- "  suite.run()"
+      print -r -- "  passed = passed && suite.testRun!.hasSucceeded"
+      print -r -- "}"
+    done
+    print -r -- "exit(passed ? 0 : 1)"
+  } > $OUT/$module/main.swift
   libs=($OUT/lib*.a(N))
   swiftc $FLAGS -I $OUT -I $GRDB_SRC/Sources/CSQLite -lsqlite3 -I $LIBS -L $LIBS -F $FRAMEWORKS -Xlinker -rpath -Xlinker $FRAMEWORKS -Xlinker -rpath -Xlinker $LIBS -Xlinker -rpath -Xlinker $PRIVATE \
-    -o $OUT/run_$module Tests/$test_class/$test_class.swift $OUT/$module/main.swift $libs
+    -o $OUT/run_$module $test_file $OUT/$module/main.swift $libs
   log=$OUT/$module/test.log
   set +e
   $OUT/run_$module > $log 2>&1
@@ -85,13 +99,13 @@ exit(suite.testRun!.hasSucceeded ? 0 : 1)" > $OUT/$module/main.swift
   set -e
   tail -n 4 $log
   started=$(grep -c "^Test Case '.*' started" $log || true)
-  ended=$(grep -cE "^Test Case '.*' (passed|failed)" $log || true)
+  ended=$(grep -cE "^Test Case '.*' (passed|failed|skipped)" $log || true)
   if (( exit_code > 1 )) || (( started != ended )); then
     echo "check_modules: $module test run crashed"
     exit 1
   fi
   if (( exit_code != 0 )); then
-    failed=(${(f)"$(sed -n "s/^Test Case '-\[run_$module\.$test_class \(.*\)\]' failed.*/\1/p" $log)"})
+    failed=(${(f)"$(sed -n "s/^Test Case '-\[run_$module\.[A-Za-z0-9_]* \(.*\)\]' failed.*/\1/p" $log)"})
     if (( ${#failed} == 0 )); then
       echo "check_modules: $module tests failed"
       exit 1
