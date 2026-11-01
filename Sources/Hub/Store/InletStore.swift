@@ -203,7 +203,7 @@ public struct KeychainStore: KeychainPort {
         let updated = SecItemUpdate(query as CFDictionary, [kSecValueData: data] as CFDictionary)
         if updated == errSecSuccess { return }
         let removed = SecItemDelete(query as CFDictionary)
-        guard removed == errSecSuccess || removed == errSecItemNotFound else { throw KeychainFailure.status(updated) }
+        guard removed == errSecSuccess || removed == errSecItemNotFound else { throw KeychainFailure.status(removed) }
         let readded = SecItemAdd(query.merging([kSecValueData: data]) { _, new in new } as CFDictionary, nil)
         guard readded == errSecSuccess else { throw KeychainFailure.status(readded) }
     }
