@@ -172,11 +172,8 @@ struct ShellResources {
     let directory: AppDirectory
 
     init(bundle: Bundle) throws {
-        guard let url = bundle.url(forResource: Self.directoryName, withExtension: "json") else {
-            throw ResourcesMissing(underlying: CocoaError(.fileNoSuchFile))
-        }
         do {
-            directory = try AppDirectory(data: Data(contentsOf: url))
+            directory = try AppDirectory(data: BundleResourceStore(bundle: bundle).data(forResource: Self.directoryName, withExtension: "json"))
         } catch {
             throw ResourcesMissing(underlying: error)
         }

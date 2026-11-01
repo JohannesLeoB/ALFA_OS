@@ -1,3 +1,4 @@
+import Core
 import Design
 import Foundation
 
@@ -12,8 +13,7 @@ enum SignInStyle {
 
     private static var fontFace: String {
         guard let family = Tokens.Family.text.first,
-              let url = Bundle(for: Anchor.self).url(forResource: "Geist-VariableFont_wght", withExtension: "ttf"),
-              let data = try? Data(contentsOf: url) else { return "" }
+              let data = try? BundleResourceStore(bundle: Bundle(for: Anchor.self)).data(forResource: "Geist-VariableFont_wght", withExtension: "ttf") else { return "" }
         return "@font-face{font-family:\(family);font-weight:\(Tokens.Weight.light) \(Tokens.Weight.semibold);"
             + "src:url(data:font/ttf;base64,\(data.base64EncodedString())) format(\"truetype\")}"
     }

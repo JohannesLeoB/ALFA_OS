@@ -3,7 +3,7 @@ import GRDB
 import Hub
 import Storage
 
-struct BookedRowStore: Sendable {
+struct BookedRowStore: BookedRowPort {
     private struct Record: Codable, FetchableRecord, PersistableRecord {
         static var databaseTableName: String { "bookedRows" }
 

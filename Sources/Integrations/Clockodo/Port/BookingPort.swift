@@ -10,6 +10,17 @@ protocol BookingPort: Sendable {
     func setBillable(id: Int, billable: Bool, confirmed: Bool) async throws
 }
 
+protocol BookedRowPort: Sendable {
+    func bookedIDs(userID: String) throws -> Set<UUID>
+    func mark(rowID: UUID, entryID: String, userID: String, at date: Date) throws
+}
+
+extension BookedRowPort {
+    func mark(rowID: UUID, entryID: String, userID: String) throws {
+        try mark(rowID: rowID, entryID: entryID, userID: userID, at: Date())
+    }
+}
+
 protocol MasterDataPort: Sendable {
     func customers() async throws -> [TimeCustomer]
     func projects() async throws -> [TimeProject]

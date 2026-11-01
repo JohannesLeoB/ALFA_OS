@@ -18,13 +18,13 @@ final class TimeTableState {
 
     private let masterData: any MasterDataPort
     private let booking: any BookingPort
-    private let booked: BookedRowStore
+    private let booked: any BookedRowPort
     private let userID: String
     private let clockodoUserID: Int?
     private let costCenters: [CostCenter]
 
     init(
-        masterData: any MasterDataPort, booking: any BookingPort, booked: BookedRowStore, userID: String,
+        masterData: any MasterDataPort, booking: any BookingPort, booked: any BookedRowPort, userID: String,
         clockodoUserID: Int? = nil, costCenters: [CostCenter] = []
     ) {
         self.masterData = masterData
