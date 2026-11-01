@@ -29,7 +29,8 @@ if (( needs_grdb )); then
   if [[ ! -d $GRDB_SRC/GRDB ]]; then
     CLONE=$TMPDIR/grdb-clone
     rm -rf $CLONE
-    git clone --template= --depth 1 --branch v6.29.3 https://github.com/groue/GRDB.swift $CLONE
+    (for name in $(git rev-parse --local-env-vars); do unset $name; done
+     git clone --template= --depth 1 --branch v6.29.3 https://github.com/groue/GRDB.swift $CLONE)
     rm -rf $CLONE/.git
     mv $CLONE $GRDB_SRC
   fi
