@@ -210,4 +210,8 @@ final class QuitDelegate: NSObject, NSApplicationDelegate {
         }
         return .terminateLater
     }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        AttachmentPreview.shared.discard()
+    }
 }
