@@ -60,7 +60,8 @@ def rows(loaded):
     for _, section in loaded["catalog-section"]:
         tables["catalog_sections"].append((section["id"], section["source"], section["level"],
                                            " > ".join(section["path"]), section.get("printed_from"),
-                                           section.get("printed_to"), section["pdf_from"], section["pdf_to"]))
+                                           section.get("printed_to"), section["pdf_from"], section["pdf_to"],
+                                           " | ".join(section.get("concepts", [])) or None))
         edges.add((section["id"], "cites", section["source"]))
         for concept in section.get("concepts", []):
             edges.add((section["id"], "about", concept))

@@ -87,6 +87,33 @@ as $$
   order by v.key, c.depth;
 $$;
 
+-- Edges are derived from the records. The seed calls this function after it loads the tables.
+create or replace function kb.rebuild_edges()
+returns integer
+language plpgsql
+set search_path = ''
+as $$
+declare total integer;
+begin
+  delete from kb.edges;
+  insert into kb.edges (src, rel, dst)
+  select id, 'broader', broader from kb.concepts where broader is not null
+  union select id, 'part_of', part_of from kb.concepts where part_of is not null
+  union select a.id, 'about', c from kb.atoms a, jsonb_array_elements_text(a.record -> 'concepts') c
+  union select a.id, 'cites', s ->> 'id' from kb.atoms a, jsonb_array_elements(a.record -> 'sources') s
+  union select a.id, l ->> 'rel', l ->> 'to' from kb.atoms a, jsonb_array_elements(coalesce(a.record -> 'links', '[]')) l
+  union select e.id, 'cites', s ->> 'id' from kb.library_entries e, jsonb_array_elements(e.record -> 'sources') s
+  union select m.id, 'cites', m.source from kb.media m
+  union select m.id, 'shows', c from kb.media m, jsonb_array_elements_text(m.record -> 'concepts') c
+  union select s.id, 'cites', s.source from kb.catalog_sections s
+  union select s.id, 'about', c from kb.catalog_sections s, unnest(string_to_array(s.concepts, ' | ')) c
+    where s.concepts is not null;
+  select count(*) into total from kb.edges;
+  return total;
+end;
+$$;
+revoke execute on function kb.rebuild_edges() from public, anon, authenticated;
+
 -- Readers: signed-in users read everything except library entries that are setup_only.
 -- Writers: only the service role (tools/export_supabase.py), which bypasses row level security.
 do $$
@@ -105,5 +132,6 @@ end $$;
 
 grant usage on schema kb to authenticated;
 grant select on all tables in schema kb to authenticated;
+revoke execute on function kb.search(text, integer), kb.setup_resolved(text) from public, anon;
 grant execute on function kb.search(text, integer), kb.setup_resolved(text) to authenticated;
 revoke all on schema kb from anon;

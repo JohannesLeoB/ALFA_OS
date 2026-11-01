@@ -89,7 +89,8 @@ create table if not exists catalog_sections (
   printed_from text,
   printed_to text,
   pdf_from integer not null,
-  pdf_to integer not null
+  pdf_to integer not null,
+  concepts text
 );
 
 create table if not exists edges (
