@@ -412,7 +412,7 @@ struct AddEditor: View {
     @ViewBuilder
     private func entry(_ field: Field) -> some View {
         if let options = choices(of: field) {
-            let current = options.contains(value(field.id)) ? value(field.id) : options[0]
+            let current = options.contains(value(field.id)) ? value(field.id) : options.first ?? value(field.id)
             ChoiceButton(label: appearance.text(ProviderPresets.choiceKey(field: field.id, option: current))) {
                 options.map { option in
                     .row(MenuItem(id: option, label: appearance.text(ProviderPresets.choiceKey(field: field.id, option: option)),
