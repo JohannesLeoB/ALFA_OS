@@ -68,7 +68,7 @@ public final class ChatState {
         sweep()
     }
 
-    public func send(choices: PrivacyChoices) async -> Bool {
+    public func send(choices: PrivacyChoices, profile: UserProfile? = nil) async -> Bool {
         guard canSend else { return false }
         closeUndo()
         let text = draft
@@ -77,10 +77,10 @@ public final class ChatState {
         pending = []
         if choices.chatFiles == false { sweep() }
         guard text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false || files.isEmpty == false else { return false }
-        return await run(text, files: files, choices: choices)
+        return await run(text, files: files, choices: choices, profile: profile)
     }
 
-    public func retry(choices: PrivacyChoices) async -> Bool {
+    public func retry(choices: PrivacyChoices, profile: UserProfile? = nil) async -> Bool {
         load()
         let messages = chat.messages(for: scope)
         guard busy == false,
@@ -92,7 +92,7 @@ public final class ChatState {
         } catch {
             return false
         }
-        return await run(question.text, files: ThreadEngine.attachments(question), choices: choices)
+        return await run(question.text, files: ThreadEngine.attachments(question), choices: choices, profile: profile)
     }
 
     public func stop() {
@@ -148,11 +148,12 @@ public final class ChatState {
         attachments.sweep(keeping: stored.union(held.map(\.relativePath)))
     }
 
-    private func run(_ text: String, files: [AttachmentRef], choices: PrivacyChoices) async -> Bool {
+    private func run(_ text: String, files: [AttachmentRef], choices: PrivacyChoices, profile: UserProfile?) async -> Bool {
         load()
         busy = true
         let settings = (try? privacy.load()) ?? PrivacySettings()
-        await engine.send(text, scope: scope, privacy: PrivacySnapshot(choices: choices, settings: settings), attachments: files)
+        await engine.send(text, scope: scope, context: ConversationContext(profile: profile),
+                          privacy: PrivacySnapshot(choices: choices, settings: settings), attachments: files)
         busy = false
         guard let last = chat.messages(for: scope).last else { return false }
         return last.role == .assistant && last.status == .complete

@@ -211,14 +211,16 @@ extension AppSession {
         let conversation = conversation
         let choices = settings.privacy
         guard !choices.assistantOff, conversation.canSend else { return }
-        Task { answered(await conversation.send(choices: choices)) }
+        let profile = settings.profile
+        Task { answered(await conversation.send(choices: choices, profile: profile)) }
     }
 
     func retryAssistant() {
         let conversation = conversation
         let choices = settings.privacy
         guard !choices.assistantOff else { return }
-        Task { answered(await conversation.retry(choices: choices)) }
+        let profile = settings.profile
+        Task { answered(await conversation.retry(choices: choices, profile: profile)) }
     }
 
     func attachToAssistant() {
@@ -234,12 +236,13 @@ extension AppSession {
     }
 
     func openAssistantSettings() {
+        settings.select(.protection, showing: SettingsSection.privacy.rawValue)
         desk.select("settings")
     }
 
     func openClaudeSettings() {
         guard let card = assembly.catalog.info(forProvider: ClaudeCredential.provider)?.id else {
-            openAssistantSettings()
+            desk.select("settings")
             return
         }
         openSettingsCard(card)
