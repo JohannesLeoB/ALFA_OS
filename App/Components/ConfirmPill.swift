@@ -250,3 +250,123 @@ private struct InnerButton<Label: View>: View {
         .onHover { hovering = $0 }
     }
 }
+
+private struct ConfirmEnter: ViewModifier {
+    let amount: Double
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(1 - amount)
+            .blur(radius: CGFloat(amount * Tokens.Size.confirmEnterBlur))
+    }
+}
+
+extension AnyTransition {
+    static var confirmEnter: AnyTransition {
+        .modifier(active: ConfirmEnter(amount: 1), identity: ConfirmEnter(amount: 0))
+    }
+}
+
+enum ConnectionState {
+    case connected
+    case connecting
+    case working
+    case notConnected
+    case failed
+    case unreadable
+}
+
+struct ConnectionStatus: View {
+    @Environment(\.appearance) private var appearance
+    let state: ConnectionState
+    let label: Text
+    var inverted = false
+
+    private var ink: InkSet { .of(inverted) }
+
+    private var dotFill: KeyPath<Colors, ColorValue>? {
+        switch state {
+        case .connected: ink.primary
+        case .failed: \.signal
+        default: nil
+        }
+    }
+
+    private var border: KeyPath<Colors, ColorValue> {
+        switch state {
+        case .connected: ink.primary
+        case .connecting, .working, .notConnected: ink.line
+        case .failed, .unreadable: \.signal
+        }
+    }
+
+    private var foreground: KeyPath<Colors, ColorValue> {
+        switch state {
+        case .connected, .connecting, .working: ink.secondary
+        case .notConnected: inverted ? ink.secondary : ink.tertiary
+        case .failed, .unreadable: \.signal
+        }
+    }
+
+    private var spins: Bool { state == .connecting || state == .working }
+
+    var body: some View {
+        let dot = CGFloat(Tokens.Spacing.statusDot)
+        let line = CGFloat(Tokens.Size.hairline)
+        HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+            ZStack {
+                if let dotFill {
+                    Circle().fill(appearance.color(dotFill))
+                }
+            }
+            .frame(width: dot, height: dot)
+            .overlay {
+                Circle().strokeBorder(appearance.color(border), lineWidth: line)
+            }
+            .overlay {
+                if spins {
+                    Spinner(side: SheetValues.statusArcBox, arc: SheetValues.statusArc, stroke: SheetValues.iconStroke,
+                            tone: nil, round: true)
+                }
+            }
+            label
+                .lineLimit(1)
+                .help(label)
+                .padding(.trailing, CGFloat(Tokens.Size.trailingTextInset))
+        }
+        .font(.face(Tokens.TextSize.small))
+        .foregroundStyle(appearance.color(foreground))
+    }
+}
+
+struct Spinner: View {
+    @Environment(\.appearance) private var appearance
+    var side = Tokens.Size.symbolSize
+    var arc = SheetValues.spinnerArc
+    var stroke = Tokens.Size.hairline
+    var duration = Tokens.Duration.thinking
+    var tone: KeyPath<Colors, ColorValue>? = \.ink
+    var track: KeyPath<Colors, ColorValue>?
+    var round = false
+    @State private var turn = 0.0
+
+    var body: some View {
+        let line = CGFloat(stroke)
+        let style = tone.map { AnyShapeStyle(appearance.color($0)) } ?? AnyShapeStyle(.foreground)
+        ZStack {
+            if let track {
+                Circle().strokeBorder(appearance.color(track), lineWidth: line)
+            }
+            Circle()
+                .inset(by: line / 2)
+                .trim(from: 0, to: CGFloat(arc))
+                .stroke(style, style: StrokeStyle(lineWidth: line, lineCap: round ? .round : .butt))
+        }
+        .frame(width: CGFloat(side), height: CGFloat(side))
+        .rotationEffect(.degrees(turn))
+        .task {
+            guard !appearance.still else { return }
+            withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) { turn = SheetValues.fullTurn }
+        }
+    }
+}

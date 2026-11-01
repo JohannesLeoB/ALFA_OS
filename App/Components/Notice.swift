@@ -1,4 +1,5 @@
 import Design
+import Shell
 import SwiftUI
 
 enum NoticeKind {
@@ -55,5 +56,106 @@ struct Notice<Glyph: View, Actions: View>: View {
             RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.notice))
                 .fill(appearance.color(onSheet ? \.sheetWell : \.well))
         )
+    }
+}
+
+struct ToastView: View {
+    @Environment(\.appearance) private var appearance
+    let message: Text
+    var undoLabel: Text?
+    var onUndo: (() -> Void)?
+    var failed = false
+    var lasts: Double?
+    let onDismiss: () -> Void
+
+    private var stay: Double {
+        if failed { return Tokens.Duration.toastFail }
+        if let lasts, onUndo != nil { return lasts }
+        return onUndo == nil ? Tokens.Duration.toast : Tokens.Duration.toastUndo
+    }
+
+    var body: some View {
+        HStack(spacing: CGFloat(Tokens.Spacing.step12)) {
+            if failed {
+                Glyph(.alert)
+                    .padding(.leading, -CGFloat(Tokens.Spacing.step4))
+            }
+            message.lineLimit(1).help(message)
+            if let undoLabel, let onUndo {
+                Button(action: onUndo) {
+                    undoLabel
+                        .lineLimit(1)
+                        .fixedSize()
+                        .typeStyle(Tokens.TextStyle.control)
+                        .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+                        .frame(height: CGFloat(Tokens.Spacing.step20))
+                        .ring(Pill(), appearance.color(\.onInverse))
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .padding(.trailing, -CGFloat(Tokens.Spacing.step8))
+            }
+        }
+        .font(.face(Tokens.TextSize.small))
+        .foregroundStyle(appearance.color(\.onInverse))
+        .padding(.horizontal, CGFloat(Tokens.Spacing.step12))
+        .frame(height: CGFloat(Tokens.Spacing.step28))
+        .background(Capsule().fill(appearance.color(\.inverse)))
+        .shadowLayers(Capsule())
+        .task(id: stay) {
+            try? await Task.sleep(for: .seconds(stay))
+            if !Task.isCancelled { onDismiss() }
+        }
+    }
+}
+
+struct ContentPlaceholder<Glyph: View, Action: View>: View {
+    enum Kind {
+        case loading
+        case permissionRequired
+        case failed
+        case noResults
+        case empty
+    }
+
+    @Environment(\.appearance) private var appearance
+    let kind: Kind
+    var title: Text?
+    let text: Text
+    @ViewBuilder let glyph: Glyph
+    @ViewBuilder let action: Action
+
+    var body: some View {
+        let symbol = CGFloat(Tokens.Size.symbolSize)
+        VStack(spacing: CGFloat(Tokens.Spacing.step12)) {
+            ZStack {
+                if kind == .loading { Spinner() } else { glyph }
+            }
+            .foregroundStyle(appearance.color(\.inkTertiary))
+            .frame(width: symbol, height: symbol)
+            .ring(Circle(), appearance.color(\.lineStrong))
+            if let title {
+                title
+                    .typeStyle(Tokens.TextStyle.bodyEmphasis)
+                    .foregroundStyle(appearance.color(\.ink))
+                    .lineHeight(Tokens.TextStyle.bodyEmphasis.lineHeight, size: Tokens.TextStyle.bodyEmphasis.size)
+                    .frame(maxWidth: CGFloat(Tokens.Size.cardStateTextMaxWidth))
+            }
+            text
+                .typeStyle(Tokens.TextStyle.body)
+                .foregroundStyle(appearance.color(\.inkTertiary))
+                .lineHeight(Tokens.TextStyle.body.lineHeight, size: Tokens.TextStyle.body.size)
+                .frame(maxWidth: CGFloat(Tokens.Size.cardStateTextMaxWidth))
+            action
+        }
+        .multilineTextAlignment(.center)
+        .padding(CGFloat(Tokens.Spacing.step24))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+extension ContentPlaceholder where Glyph == EmptyView, Action == EmptyView {
+    init(loading text: Text) {
+        self.init(kind: .loading, text: text, glyph: { EmptyView() }, action: { EmptyView() })
     }
 }

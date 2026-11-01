@@ -73,3 +73,66 @@ extension InputField where Trailing == EmptyView {
         self.init(text: text, placeholder: placeholder, labelKey: labelKey, secret: secret, focus: focus) { EmptyView() }
     }
 }
+
+struct ToggleSwitch: View {
+    @Environment(\.appearance) private var appearance
+    @Binding var isOn: Bool
+    let labelKey: String
+
+    var body: some View {
+        let height = Tokens.Spacing.step20
+        let knob = Tokens.Spacing.step16
+        Button(action: { isOn.toggle() }) {
+            ZStack(alignment: .topLeading) {
+                Capsule().fill(isOn ? appearance.color(\.ink) : Color.clear)
+                Circle()
+                    .fill(appearance.color(isOn ? \.lane : \.inkTertiary))
+                    .frame(width: CGFloat(knob), height: CGFloat(knob))
+                    .offset(
+                        x: CGFloat(isOn ? Tokens.Size.toggleKnobOffsetOn : Tokens.Size.toggleKnobOffsetOff),
+                        y: CGFloat(Tokens.Spacing.step2)
+                    )
+            }
+            .frame(width: CGFloat(Tokens.Spacing.step32), height: CGFloat(height))
+            .ring(Pill(), isOn ? nil : appearance.color(\.lineStrong))
+            .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(appearance.text(labelKey))
+        .accessibilityAddTraits(isOn ? .isSelected : [])
+        .animation(appearance.ease(Tokens.Duration.toggle), value: isOn)
+    }
+}
+
+struct SegmentOption<ID: Hashable>: Identifiable {
+    let id: ID
+    let label: Text
+}
+
+struct SegmentedControl<ID: Hashable>: View {
+    @Environment(\.appearance) private var appearance
+    let options: [SegmentOption<ID>]
+    @Binding var selection: ID
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(options) { option in
+                let on = option.id == selection
+                Button(action: { selection = option.id }) {
+                    option.label
+                        .lineLimit(1)
+                        .typeStyle(Tokens.TextStyle.control)
+                        .foregroundStyle(appearance.color(on ? \.onInverse : \.inkSecondary))
+                        .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+                        .frame(height: CGFloat(Tokens.Spacing.step24))
+                        .background(Capsule().fill(on ? appearance.color(\.inverse) : Color.clear))
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(on ? .isSelected : [])
+            }
+        }
+        .padding(CGFloat(Tokens.Spacing.step2))
+        .ring(Pill(), appearance.color(\.lineStrong))
+    }
+}
