@@ -1,19 +1,81 @@
 {
   "id": "SET-STUDIO-EXAMPLE",
-  "level": "workshop",
+  "level": "company",
+  "parent": "SET-DEFAULT",
+  "label": "Studio values from the owner and the master data",
   "status": "proposed",
   "values": {
-    "carcass_material_and_thickness": {"value": "per project or workshop", "status": "proposed", "evidence": "owner", "note": "Johannes: carcass material, thickness and back panel are not a studio standard. The setup of the workshop or the project sets them."},
-    "carcass_thickness_mm": {"value": null, "status": "open", "evidence": "interpretation", "note": "No value read in the master data yet. The value 19 of an earlier example setup had no source."},
-    "back_panel_thickness_mm": {"value": 8, "status": "proposed", "evidence": "master_data", "note": "Drilling grid names 'RW8' in the studio drilling grids."},
-    "hole_row_pitch_mm": {"value": 32, "status": "proposed", "evidence": "master_data", "note": "Studio drilling grids: steps of 32 mm."},
-    "hole_row_front_offset_mm": {"value": 37, "status": "proposed", "evidence": "master_data", "note": "Studio drilling grids: first row 37 mm from the front edge."},
-    "hole_row_back_offset_mm": {"value": "37 plus 23, 25 or 27", "status": "proposed", "evidence": "master_data", "note": "Studio drilling grids for a grooved back panel. The extra value depends on the grid variant."},
-    "hole_row_middle_from_depth_mm": {"value": 700, "status": "proposed", "evidence": "master_data", "note": "Studio drilling grids add a middle row when the depth is more than 700 mm."},
-    "drawer_systems": {"value": ["Blum LEGRABOX", "Blum TANDEM", "Blum MOVENTO", "solid wood drawers made to measure"], "status": "proposed", "evidence": "owner", "note": "Johannes named these systems. He named Haefele and Wuerth as further sources."},
-    "studio_runner_library": {"value": "Blum MOVENTO S only", "status": "proposed", "evidence": "master_data", "note": "The own runner library of the studio holds only MOVENTO S. The maker base set also holds Blum TANDEM, Grass, Hettich and Haefele. This does not limit the drawer systems."},
-    "drawer_bought_in": {"value": "Haefele SE53, solid oak 13 mm, finger jointed on four sides, bottom 8 mm chipboard, groove 6 mm deep, 8 mm wide, 13 mm above the lower edge", "status": "proposed", "evidence": "master_data", "note": "59 studio drawer boxes."},
-    "drawer_own_build": {"value": "oak multiplex 15 mm, bottom 9 mm, groove 6 mm deep, 9.25 to 9.5 mm wide, 14.5 to 15 mm above the lower edge", "status": "proposed", "evidence": "master_data", "note": "20 studio drawer boxes."}
+    "carcass_material_and_thickness": {
+      "value": "per project or workshop",
+      "status": "proposed",
+      "evidence": "owner",
+      "note": "Johannes: carcass material, thickness and back panel are not a studio standard. The setup of the workshop or the project sets them."
+    },
+    "carcass_thickness_mm": {
+      "value": null,
+      "status": "open",
+      "evidence": "interpretation",
+      "note": "No value read in the master data yet. The value 19 of an earlier example setup had no source."
+    },
+    "back_panel_thickness_mm": {
+      "value": 8,
+      "status": "proposed",
+      "evidence": "master_data",
+      "note": "Drilling grid names 'RW8' in the studio drilling grids."
+    },
+    "hole_row_pitch_mm": {
+      "value": 32,
+      "status": "proposed",
+      "evidence": "master_data",
+      "note": "Studio drilling grids: steps of 32 mm."
+    },
+    "hole_row_front_offset_mm": {
+      "value": 37,
+      "status": "proposed",
+      "evidence": "master_data",
+      "note": "Studio drilling grids: first row 37 mm from the front edge."
+    },
+    "hole_row_back_offset_mm": {
+      "value": "37 plus 23, 25 or 27",
+      "status": "proposed",
+      "evidence": "master_data",
+      "note": "Studio drilling grids for a grooved back panel. The extra value depends on the grid variant."
+    },
+    "hole_row_middle_from_depth_mm": {
+      "value": 700,
+      "status": "proposed",
+      "evidence": "master_data",
+      "note": "Studio drilling grids add a middle row when the depth is more than 700 mm."
+    },
+    "drawer_systems": {
+      "value": [
+        "Blum LEGRABOX",
+        "Blum TANDEM",
+        "Blum MOVENTO",
+        "solid wood drawers made to measure"
+      ],
+      "status": "proposed",
+      "evidence": "owner",
+      "note": "Johannes named these systems. He named Haefele and Wuerth as further sources."
+    },
+    "studio_runner_library": {
+      "value": "Blum MOVENTO S only",
+      "status": "proposed",
+      "evidence": "master_data",
+      "note": "The own runner library of the studio holds only MOVENTO S. The maker base set also holds Blum TANDEM, Grass, Hettich and Haefele. This does not limit the drawer systems."
+    },
+    "drawer_bought_in": {
+      "value": "Haefele SE53, solid oak 13 mm, finger jointed on four sides, bottom 8 mm chipboard, groove 6 mm deep, 8 mm wide, 13 mm above the lower edge",
+      "status": "proposed",
+      "evidence": "master_data",
+      "note": "59 studio drawer boxes."
+    },
+    "drawer_own_build": {
+      "value": "oak multiplex 15 mm, bottom 9 mm, groove 6 mm deep, 9.25 to 9.5 mm wide, 14.5 to 15 mm above the lower edge",
+      "status": "proposed",
+      "evidence": "master_data",
+      "note": "20 studio drawer boxes."
+    }
   },
   "note": "All values wait for the confirmation of Johannes. A project setup overrides a workshop setup."
 }

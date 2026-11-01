@@ -1,0 +1,8 @@
+{
+  "id": "SET-DEFAULT",
+  "level": "default",
+  "label": "Base layer. It holds no values yet.",
+  "status": "proposed",
+  "values": {},
+  "note": "Each lower layer overrides only the values that it sets: default, company, workshop, user, project."
+}

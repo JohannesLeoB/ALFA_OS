@@ -1,0 +1,20 @@
+{
+  "title": "concept",
+  "type": "object",
+  "required": ["id", "label_en", "label_de", "definition_en", "added"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^CON-[A-Z0-9-]+$"},
+    "label_en": {"type": "string"},
+    "label_de": {"type": "string"},
+    "synonyms_en": {"type": "array", "items": {"type": "string"}},
+    "synonyms_de": {"type": "array", "items": {"type": "string"}},
+    "broader": {"type": "string", "pattern": "^CON-[A-Z0-9-]+$"},
+    "part_of": {"type": "string", "pattern": "^CON-[A-Z0-9-]+$"},
+    "code_names": {"type": "object", "additionalProperties": {"type": "string"}},
+    "definition_en": {"type": "string"},
+    "definition_de": {"type": "string"},
+    "added": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "note": {"type": "string"}
+  }
+}

@@ -10,14 +10,16 @@ This branch has no shared history with `main`. The rules of `main` (`AGENTS.md`,
 
 | Layer | Folder | Content |
 |---|---|---|
-| 1 Sources | `sources/` | One record per source document. Reference and locator only. No copies of documents. |
-| 2 Atoms | `atoms/` | One checkable statement per line, with source, stage, status and evidence. |
-| 3 Libraries | `libraries/` | One file per product or material entry: hardware, material, edge, appliance. |
-| 4 Rules | `rules/` | Formulas as Python functions, with tests. |
-| 5 Setups | `setups/` | Values for one workshop or one project. They override defaults. |
-| 6 Skills | `skills/` | Generated packages for Claude. Not yet built. |
+| Sources | `sources/` | One record per source document. Reference and locator only. No copies of documents. |
+| Concepts | `concepts/` | One record per concept with English and German labels, synonyms, and the relations `broader` and `part_of`. |
+| Atoms | `atoms/` | One checkable statement per line in English and German, with concepts, links, source, stage, status and evidence. |
+| Media | `media/` | One record per image, drawing or page region, with its source and the concepts it shows. |
+| Libraries | `libraries/` | One file per product or material entry: hardware, material, edge, appliance. |
+| Rules | `rules/` | Formulas as Python functions, with tests. |
+| Setups | `setups/` | Layers of values: default, company, workshop, user, project. A lower layer overrides only the values that it sets. |
+| Skills | `skills/` | Packages for Claude. Not yet built. |
 
-Terms are in [GLOSSARY.md](GLOSSARY.md). Record formats are in `schema/`.
+Record formats are in `schema/`. The table schema is in `sql/`. [GLOSSARY.md](GLOSSARY.md) explains the terms for people. The concepts in `concepts/` are the terms for machines.
 
 ## Commands
 
@@ -26,13 +28,31 @@ All commands use Python 3.9 or later and the standard library only.
 ```sh
 python3 -I tools/validate.py
 python3 -I -m unittest discover -s rules -p "test_*.py"
+python3 -I tools/kb.py build
+python3 -I tools/kb.py query "Schubkasten MOVENTO lichte Weite"
+python3 -I tools/kb.py concept CON-RUNNER-MOVENTO
+python3 -I tools/kb.py setup SET-STUDIO-EXAMPLE
 python3 -I tools/build_xray.py
+python3 -I tools/export_supabase.py
 ```
 
-`validate.py` checks every record against its schema, checks that each source reference exists, and checks that IDs are unique. It ends with exit code 0 when all checks pass.
+- `validate.py` checks every record against its schema. It checks that every source, concept, link target, parent setup and rule exists, and that IDs are unique.
+- `kb.py build` writes `build/knowledge.sqlite` with full text search in English and German and one table of edges for all relations.
+- `kb.py query` finds atoms in English or German. It also follows the concepts that match the words.
+- `kb.py setup` shows the values of a setup after all parent layers are applied.
+- `build_xray.py` writes `build/xray.html`. Do not edit the page by hand.
+- `export_supabase.py` writes `build/supabase_seed.sql`. It leaves out library entries with `sharing: setup_only`.
 
-`build_xray.py` writes `build/xray.html`. The page shows the layers, one drawer calculated by the rules, all atoms, the open points and the limits. Do not edit the page by hand.
+## Supabase
+
+Supabase is a mirror for online access. The files of this branch stay the source.
+
+1. Create a project in an EU region.
+2. Run `sql/schema.sql`, then `sql/postgres.sql`, in the SQL editor.
+3. Run `python3 -I tools/export_supabase.py` and run `build/supabase_seed.sql` in the SQL editor.
+
+The seed deletes and refills all tables. Do not edit data in Supabase.
 
 ## Status
 
-The first scope is the standard base cabinet with drawers. The drawer rules for Blum TANDEM, MOVENTO and LEGRABOX are in `rules/drawer.py`. The coordination strand for this work is `strands/S-kitchen-knowledge.md` in the repository `ALFA-Knowledge`.
+The first scope is the standard base cabinet with drawers. The coordination strand for this work is `strands/S-kitchen-knowledge.md` in the repository `ALFA-Knowledge`.

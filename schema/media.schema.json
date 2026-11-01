@@ -1,0 +1,21 @@
+{
+  "title": "media",
+  "type": "object",
+  "required": ["id", "kind", "source", "locator", "caption_en", "concepts", "added"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^MED-[A-Z0-9]+-[0-9]{4}$"},
+    "kind": {"enum": ["photo", "drawing", "drilling_pattern", "section", "elevation", "plan", "diagram", "table", "page"]},
+    "source": {"type": "string", "pattern": "^SRC-[A-Z0-9]+-[0-9]{3}$"},
+    "locator": {"type": "string"},
+    "region": {"type": "string"},
+    "file": {"type": "string"},
+    "caption_en": {"type": "string"},
+    "caption_de": {"type": "string"},
+    "concepts": {"type": "array", "items": {"type": "string", "pattern": "^CON-[A-Z0-9-]+$"}},
+    "atoms": {"type": "array", "items": {"type": "string", "pattern": "^ATM-[A-Z]{3}-[0-9]{4}$"}},
+    "sharing": {"enum": ["setup_only", "open"]},
+    "added": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "note": {"type": "string"}
+  }
+}

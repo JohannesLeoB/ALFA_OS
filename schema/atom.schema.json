@@ -1,13 +1,29 @@
 {
   "title": "atom",
   "type": "object",
-  "required": ["id", "kind", "domain", "statement", "stage", "status", "evidence", "sources", "added"],
+  "required": ["id", "kind", "domain", "concepts", "statement_en", "statement_de", "stage", "status", "evidence", "sources", "proposed_by", "added"],
   "additionalProperties": false,
   "properties": {
     "id": {"type": "string", "pattern": "^ATM-[A-Z]{3}-[0-9]{4}$"},
     "kind": {"enum": ["rule", "dimension", "pattern", "style", "fact"]},
     "domain": {"enum": ["carcass", "drawer", "front", "board", "edge", "hardware", "appliance", "layout", "drawing"]},
-    "statement": {"type": "string"},
+    "concepts": {"type": "array", "items": {"type": "string", "pattern": "^CON-[A-Z0-9-]+$"}},
+    "statement_en": {"type": "string"},
+    "statement_de": {"type": "string"},
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rel", "to"],
+        "additionalProperties": false,
+        "properties": {
+          "rel": {"enum": ["same_rule_as", "variant_of", "extends", "follows_from", "conflicts_with", "supersedes", "exception_to", "related"]},
+          "to": {"type": "string", "pattern": "^(ATM|CON|LIB|MED)-[A-Z0-9-]+$"}
+        }
+      }
+    },
+    "proposed_by": {"type": "string"},
+    "decided_by": {"type": "string"},
     "condition": {"type": "string"},
     "formula": {"type": "string"},
     "value": {

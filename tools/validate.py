@@ -1,9 +1,13 @@
-import json
 import pathlib
-import re
 import sys
 
-root = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+
+import json
+import re
+
+from data import by_id, load, root, setup_chain
+
 sys.path.insert(0, str(root / "rules"))
 
 from drawer import RUNNERS  # noqa: E402
@@ -27,7 +31,7 @@ def check(value, rules, where):
         return
     kind = rules.get("type")
     types = {"object": dict, "array": list, "string": str, "integer": int, "number": (int, float)}
-    if kind and not isinstance(value, types[kind]) or (kind in ("integer", "number") and isinstance(value, bool)):
+    if kind and (not isinstance(value, types[kind]) or (kind in ("integer", "number") and isinstance(value, bool))):
         errors.append(f"{where}: expected {kind}")
         return
     if kind == "string" and "pattern" in rules and not re.search(rules["pattern"], value):
@@ -52,45 +56,53 @@ def check(value, rules, where):
                 check(item, extra, f"{where}.{key}")
 
 
-def records(pattern):
-    for path in sorted(root.glob(pattern)):
-        if path.suffix == ".jsonl":
-            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
-                if line.strip():
-                    yield f"{path.relative_to(root)}:{number}", json.loads(line)
-        else:
-            yield str(path.relative_to(root)), json.loads(path.read_text(encoding="utf-8"))
-
-
 def main():
+    loaded = load()
     seen = {}
-    loaded = {}
-    for kind, pattern in (("source", "sources/*.jsonl"), ("atom", "atoms/*.jsonl"),
-                          ("library-entry", "libraries/*/*.json"), ("setup", "setups/*.json")):
+    for kind, items in loaded.items():
         rules = schema(kind)
-        loaded[kind] = []
-        for where, record in records(pattern):
+        for where, record in items:
             check(record, rules, where)
             identifier = record.get("id")
             if identifier in seen:
                 errors.append(f"{where}: id '{identifier}' is also in {seen[identifier]}")
             seen[identifier] = where
-            loaded[kind].append((where, record))
 
-    sources = {record["id"] for _, record in loaded["source"]}
-    atoms = {record["id"] for _, record in loaded["atom"]}
+    sources = set(by_id(loaded, "source"))
+    concepts = by_id(loaded, "concept")
+    atoms = set(by_id(loaded, "atom"))
+    libraries = set(by_id(loaded, "library-entry"))
+    media = set(by_id(loaded, "media"))
+    setups = by_id(loaded, "setup")
     runner_keys = set(RUNNERS) | {record["attributes"].get("runner_key") for _, record in loaded["library-entry"]}
+    targets = {"ATM": atoms, "CON": set(concepts), "LIB": libraries, "MED": media}
 
-    for kind in ("atom", "library-entry"):
+    for where, record in loaded["concept"]:
+        for key in ("broader", "part_of"):
+            if record.get(key) and record[key] not in concepts:
+                errors.append(f"{where}: {key} '{record[key]}' does not exist")
+
+    for kind in ("atom", "library-entry", "media"):
         for where, record in loaded[kind]:
             for reference in record.get("sources", []):
                 if reference.get("id") not in sources:
                     errors.append(f"{where}: source '{reference.get('id')}' does not exist")
+            if kind == "media" and record.get("source") not in sources:
+                errors.append(f"{where}: source '{record.get('source')}' does not exist")
+            for concept in record.get("concepts", []):
+                if concept not in concepts:
+                    errors.append(f"{where}: concept '{concept}' does not exist")
+            for link in record.get("links", []):
+                if link.get("to") not in targets.get(link.get("to", "")[:3], set()):
+                    errors.append(f"{where}: link target '{link.get('to')}' does not exist")
+            for atom in record.get("atoms", []):
+                if atom not in atoms:
+                    errors.append(f"{where}: atom '{atom}' does not exist")
             target = record.get("rule")
             if target:
                 file_name, _, function = target.partition(":")
-                text = (root / file_name).read_text(encoding="utf-8") if (root / file_name).exists() else ""
-                if f"def {function}(" not in text:
+                path = root / file_name
+                if not path.exists() or f"def {function}(" not in path.read_text(encoding="utf-8"):
                     errors.append(f"{where}: rule '{target}' does not exist")
             for key in record.get("applies_to", []):
                 if key not in runner_keys:
@@ -101,14 +113,18 @@ def main():
                     errors.append(f"{where}: nominal lengths differ from rules/drawer.py")
 
     for where, record in loaded["setup"]:
+        try:
+            setup_chain(setups, record["id"])
+        except ValueError as error:
+            errors.append(f"{where}: {error}")
         for name, entry in record["values"].items():
             if "atom" in entry and entry["atom"] not in atoms:
                 errors.append(f"{where}.{name}: atom '{entry['atom']}' does not exist")
 
     for path in sorted(root.rglob("*")):
-        if not path.is_file() or ".git" in path.parts or path.suffix not in (".md", ".json", ".jsonl", ".py"):
+        if not path.is_file() or ".git" in path.parts or "build" in path.parts:
             continue
-        if path.name == "validate.py":
+        if path.suffix not in (".md", ".json", ".jsonl", ".py", ".sql") or path.name == "validate.py":
             continue
         text = path.read_text(encoding="utf-8")
         for name, pattern in FORBIDDEN:

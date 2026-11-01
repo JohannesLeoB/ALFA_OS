@@ -154,11 +154,11 @@ def main():
 
     runner_item, trace_html = trace(sources_by_id)
 
-    atom_rows = "".join(f"""<tr><td><code>{e(a['id'])}</code></td><td>{e(a['statement'])}</td>
+    atom_rows = "".join(f"""<tr><td><code>{e(a['id'])}</code></td><td>{e(a['statement_en'])}</td>
 <td>{chip('ev', a['evidence'])}</td><td>{chip('st', a['status'])}</td>
 <td class="srcs">{e(', '.join(s['id'].replace('SRC-', '') for s in a['sources']))}</td></tr>""" for a in atoms)
 
-    open_items = [(a["id"], a["statement"]) for a in atoms if a["status"] == "open"]
+    open_items = [(a["id"], a["statement_en"]) for a in atoms if a["status"] == "open"]
     open_items += [(f"{s['id']} · {k}", v.get("note") or f"Value {v['value']} waits for approval.")
                    for s in setups for k, v in s["values"].items() if v["status"] == "open"]
     open_items += [(lib["id"], lib["note"]) for lib in libraries if lib.get("note")]

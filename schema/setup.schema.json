@@ -5,7 +5,9 @@
   "additionalProperties": false,
   "properties": {
     "id": {"type": "string", "pattern": "^SET-[A-Z0-9-]+$"},
-    "level": {"enum": ["default", "workshop", "project"]},
+    "level": {"enum": ["default", "company", "workshop", "user", "project"]},
+    "parent": {"type": "string", "pattern": "^SET-[A-Z0-9-]+$"},
+    "label": {"type": "string"},
     "status": {"enum": ["decided", "proposed", "open"]},
     "values": {
       "type": "object",
