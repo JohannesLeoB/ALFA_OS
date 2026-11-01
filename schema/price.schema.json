@@ -1,0 +1,54 @@
+{
+  "title": "price observation",
+  "type": "object",
+  "required": ["id", "maker", "article_no", "dealer", "price_type", "amount", "currency", "vat_included", "price_unit", "observed_at", "sources", "evidence"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^PRC-[A-Z0-9]+-[0-9]{6}$"},
+    "maker": {"type": "string"},
+    "article_no": {"type": "string"},
+    "dealer": {"type": "string"},
+    "dealer_article_no": {"type": "string"},
+    "library_entry": {"type": "string", "pattern": "^LIB-[A-Z0-9-]+$"},
+    "universal_class": {"type": "string", "pattern": "^CON-[A-Z0-9-]+$"},
+    "price_type": {"enum": ["list", "purchase_net", "retail_gross", "offer", "invoice", "web_shop"]},
+    "amount": {"type": "number", "minimum": 0},
+    "currency": {"enum": ["EUR", "CHF", "USD", "GBP"]},
+    "vat_included": {"enum": [true, false]},
+    "vat_rate": {"type": "number", "minimum": 0},
+    "price_unit": {"enum": ["piece", "set", "pair", "m", "m2", "pack", "roll", "board"]},
+    "per_quantity": {"type": "number", "minimum": 0},
+    "packaging_unit": {"type": "number", "minimum": 0},
+    "min_order_qty": {"type": "number", "minimum": 0},
+    "quantity_breaks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from_qty", "amount"],
+        "additionalProperties": false,
+        "properties": {"from_qty": {"type": "number", "minimum": 0}, "amount": {"type": "number", "minimum": 0}}
+      }
+    },
+    "discount_pct": {"type": "number"},
+    "margin_pct": {"type": "number"},
+    "delivery_days_min": {"type": "integer", "minimum": 0},
+    "delivery_days_max": {"type": "integer", "minimum": 0},
+    "delivery_note": {"type": "string"},
+    "stability": {"enum": ["fixed_until", "catalogue_period", "subject_to_change", "daily", "one_off", "unknown"]},
+    "valid_from": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "valid_to": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "observed_at": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "order_ref": {"type": "string", "pattern": "^[A-Z0-9-]+$"},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "locator"],
+        "additionalProperties": false,
+        "properties": {"id": {"type": "string", "pattern": "^SRC-[A-Z0-9]+-[0-9]{3}$"}, "locator": {"type": "string"}}
+      }
+    },
+    "evidence": {"enum": ["verified", "extracted", "derived", "uncertain", "master_data", "owner", "interpretation"]},
+    "note": {"type": "string"}
+  }
+}
