@@ -13,9 +13,22 @@ Rules for every agent and every person that changes this branch.
 1. Write all files in English. Use the style of ASD-STE100: short sentences, active voice, one statement per sentence, one term per concept.
 2. Do not copy text from a source. Write the fact as a rule in your own words. Give the source ID and the locator (page, section or table).
 3. Do not write dates in the statement text. Dates go in the fields `added` and `checked`.
-4. Do not write prices, amounts, customer names, project names, person names, addresses or keys.
+4. Do not write customer names, project names, person names, addresses or keys. Write prices and amounts only in `prices/`, as records of `schema/price.schema.json`.
 5. Use only terms from [GLOSSARY.md](GLOSSARY.md). Add a new term there first.
 6. Lengths are in millimetres. Put the unit in the field name, for example `inner_width_mm`.
+
+## Owner rules for knowledge work
+
+Johannes set these rules in the kitchen session. They apply to every record and every worker.
+
+1. Every record has a UTC timestamp and a source with a locator.
+2. Records are anonymous, atomic (one fact per record), uniform (mm, kg, N, deg; English and German labels) and universal (each maker product also gets a maker-neutral class).
+3. Prices are wanted, always with context: net or gross, VAT, currency, unit, quantity breaks, minimum and packaging quantity, delivery time, dealer, article number, date and price stability.
+4. Read catalogues like a curious person. Follow cross references. Record patterns, clever parts, problems, solutions, alternatives and tricks, and link them.
+5. Use structured maker data first (interiorcad tables, Datanorm, BMEcat). Read PDF pages for context, mounting, drawings and discoveries.
+6. Catalogue page text stays on the studio Mac. It does not go into Git or Supabase.
+7. The drop folder `Training/05_Eingang_Quellen/neu` is read only when Johannes says so. `Training/00_Eingang_roh` is confidential and is not read.
+8. Every result of a session goes into this branch before the session ends. Work that exists only in a scratch folder or on one disk is not kept.
 
 ## Evidence
 

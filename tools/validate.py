@@ -129,7 +129,10 @@ def main():
         if path.suffix not in (".md", ".json", ".jsonl", ".py", ".sql") or path.name == "validate.py":
             continue
         text = path.read_text(encoding="utf-8")
+        relative = path.relative_to(root).parts
         for name, pattern in FORBIDDEN:
+            if name == "amount" and relative[0] in ("prices", "tools"):
+                continue
             for match in pattern.finditer(text):
                 line = text.count("\n", 0, match.start()) + 1
                 errors.append(f"{path.relative_to(root)}:{line}: forbidden pattern ({name})")
