@@ -299,9 +299,8 @@ struct ToolShelf {
             Task { _ = await anchors.warmUp() }
             primary = anchors
         }
-        return EstimationEngine(
+        return learning.estimationEngine(
             anchors: CompositeAnchorStore(primary: primary, learned: learned, pdfLearned: pdf),
-            learningStore: learning,
             articlePrices: client.map { ArticleStore(fetch: $0) },
             auditStore: audit,
             parameterPort: client.map { EstimationParameterStore(fetch: $0) },

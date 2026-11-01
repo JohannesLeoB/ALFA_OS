@@ -2,7 +2,7 @@ import Foundation
 import GRDB
 import Storage
 
-public final class LearningStore: FactorPort {
+public final class LearningStore: LearningLedgerPort {
     static let outlierPercent = 25.0
     static let carcassOutlierPercent = 50.0
     static let minimumSamples = 3
@@ -422,5 +422,23 @@ extension LearningStore {
 
     static func pdfPositions(_ db: Database) throws -> [PdfPosition] {
         try StoredPdfPosition.order(sql: "pk").fetchAll(db).map(\.domain)
+    }
+}
+
+extension LearningStore {
+    public func estimationEngine(
+        anchors: any PriceAnchorPort,
+        articlePrices: (any ArticlePricePort)? = nil,
+        devicePrices: (any ArticlePricePort)? = nil,
+        auditStore: (any AuditPort)? = nil,
+        parameterPort: (any CarcassParameterPort)? = nil,
+        workshopFactors: WorkshopFactors = WorkshopFactors(),
+        actorUserID: String = "local-user",
+        maxEvidence: Int = 5
+    ) -> EstimationEngine {
+        EstimationEngine(
+            anchors: anchors, learningStore: self, articlePrices: articlePrices, devicePrices: devicePrices,
+            auditStore: auditStore, parameterPort: parameterPort, workshopFactors: workshopFactors,
+            actorUserID: actorUserID, maxEvidence: maxEvidence)
     }
 }

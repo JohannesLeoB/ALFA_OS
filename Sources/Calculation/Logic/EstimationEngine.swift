@@ -8,10 +8,10 @@ public actor EstimationEngine: EstimationPort {
     static let assumedCarcassCount = 7
 
     private let anchors: any PriceAnchorPort
-    private let learningStore: LearningStore
+    private let learningStore: any LearningLedgerPort
     private let articlePrices: (any ArticlePricePort)?
     private let devicePrices: (any ArticlePricePort)?
-    private let auditStore: AuditStore?
+    private let auditStore: (any AuditPort)?
     private let parameterPort: (any CarcassParameterPort)?
     private let workshopFactors: WorkshopFactors
     private let actorUserID: String
@@ -22,12 +22,12 @@ public actor EstimationEngine: EstimationPort {
     private var parametersCache: CarcassParameters?
     private var projectIDBySession: [String: String] = [:]
 
-    public init(
+    init(
         anchors: any PriceAnchorPort,
-        learningStore: LearningStore,
+        learningStore: any LearningLedgerPort,
         articlePrices: (any ArticlePricePort)? = nil,
         devicePrices: (any ArticlePricePort)? = nil,
-        auditStore: AuditStore? = nil,
+        auditStore: (any AuditPort)? = nil,
         parameterPort: (any CarcassParameterPort)? = nil,
         workshopFactors: WorkshopFactors = WorkshopFactors(),
         actorUserID: String = "local-user",
