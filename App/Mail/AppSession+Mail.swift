@@ -92,7 +92,7 @@ extension AppSession {
         let inbox = self.inbox
         Task {
             for url in urls {
-                guard let data = try? await Task.detached(operation: { try Data(contentsOf: url) }).value else {
+                guard let data = await AttachmentSourceStore.data(at: url) else {
                     inbox.announce(.attachmentFailed)
                     continue
                 }

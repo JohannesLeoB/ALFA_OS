@@ -16,10 +16,16 @@ public enum AttachmentFolder {
     }
 }
 
+public enum AttachmentSourceStore {
+    public static func data(at url: URL) async -> Data? {
+        await Task.detached { try? Data(contentsOf: url) }.value
+    }
+}
+
 @MainActor
 final class AttachmentFileStore {
     private let database: SQLiteStore
-    private let base: URL
+    private let directory: URL
     private let now: @Sendable () -> Date
     let settings: @MainActor () -> MailStoreSettings
     private let cap: @MainActor (MailStoreSettings) -> Int?
@@ -27,12 +33,12 @@ final class AttachmentFileStore {
     private var scopes: [Data: URL] = [:]
     private var moving = false
 
-    init(database: SQLiteStore, base: URL, now: @escaping @Sendable () -> Date = { Date() },
+    init(database: SQLiteStore, directory: URL, now: @escaping @Sendable () -> Date = { Date() },
          settings: @escaping @MainActor () -> MailStoreSettings = { MailStoreSettings() },
          cap: @escaping @MainActor (MailStoreSettings) -> Int? = { $0.limit.bytes },
          resolve: @escaping @MainActor (Data) -> URL? = { AttachmentFolder.url(for: $0) }) {
         self.database = database
-        self.base = base
+        self.directory = directory
         self.now = now
         self.settings = settings
         self.cap = cap
@@ -48,7 +54,7 @@ final class AttachmentFileStore {
     }
 
     func root(for bookmark: Data?) -> URL? {
-        guard let bookmark else { return base.appendingPathComponent(AttachmentFolder.name, isDirectory: true) }
+        guard let bookmark else { return directory.appendingPathComponent(AttachmentFolder.name, isDirectory: true) }
         if let known = scopes[bookmark] { return known.appendingPathComponent(AttachmentFolder.name, isDirectory: true) }
         guard let url = resolve(bookmark) else { return nil }
         _ = url.startAccessingSecurityScopedResource()
@@ -82,7 +88,7 @@ final class AttachmentFileStore {
     func data(_ inlet: String, message: String, attachment: String) async -> Data? {
         guard let entry = file(inlet, message, attachment), let folder = root() else { return nil }
         let url = folder.appendingPathComponent(entry.path)
-        let found = await Task.detached { try? Data(contentsOf: url) }.value
+        let found = await AttachmentSourceStore.data(at: url)
         if let found, found.count == entry.size { return found }
         if !moving { remove([entry]) }
         return nil

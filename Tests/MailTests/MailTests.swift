@@ -5003,7 +5003,7 @@ final class AttachmentFileTests: XCTestCase {
     @MainActor
     private func rig(_ setting: Setting, base: URL) throws -> (store: AttachmentFileStore, database: SQLiteStore) {
         let database = try SQLiteStore.inMemory()
-        let store = AttachmentFileStore(database: database, base: base, now: { Self.epoch }, settings: { setting.value },
+        let store = AttachmentFileStore(database: database, directory: base, now: { Self.epoch }, settings: { setting.value },
                                         cap: { _ in setting.cap },
                                         resolve: { URL(fileURLWithPath: String(decoding: $0, as: UTF8.self), isDirectory: true) })
         return (store, database)

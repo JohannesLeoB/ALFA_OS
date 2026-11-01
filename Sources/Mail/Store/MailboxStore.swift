@@ -45,7 +45,7 @@ public final class MailboxStore: MailboxPort {
         self.range = range
         self.names = names
         self.serverCopy = serverCopy
-        self.attachments = AttachmentFileStore(database: database, base: attachmentDirectory, now: now, settings: attachmentSettings)
+        self.attachments = AttachmentFileStore(database: database, directory: attachmentDirectory, now: now, settings: attachmentSettings)
         outbox.mirror = self
         watcher = Task { [weak self] in
             guard let stream = self?.access.events else { return }

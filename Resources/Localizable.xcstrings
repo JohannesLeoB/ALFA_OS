@@ -12809,7 +12809,7 @@
         }
       }
     },
-    "mail.deck.showNew" : {
+    "mail.deck.showUnread" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {

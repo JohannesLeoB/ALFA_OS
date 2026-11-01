@@ -477,7 +477,7 @@
    "de": "Postfächer zeigen",
    "en": "Show mailboxes"
   },
-  "mail.deck.showNew": {
+  "mail.deck.showUnread": {
    "de": "Postfächer zeigen · neue Mail in %@",
    "en": "Show mailboxes · new mail in %@"
   },

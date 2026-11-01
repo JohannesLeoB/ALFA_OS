@@ -29,7 +29,7 @@ struct AccountDeck: View {
         if open { return appearance.string("mail.deck.hide") }
         if waiting.isEmpty { return appearance.string("mail.deck.show") }
         let names = waiting.map { $0.shownName(settings.display($0.id), appearance: appearance) }
-        return appearance.format("mail.deck.showNew", ListFormatter.localizedString(byJoining: names))
+        return appearance.format("mail.deck.showUnread", ListFormatter.localizedString(byJoining: names))
     }
 
     var body: some View {
