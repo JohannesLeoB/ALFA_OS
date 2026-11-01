@@ -158,8 +158,8 @@ public final class InboxState {
         notePlanned()
         restoreKeptDrafts()
         if eventTask == nil {
+            let events = mailbox.events
             eventTask = Task { [weak self] in
-                guard let events = self?.mailbox.events else { return }
                 for await event in events {
                     guard let self else { return }
                     await self.handle(event)

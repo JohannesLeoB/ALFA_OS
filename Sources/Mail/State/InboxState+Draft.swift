@@ -324,15 +324,25 @@ extension InboxState {
             post(refusal)
             return
         }
-        if let limit = await mailbox.sendLimit(card.inlet), MessageEngine.encodedSize(card.draft) > limit {
-            if let now = drafts.firstIndex(where: { $0.id == id }) { drafts[now].tooLarge = true }
+        let limit = await mailbox.sendLimit(card.inlet)
+        guard let now = drafts.firstIndex(where: { $0.id == id }) else { return }
+        if draftWork[id] != nil || drafts[now].state == .saving {
+            sendAfterSave.insert(id)
             return
         }
-        guard sendHold > .zero, card.outboxID == nil else {
+        switch drafts[now].state {
+        case .sending, .sent, .queuedInOutbox: return
+        default: break
+        }
+        if let limit, MessageEngine.encodedSize(drafts[now].draft) > limit {
+            drafts[now].tooLarge = true
+            return
+        }
+        guard sendHold > .zero, drafts[now].outboxID == nil else {
             await deliver(id)
             return
         }
-        hold(id, returning: card.state)
+        hold(id, returning: drafts[now].state)
     }
 
     private func hold(_ id: UUID, returning previous: DraftState) {

@@ -64,19 +64,30 @@ public struct ListEventsTool: ToolPort {
         let calendars = try await calendar.calendars()
         let port = calendar
         var perCalendar: [[CalendarEntry]] = []
-        await withTaskGroup(of: [CalendarEntry].self) { group in
+        var failure: (any Error)?
+        await withTaskGroup(of: Result<[CalendarEntry], any Error>.self) { group in
             for ref in calendars.prefix(Self.maxCalendars) {
                 group.addTask {
-                    let raw = (try? await port.events(calendarID: ref.id, query: query, withinDays: days)) ?? []
-                    return raw.map { entry in
-                        var copy = entry
-                        copy.calendarTitle = ref.title
-                        return copy
+                    do {
+                        let raw = try await port.events(calendarID: ref.id, query: query, withinDays: days)
+                        return .success(raw.map { entry in
+                            var copy = entry
+                            copy.calendarTitle = ref.title
+                            return copy
+                        })
+                    } catch {
+                        return .failure(error)
                     }
                 }
             }
-            for await part in group { perCalendar.append(part) }
+            for await part in group {
+                switch part {
+                case .success(let entries): perCalendar.append(entries)
+                case .failure(let error): failure = failure ?? error
+                }
+            }
         }
+        if let failure { throw failure }
         return Self.merge(perCalendar)
     }
 

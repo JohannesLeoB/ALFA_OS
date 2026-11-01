@@ -118,11 +118,17 @@ public final class ChatState {
     public func undo() {
         guard note == .cleared else { return }
         let restore = cleared
-        cleared = []
         note = nil
         if chat.messages(for: scope).isEmpty {
-            for message in restore { try? chat.append(message, to: scope) }
+            do {
+                for message in restore { try chat.append(message, to: scope) }
+            } catch {
+                try? chat.clear(scope)
+                show(.cleared)
+                return
+            }
         }
+        cleared = []
         sweep()
     }
 

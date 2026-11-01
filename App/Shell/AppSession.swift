@@ -95,9 +95,9 @@ final class AppSession {
 
     func start() async {
         guard watcher == nil else { return }
-        let access = assembly.connections.access
+        let changes = assembly.connections.access.events
         watcher = Task { [weak self] in
-            for await event in access.events {
+            for await event in changes {
                 switch event {
                 case .inletChanged: self?.reshelveIfChanged()
                 case .inletRemoved(let id):
@@ -108,9 +108,9 @@ final class AppSession {
             }
         }
         Task { [attention] in await attention.prepare() }
+        let mailEvents = assembly.mailEvents.stream
         arrivals = Task { [weak self] in
-            guard let events = self?.assembly.mailEvents.stream else { return }
-            for await event in events {
+            for await event in mailEvents {
                 if case .mailArrived(_, let count) = event { await self?.announce(arrivals: count) }
             }
         }

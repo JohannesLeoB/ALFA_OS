@@ -198,8 +198,9 @@ public final class OutboxStore: OutboxPort {
         let wait = max(0, next.timeIntervalSince(clock()))
         timer = Task { [weak self] in
             try? await Task.sleep(for: .seconds(wait))
-            guard !Task.isCancelled else { return }
-            await self?.due()
+            guard !Task.isCancelled, let self else { return }
+            self.timer = nil
+            await self.due()
         }
     }
 

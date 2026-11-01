@@ -182,7 +182,7 @@ public final class ChatStore: ChatPort {
         }
         var paths = Set<String>()
         for data in stored {
-            for block in (try? JSONDecoder().decode([ContentBlock].self, from: data)) ?? [] {
+            for block in try JSONDecoder().decode([ContentBlock].self, from: data) {
                 switch block {
                 case .image(let ref), .document(let ref): paths.insert(ref.relativePath)
                 default: break

@@ -49,8 +49,8 @@ public final class MailboxStore: MailboxPort {
         self.attachments = AttachmentFileStore(database: database, directory: attachmentDirectory, now: now, settings: attachmentSettings,
                                                renew: attachmentRenew)
         outbox.mirror = self
+        let stream = access.events
         watcher = Task { [weak self] in
-            guard let stream = self?.access.events else { return }
             for await event in stream {
                 guard let self else { return }
                 await self.handle(event)
@@ -373,12 +373,23 @@ public final class MailboxStore: MailboxPort {
         running.forEach { $0.cancel() }
         for task in running { _ = await task.value }
         attachments.removeInlet(inlet)
-        let deleted: Void? = try? database.write { db in
-            for table in ["mail_message", "mail_folder", "mail_sync", "mail_cursor", "mail_outbox", "mail_draft", "mail_body", "mail_pop"] {
-                try db.execute(sql: "DELETE FROM \(table) WHERE inlet = ?", arguments: [inlet])
+        let purge = { [database] in
+            try database.write { db in
+                for table in ["mail_message", "mail_folder", "mail_sync", "mail_cursor", "mail_outbox", "mail_draft", "mail_body", "mail_pop"] {
+                    try db.execute(sql: "DELETE FROM \(table) WHERE inlet = ?", arguments: [inlet])
+                }
             }
         }
-        guard deleted != nil else { return }
+        do {
+            try purge()
+        } catch {
+            do {
+                try purge()
+            } catch {
+                Log.failure("mail.purge.failed", detail: String(describing: error))
+                return
+            }
+        }
         olderOffered = olderOffered.filter { !$0.key.hasPrefix(prefix) }
         let changed = outboxStore.forget(inlet)
         eventBus.emit(.foldersChanged(inlet))
