@@ -88,23 +88,34 @@ extension InletsState: SetupPort {
     }
 
     private func renew(_ existing: Inlet, with grant: Grant, account: String? = nil) throws(SetupFailure) -> Inlet {
+        let previous = (try? inletStore.slots(of: existing.id)) ?? []
+        var saved: [String: String] = [:]
+        for name in Set(previous).union(grant.values.keys) {
+            if let value = (try? configuration.keychain.get(KeySlot(inlet: existing.id, name: name))) ?? nil { saved[name] = value }
+        }
+        var written: [String] = []
         do {
             for (name, value) in SetupEngine.sorted(grant) {
+                written.append(name)
                 try configuration.keychain.put(value, at: KeySlot(inlet: existing.id, name: name))
-            }
-            let kept = Set(grant.values.keys)
-            for name in (try? inletStore.slots(of: existing.id)) ?? [] where !kept.contains(name) {
-                try? configuration.keychain.delete(KeySlot(inlet: existing.id, name: name))
             }
             var inlet = existing
             if let account { inlet.account = account }
             inlet.state = .connected(probed: configuration.clock())
             try inletStore.save(inlet, slots: SetupEngine.sorted(grant).map(\.key))
+            let kept = Set(grant.values.keys)
+            for name in previous where !kept.contains(name) {
+                try? configuration.keychain.delete(KeySlot(inlet: existing.id, name: name))
+            }
             grants[inlet.id] = grant
             rest(inlet.id, as: inlet.state, persist: .never)
             for capability in inlet.capabilities { plan(inlet.id, capability) }
             return inlet
         } catch {
+            for name in written {
+                let slot = KeySlot(inlet: existing.id, name: name)
+                if let value = saved[name] { try? configuration.keychain.put(value, at: slot) } else { try? configuration.keychain.delete(slot) }
+            }
             throw SetupEngine.keychainFailure(error)
         }
     }
@@ -160,30 +171,48 @@ extension InletsState: SetupPort {
         for name in names {
             if let value = (try? configuration.keychain.get(KeySlot(inlet: inletID, name: name))) ?? nil { saved[name] = value }
         }
+        func restore(_ done: [String]) {
+            for name in done {
+                if let value = saved[name] { try? configuration.keychain.put(value, at: KeySlot(inlet: inletID, name: name)) }
+            }
+        }
         var attempted: [String] = []
         for name in names {
             attempted.append(name)
             do {
                 try configuration.keychain.delete(KeySlot(inlet: inletID, name: name))
             } catch {
-                for done in attempted {
-                    if let value = saved[done] { try? configuration.keychain.put(value, at: KeySlot(inlet: inletID, name: done)) }
-                }
+                restore(attempted)
                 throw error
             }
+        }
+        do {
+            try inletStore.delete(inletID)
+        } catch {
+            restore(attempted)
+            throw error
         }
         for capability in inlet.capabilities {
             configuration.cadence.plan(inletID, capability, .off)
             watchers.stop(SyncEngine.key(inletID, capability))
         }
         if let provider = router.provider(inlet.provider) { try? await provider.signIn.signOut(inlet) }
-        try inletStore.delete(inletID)
-        try settingStore.remove(withPrefix: Self.cadencePrefix + inletID + "|")
+        for prefix in [Self.cadencePrefix, Self.lastSyncPrefix] {
+            do {
+                try settingStore.remove(withPrefix: prefix + inletID + "|")
+            } catch {
+                Log.failure("hub.remove.settings", detail: String(describing: error))
+            }
+        }
         cadences = cadences.filter { !$0.key.hasPrefix(inletID + "|") }
-        try settingStore.remove(withPrefix: Self.lastSyncPrefix + inletID + "|")
         syncedAt = syncedAt.filter { !$0.key.hasPrefix(inletID + "|") }
-        try settingStore.remove(key: SettingsKey.mailboxDisplay(inletID))
-        try settingStore.remove(key: SettingsKey.mailboxName(inletID))
+        for key in [SettingsKey.mailboxDisplay(inletID), SettingsKey.mailboxName(inletID)] {
+            do {
+                try settingStore.remove(key: key)
+            } catch {
+                Log.failure("hub.remove.settings", detail: String(describing: error))
+            }
+        }
         grants[inletID] = nil
         forget(inletID)
         reports[inletID] = nil
