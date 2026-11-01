@@ -1,4 +1,5 @@
 import Assistant
+import Core
 import Foundation
 import Hub
 
@@ -52,6 +53,7 @@ struct ProbeClient: ProbePort {
     let oauth: OAuthClient
     let clock: @Sendable () -> Date
     let policy: RequestPolicy
+    var flight = RefreshFlight<StoredToken>()
 
     func probe(_ inlet: Inlet, _ grant: Grant) async throws -> ProbeResult {
         let state: StoredToken
@@ -60,7 +62,7 @@ struct ProbeClient: ProbePort {
         } catch {
             return ProbeResult(account: inlet.id, rejection: Hint(text: Self.grantKey, detail: String(describing: error)))
         }
-        let tokens = AccessTokenClient(state: state, refresher: oauth, clock: clock)
+        let tokens = AccessTokenClient(state: state, refresher: oauth, clock: clock, flight: flight)
         let token: String
         do {
             token = try await tokens.validAccessToken()

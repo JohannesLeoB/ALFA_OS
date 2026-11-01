@@ -86,6 +86,7 @@ struct OAuthClient: TokenRefreshPort {
 
 final class MailTokenClient: MailTokenPort, Sendable {
     static let expirySkew: TimeInterval = 60
+    static let chainLimit = 8
 
     private let state: Mutex<StoredToken>
     private let refresher: any TokenRefreshPort
@@ -103,20 +104,30 @@ final class MailTokenClient: MailTokenPort, Sendable {
     }
 
     func accessToken() async throws -> String {
-        let current = state.withLock { $0 }
+        var current = state.withLock { $0 }
+        if fresh(current) { return current.accessToken }
+        current = newest(current)
+        state.withLock { $0 = current }
         if fresh(current) { return current.accessToken }
         guard let refreshToken = current.refreshToken else {
             if MicrosoftFailureEngine.isRejection(SignInFailure.refreshUnavailable) { renewal.failed(SignInFailure.refreshUnavailable) }
             throw SignInFailure.refreshUnavailable
         }
-        if let known = flight.recent(refreshToken), fresh(known) {
-            state.withLock { $0 = known }
-            return known.accessToken
-        }
         let identity = current.identity
-        let renewed = try await flight.run(refreshToken) { [self] in try await refresh(refreshToken, identity: identity) }
+        let renewed = try await flight.run(refreshToken, reuse: { [self] in fresh($0) }) { [self] in
+            try await refresh(refreshToken, identity: identity)
+        }
         state.withLock { $0 = renewed }
         return renewed.accessToken
+    }
+
+    private func newest(_ start: StoredToken) -> StoredToken {
+        var current = start
+        for _ in 0..<Self.chainLimit {
+            guard let key = current.refreshToken, let next = flight.recent(key), next != current else { break }
+            current = next
+        }
+        return current
     }
 
     private func fresh(_ token: StoredToken) -> Bool {
@@ -178,7 +189,7 @@ public struct OutlookAccess: ProviderPort {
     public let probe: any ProbePort
     private let oauth: OAuthClient
     private let mail = OAuthMailClient()
-    private let flight = RefreshFlight<StoredToken>()
+    private let flight: RefreshFlight<StoredToken>
     private let clock: @Sendable () -> Date
 
     public init(registration: Registration, http: any HttpPort = URLSession.shared,
@@ -195,7 +206,9 @@ public struct OutlookAccess: ProviderPort {
         self.clock = clock
         signIn = SignInClient(oauth: oauth, openBrowser: openBrowser, makeRedirect: makeRedirect, clock: clock,
                               release: { [mail] inlet in mail.release(inlet) })
-        probe = ProbeClient(oauth: oauth, mail: mail, clock: clock)
+        let flight = RefreshFlight<StoredToken>()
+        self.flight = flight
+        probe = ProbeClient(oauth: oauth, mail: mail, clock: clock, flight: flight)
     }
 
     public func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P {
@@ -232,6 +245,7 @@ struct ProbeClient: ProbePort {
     let oauth: OAuthClient
     let mail: OAuthMailClient
     let clock: @Sendable () -> Date
+    var flight = RefreshFlight<StoredToken>()
 
     func probe(_ inlet: Inlet, _ grant: Grant) async throws -> ProbeResult {
         let state: StoredToken
@@ -240,7 +254,7 @@ struct ProbeClient: ProbePort {
         } catch {
             return ProbeResult(account: inlet.id, rejection: Hint(text: Self.grantKey, detail: String(describing: error)))
         }
-        let tokens = MailTokenClient(state: state, refresher: oauth, clock: clock)
+        let tokens = MailTokenClient(state: state, refresher: oauth, clock: clock, flight: flight)
         let token: String
         do {
             token = try await tokens.accessToken()

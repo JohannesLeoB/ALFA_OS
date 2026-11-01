@@ -165,6 +165,7 @@ struct SignInClient: SignInPort {
 
 final class AccessTokenClient: AccessTokenPort, Sendable {
     static let expirySkew: TimeInterval = 60
+    static let chainLimit = 8
 
     private let state: Mutex<StoredToken>
     private let refresher: any TokenRefreshPort
@@ -182,19 +183,27 @@ final class AccessTokenClient: AccessTokenPort, Sendable {
     }
 
     func validAccessToken() async throws -> String {
-        let current = state.withLock { $0 }
+        var current = state.withLock { $0 }
+        if fresh(current) { return current.accessToken }
+        current = newest(current)
+        state.withLock { $0 = current }
         if fresh(current) { return current.accessToken }
         guard let refreshToken = current.refreshToken else {
             if Self.isRejection(SignInFailure.refreshUnavailable) { renewal.failed(SignInFailure.refreshUnavailable) }
             throw SignInFailure.refreshUnavailable
         }
-        if let known = flight.recent(refreshToken), fresh(known) {
-            state.withLock { $0 = known }
-            return known.accessToken
-        }
-        let renewed = try await flight.run(refreshToken) { [self] in try await refresh(refreshToken) }
+        let renewed = try await flight.run(refreshToken, reuse: { [self] in fresh($0) }) { [self] in try await refresh(refreshToken) }
         state.withLock { $0 = renewed }
         return renewed.accessToken
+    }
+
+    private func newest(_ start: StoredToken) -> StoredToken {
+        var current = start
+        for _ in 0..<Self.chainLimit {
+            guard let key = current.refreshToken, let next = flight.recent(key), next != current else { break }
+            current = next
+        }
+        return current
     }
 
     private func fresh(_ token: StoredToken) -> Bool {

@@ -14,7 +14,7 @@ public struct AccessRouter: ProviderPort {
     public let signIn: any SignInPort
     public let probe: any ProbePort
     private let oauth: OAuthClient
-    private let flight = RefreshFlight<StoredToken>()
+    private let flight: RefreshFlight<StoredToken>
     private let drive: DriveConfig
     private let roots: DriveRootStore?
     private let clock: @Sendable () -> Date
@@ -40,7 +40,9 @@ public struct AccessRouter: ProviderPort {
         self.clock = clock
         self.policy = policy
         self.signIn = signIn ?? SignInClient(oauth: oauth, openBrowser: openBrowser, makeRedirect: makeRedirect, clock: clock)
-        self.probe = ProbeClient(oauth: oauth, clock: clock, policy: policy)
+        let flight = RefreshFlight<StoredToken>()
+        self.flight = flight
+        self.probe = ProbeClient(oauth: oauth, clock: clock, policy: policy, flight: flight)
     }
 
     public func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P {
