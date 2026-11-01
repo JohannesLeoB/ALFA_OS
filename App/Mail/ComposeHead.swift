@@ -31,6 +31,7 @@ struct ComposeHead: View {
             }
             .buttonStyle(PressScaleButtonStyle(scale: Tokens.Scale.pressTile))
             .keyboardShortcut("n", modifiers: .command)
+            .disabled(account == nil)
             .help(appearance.text("mail.action.compose"))
             .onHover { hovering = $0 }
             .layoutPriority(1)

@@ -25,6 +25,7 @@ final class AppSession {
     let attention: any AttentionPort = AttentionClient()
     let lock: LockState
     let shield: WindowShield
+    let redo = RedoWatch()
     @ObservationIgnored private var shelved: Set<Inlet.ID> = []
 
     init(assembly: Assembly, directory: AppDirectory) {

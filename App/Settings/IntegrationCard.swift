@@ -419,7 +419,7 @@ struct ProjectRootRows: View {
     private var driveEntries: [MenuEntry] {
         var result: [MenuEntry] = [.head(id: "drive.head", label: appearance.text("settings.projectRoot.drive"))]
         if drives.isEmpty {
-            result.append(.row(MenuItem(id: "drive.none", label: appearance.text("settings.root.none"), action: {})))
+            result.append(.head(id: "drive.none", label: appearance.text("settings.root.none")))
         }
         for drive in drives {
             result.append(.row(MenuItem(id: drive.id, label: Text(verbatim: name(of: drive))) { open(drive) }))
@@ -436,7 +436,7 @@ struct ProjectRootRows: View {
             let folders = await listing(drive.id)
             var result: [MenuEntry] = [.head(id: "root.head", label: Text(verbatim: name(of: drive)))]
             if folders.isEmpty {
-                result.append(.row(MenuItem(id: "root.none", label: appearance.text("settings.root.none"), action: {})))
+                result.append(.head(id: "root.none", label: appearance.text("settings.root.none")))
             }
             for folder in folders {
                 result.append(.row(MenuItem(id: folder.id, label: Text(verbatim: folder.name),

@@ -12,11 +12,11 @@ struct MailCommands: Commands {
             item(titleKey: "shell.menu.settings", shortcut: KeyboardShortcut(",", modifiers: .command), enabled: session != nil) { session?.desk.select("settings") }
         }
         CommandGroup(replacing: .newItem) {
-            item(titleKey: "mail.action.compose", shortcut: KeyboardShortcut("n", modifiers: .command), enabled: session != nil) { compose() }
+            item(titleKey: "mail.action.compose", shortcut: KeyboardShortcut("n", modifiers: .command), enabled: session?.inbox.selectedInlet != nil) { compose() }
         }
         CommandGroup(replacing: .undoRedo) {
             item(titleKey: "mail.toast.undo", shortcut: KeyboardShortcut("z", modifiers: .command), enabled: session != nil) { undo() }
-            item(titleKey: "shell.menu.redo", shortcut: KeyboardShortcut("z", modifiers: [.command, .shift]), enabled: session != nil) { redo() }
+            item(titleKey: "shell.menu.redo", shortcut: KeyboardShortcut("z", modifiers: [.command, .shift]), enabled: session?.redo.possible == true) { redo() }
         }
         CommandGroup(replacing: .saveItem) {
             item(titleKey: "mail.action.saveDraft", shortcut: KeyboardShortcut("s", modifiers: .command), enabled: allows(.saveDraft)) { target?.perform(.saveDraft) }
@@ -114,6 +114,30 @@ struct MailCommands: Commands {
     private func fetch() {
         guard let session else { return }
         Task { await session.sync() }
+    }
+}
+
+@MainActor
+@Observable
+final class RedoWatch {
+    private(set) var possible = false
+    @ObservationIgnored private let center: NotificationCenter
+    @ObservationIgnored private var observer: (any NSObjectProtocol)?
+
+    init(center: NotificationCenter = .default) {
+        self.center = center
+        observer = center.addObserver(forName: NSApplication.didUpdateNotification, object: nil, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.look() }
+        }
+    }
+
+    isolated deinit {
+        if let observer { center.removeObserver(observer) }
+    }
+
+    private func look() {
+        let next = NSApp.keyWindow?.firstResponder?.undoManager?.canRedo == true
+        if next != possible { possible = next }
     }
 }
 
