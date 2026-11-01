@@ -500,7 +500,7 @@ final class HubTests: XCTestCase {
     }
 
     @MainActor
-    func testTwoOffersOfOneProviderCarryTheirOwnCapabilitiesAndRefuseTheSameAddress() async throws {
+    func testTwoOffersOfOneProviderCarryTheirOwnCapabilitiesAndTheLargerWidensTheSameAddress() async throws {
         let mailOnly = Offer(
             id: "fake.gmail", provider: "fake", title: "Gmail", capabilities: [.mail], owner: .person("p1"),
             way: .form([Field(id: "address", title: "address", holdsAccount: true)]))
@@ -513,13 +513,17 @@ final class HubTests: XCTestCase {
         let large = try await rig.connect("b@x.test", offer: full)
         XCTAssertEqual(small.capabilities, [.mail])
         XCTAssertEqual(large.capabilities, [.mail, .calendar, .contacts, .files])
+        let widened = try await rig.connect("a@x.test", offer: full)
+        XCTAssertEqual(widened.id, small.id)
+        XCTAssertEqual(widened.capabilities, [.mail, .calendar, .contacts, .files])
+        XCTAssertEqual(widened.title, "Google")
+        XCTAssertEqual(rig.connections.setup.inlets.count, 2)
         do {
-            _ = try await rig.connect("a@x.test", offer: full)
+            _ = try await rig.connect("a@x.test", offer: mailOnly)
             XCTFail("add must throw")
         } catch {
             XCTAssertEqual(error as? SetupFailure, .duplicate)
         }
-        XCTAssertEqual(rig.connections.setup.inlets.count, 2)
     }
 
     @MainActor

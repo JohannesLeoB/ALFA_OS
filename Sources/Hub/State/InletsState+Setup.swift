@@ -58,6 +58,12 @@ extension InletsState: SetupPort {
             return try renew(renewed, with: grant, account: result.account)
         }
         if let existing = SetupEngine.existing(offer: offer, account: result.account, in: records) {
+            if existing.provider == offer.provider, !offer.capabilities.isSubset(of: existing.capabilities) {
+                var widened = existing
+                widened.capabilities.formUnion(offer.capabilities)
+                widened.title = offer.title
+                return try renew(widened, with: grant)
+            }
             guard existing.provider == offer.provider, existing.state.canRenew else {
                 try? await provider.signIn.signOut(inlet)
                 throw .duplicate
