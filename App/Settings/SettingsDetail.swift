@@ -230,10 +230,18 @@ struct PrivacyCard: View {
             BlockHead(key: "settings.privacy.categories")
             ForEach(Array(categories.enumerated()), id: \.element) { index, category in
                 SettingsRow(label: appearance.text(category.key), line: index < categories.count - 1) {
-                    ToggleSwitch(isOn: Binding(get: { privacy.shares(category) }, set: { privacy.set(category, shares: $0) }),
+                    ToggleSwitch(isOn: Binding(get: { privacy.shares(category) }, set: { share(category, $0) }),
                                  labelKey: category.key)
                 }
             }
+        }
+    }
+
+    private func share(_ category: PrivacyCategory, _ shares: Bool) {
+        do {
+            try privacy.set(category, shares: shares)
+        } catch {
+            state.notify(SettingsKeys.failedUnknown, failed: true)
         }
     }
 
@@ -577,8 +585,10 @@ final class AssistantPrivacy {
 
     func shares(_ category: PrivacyCategory) -> Bool { settings.shares(category) }
 
-    func set(_ category: PrivacyCategory, shares: Bool) {
-        if shares { settings.disabled.remove(category) } else { settings.disabled.insert(category) }
-        try? store.save(settings)
+    func set(_ category: PrivacyCategory, shares: Bool) throws {
+        var next = settings
+        if shares { next.disabled.remove(category) } else { next.disabled.insert(category) }
+        try store.save(next)
+        settings = next
     }
 }

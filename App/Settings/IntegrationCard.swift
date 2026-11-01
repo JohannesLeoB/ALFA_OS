@@ -98,7 +98,11 @@ struct IntegrationCard: View {
                     .row(MenuItem(id: choice.rawValue, label: appearance.text(choice.key),
                                   check: choice == current ? appearance.text(SettingsKeys.menuCheck) : nil) {
                         let slot = KeySlot(inlet: inlet.id, name: field.id)
-                        if let id = choice.id { try? context.keychain.put(id, at: slot) } else { try? context.keychain.delete(slot) }
+                        do {
+                            if let id = choice.id { try context.keychain.put(id, at: slot) } else { try context.keychain.delete(slot) }
+                        } catch {
+                            context.state.notify(SettingsKeys.failedUnknown, failed: true)
+                        }
                         held = IntegrationReadEngine.values(of: reading, keychain: context.keychain)
                     })
                 }

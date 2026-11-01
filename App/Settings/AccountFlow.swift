@@ -161,7 +161,10 @@ final class AccountFlow {
     }
 
     func renew(_ inlet: Inlet.ID) async {
-        guard let renewal = setup.renewal(of: inlet) else { return }
+        guard let renewal = setup.renewal(of: inlet) else {
+            failure = Hint(text: "settings.setup.unavailable")
+            return
+        }
         await choose(renewal.offer, values: renewal.values)
     }
 
