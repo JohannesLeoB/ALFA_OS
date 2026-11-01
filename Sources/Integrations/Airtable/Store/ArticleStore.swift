@@ -14,11 +14,11 @@ public actor ArticleStore: CatalogPort, ArticlePricePort {
     private var loading: Task<[CatalogEntry], any Error>?
 
     public init(fetch: any RecordFetchPort,
-                baseID: String = CompanyValues.valueOrEmpty("airtable.base.article_catalog"),
-                articleTable: String = CompanyValues.valueOrEmpty("airtable.table.article_catalog"),
-                manufacturerTable: String = CompanyValues.valueOrEmpty("airtable.table.manufacturers_new"),
-                categoryTable: String = CompanyValues.valueOrEmpty("airtable.table.categories_new"),
-                saleField: String = CompanyValues.valueOrEmpty("airtable.field.sale_price")) {
+                baseID: String = CompanyValuesStore.valueOrEmpty("airtable.base.article_catalog"),
+                articleTable: String = CompanyValuesStore.valueOrEmpty("airtable.table.article_catalog"),
+                manufacturerTable: String = CompanyValuesStore.valueOrEmpty("airtable.table.manufacturers_new"),
+                categoryTable: String = CompanyValuesStore.valueOrEmpty("airtable.table.categories_new"),
+                saleField: String = CompanyValuesStore.valueOrEmpty("airtable.field.sale_price")) {
         self.fetch = fetch
         self.baseID = baseID
         self.articleTable = articleTable
@@ -86,7 +86,7 @@ public actor StockStore: StockPort {
     private var items: [StockItem] = []
 
     public init(fetch: any RecordFetchPort,
-                baseID: String = CompanyValues.valueOrEmpty("airtable.base.article_catalog"),
+                baseID: String = CompanyValuesStore.valueOrEmpty("airtable.base.article_catalog"),
                 table: String? = nil) {
         loader = RecordListStore(fetch: fetch, baseID: baseID, table: table ?? Self.tableName, map: StockEngine.items(from:))
     }
@@ -131,7 +131,7 @@ public struct AnchorRowStore: AnchorRowsPort {
     private let table: String
 
     public init(fetch: any RecordFetchPort,
-                baseID: String = CompanyValues.valueOrEmpty("airtable.base.estimation_model"),
+                baseID: String = CompanyValuesStore.valueOrEmpty("airtable.base.estimation_model"),
                 table: String? = nil) {
         self.fetch = fetch
         self.baseID = baseID
@@ -153,10 +153,10 @@ public struct CustomerContactStore: ContactFeedPort {
     private let addressField: String
 
     public init(fetch: any RecordFetchPort,
-                baseID: String = CompanyValues.valueOrEmpty("airtable.base.golden_customers"),
-                table: String = CompanyValues.valueOrEmpty("airtable.table.golden_customers"),
-                nameField: String = CompanyValues.valueOrEmpty("airtable.field.customer_name"),
-                addressField: String = CompanyValues.valueOrEmpty("airtable.field.customer_email")) {
+                baseID: String = CompanyValuesStore.valueOrEmpty("airtable.base.golden_customers"),
+                table: String = CompanyValuesStore.valueOrEmpty("airtable.table.golden_customers"),
+                nameField: String = CompanyValuesStore.valueOrEmpty("airtable.field.customer_name"),
+                addressField: String = CompanyValuesStore.valueOrEmpty("airtable.field.customer_email")) {
         self.fetch = fetch
         self.baseID = baseID
         self.table = table
@@ -185,7 +185,7 @@ public struct EstimationParameterStore: CarcassParameterPort {
     private let table: String
 
     public init(fetch: any RecordFetchPort,
-                baseID: String = CompanyValues.valueOrEmpty("airtable.base.estimation_model"),
+                baseID: String = CompanyValuesStore.valueOrEmpty("airtable.base.estimation_model"),
                 table: String? = nil) {
         self.fetch = fetch
         self.baseID = baseID

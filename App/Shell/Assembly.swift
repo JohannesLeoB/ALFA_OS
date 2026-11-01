@@ -49,7 +49,7 @@ final class Assembly {
         let settingStore = SettingStore(database: database)
         let settings = try SettingsState(settings: settingStore, templates: TemplateStore())
         for (entry, key) in Self.companySeeds where settings.company[entry.rawValue]?.isEmpty != false {
-            let value = CompanyValues.valueOrEmpty(key)
+            let value = CompanyValuesStore.valueOrEmpty(key)
             if !value.isEmpty { settings.setCompany(entry, value) }
         }
         let keychain = KeychainStore()

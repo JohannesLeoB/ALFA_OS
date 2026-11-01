@@ -1,6 +1,6 @@
 import Foundation
 
-public enum CompanyValues {
+public enum CompanyValuesStore {
     private static let values: [String: String] = load()
 
     public static func valueOrEmpty(_ key: String) -> String {
@@ -14,10 +14,4 @@ public enum CompanyValues {
               let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return [:] }
         return object.compactMapValues { $0 as? String }
     }
-}
-
-public enum AppIdentity {
-    public static let name = "ALFA_OS"
-    static let bundleID = "com.johannesleoberger.alfaos"
-    public static let keychainPrefix = "\(bundleID)."
 }

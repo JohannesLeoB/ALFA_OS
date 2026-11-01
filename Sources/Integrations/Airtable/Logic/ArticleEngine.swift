@@ -164,8 +164,8 @@ public struct WriteAllowlist: Sendable {
         self.deletable = Self.pruned(deletable)
     }
 
-    static public func standard() -> WriteAllowlist {
-        func value(_ key: String) -> String { CompanyValues.valueOrEmpty(key) }
+    static public func standard(values: (String) -> String) -> WriteAllowlist {
+        func value(_ key: String) -> String { values(key) }
         let entries: [(String, [String])] = [
             (value("airtable.base.golden_customers"), [value("airtable.table.golden_customers"), value("airtable.table.contacts")]),
             (value("airtable.base.projects"), [

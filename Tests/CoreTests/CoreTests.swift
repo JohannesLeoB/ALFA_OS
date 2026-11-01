@@ -85,7 +85,7 @@ final class CoreTests: XCTestCase {
     }
 
     func testCompanyValuesDefaultToEmpty() {
-        XCTAssertEqual(CompanyValues.valueOrEmpty("test.key.that.is.not.configured"), "")
+        XCTAssertEqual(CompanyValuesStore.valueOrEmpty("test.key.that.is.not.configured"), "")
     }
 
     func testPlaceholdersAreFilledInOnePassOverTheTemplate() {

@@ -11,7 +11,7 @@ public struct AirtableClient: RecordFetchPort, RecordCreatePort, RecordUpdatePor
     private let http: any HttpPort
     private let allowlist: WriteAllowlist
 
-    public init(credentials: any CredentialsPort, http: any HttpPort, allowlist: WriteAllowlist = .standard()) {
+    public init(credentials: any CredentialsPort, http: any HttpPort, allowlist: WriteAllowlist = .standard(values: CompanyValuesStore.valueOrEmpty)) {
         self.credentials = credentials
         self.http = http
         self.allowlist = allowlist
@@ -127,7 +127,7 @@ public struct ConnectionCheck: ConnectionCheckPort {
     private let http: any HttpPort
     private let table: String
 
-    public init(http: any HttpPort, table: String = CompanyValues.valueOrEmpty("airtable.table.projects")) {
+    public init(http: any HttpPort, table: String = CompanyValuesStore.valueOrEmpty("airtable.table.projects")) {
         self.http = http
         self.table = table
     }
