@@ -6,7 +6,7 @@ import Observation
 public final class ChatState {
     public enum Note: Equatable, Sendable {
         case cleared
-        case rejected(AttachmentStore.Failure)
+        case rejected(AttachmentFailure)
     }
 
     public struct Pending: Identifiable, Equatable, Sendable {
@@ -55,7 +55,7 @@ public final class ChatState {
             do {
                 let file = try await attachments.save(url)
                 pending.append(Pending(id: UUID(), file: file))
-            } catch let failure as AttachmentStore.Failure {
+            } catch let failure as AttachmentFailure {
                 show(.rejected(failure))
             } catch {
                 show(.rejected(.unreadable(url.lastPathComponent)))

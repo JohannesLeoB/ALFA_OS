@@ -88,7 +88,7 @@ public final class ChatStore: ChatPort {
         }
     }
 
-    func updateStreamingText(id: UUID, text: String, in scope: ConversationScope) {
+    public func updateStreamingText(id: UUID, text: String, in scope: ConversationScope) {
         let key = scope.rawKey
         guard var list = byScope[key], let index = list.firstIndex(where: { $0.id == id }) else { return }
         var blocks = list[index].blocks
@@ -101,7 +101,7 @@ public final class ChatStore: ChatPort {
         byScope[key] = list
     }
 
-    func updateStreamingActivities(id: UUID, activities: [ContentBlock], in scope: ConversationScope) {
+    public func updateStreamingActivities(id: UUID, activities: [ContentBlock], in scope: ConversationScope) {
         let key = scope.rawKey
         guard var list = byScope[key], let index = list.firstIndex(where: { $0.id == id }) else { return }
         let text = list[index].blocks.first { if case .text = $0 { true } else { false } } ?? .text("")
@@ -109,7 +109,7 @@ public final class ChatStore: ChatPort {
         byScope[key] = list
     }
 
-    func updateAssistantTurn(id: UUID, blocks: [ContentBlock], status: TurnStatus,
+    public func updateAssistantTurn(id: UUID, blocks: [ContentBlock], status: TurnStatus,
                              in scope: ConversationScope) throws {
         let key = scope.rawKey
         guard var list = byScope[key], let index = list.firstIndex(where: { $0.id == id }) else { return }
@@ -204,7 +204,7 @@ private struct StoredMemorySummary: Codable, FetchableRecord, PersistableRecord 
 }
 
 @MainActor
-public final class MemoryStore {
+public final class MemoryStore: MemoryPort {
     static let fallbackOwner = "local"
 
     private let database: SQLiteStore

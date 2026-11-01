@@ -364,7 +364,7 @@ struct AssistantToast: View {
         }
     }
 
-    private func message(_ failure: AttachmentStore.Failure) -> String {
+    private func message(_ failure: AttachmentFailure) -> String {
         switch failure {
         case .unsupported(let name): appearance.format("shell.assistantAttachment.unsupported", name)
         case .tooLarge(let name): appearance.format("shell.assistantAttachment.tooLarge", name)

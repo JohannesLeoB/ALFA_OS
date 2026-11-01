@@ -2,6 +2,8 @@ import Foundation
 import Hub
 
 enum Grounding {
+    static let volatileMarker = "\n\u{1D}\n"
+
     struct Input: Sendable {
         var profile: UserProfile?
         var focusedProjectID: String?
@@ -87,7 +89,7 @@ enum Grounding {
         }
         let stable = fixed.joined(separator: "\n")
         let volatile = changing.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
-        return volatile.isEmpty ? stable : stable + ClaudeClient.volatileMarker + volatile
+        return volatile.isEmpty ? stable : stable + Grounding.volatileMarker + volatile
     }
 
     static func toolsBlock(_ input: Input, text: any TextPort) -> String {

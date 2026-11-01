@@ -6,14 +6,6 @@ import ImageIO
 import UniformTypeIdentifiers
 
 public struct AttachmentStore: AttachmentPort {
-    enum Kind: Equatable, Sendable { case image, pdf, text }
-
-    public enum Failure: Error, Equatable {
-        case unsupported(String)
-        case tooLarge(String)
-        case unreadable(String)
-    }
-
     static let imageLongEdge = 1568
     static let imageByteLimit = 4_000_000
     static let documentByteLimit = Tokens.Count.chatDocumentByteLimit
@@ -26,13 +18,6 @@ public struct AttachmentStore: AttachmentPort {
         self.root = root
     }
 
-    static func kind(forMimeType mime: String) -> Kind? {
-        if mime.hasPrefix("image/") { return .image }
-        if mime == "application/pdf" { return .pdf }
-        if mime.hasPrefix("text/") || mime == "application/json" { return .text }
-        return nil
-    }
-
     static func mimeType(of url: URL) -> String {
         UTType(filenameExtension: url.pathExtension)?.preferredMIMEType ?? "application/octet-stream"
     }
@@ -42,10 +27,10 @@ public struct AttachmentStore: AttachmentPort {
     public func save(_ url: URL) async throws -> AttachmentRef {
         let name = url.lastPathComponent
         let mime = Self.mimeType(of: url)
-        guard let kind = Self.kind(forMimeType: mime) else { throw Failure.unsupported(name) }
+        guard let kind = AttachmentKind(mimeType: mime) else { throw AttachmentFailure.unsupported(name) }
         let size = (try? url.resourceValues(forKeys: [.fileSizeKey]))?.fileSize
-        if kind == .pdf, let size, size > Self.documentByteLimit { throw Failure.tooLarge(name) }
-        guard let data = try? Data(contentsOf: url) else { throw Failure.unreadable(name) }
+        if kind == .pdf, let size, size > Self.documentByteLimit { throw AttachmentFailure.tooLarge(name) }
+        guard let data = try? Data(contentsOf: url) else { throw AttachmentFailure.unreadable(name) }
         return try save(Attachment(filename: name, mimeType: mime, data: data))
     }
 
@@ -57,22 +42,22 @@ public struct AttachmentStore: AttachmentPort {
     }
 
     func save(_ file: Attachment) throws -> AttachmentRef {
-        guard let kind = Self.kind(forMimeType: file.mimeType) else { throw Failure.unsupported(file.filename) }
+        guard let kind = AttachmentKind(mimeType: file.mimeType) else { throw AttachmentFailure.unsupported(file.filename) }
         var mime = file.mimeType
         var data = file.data
         switch kind {
         case .image:
             if Self.wireImageTypes.contains(mime) == false || data.count > Self.imageByteLimit {
-                guard let jpeg = Self.jpegData(from: data) else { throw Failure.unreadable(file.filename) }
+                guard let jpeg = Self.jpegData(from: data) else { throw AttachmentFailure.unreadable(file.filename) }
                 data = jpeg
                 mime = "image/jpeg"
             }
-            if data.count > Self.imageByteLimit { throw Failure.tooLarge(file.filename) }
+            if data.count > Self.imageByteLimit { throw AttachmentFailure.tooLarge(file.filename) }
         case .pdf:
-            if data.count > Self.documentByteLimit { throw Failure.tooLarge(file.filename) }
+            if data.count > Self.documentByteLimit { throw AttachmentFailure.tooLarge(file.filename) }
         case .text:
-            guard let text = String(data: data, encoding: .utf8) else { throw Failure.unreadable(file.filename) }
-            if text.count > Self.textCharacterLimit { throw Failure.tooLarge(file.filename) }
+            guard let text = String(data: data, encoding: .utf8) else { throw AttachmentFailure.unreadable(file.filename) }
+            if text.count > Self.textCharacterLimit { throw AttachmentFailure.tooLarge(file.filename) }
         }
         let digest = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
         let ext = mime == file.mimeType ? (file.filename as NSString).pathExtension : "jpg"

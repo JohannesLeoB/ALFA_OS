@@ -10,11 +10,11 @@ public final class ConversationEngine {
     static let distillTokens = 600
     static let usageLog = Logger(subsystem: Log.subsystem, category: "assistant.usage")
 
-    private let chat: ChatStore
+    private let chat: any ChatPort
     private let provider: any ConversationPort
     private let text: any TextPort
-    private let memory: MemoryStore?
-    private let log: IntegrationLogStore?
+    private let memory: (any MemoryPort)?
+    private let log: (any ToolAuditPort)?
     private let toolTimeout: Duration
     private let turnDeadline: TimeInterval
     private var registry: ToolRegistry
@@ -24,8 +24,8 @@ public final class ConversationEngine {
     private(set) var isResponding = false
     private(set) var lastRoutedModel: String?
 
-    public init(chat: ChatStore, provider: any ConversationPort, registry: ToolRegistry, text: any TextPort,
-                memory: MemoryStore? = nil, log: IntegrationLogStore? = nil,
+    public init(chat: any ChatPort, provider: any ConversationPort, registry: ToolRegistry, text: any TextPort,
+                memory: (any MemoryPort)? = nil, log: (any ToolAuditPort)? = nil,
                 toolTimeout: Duration = .seconds(15), turnDeadline: TimeInterval = 75) {
         self.chat = chat
         self.provider = provider
@@ -60,7 +60,7 @@ public final class ConversationEngine {
         defer { isResponding = false }
 
         let attachmentBlocks: [ContentBlock] = attachments.map {
-            AttachmentStore.kind(forMimeType: $0.mimeType) == .image ? .image($0) : .document($0)
+            AttachmentKind(mimeType: $0.mimeType) == .image ? .image($0) : .document($0)
         }
         let user = Message(role: .user, blocks: (trimmed.isEmpty ? [] : [.text(trimmed)]) + attachmentBlocks)
         let placeholder = Message(role: .assistant, blocks: [.text("")], status: .streaming)

@@ -2,7 +2,6 @@ import Foundation
 import Hub
 
 public struct ClaudeClient: ConversationPort {
-    static let volatileMarker = "\n\u{1D}\n"
     public static let endpoint = URL(string: "https://api.anthropic.com/v1/messages")!
     static let apiVersion = "2023-06-01"
     static let plainTimeout: TimeInterval = 30
@@ -112,7 +111,7 @@ public struct ClaudeClient: ConversationPort {
     func attachmentBlock(_ ref: AttachmentRef, withData: Bool) -> WireBlock {
         let placeholder = WireBlock.text("[attachment: \(ref.fileName)]")
         guard withData, let data = attachments?.data(for: ref),
-              let kind = AttachmentStore.kind(forMimeType: ref.mimeType) else { return placeholder }
+              let kind = AttachmentKind(mimeType: ref.mimeType) else { return placeholder }
         switch kind {
         case .image:
             return .image(mediaType: ref.mimeType, base64: data.base64EncodedString())
@@ -180,7 +179,7 @@ public struct ClaudeClient: ConversationPort {
     }
 
     static func systemBlocks(from system: String) -> [SystemBlock] {
-        let parts = system.components(separatedBy: volatileMarker)
+        let parts = system.components(separatedBy: Grounding.volatileMarker)
         guard parts.count == 2, parts[1].isEmpty == false else {
             return [SystemBlock(text: system, cacheControl: CacheControl())]
         }

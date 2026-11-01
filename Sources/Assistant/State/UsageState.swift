@@ -8,10 +8,10 @@ public final class UsageState {
     public private(set) var outputPrice = ""
     public private(set) var now = Date()
 
-    @ObservationIgnored private let store: ClaudeUsageStore
+    @ObservationIgnored private let store: any UsagePort
     @ObservationIgnored private let calendar: Calendar
 
-    public init(store: ClaudeUsageStore, calendar: Calendar = .current) {
+    public init(store: any UsagePort, calendar: Calendar = .current) {
         self.store = store
         self.calendar = calendar
         refresh()

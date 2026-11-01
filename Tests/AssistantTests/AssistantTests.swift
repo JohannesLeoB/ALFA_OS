@@ -390,7 +390,7 @@ final class AssistantTests: XCTestCase {
         XCTAssertTrue(prompt.contains("assistant.tool.schaetze_projekt.prompt.catalog"))
         XCTAssertTrue(prompt.contains("assistant.tool.list_drive_folder.prompt"))
         XCTAssertFalse(prompt.contains("assistant.tool.list_zeiten.prompt"))
-        XCTAssertTrue(prompt.contains(ClaudeClient.volatileMarker))
+        XCTAssertTrue(prompt.contains(Grounding.volatileMarker))
         let blocks = ClaudeClient.systemBlocks(from: prompt)
         XCTAssertEqual(blocks.count, 2)
         XCTAssertNotNil(blocks[0].cacheControl)
@@ -700,7 +700,7 @@ final class AssistantTests: XCTestCase {
         let big = Attachment(filename: "lang.txt", mimeType: "text/plain",
                              data: Data(String(repeating: "a", count: AttachmentStore.textCharacterLimit + 1).utf8))
         XCTAssertThrowsError(try store.save(big)) { error in
-            XCTAssertEqual(error as? AttachmentStore.Failure, .tooLarge("lang.txt"))
+            XCTAssertEqual(error as? AttachmentFailure, .tooLarge("lang.txt"))
         }
         let chat = ChatStore(database: database, userID: "u")
         let engine = ConversationEngine(chat: chat, provider: ScriptedProvider([]), registry: ToolRegistry(tools: []), text: KeyText())
@@ -942,7 +942,7 @@ final class AssistantTests: XCTestCase {
     }
 
     func testCacheSplitsTheSystemPromptAtTheVolatileMarker() {
-        let split = ClaudeClient.systemBlocks(from: "a" + ClaudeClient.volatileMarker + "b")
+        let split = ClaudeClient.systemBlocks(from: "a" + Grounding.volatileMarker + "b")
         XCTAssertEqual(split.map(\.text), ["a", "b"])
         XCTAssertEqual(split.map { $0.cacheControl != nil }, [true, false])
     }
@@ -951,7 +951,7 @@ final class AssistantTests: XCTestCase {
         let whole = ClaudeClient.systemBlocks(from: "ab")
         XCTAssertEqual(whole.map(\.text), ["ab"])
         XCTAssertNotNil(whole[0].cacheControl)
-        let trailing = ClaudeClient.systemBlocks(from: "a" + ClaudeClient.volatileMarker)
+        let trailing = ClaudeClient.systemBlocks(from: "a" + Grounding.volatileMarker)
         XCTAssertEqual(trailing.count, 1)
     }
 
