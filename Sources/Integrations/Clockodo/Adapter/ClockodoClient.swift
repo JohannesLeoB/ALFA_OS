@@ -123,7 +123,7 @@ public struct ClockodoClient: MasterDataPort, BookingPort, TimeEntryPort {
 
     private func update(id: Int, fields: [String: Any], confirmed: Bool) async throws {
         try Self.assertConfirmed(confirmed)
-        let body = try? JSONSerialization.data(withJSONObject: fields)
+        let body = try JSONSerialization.data(withJSONObject: fields)
         _ = try await send("PUT", path: "entries/\(id)", body: body)
     }
 

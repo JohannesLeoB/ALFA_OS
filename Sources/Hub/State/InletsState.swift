@@ -142,8 +142,13 @@ final class InletsState: RulesPort {
         guard let names = try? inletStore.slots(of: inlet.id), !names.isEmpty else { return nil }
         var values: [String: String] = [:]
         for name in names {
-            guard let value = try? configuration.keychain.get(KeySlot(inlet: inlet.id, name: name)) else { return nil }
-            values[name] = value
+            do {
+                guard let value = try configuration.keychain.get(KeySlot(inlet: inlet.id, name: name)) else { return nil }
+                values[name] = value
+            } catch {
+                Log.failure("KeySlotUnreadable", detail: String(describing: error))
+                return nil
+            }
         }
         let loaded = Grant(values: values)
         grants[inlet.id] = loaded

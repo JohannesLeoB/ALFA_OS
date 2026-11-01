@@ -81,7 +81,7 @@ extension InletsState: SetupPort {
             inlet.state = .connected(probed: configuration.clock())
             try inletStore.save(inlet, slots: SetupEngine.sorted(grant).map(\.key))
         } catch {
-            for slot in written { try? configuration.keychain.delete(slot) }
+            for slot in written { release(slot) }
             try? await provider.signIn.signOut(inlet)
             throw SetupEngine.keychainFailure(error)
         }
@@ -91,6 +91,22 @@ extension InletsState: SetupPort {
         emit(.inletChanged(inlet.id))
         for capability in inlet.capabilities { plan(inlet.id, capability) }
         return inlet
+    }
+
+    private func release(_ slot: KeySlot) {
+        do {
+            try configuration.keychain.delete(slot)
+        } catch {
+            Log.failure("KeySlotNotReleased", detail: String(describing: error))
+        }
+    }
+
+    private func restore(_ value: String, at slot: KeySlot) {
+        do {
+            try configuration.keychain.put(value, at: slot)
+        } catch {
+            Log.failure("KeySlotNotRestored", detail: String(describing: error))
+        }
     }
 
     private func renew(_ existing: Inlet, with grant: Grant, account: String? = nil) throws(SetupFailure) -> Inlet {
@@ -111,7 +127,7 @@ extension InletsState: SetupPort {
             try inletStore.save(inlet, slots: SetupEngine.sorted(grant).map(\.key))
             let kept = Set(grant.values.keys)
             for name in previous where !kept.contains(name) {
-                try? configuration.keychain.delete(KeySlot(inlet: existing.id, name: name))
+                release(KeySlot(inlet: existing.id, name: name))
             }
             grants[inlet.id] = grant
             if let index = records.firstIndex(where: { $0.id == inlet.id }) { records[index] = inlet }
@@ -121,7 +137,7 @@ extension InletsState: SetupPort {
         } catch {
             for name in written {
                 let slot = KeySlot(inlet: existing.id, name: name)
-                if let value = saved[name] { try? configuration.keychain.put(value, at: slot) } else { try? configuration.keychain.delete(slot) }
+                if let value = saved[name] { restore(value, at: slot) } else { release(slot) }
             }
             throw SetupEngine.keychainFailure(error)
         }
@@ -184,7 +200,7 @@ extension InletsState: SetupPort {
         }
         func restore(_ done: [String]) {
             for name in done {
-                if let value = saved[name] { try? configuration.keychain.put(value, at: KeySlot(inlet: inletID, name: name)) }
+                if let value = saved[name] { self.restore(value, at: KeySlot(inlet: inletID, name: name)) }
             }
         }
         var attempted: [String] = []

@@ -40,7 +40,12 @@ public struct AirtableClient: RecordFetchPort, RecordCreatePort, RecordUpdatePor
         }
         let body: [String: Any] = ["records": [["fields": fields.mapValues(\.jsonValue)]]]
         let data = try await send("POST", baseID: baseID, table: table, body: body)
-        return (try? JSONDecoder().decode(Created.self, from: data))?.records.first?.id ?? ""
+        do {
+            return try JSONDecoder().decode(Created.self, from: data).records.first?.id ?? ""
+        } catch {
+            Log.failure("CreatedRecordUnreadable", detail: String(describing: error))
+            return ""
+        }
     }
 
     func updateRecord(baseID: String, table: String, recordID: String, fields: [String: FieldValue]) async throws {

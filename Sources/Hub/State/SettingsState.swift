@@ -1,3 +1,4 @@
+import Core
 import Design
 import Foundation
 import Observation
@@ -396,7 +397,13 @@ public final class ContactSourceState {
     public func refresh() async -> Bool {
         var saved = true
         for feed in feeds where isOn(feed.source.id) {
-            guard let fetched = try? await feed.port.people() else { continue }
+            let fetched: [ContactPerson]
+            do {
+                fetched = try await feed.port.people()
+            } catch {
+                Log.failure("ContactsNotFetched", detail: String(describing: error))
+                continue
+            }
             cached[feed.source.id] = fetched
             do {
                 try settings?.store(fetched, forKey: SettingsKey.contactCache(feed.source.id))

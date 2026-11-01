@@ -1,3 +1,4 @@
+import Core
 import Foundation
 
 public struct KeyAccess: ProviderPort {
@@ -114,9 +115,18 @@ public final class ClaudeCredential {
 
     public func current() -> ClaudeKey? {
         guard let inlet = setup.inlets.first(where: { $0.provider == Self.provider && $0.state.isConnected }),
-              let key = try? keychain.get(KeySlot(inlet: inlet.id, name: "key")), !key.isEmpty else { return nil }
-        let model = (try? keychain.get(KeySlot(inlet: inlet.id, name: "model"))) ?? ""
+              let key = read(inlet.id, "key"), !key.isEmpty else { return nil }
+        let model = read(inlet.id, "model") ?? ""
         return ClaudeKey(apiKey: key, model: model.isEmpty ? ClaudeKey.defaultModel : model)
+    }
+
+    private func read(_ inlet: Inlet.ID, _ name: String) -> String? {
+        do {
+            return try keychain.get(KeySlot(inlet: inlet, name: name))
+        } catch {
+            Log.failure("KeySlotUnreadable", detail: String(describing: error))
+            return nil
+        }
     }
 }
 

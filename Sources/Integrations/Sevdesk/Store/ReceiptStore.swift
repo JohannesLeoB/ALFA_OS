@@ -1,4 +1,5 @@
 import Assistant
+import Core
 import Foundation
 import GRDB
 import Hub
@@ -22,9 +23,15 @@ public struct ReceiptStore: ReceiptPort {
     }
 
     public func all() -> [Receipt] {
-        let rows: [Data] = (try? database.read { db in
-            try Data.fetchAll(db, sql: "SELECT json FROM sevdeskReceipts ORDER BY seq")
-        }) ?? []
+        let rows: [Data]
+        do {
+            rows = try database.read { db in
+                try Data.fetchAll(db, sql: "SELECT json FROM sevdeskReceipts ORDER BY seq")
+            }
+        } catch {
+            Log.failure("ReceiptsUnreadable", detail: String(describing: error))
+            rows = []
+        }
         return rows.compactMap { try? JSONDecoder().decode(Receipt.self, from: $0) }
     }
 
@@ -61,8 +68,10 @@ public struct ReceiptStore: ReceiptPort {
 
     public func adopt(legacy defaults: UserDefaults) throws {
         guard let data = defaults.data(forKey: Self.legacyKey) else { return }
-        if let list = try? JSONDecoder().decode([Receipt].self, from: data) {
-            for receipt in list { try register(receipt) }
+        do {
+            for receipt in try JSONDecoder().decode([Receipt].self, from: data) { try register(receipt) }
+        } catch let error as DecodingError {
+            Log.failure("LegacyReceiptsUnreadable", detail: String(describing: error))
         }
         defaults.removeObject(forKey: Self.legacyKey)
     }

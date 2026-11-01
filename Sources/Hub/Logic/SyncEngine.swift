@@ -1,3 +1,4 @@
+import Core
 import Foundation
 
 enum SyncEngine {
@@ -111,8 +112,12 @@ public enum IntegrationReadEngine {
         guard let inlet = reading.inlets.first else { return .none }
         var values = IntegrationValues.none
         for field in reading.info.fields {
-            guard let value = try? keychain.get(KeySlot(inlet: inlet.id, name: field.id)), !value.isEmpty else { continue }
-            if !field.secret { values.text[field.id] = value }
+            do {
+                guard let value = try keychain.get(KeySlot(inlet: inlet.id, name: field.id)), !value.isEmpty else { continue }
+                if !field.secret { values.text[field.id] = value }
+            } catch {
+                Log.failure("KeySlotUnreadable", detail: String(describing: error))
+            }
         }
         return values
     }

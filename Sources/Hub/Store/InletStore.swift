@@ -162,12 +162,16 @@ public final class CostStore: CostPort {
 
     public func book(_ item: CostItem) {
         let day = Self.day(of: item.at)
-        try? database.write { db in
-            try db.execute(sql: """
-                INSERT INTO cost_day (inlet, capability, day, calls, bytes, tokens) VALUES (?, ?, ?, ?, ?, ?)
-                ON CONFLICT(inlet, capability, day) DO UPDATE SET
-                    calls = calls + excluded.calls, bytes = bytes + excluded.bytes, tokens = tokens + excluded.tokens
-                """, arguments: [item.inlet, item.capability.rawValue, day, item.cost.calls, item.cost.bytes, item.cost.tokens])
+        do {
+            try database.write { db in
+                try db.execute(sql: """
+                    INSERT INTO cost_day (inlet, capability, day, calls, bytes, tokens) VALUES (?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(inlet, capability, day) DO UPDATE SET
+                        calls = calls + excluded.calls, bytes = bytes + excluded.bytes, tokens = tokens + excluded.tokens
+                    """, arguments: [item.inlet, item.capability.rawValue, day, item.cost.calls, item.cost.bytes, item.cost.tokens])
+            }
+        } catch {
+            Log.failure("CostNotBooked", detail: String(describing: error))
         }
     }
 }
