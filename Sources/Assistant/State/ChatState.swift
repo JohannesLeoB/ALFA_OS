@@ -1,3 +1,4 @@
+import Core
 import Foundation
 import Hub
 import Observation
@@ -48,7 +49,11 @@ public final class ChatState {
     }
 
     public func load() {
-        try? chat.loadIfNeeded(scope)
+        do {
+            try chat.loadIfNeeded(scope)
+        } catch {
+            Log.failure("ChatUnloaded", detail: String(describing: error))
+        }
     }
 
     public func attach(_ urls: [URL]) async {
@@ -123,7 +128,11 @@ public final class ChatState {
             do {
                 for message in restore { try chat.append(message, to: scope) }
             } catch {
-                try? chat.clear(scope)
+                do {
+                    try chat.clear(scope)
+                } catch {
+                    Log.failure("ChatUncleared", detail: String(describing: error))
+                }
                 show(.cleared)
                 return
             }

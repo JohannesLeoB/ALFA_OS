@@ -417,7 +417,12 @@ struct ProjectRootRows: View {
         }
         .task(id: inlet.id) {
             root = context.roots.current()
-            drives = (try? await port()?.drives()) ?? []
+            do {
+                drives = try await port()?.drives() ?? []
+            } catch {
+                drives = []
+                Log.failure("DrivesUnlisted", detail: String(describing: error))
+            }
         }
     }
 
@@ -458,7 +463,13 @@ struct ProjectRootRows: View {
     }
 
     private func listing(_ folderID: String) async -> [FileEntry] {
-        guard let all = try? await port()?.files(in: folderID) else { return [] }
+        let all: [FileEntry]
+        do {
+            all = try await port()?.files(in: folderID) ?? []
+        } catch {
+            Log.failure("FoldersUnlisted", detail: String(describing: error))
+            return []
+        }
         return all.filter(\.isFolder).sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
     }
 

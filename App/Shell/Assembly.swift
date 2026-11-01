@@ -157,7 +157,13 @@ final class Assembly {
 
     private static func google(directory: URL, http: URLSession, roots: DriveRootStore,
                                openBrowser: @escaping @Sendable (URL) async -> Bool) -> AccessRouter? {
-        guard let config = try? ClientConfigStore(directory: directory).load() else { return nil }
+        let config: ClientConfig
+        do {
+            config = try ClientConfigStore(directory: directory).load()
+        } catch {
+            Log.failure("GoogleConfigUnread", detail: String(describing: error))
+            return nil
+        }
         return AccessRouter(
             config: config, drive: DriveConfigStore.load(in: directory), http: http, openBrowser: openBrowser,
             makeRedirect: {
@@ -169,7 +175,13 @@ final class Assembly {
 
     private static func outlook(directory: URL, http: URLSession,
                                 openBrowser: @escaping @Sendable (URL) async -> Bool) -> OutlookAccess? {
-        guard let registration = try? RegistrationStore(directory: directory).load() else { return nil }
+        let registration: Registration
+        do {
+            registration = try RegistrationStore(directory: directory).load()
+        } catch {
+            Log.failure("MicrosoftRegistrationUnread", detail: String(describing: error))
+            return nil
+        }
         return OutlookAccess(
             registration: registration, http: http, openBrowser: openBrowser,
             acceptedPage: signInPage(title: String(localized: String.LocalizationValue("microsoft.oauth.accepted")), accepted: true),

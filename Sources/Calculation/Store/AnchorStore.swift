@@ -49,7 +49,12 @@ public struct CompositeAnchorStore: PriceAnchorPort {
     }
 
     private func orEmpty(_ provider: any PriceAnchorPort) -> [CandidateReleaseDecision] {
-        (try? provider.activeAnchors()) ?? []
+        do {
+            return try provider.activeAnchors()
+        } catch {
+            Log.failure("AnchorsUnread", detail: String(describing: error))
+            return []
+        }
     }
 }
 

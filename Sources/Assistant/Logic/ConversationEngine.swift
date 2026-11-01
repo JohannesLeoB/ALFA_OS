@@ -71,8 +71,7 @@ public final class ConversationEngine {
             return
         }
         if privacy.assistantOff {
-            try? chat.updateAssistantTurn(id: placeholder.id, blocks: [.text(say("assistant.engine.assistantOff"))],
-                                          status: .complete, in: scope)
+            settle(placeholder.id, blocks: [.text(say("assistant.engine.assistantOff"))], status: .complete, in: scope)
             return
         }
 

@@ -37,7 +37,11 @@ public struct AttachmentStore: AttachmentPort {
     public func sweep(keeping paths: Set<String>) {
         let files = (try? FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)) ?? []
         for file in files where paths.contains(file.lastPathComponent) == false {
-            try? FileManager.default.removeItem(at: file)
+            do {
+                try FileManager.default.removeItem(at: file)
+            } catch {
+                Log.failure("AttachmentUnswept", detail: String(describing: error))
+            }
         }
     }
 

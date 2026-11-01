@@ -85,16 +85,20 @@ public final class ClaudeUsageStore: UsagePort {
 
     public func totals(from start: Date) -> UsageTotals {
         let first = Self.day(of: start)
-        let found = try? database.read { db -> UsageTotals in
-            guard let row = try Row.fetchOne(db, sql: """
-                SELECT COALESCE(SUM(input + cacheRead + cacheWrite), 0) AS input, COALESCE(SUM(output), 0) AS output,
-                       COALESCE(SUM(calls), 0) AS calls, MIN(day) AS since
-                FROM claude_usage WHERE day >= ?
-                """, arguments: [first]), (row["calls"] as Int? ?? 0) > 0 else { return UsageTotals() }
-            let since = (row["since"] as Int?).map { Date(timeIntervalSince1970: Double($0) * UsageEngine.secondsPerDay) }
-            return UsageTotals(input: row["input"], output: row["output"], calls: row["calls"], since: since)
+        do {
+            return try database.read { db -> UsageTotals in
+                guard let row = try Row.fetchOne(db, sql: """
+                    SELECT COALESCE(SUM(input + cacheRead + cacheWrite), 0) AS input, COALESCE(SUM(output), 0) AS output,
+                           COALESCE(SUM(calls), 0) AS calls, MIN(day) AS since
+                    FROM claude_usage WHERE day >= ?
+                    """, arguments: [first]), (row["calls"] as Int? ?? 0) > 0 else { return UsageTotals() }
+                let since = (row["since"] as Int?).map { Date(timeIntervalSince1970: Double($0) * UsageEngine.secondsPerDay) }
+                return UsageTotals(input: row["input"], output: row["output"], calls: row["calls"], since: since)
+            }
+        } catch {
+            Log.failure("UsageUnread", detail: String(describing: error))
+            return UsageTotals()
         }
-        return found ?? UsageTotals()
     }
 
     public func reset() {
@@ -106,16 +110,25 @@ public final class ClaudeUsageStore: UsagePort {
     }
 
     public func price(_ kind: UsagePrice) -> String {
-        let raw = try? database.read { db in
-            try String.fetchOne(db, sql: "SELECT price FROM claude_price WHERE kind = ?", arguments: [kind.rawValue])
+        do {
+            let raw = try database.read { db in
+                try String.fetchOne(db, sql: "SELECT price FROM claude_price WHERE kind = ?", arguments: [kind.rawValue])
+            }
+            return raw ?? ""
+        } catch {
+            Log.failure("PriceUnread", detail: String(describing: error))
+            return ""
         }
-        return raw.flatMap { $0 } ?? ""
     }
 
     public func setPrice(_ text: String, for kind: UsagePrice) {
-        try? database.write { db in
-            try db.execute(sql: "INSERT INTO claude_price (kind, price) VALUES (?, ?) ON CONFLICT(kind) DO UPDATE SET price = excluded.price",
-                           arguments: [kind.rawValue, text])
+        do {
+            try database.write { db in
+                try db.execute(sql: "INSERT INTO claude_price (kind, price) VALUES (?, ?) ON CONFLICT(kind) DO UPDATE SET price = excluded.price",
+                               arguments: [kind.rawValue, text])
+            }
+        } catch {
+            Log.failure("PriceUnsaved", detail: String(describing: error))
         }
     }
 }
