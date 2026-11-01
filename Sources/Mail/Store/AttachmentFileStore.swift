@@ -250,7 +250,7 @@ final class AttachmentFileStore {
         await Task.detached {
             do {
                 try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-                try data.write(to: url)
+                try data.write(to: url, options: .atomic)
                 return true
             } catch {
                 return false

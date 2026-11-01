@@ -180,7 +180,8 @@ public struct OutlookAccess: ProviderPort {
         let oauth = OAuthClient(registration: registration, http: http)
         self.oauth = oauth
         self.clock = clock
-        signIn = SignInClient(oauth: oauth, openBrowser: openBrowser, makeRedirect: makeRedirect, clock: clock)
+        signIn = SignInClient(oauth: oauth, openBrowser: openBrowser, makeRedirect: makeRedirect, clock: clock,
+                              release: { [mail] inlet in mail.release(inlet) })
         probe = ProbeClient(oauth: oauth, mail: mail, clock: clock)
     }
 
@@ -252,6 +253,7 @@ struct SignInClient: SignInPort {
     let openBrowser: @Sendable (URL) async -> Bool
     let makeRedirect: @Sendable () -> any RedirectPort
     let clock: @Sendable () -> Date
+    var release: @Sendable (Inlet.ID) -> Void = { _ in }
 
     func signIn(_ inlet: Inlet, input: [Field.ID: String]) async throws -> Grant {
         let server = makeRedirect()
@@ -281,5 +283,7 @@ struct SignInClient: SignInPort {
         return StoredToken(token: token, identity: state.identity, previousRefresh: refreshToken, now: clock()).grant
     }
 
-    func signOut(_ inlet: Inlet) async throws {}
+    func signOut(_ inlet: Inlet) async throws {
+        release(inlet.id)
+    }
 }
