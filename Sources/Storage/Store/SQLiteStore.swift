@@ -20,7 +20,7 @@ public final class SQLiteStore: Sendable {
         try Self.migrator().migrate(queue)
     }
 
-    public static func inMemory() throws -> SQLiteStore {
+    static func inMemory() throws -> SQLiteStore {
         try SQLiteStore()
     }
 

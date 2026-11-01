@@ -1,7 +1,7 @@
 import Core
 import Foundation
 import GRDB
-import Storage
+@testable import Storage
 import XCTest
 @testable import Calculation
 

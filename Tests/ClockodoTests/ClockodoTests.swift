@@ -1,7 +1,7 @@
 import Assistant
 import Foundation
 import Hub
-import Storage
+@testable import Storage
 import XCTest
 @testable import Clockodo
 

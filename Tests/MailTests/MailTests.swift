@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 @testable import Hub
 import Shell
-import Storage
+@testable import Storage
 import XCTest
 @testable import Mail
 

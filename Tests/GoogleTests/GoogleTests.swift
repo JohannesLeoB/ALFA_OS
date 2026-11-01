@@ -3,7 +3,7 @@ import Core
 import Foundation
 import Hub
 import Mail
-import Storage
+@testable import Storage
 import XCTest
 @testable import Google
 
