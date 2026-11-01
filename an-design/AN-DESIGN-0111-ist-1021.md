@@ -65,3 +65,6 @@ Grundlage: 43 Screenshots, die Johannes am 31.10. abends von Build 1021 gemacht 
 - Claude-Schlüssel und die übrigen Dienstschlüssel eintragen; Rolle, Firmenname, Projektordner, Impressum.
 - App-Name „mykilOS“ in der Google Cloud Console ändern.
 - Nur eine App-Instanz laufen lassen (zwei gleichzeitig teilen sich die Datenbank).
+
+## Nachtrag · Startfehler-Bildschirm (`main` d51331de)
+Startet die App nicht, zeigt sie heute „Fehler · Domäne Code“ mit dem Fehlertext und den Knopf „Schließen“ (beendet die App). Bitte einen Bogen liefern: Titel, Wortlaut, ob es „Erneut versuchen“ gibt, und ob „Beenden“ statt „Schließen“.
