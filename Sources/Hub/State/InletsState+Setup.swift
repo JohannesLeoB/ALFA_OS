@@ -203,7 +203,7 @@ extension InletsState: SetupPort {
             do {
                 try settingStore.remove(withPrefix: prefix + inletID + "|")
             } catch {
-                Log.failure("hub.remove.settings", detail: String(describing: error))
+                Log.failure("RemoveSettingsLeft", detail: String(describing: error))
             }
         }
         cadences = cadences.filter { !$0.key.hasPrefix(inletID + "|") }
@@ -212,7 +212,7 @@ extension InletsState: SetupPort {
             do {
                 try settingStore.remove(key: key)
             } catch {
-                Log.failure("hub.remove.settings", detail: String(describing: error))
+                Log.failure("RemoveSettingsLeft", detail: String(describing: error))
             }
         }
         grants[inletID] = nil

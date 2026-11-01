@@ -1,3 +1,4 @@
+import Core
 import Foundation
 import UserNotifications
 
@@ -52,7 +53,11 @@ public struct TodoAlarmClient: AlarmPort {
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: due)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: Self.identifier(todo.id), content: content, trigger: trigger)
-        try? await UNUserNotificationCenter.current().add(request)
+        do {
+            try await UNUserNotificationCenter.current().add(request)
+        } catch {
+            Log.failure("TodoAlarmUnset", detail: String(describing: error))
+        }
     }
 
     public func cancel(todoID: String) async {

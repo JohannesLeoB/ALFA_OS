@@ -105,12 +105,10 @@ public final class ConversationEngine {
                 try self.chat.updateAssistantTurn(id: placeholder.id, blocks: outcome.activities + [.text(outcome.answer)],
                                                   status: .complete, in: scope)
             } catch is CancellationError {
-                try? self.chat.updateAssistantTurn(id: placeholder.id, blocks: [.text(self.say("assistant.engine.cancelled"))],
-                                                   status: .complete, in: scope)
+                self.settle(placeholder.id, blocks: [.text(self.say("assistant.engine.cancelled"))], status: .complete, in: scope)
             } catch {
                 let failure = self.describe(error)
-                try? self.chat.updateAssistantTurn(id: placeholder.id, blocks: [.text(failure)],
-                                                   status: .failed(failure), in: scope)
+                self.settle(placeholder.id, blocks: [.text(failure)], status: .failed(failure), in: scope)
             }
         }
         activeTask = task
@@ -258,6 +256,14 @@ public final class ConversationEngine {
             convo.append(Message(role: .user, blocks: resultBlocks))
             chat.updateStreamingActivities(id: turn.placeholderID, activities: activities, in: turn.conversation)
             if repeated { return Outcome(answer: say("assistant.engine.noNewData"), activities: activities) }
+        }
+    }
+
+    private func settle(_ id: UUID, blocks: [ContentBlock], status: TurnStatus, in scope: ConversationScope) {
+        do {
+            try chat.updateAssistantTurn(id: id, blocks: blocks, status: status, in: scope)
+        } catch {
+            Log.failure("ChatUnsaved", detail: String(describing: error))
         }
     }
 

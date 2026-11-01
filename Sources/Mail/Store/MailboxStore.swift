@@ -386,7 +386,7 @@ public final class MailboxStore: MailboxPort {
             do {
                 try purge()
             } catch {
-                Log.failure("mail.purge.failed", detail: String(describing: error))
+                Log.failure("MailPurgeFailed", detail: String(describing: error))
                 return
             }
         }

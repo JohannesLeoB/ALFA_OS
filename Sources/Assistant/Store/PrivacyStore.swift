@@ -69,13 +69,17 @@ public final class ClaudeUsageStore: UsagePort {
 
     public func book(_ usage: TokenUsage, model: String, at date: Date) {
         let day = Self.day(of: date)
-        try? database.write { db in
-            try db.execute(sql: """
+        do {
+            try database.write { db in
+                try db.execute(sql: """
                 INSERT INTO claude_usage (day, model, calls, input, output, cacheRead, cacheWrite) VALUES (?, ?, 1, ?, ?, ?, ?)
                 ON CONFLICT(day, model) DO UPDATE SET
                     calls = calls + 1, input = input + excluded.input, output = output + excluded.output,
                     cacheRead = cacheRead + excluded.cacheRead, cacheWrite = cacheWrite + excluded.cacheWrite
                 """, arguments: [day, model, usage.input, usage.output, usage.cacheRead, usage.cacheWrite])
+            }
+        } catch {
+            Log.failure("UsageUnsaved", detail: String(describing: error))
         }
     }
 
@@ -94,7 +98,11 @@ public final class ClaudeUsageStore: UsagePort {
     }
 
     public func reset() {
-        try? database.write { db in try db.execute(sql: "DELETE FROM claude_usage") }
+        do {
+            try database.write { db in try db.execute(sql: "DELETE FROM claude_usage") }
+        } catch {
+            Log.failure("UsageUnsaved", detail: String(describing: error))
+        }
     }
 
     public func price(_ kind: UsagePrice) -> String {
