@@ -29,6 +29,9 @@ Johannes set these rules in the kitchen session. They apply to every record and 
 6. Catalogue page text stays on the studio Mac. It does not go into Git or Supabase.
 7. The drop folder `Training/05_Eingang_Quellen/neu` is read only when Johannes says so. `Training/00_Eingang_roh` is confidential and is not read.
 8. Every result of a session goes into this branch before the session ends. Work that exists only in a scratch folder or on one disk is not kept.
+9. A newer specification replaces an older one. A source that is more than 14 days older than a newer specification on the same topic is history, not a requirement.
+10. A statement of Johannes counts only as an English functional specification in a repository. Do not collect or cite loose quotes as requirements.
+11. Who may see purchase prices and margins is a setting of the app (settings and hub). Records here store the data. They do not restate that rule.
 
 ## Evidence
 
