@@ -122,12 +122,12 @@
    "en": "No services connected"
   },
   "settings.identity.signOut.sub.one": {
-   "de": "Trennt 1 Dienst · %@",
-   "en": "Disconnects 1 service · %@"
+   "de": "Trennt 1 Dienst · {1}",
+   "en": "Disconnects 1 service · {1}"
   },
   "settings.identity.signOut.sub.other": {
-   "de": "Trennt %@ Dienste · %@",
-   "en": "Disconnects %@ services · %@"
+   "de": "Trennt {1} Dienste · {2}",
+   "en": "Disconnects {1} services · {2}"
   },
   "settings.account.provider": {
    "de": "Anbieter",
@@ -186,12 +186,12 @@
    "en": "Sign-in is not set up."
   },
   "settings.sync.lastOK": {
-   "de": "Verbindung steht. Letzter Abgleich %@",
-   "en": "Connection is up. Last sync %@"
+   "de": "Verbindung steht. Letzter Abgleich {1}",
+   "en": "Connection is up. Last sync {1}"
   },
   "settings.sync.lastFailed": {
-   "de": "Fehler: %@. Letzter Abgleich %@",
-   "en": "Error: %@. Last sync %@"
+   "de": "Fehler: {1}. Letzter Abgleich {2}",
+   "en": "Error: {1}. Last sync {2}"
   },
   "settings.contacts.saved": {
    "de": "Eigene Kontakte",
@@ -213,10 +213,6 @@
    "de": "Quellen",
    "en": "Sources"
   },
-  "settings.row.projectRoot": {
-   "de": "Projektordner",
-   "en": "Project folder"
-  },
   "settings.value.choose": {
    "de": "Wählen",
    "en": "Choose"
@@ -230,8 +226,8 @@
    "en": "No folders found"
   },
   "settings.toast.rootChosen": {
-   "de": "Projektordner · %@",
-   "en": "Project folder · %@"
+   "de": "Projektordner · {1}",
+   "en": "Project folder · {1}"
   },
   "settings.action.clear": {
    "de": "Leeren",
@@ -281,10 +277,6 @@
    "de": "Anlegen",
    "en": "Create"
   },
-  "settings.templates.remove": {
-   "de": "Entfernen",
-   "en": "Remove"
-  },
   "settings.templates.remove.question": {
    "de": "Vorlage entfernen?",
    "en": "Remove template?"
@@ -317,25 +309,21 @@
    "de": "gerade eben",
    "en": "just now"
   },
-  "settings.toast.retry": {
-   "de": "Erneut versuchen",
-   "en": "Try Again"
-  },
   "settings.projectRoot.drive": {
    "de": "Laufwerk",
    "en": "Drive"
   },
   "settings.projectRoot.path": {
-   "de": "%@ · %@",
-   "en": "%@ · %@"
+   "de": "{1} · {2}",
+   "en": "{1} · {2}"
   },
   "settings.system.line": {
-   "de": "%@: %@",
-   "en": "%@: %@"
+   "de": "{1}: {2}",
+   "en": "{1}: {2}"
   },
   "settings.area.account": {
-   "de": "%@ · %@",
-   "en": "%@ · %@"
+   "de": "{1} · {2}",
+   "en": "{1} · {2}"
   },
   "settings.note.working": {
    "de": "{1} {2} von {3}",
@@ -346,8 +334,8 @@
    "en": "Check"
   },
   "settings.add.missing": {
-   "de": "Es fehlen: %@.",
-   "en": "Missing: %@."
+   "de": "Es fehlen: {1}.",
+   "en": "Missing: {1}."
   },
   "settings.mailStore.head": {
    "de": "Lokale Ablage",
@@ -405,10 +393,6 @@
    "de": "Ordner",
    "en": "Folder"
   },
-  "settings.mailStore.folder.default": {
-   "de": "Standard",
-   "en": "Default"
-  },
   "settings.mailStore.folder.custom": {
    "de": "Eigener Ordner",
    "en": "Custom folder"
@@ -462,8 +446,8 @@
    "en": "Browser sign-in"
   },
   "settings.access.company": {
-   "de": "%@ · für die Firma",
-   "en": "%@ · for the company"
+   "de": "{1} · für die Firma",
+   "en": "{1} · for the company"
   },
   "settings.access.emailKey": {
    "de": "E-Mail und Schlüssel",
@@ -478,8 +462,8 @@
    "en": "User and password"
   },
   "settings.access.personal": {
-   "de": "%@ · persönlich",
-   "en": "%@ · personal"
+   "de": "{1} · persönlich",
+   "en": "{1} · personal"
   },
   "settings.account.show": {
    "de": "Angezeigt als",
@@ -598,8 +582,8 @@
    "en": "Web"
   },
   "settings.confirm.hold": {
-   "de": "Halten zum %@",
-   "en": "Hold to %@"
+   "de": "Halten zum {1}",
+   "en": "Hold to {1}"
   },
   "settings.contacts.add": {
    "de": "Hinzufügen",
@@ -646,20 +630,20 @@
    "en": "No name"
   },
   "settings.disconnect.ask": {
-   "de": "%@ trennen?",
-   "en": "Disconnect %@?"
+   "de": "{1} trennen?",
+   "en": "Disconnect {1}?"
   },
   "settings.disconnect.text": {
-   "de": "Die App nutzt %@ danach nicht mehr.",
-   "en": "The app will no longer use %@."
+   "de": "Die App nutzt {1} danach nicht mehr.",
+   "en": "The app will no longer use {1}."
   },
   "settings.failed.body": {
    "de": "Der Assistent bleibt aus, bis die Verbindung wieder steht.",
    "en": "The assistant stays off until the connection is back."
   },
   "settings.failed.title": {
-   "de": "Fehler · %@",
-   "en": "Error · %@"
+   "de": "Fehler · {1}",
+   "en": "Error · {1}"
   },
   "settings.failed.unknown": {
    "de": "Keine Antwort",
@@ -805,21 +789,17 @@
    "de": "App-Sperre",
    "en": "App lock"
   },
-  "settings.menu.check": {
-   "de": "✓",
-   "en": "✓"
-  },
   "settings.note.checked": {
-   "de": "Beim Anbieter geprüft · %@",
-   "en": "Checked with provider · %@"
+   "de": "Beim Anbieter geprüft · {1}",
+   "en": "Checked with provider · {1}"
   },
   "settings.note.failed": {
-   "de": "Letzter Fehler %@ · letzter Erfolg %@",
-   "en": "Last error %@ · last success %@"
+   "de": "Letzter Fehler {1} · letzter Erfolg {2}",
+   "en": "Last error {1} · last success {2}"
   },
   "settings.note.failedOnly": {
-   "de": "Letzter Fehler %@",
-   "en": "Last error %@"
+   "de": "Letzter Fehler {1}",
+   "en": "Last error {1}"
   },
   "settings.note.signingIn": {
    "de": "Anmeldung läuft",
@@ -1117,10 +1097,6 @@
    "de": "sevDesk",
    "en": "sevDesk"
   },
-  "settings.signin": {
-   "de": "Anmelden",
-   "en": "Sign In"
-  },
   "settings.start.label": {
    "de": "Beim Öffnen",
    "en": "On launch"
@@ -1142,8 +1118,8 @@
    "en": "Sync"
   },
   "settings.sync.last": {
-   "de": "Letzter Abgleich %@",
-   "en": "Last sync %@"
+   "de": "Letzter Abgleich {1}",
+   "en": "Last sync {1}"
   },
   "settings.sync.never": {
    "de": "Noch nicht abgeglichen",
@@ -1154,16 +1130,16 @@
    "en": "Sync now"
   },
   "settings.system.branch.format": {
-   "de": "%@ · %@",
-   "en": "%@ · %@"
+   "de": "{1} · {2}",
+   "en": "{1} · {2}"
   },
   "settings.system.copy": {
    "de": "Kopieren",
    "en": "Copy"
   },
   "settings.system.version.format": {
-   "de": "%@ (%@)",
-   "en": "%@ (%@)"
+   "de": "{1} ({2})",
+   "en": "{1} ({2})"
   },
   "settings.templates.none": {
    "de": "Noch keine Vorlage.",
@@ -1208,10 +1184,6 @@
   "text.settings.action.check": {
    "de": "Prüfen",
    "en": "Check"
-  },
-  "text.settings.action.remove": {
-   "de": "Entfernen",
-   "en": "Remove"
   },
   "settings.account.email": {
    "de": "E-Mail-Adresse",
@@ -1278,8 +1250,8 @@
    "en": "Off"
   },
   "settings.mail.undoSeconds": {
-   "de": "%@ s",
-   "en": "%@ s"
+   "de": "{1} s",
+   "en": "{1} s"
   },
   "settings.identity.retire": {
    "de": "Nutzerkonto stilllegen",

@@ -138,7 +138,7 @@ struct AccountCard: View {
         .help(Text(verbatim: account.account))
         .accessibilityLabel(Text(verbatim: account.account))
         .accessibilityValue(alert ? appearance.text("mail.row.unread") : Text(verbatim: ""))
-        .accessibilityAction(named: appearance.text("mail.account.show")) {
+        .accessibilityAction(named: appearance.text("settings.account.show")) {
             anchor.showMenu(MailboxMenu.entries(for: account, current: display, appearance: appearance, choose: choose))
         }
         .animation(appearance.ease(SheetValues.deckLift, Tokens.Easing.envelopeSpring), value: hovering)
@@ -166,7 +166,7 @@ struct AccountTitle: View {
                 }
             }
             .background(AnchorMarker(box: anchor))
-            .accessibilityAction(named: appearance.text("mail.account.show")) {
+            .accessibilityAction(named: appearance.text("settings.account.show")) {
                 anchor.showMenu(MailboxMenu.entries(for: account, current: display, appearance: appearance, choose: choose))
             }
     }
@@ -255,12 +255,12 @@ enum MailboxMenu {
     static func entries(for account: Inlet, current: MailboxDisplay, appearance: Appearance,
                         choose: @escaping (MailboxDisplay) -> Void) -> [MenuEntry] {
         let own = account.shownTitle(appearance)
-        return [.head(id: "mailbox.display", label: appearance.text("mail.account.show"))] + MailboxDisplay.allCases.map { option in
+        return [.head(id: "mailbox.display", label: appearance.text("settings.account.show"))] + MailboxDisplay.allCases.map { option in
             let label: Text
             var meta: Text?
             switch option {
             case .ownName:
-                label = own.isEmpty ? appearance.text("mail.account.show.own") : Text(verbatim: own)
+                label = own.isEmpty ? appearance.text("settings.account.show.own") : Text(verbatim: own)
                 meta = own.isEmpty ? appearance.text("mail.account.show.inSettings") : nil
             case .localPart: label = Text(verbatim: MailboxDisplay.local(account.account))
             case .domain: label = Text(verbatim: MailboxDisplay.domain(account.account))

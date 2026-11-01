@@ -161,6 +161,7 @@ struct IntegrationCard: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             } else if let failure = flow.failure {
                 BlockNotice(kind: .failure, title: Text(verbatim: appearance.format("settings.failed.title", failure.line(appearance))))
+                    .help(failure.detail ?? "")
             } else if let checked = flow.checked, reading.inlets.contains(where: { $0.id == checked }) {
                 BlockNotice(kind: .success, title: appearance.text("settings.check.ok.title"))
             }
@@ -334,7 +335,7 @@ extension BlockNotice where Actions == EmptyView {
 
 extension Hint {
     func line(_ appearance: Appearance) -> String {
-        [appearance.string(text), detail].compactMap { $0 }.joined(separator: " ")
+        appearance.string(text)
     }
 }
 
@@ -404,7 +405,7 @@ struct ProjectRootRows: View {
 
     var body: some View {
         Group {
-            SettingsRow(label: appearance.text("settings.row.projectRoot")) {
+            SettingsRow(label: appearance.text("settings.folders.projects")) {
                 ChoiceButton(label: root.map { Text(verbatim: $0.name) } ?? appearance.text("settings.value.choose"),
                              entries: { driveEntries }, anchor: anchor)
             }

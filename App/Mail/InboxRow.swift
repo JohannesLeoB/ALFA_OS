@@ -215,7 +215,7 @@ struct InboxRow: View {
         } else if let state = item.outbox, state.offersRowActions {
             HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
                 if case .failed = state {
-                    rowAction("mail.outbox.retry.tooltip", glyph: .send) {
+                    rowAction("mail.draft.failed.act", glyph: .send) {
                         Task { await inbox.resendQueued(item.id) }
                     }
                 }
@@ -294,7 +294,7 @@ extension ConfirmPill {
     init(question: String, yes: String, appearance: Appearance, startsAsking: Bool = false, onYes: @escaping () -> Void,
          onNo: @escaping () -> Void = {}, @ViewBuilder glyph: () -> Glyph) {
         self.init(label: nil, question: appearance.text(question), yes: appearance.text(yes), no: appearance.text("confirm.no"),
-                  holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string(yes))),
+                  holdHint: Text(verbatim: appearance.format("settings.confirm.hold", appearance.string(yes))),
                   startsAsking: startsAsking, showsProgress: false, onYes: onYes, onNo: onNo, glyph: glyph)
     }
 }

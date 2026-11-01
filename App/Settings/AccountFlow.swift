@@ -20,7 +20,11 @@ final class AccountFlow {
     private(set) var step = AddStep.address
     private(set) var needsAddress = false
     private(set) var busy = false
-    private(set) var failure: Hint?
+    private(set) var failure: Hint? {
+        didSet {
+            if let failure { Log.failure(failure.text, detail: failure.detail) }
+        }
+    }
     private(set) var actedOn: String?
     private(set) var checked: Inlet.ID?
     var form: Offer?
@@ -272,7 +276,7 @@ struct AddEditor: View {
         switch offer.way {
         case .key: "settings.action.connect"
         case .form: "text.settings.action.addAccount"
-        case .signIn: "settings.signin"
+        case .signIn: "settings.account.signIn"
         }
     }
 
@@ -376,6 +380,7 @@ struct AddEditor: View {
         if let failure = flow.failure {
             BlockNotice(kind: .failure, title: appearance.text("settings.add.failed.title"),
                         text: Text(verbatim: failure.line(appearance)))
+                .help(failure.detail ?? "")
         }
     }
 
@@ -512,11 +517,11 @@ struct AccountBlock: View {
                 }
                 SettingsRow(label: appearance.text("settings.account.remove")) {
                     ConfirmPill(
-                        label: appearance.text("text.settings.action.remove"),
+                        label: appearance.text("settings.contacts.remove"),
                         question: Text(verbatim: [appearance.string("settings.account.remove.ask"),
                                                   Self.waiting([inlet.id], context: context, appearance: appearance)]
                             .compactMap { $0 }.joined(separator: " ")),
-                        yes: appearance.text("text.settings.action.remove"),
+                        yes: appearance.text("settings.contacts.remove"),
                         no: appearance.text("confirm.no"),
                         holdHint: appearance.text("settings.hold.remove"),
                         showsProgress: false,

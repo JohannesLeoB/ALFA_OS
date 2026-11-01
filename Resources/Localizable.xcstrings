@@ -11521,29 +11521,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld pt"
+            "value" : "{1} pt"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld pt"
-          }
-        }
-      }
-    },
-    "mail.account.show" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Angezeigt als"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shown as"
+            "value" : "{1} pt"
           }
         }
       }
@@ -11560,22 +11544,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "in Settings"
-          }
-        }
-      }
-    },
-    "mail.account.show.own" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eigener Name"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Own name"
           }
         }
       }
@@ -12259,39 +12227,6 @@
         }
       }
     },
-    "mail.attachment.otherProject" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In anderes Projekt …"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Move to Another Project …"
-          }
-        }
-      }
-    },
-    "mail.card.more" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "und %@ weitere"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "and %@ more"
-          }
-        }
-      }
-    },
     "mail.card.pin.tip" : {
       "comment" : "alpha",
       "localizations" : {
@@ -12516,13 +12451,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alle %@ Empfänger zeigen"
+            "value" : "Alle {1} Empfänger zeigen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Show all %@ recipients"
+            "value" : "Show all {1} recipients"
           }
         }
       }
@@ -12644,23 +12579,6 @@
         }
       }
     },
-    "mail.confirm.hold" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Halten zum %@"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hold to %@"
-          }
-        }
-      }
-    },
     "mail.confirm.purge.question" : {
       "comment" : "alpha",
       "localizations" : {
@@ -12749,13 +12667,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Heute, %@"
+            "value" : "Heute, {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Today, %@"
+            "value" : "Today, {1}"
           }
         }
       }
@@ -12814,13 +12732,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Postfächer zeigen · neue Mail in %@"
+            "value" : "Postfächer zeigen · neue Mail in {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Show mailboxes · new mail in %@"
+            "value" : "Show mailboxes · new mail in {1}"
           }
         }
       }
@@ -13022,23 +12940,6 @@
         }
       }
     },
-    "mail.draft.saved" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entwurf gesichert"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Draft saved"
-          }
-        }
-      }
-    },
     "mail.draft.saving" : {
       "localizations" : {
         "de" : {
@@ -13068,23 +12969,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Not sent"
-          }
-        }
-      }
-    },
-    "mail.draft.sending" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sendet …"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sending …"
           }
         }
       }
@@ -13450,13 +13334,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Filter: %@"
+            "value" : "Filter: {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Filter: %@"
+            "value" : "Filter: {1}"
           }
         }
       }
@@ -13484,13 +13368,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ falten"
+            "value" : "{1} falten"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fold %@"
+            "value" : "Fold {1}"
           }
         }
       }
@@ -13575,22 +13459,6 @@
         }
       }
     },
-    "mail.format.linkCancel" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abbrechen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel"
-          }
-        }
-      }
-    },
     "mail.format.linkPlaceholder" : {
       "localizations" : {
         "de" : {
@@ -13661,13 +13529,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ groß"
+            "value" : "{1} groß"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enlarge %@"
+            "value" : "Enlarge {1}"
           }
         }
       }
@@ -13751,23 +13619,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Image blocked"
-          }
-        }
-      }
-    },
-    "mail.lane.back" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zurück"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Back"
           }
         }
       }
@@ -14021,13 +13872,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Keine Treffer für „%@“ in %@."
+            "value" : "Keine Treffer für „{1}“ in {2}."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No results for “%@” in %@."
+            "value" : "No results for “{1}” in {2}."
           }
         }
       }
@@ -14089,13 +13940,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zuletzt geladen %@."
+            "value" : "Zuletzt geladen {1}."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Last loaded %@."
+            "value" : "Last loaded {1}."
           }
         }
       }
@@ -14272,13 +14123,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d von %d"
+            "value" : "{1} von {2}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d of %d"
+            "value" : "{1} of {2}"
           }
         }
       }
@@ -14289,30 +14140,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ ist nicht erreichbar"
+            "value" : "{1} ist nicht erreichbar"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ is unreachable"
-          }
-        }
-      }
-    },
-    "mail.list.signInExpired.act" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erneut verbinden"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reconnect"
+            "value" : "{1} is unreachable"
           }
         }
       }
@@ -14431,34 +14265,18 @@
         }
       }
     },
-    "mail.notice.outboxUnsaved.act" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erneut sichern"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Save Again"
-          }
-        }
-      }
-    },
     "mail.notice.outboxUnsaved.text" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ Mails liegen nur im Arbeitsspeicher und gehen beim Beenden verloren."
+            "value" : "{1} Mails liegen nur im Arbeitsspeicher und gehen beim Beenden verloren."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ messages exist only in memory and will be lost when you quit."
+            "value" : "{1} messages exist only in memory and will be lost when you quit."
           }
         }
       }
@@ -14559,22 +14377,6 @@
         }
       }
     },
-    "mail.outbox.retry.tooltip" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erneut senden"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Send Again"
-          }
-        }
-      }
-    },
     "mail.outbox.state.checking" : {
       "localizations" : {
         "de" : {
@@ -14661,13 +14463,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Übersicht · %@ Karten"
+            "value" : "Übersicht · {1} Karten"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Overview · %@ cards"
+            "value" : "Overview · {1} cards"
           }
         }
       }
@@ -14729,13 +14531,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ gewählt"
+            "value" : "{1} gewählt"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ selected"
+            "value" : "{1} selected"
           }
         }
       }
@@ -14887,22 +14689,6 @@
         }
       }
     },
-    "mail.projectFiles.retry" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erneut versuchen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Try Again"
-          }
-        }
-      }
-    },
     "mail.quote.hide" : {
       "comment" : "alpha",
       "localizations" : {
@@ -14926,13 +14712,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zitat zeigen · %lld Zeilen"
+            "value" : "Zitat zeigen · {1} Zeilen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Show quote · %lld lines"
+            "value" : "Show quote · {1} lines"
           }
         }
       }
@@ -14977,13 +14763,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld Nachrichten in dieser Unterhaltung"
+            "value" : "{1} Nachrichten in dieser Unterhaltung"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld messages in this conversation"
+            "value" : "{1} messages in this conversation"
           }
         }
       }
@@ -14994,13 +14780,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ Empfänger"
+            "value" : "{1} Empfänger"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ recipients"
+            "value" : "{1} recipients"
           }
         }
       }
@@ -15061,13 +14847,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "und %@ weitere"
+            "value" : "und {1} weitere"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "and %@ more"
+            "value" : "and {1} more"
           }
         }
       }
@@ -15316,13 +15102,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "An %@"
+            "value" : "An {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "To %@"
+            "value" : "To {1}"
           }
         }
       }
@@ -15467,13 +15253,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In %@ suchen"
+            "value" : "In {1} suchen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Search in %@"
+            "value" : "Search in {1}"
           }
         }
       }
@@ -15484,13 +15270,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ Treffer in allen Ordnern"
+            "value" : "{1} Treffer in allen Ordnern"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ results in all folders"
+            "value" : "{1} results in all folders"
           }
         }
       }
@@ -15518,13 +15304,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nur %@"
+            "value" : "Nur {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Only %@"
+            "value" : "Only {1}"
           }
         }
       }
@@ -15535,13 +15321,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sucht in allen Ordnern außer Spam und Papierkorb. Klicken: nur in %@"
+            "value" : "Sucht in allen Ordnern außer Spam und Papierkorb. Klicken: nur in {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Searches all folders except spam and trash. Click: only in %@"
+            "value" : "Searches all folders except spam and trash. Click: only in {1}"
           }
         }
       }
@@ -15552,13 +15338,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sucht nur in %@. Klicken: überall suchen"
+            "value" : "Sucht nur in {1}. Klicken: überall suchen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Searches only in %@. Click: search everywhere"
+            "value" : "Searches only in {1}. Click: search everywhere"
           }
         }
       }
@@ -15715,13 +15501,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kopiert nach %@"
+            "value" : "Kopiert nach {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copied to %@"
+            "value" : "Copied to {1}"
           }
         }
       }
@@ -15749,13 +15535,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ Mails archiviert"
+            "value" : "{1} Mails archiviert"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ mails archived"
+            "value" : "{1} mails archived"
           }
         }
       }
@@ -15783,13 +15569,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ Mails gelesen"
+            "value" : "{1} Mails gelesen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ mails read"
+            "value" : "{1} mails read"
           }
         }
       }
@@ -15817,13 +15603,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ Mails ungelesen"
+            "value" : "{1} Mails ungelesen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ mails unread"
+            "value" : "{1} mails unread"
           }
         }
       }
@@ -15851,13 +15637,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ Mails in den Papierkorb gelegt"
+            "value" : "{1} Mails in den Papierkorb gelegt"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ mails moved to trash"
+            "value" : "{1} mails moved to trash"
           }
         }
       }
@@ -15867,13 +15653,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ ist schon Kontakt"
+            "value" : "{1} ist schon Kontakt"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ is already a contact"
+            "value" : "{1} is already a contact"
           }
         }
       }
@@ -15899,13 +15685,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ als Kontakt gesichert"
+            "value" : "{1} als Kontakt gesichert"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ saved as contact"
+            "value" : "{1} saved as contact"
           }
         }
       }
@@ -16045,13 +15831,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Als PDF gesichert · %@"
+            "value" : "Als PDF gesichert · {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saved as PDF · %@"
+            "value" : "Saved as PDF · {1}"
           }
         }
       }
@@ -16356,13 +16142,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · für die Firma"
+            "value" : "{1} · für die Firma"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · for the company"
+            "value" : "{1} · for the company"
           }
         }
       }
@@ -16420,13 +16206,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · persönlich"
+            "value" : "{1} · persönlich"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · personal"
+            "value" : "{1} · personal"
           }
         }
       }
@@ -17030,13 +16816,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Es fehlen: %@."
+            "value" : "Es fehlen: {1}."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Missing: %@."
+            "value" : "Missing: {1}."
           }
         }
       }
@@ -17145,13 +16931,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · %@"
+            "value" : "{1} · {2}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · %@"
+            "value" : "{1} · {2}"
           }
         }
       }
@@ -17482,13 +17268,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Halten zum %@"
+            "value" : "Halten zum {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hold to %@"
+            "value" : "Hold to {1}"
           }
         }
       }
@@ -17770,13 +17556,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ trennen?"
+            "value" : "{1} trennen?"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Disconnect %@?"
+            "value" : "Disconnect {1}?"
           }
         }
       }
@@ -17803,13 +17589,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die App nutzt %@ danach nicht mehr."
+            "value" : "Die App nutzt {1} danach nicht mehr."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The app will no longer use %@."
+            "value" : "The app will no longer use {1}."
           }
         }
       }
@@ -17835,13 +17621,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ ungesendete Mails im Postausgang gehen verloren."
+            "value" : "{1} ungesendete Mails im Postausgang gehen verloren."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ unsent mails in the outbox will be lost."
+            "value" : "{1} unsent mails in the outbox will be lost."
           }
         }
       }
@@ -17867,13 +17653,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fehler · %@"
+            "value" : "Fehler · {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Error · %@"
+            "value" : "Error · {1}"
           }
         }
       }
@@ -18237,13 +18023,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trennt 1 Dienst · %@"
+            "value" : "Trennt 1 Dienst · {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Disconnects 1 service · %@"
+            "value" : "Disconnects 1 service · {1}"
           }
         }
       }
@@ -18253,13 +18039,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trennt %@ Dienste · %@"
+            "value" : "Trennt {1} Dienste · {2}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Disconnects %@ services · %@"
+            "value" : "Disconnects {1} services · {2}"
           }
         }
       }
@@ -18655,13 +18441,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ s"
+            "value" : "{1} s"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ s"
+            "value" : "{1} s"
           }
         }
       }
@@ -18726,22 +18512,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Custom folder"
-          }
-        }
-      }
-    },
-    "settings.mailStore.folder.default" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Standard"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Default"
           }
         }
       }
@@ -18938,23 +18708,6 @@
         }
       }
     },
-    "settings.menu.check" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "✓"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "✓"
-          }
-        }
-      }
-    },
     "settings.model.haiku" : {
       "localizations" : {
         "de" : {
@@ -19008,13 +18761,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beim Anbieter geprüft · %@"
+            "value" : "Beim Anbieter geprüft · {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Checked with provider · %@"
+            "value" : "Checked with provider · {1}"
           }
         }
       }
@@ -19024,13 +18777,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Letzter Fehler %@ · letzter Erfolg %@"
+            "value" : "Letzter Fehler {1} · letzter Erfolg {2}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Last error %@ · last success %@"
+            "value" : "Last error {1} · last success {2}"
           }
         }
       }
@@ -19040,13 +18793,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Letzter Fehler %@"
+            "value" : "Letzter Fehler {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Last error %@"
+            "value" : "Last error {1}"
           }
         }
       }
@@ -19436,13 +19189,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · %@"
+            "value" : "{1} · {2}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · %@"
+            "value" : "{1} · {2}"
           }
         }
       }
@@ -19587,22 +19340,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sign-in"
-          }
-        }
-      }
-    },
-    "settings.row.projectRoot" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Projektordner"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Project folder"
           }
         }
       }
@@ -20847,13 +20584,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Signatur %@"
+            "value" : "Signatur {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Signature %@"
+            "value" : "Signature {1}"
           }
         }
       }
@@ -20895,13 +20632,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Signatur · %@"
+            "value" : "Signatur · {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Signature · %@"
+            "value" : "Signature · {1}"
           }
         }
       }
@@ -20950,23 +20687,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove Signature"
-          }
-        }
-      }
-    },
-    "settings.signin" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anmelden"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign In"
           }
         }
       }
@@ -21056,13 +20776,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Letzter Abgleich %@"
+            "value" : "Letzter Abgleich {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Last sync %@"
+            "value" : "Last sync {1}"
           }
         }
       }
@@ -21072,13 +20792,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fehler: %@. Letzter Abgleich %@"
+            "value" : "Fehler: {1}. Letzter Abgleich {2}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Error: %@. Last sync %@"
+            "value" : "Error: {1}. Last sync {2}"
           }
         }
       }
@@ -21088,13 +20808,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verbindung steht. Letzter Abgleich %@"
+            "value" : "Verbindung steht. Letzter Abgleich {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Connection is up. Last sync %@"
+            "value" : "Connection is up. Last sync {1}"
           }
         }
       }
@@ -21137,13 +20857,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · %@"
+            "value" : "{1} · {2}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · %@"
+            "value" : "{1} · {2}"
           }
         }
       }
@@ -21169,13 +20889,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@: %@"
+            "value" : "{1}: {2}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@: %@"
+            "value" : "{1}: {2}"
           }
         }
       }
@@ -21185,13 +20905,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ (%@)"
+            "value" : "{1} ({2})"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ (%@)"
+            "value" : "{1} ({2})"
           }
         }
       }
@@ -21240,22 +20960,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No template yet."
-          }
-        }
-      }
-    },
-    "settings.templates.remove" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entfernen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove"
           }
         }
       }
@@ -21404,34 +21108,18 @@
         }
       }
     },
-    "settings.toast.retry" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erneut versuchen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Try Again"
-          }
-        }
-      }
-    },
     "settings.toast.rootChosen" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Projektordner · %@"
+            "value" : "Projektordner · {1}"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Project folder · %@"
+            "value" : "Project folder · {1}"
           }
         }
       }
@@ -21964,34 +21652,18 @@
         }
       }
     },
-    "shell.assistantActivity.categoryOff" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ ist für den Assistenten aus"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ is off for the assistant"
-          }
-        }
-      }
-    },
     "shell.assistantAttachment.tooLarge" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ ist zu groß"
+            "value" : "{1} ist zu groß"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ is too large"
+            "value" : "{1} is too large"
           }
         }
       }
@@ -22001,13 +21673,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ ist nicht lesbar"
+            "value" : "{1} ist nicht lesbar"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ can’t be read"
+            "value" : "{1} can’t be read"
           }
         }
       }
@@ -22017,13 +21689,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ wird nicht unterstützt"
+            "value" : "{1} wird nicht unterstützt"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ isn’t supported"
+            "value" : "{1} isn’t supported"
           }
         }
       }
@@ -22033,13 +21705,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ Positionen"
+            "value" : "{1} Positionen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ items"
+            "value" : "{1} items"
           }
         }
       }
@@ -22049,13 +21721,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ – %@ € netto"
+            "value" : "{1} – {2} € netto"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ – %@ € net"
+            "value" : "{1} – {2} € net"
           }
         }
       }
@@ -22184,22 +21856,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Task"
-          }
-        }
-      }
-    },
-    "shell.assistantCard.mailTo" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "An %@"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "To %@"
           }
         }
       }
@@ -22385,13 +22041,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ neue E-Mails"
+            "value" : "{1} neue E-Mails"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ new messages"
+            "value" : "{1} new messages"
           }
         }
       }
@@ -22456,22 +22112,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove"
-          }
-        }
-      }
-    },
-    "shell.confirmUndo.undo.text" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rückgängig"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Undo"
           }
         }
       }
@@ -22636,22 +22276,6 @@
         }
       }
     },
-    "shell.menu.mailbox" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Postfach"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mailbox"
-          }
-        }
-      }
-    },
     "shell.menu.message" : {
       "localizations" : {
         "de" : {
@@ -22748,22 +22372,6 @@
         }
       }
     },
-    "shell.symbolButton.assistantAttach.tooltip" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Datei anhängen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Attach File"
-          }
-        }
-      }
-    },
     "shell.symbolButton.assistantAttachOff.tooltip" : {
       "localizations" : {
         "de" : {
@@ -22792,54 +22400,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clear History"
-          }
-        }
-      }
-    },
-    "shell.symbolButton.assistantSend.tooltip" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Senden"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Send"
-          }
-        }
-      }
-    },
-    "shell.textButton.assistantOff.text" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einstellungen öffnen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Settings"
-          }
-        }
-      }
-    },
-    "shell.textButton.assistantRetry.text" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erneut versuchen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Try Again"
           }
         }
       }
@@ -23102,23 +22662,6 @@
         }
       }
     },
-    "sync.running" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gleicht ab …"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Syncing …"
-          }
-        }
-      }
-    },
     "text.common.cancel" : {
       "comment" : "alpha",
       "extractionState" : "manual",
@@ -23169,24 +22712,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Check"
-          }
-        }
-      }
-    },
-    "text.settings.action.remove" : {
-      "comment" : "alpha",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entfernen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove"
           }
         }
       }

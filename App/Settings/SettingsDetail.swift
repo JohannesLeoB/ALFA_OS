@@ -47,11 +47,11 @@ struct TemplatesCard: View {
             ForEach(state.templates) { template in
                 SettingsRow(label: Text(verbatim: template.name)) {
                     ConfirmPill(
-                        label: appearance.text("settings.templates.remove"),
+                        label: appearance.text("settings.contacts.remove"),
                         question: appearance.text("settings.templates.remove.question"),
-                        yes: appearance.text("settings.templates.remove"),
+                        yes: appearance.text("settings.contacts.remove"),
                         no: appearance.text("confirm.no"),
-                        holdHint: Text(verbatim: appearance.format("settings.confirm.hold", appearance.string("settings.templates.remove"))),
+                        holdHint: Text(verbatim: appearance.format("settings.confirm.hold", appearance.string("settings.contacts.remove"))),
                         showsProgress: false,
                         onYes: { remove(template) }
                     )
@@ -171,9 +171,9 @@ struct KeyCard: View {
                 }
             } else if !reading.inlets.isEmpty {
                 ConfirmPill(
-                    label: appearance.text("text.settings.action.remove"),
+                    label: appearance.text("settings.contacts.remove"),
                     question: Text(verbatim: question(reading)),
-                    yes: appearance.text("text.settings.action.remove"),
+                    yes: appearance.text("settings.contacts.remove"),
                     no: appearance.text("confirm.no"),
                     holdHint: appearance.text("settings.hold.remove"),
                     showsProgress: false,
@@ -185,6 +185,7 @@ struct KeyCard: View {
                 .rowPill()
             }
         }
+        .help(failure?.detail ?? "")
     }
 
     private func question(_ reading: IntegrationReading) -> String {
@@ -483,6 +484,7 @@ struct IdentityCard: View {
             }
             if let refused {
                 BlockNotice(kind: .failure, title: Text(verbatim: appearance.format("settings.failed.title", refused.line(appearance))))
+                    .help(refused.detail ?? "")
             }
         }
     }

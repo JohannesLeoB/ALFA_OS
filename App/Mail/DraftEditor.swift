@@ -97,7 +97,7 @@ struct DraftEditor: View {
                        glyph: { Glyph(.alert) },
                        actions: {
                     if card.saveNeedsSignIn {
-                        TextButton(label: appearance.text("mail.list.signInExpired.act"), kind: .accent) { session.openMailCard(of: account) }
+                        TextButton(label: appearance.text("settings.action.reconnect"), kind: .accent) { session.openMailCard(of: account) }
                     } else {
                         TextButton(label: appearance.text("mail.draft.saveFailed.retry"), kind: .accent) { Task { await inbox.save(card.id) } }
                     }
@@ -351,7 +351,7 @@ struct FormatRow: View {
         field.frame.size.width = CGFloat(SheetValues.linkFieldWidth)
         alert.accessoryView = field
         alert.addButton(withTitle: appearance.string("mail.format.linkApply"))
-        alert.addButton(withTitle: appearance.string("mail.format.linkCancel"))
+        alert.addButton(withTitle: appearance.string("text.common.cancel"))
         alert.window.initialFirstResponder = field
         guard alert.runModal() == .alertFirstButtonReturn else { return }
         box.link(field.stringValue.trimmingCharacters(in: .whitespacesAndNewlines))

@@ -56,7 +56,7 @@ struct StackLane: View {
     private func head(_ commands: CommandSet, width: Double) -> some View {
         let plan = CommandBarEngine.plan(main: commands.main, tail: commands.tail, fan: commands.fan, fold: commands.fold,
                                          staticMore: false, width: width - Tokens.Size.edge)
-        return CommandHead(plan: plan, moreHelp: appearance.string("mail.action.more"), glyph: { $0.glyph },
+        return CommandHead(plan: plan, moreHelp: appearance.string("settings.action.more"), glyph: { $0.glyph },
                            help: { session.help($0, appearance: appearance) }, shortcut: { $0.shortcut }, perform: perform,
                            more: { actions in
                                MenuLine.entries(actions.map { MenuLine.item($0) }, appearance: appearance, warns: false) { perform($0) }
@@ -251,7 +251,7 @@ struct SheetDetail: View {
                 .lineHeight(Tokens.TextStyle.title.lineHeight, size: Tokens.TextStyle.title.size)
                 .fixedSize(horizontal: false, vertical: true)
             if card.hasConversation {
-                Text(verbatim: appearance.format("mail.read.conversation", card.conversation.count))
+                Text(verbatim: appearance.format("mail.read.conversation", String(card.conversation.count)))
                     .font(.face(Tokens.TextSize.small))
                     .foregroundStyle(appearance.color(\.sheetInkTertiary))
                     .padding(.top, CGFloat(Tokens.Spacing.step4))
@@ -298,7 +298,7 @@ struct SheetDetail: View {
         if list.unsubscribes {
             ConfirmPill(label: appearance.text("mail.list.unsubscribe"), question: appearance.text("mail.list.unsubscribeQuestion"),
                         yes: appearance.text("mail.list.unsubscribe"), no: appearance.text("confirm.no"),
-                        holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.list.unsubscribe"))),
+                        holdHint: Text(verbatim: appearance.format("settings.confirm.hold", appearance.string("mail.list.unsubscribe"))),
                         showsProgress: false,
                         onYes: {
                 Task {

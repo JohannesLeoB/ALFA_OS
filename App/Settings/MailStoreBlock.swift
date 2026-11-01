@@ -58,9 +58,9 @@ struct MailStoreBlock: View {
         let custom = state.mailStore.folder != nil
         return SettingsRow(label: appearance.text("settings.mailStore.folder"),
                            sub: custom ? folderName.map { Text(verbatim: $0) } : nil, line: false) {
-            ChoiceButton(label: appearance.text(custom ? "settings.mailStore.folder.custom" : "settings.mailStore.folder.default")) {
+            ChoiceButton(label: appearance.text(custom ? "settings.mailStore.folder.custom" : "settings.value.default")) {
                 [
-                    .row(MenuItem(id: "folder.default", label: appearance.text("settings.mailStore.folder.default"),
+                    .row(MenuItem(id: "folder.default", label: appearance.text("settings.value.default"),
                                   check: custom ? nil : appearance.text(SettingsKeys.menuCheck)) { relocate(to: nil) }),
                     .row(MenuItem(id: "folder.custom", label: appearance.text("settings.mailStore.folder.custom"),
                                   check: custom ? appearance.text(SettingsKeys.menuCheck) : nil) { choose() }),

@@ -221,8 +221,8 @@ public enum DraftStatus: Equatable, Sendable {
     public var key: String {
         switch self {
         case .saving: "mail.draft.saving"
-        case .saved: "mail.draft.saved"
-        case .sending: "mail.draft.sending"
+        case .saved: "mail.toast.draftSaved"
+        case .sending: "mail.outbox.state.sending"
         case .outbox: "mail.draft.outbox"
         case .sendFailed: "mail.draft.sendFailed"
         case .notSaved: "mail.draft.notSaved"

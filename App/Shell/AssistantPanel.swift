@@ -67,7 +67,7 @@ struct AssistantPanel: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
             if offered {
-                TextButton(label: appearance.text("shell.textButton.assistantOff.text"), kind: .inverse, plate: \.inverseHot, action: open)
+                TextButton(label: appearance.text("mail.draft.grant.act"), kind: .inverse, plate: \.inverseHot, action: open)
             }
         }
         .padding(.vertical, CGFloat(Tokens.Spacing.step8))
@@ -138,7 +138,7 @@ struct AssistantCard: View {
                 .typeStyle(Tokens.TextStyle.bodyEmphasis)
                 .fixedSize(horizontal: false, vertical: true)
             if let line {
-                Text(verbatim: addressed ? appearance.format("shell.assistantCard.mailTo", line) : line)
+                Text(verbatim: addressed ? appearance.format("mail.row.to", line) : line)
                     .typeStyle(Tokens.TextStyle.caption)
                     .foregroundStyle(appearance.color(\.onInverseTertiary))
                     .fixedSize(horizontal: false, vertical: true)
@@ -183,7 +183,7 @@ struct AssistantInput: View {
 
     var body: some View {
         HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
-            SymbolButton(help: appearance.string(files ? "shell.symbolButton.assistantAttach.tooltip" : "shell.symbolButton.assistantAttachOff.tooltip"),
+            SymbolButton(help: appearance.string(files ? "mail.action.attachFile" : "shell.symbolButton.assistantAttachOff.tooltip"),
                          glyph: .attach, disabled: !files, tone: nil, hoverTone: nil, ringed: false, hover: .fill, hoverFill: \.inverseHot, pressed: false,
                          action: attach)
             ZStack(alignment: .leading) {
@@ -206,7 +206,7 @@ struct AssistantInput: View {
             }
             .padding(.horizontal, CGFloat(Tokens.Spacing.step4))
             .frame(maxWidth: .infinity)
-            SymbolButton(help: appearance.string("shell.symbolButton.assistantSend.tooltip"), glyph: .send, disabled: !ready, dimmed: false,
+            SymbolButton(help: appearance.string("mail.action.send"), glyph: .send, disabled: !ready, dimmed: false,
                          tone: ready ? \.inverse : \.onInverseTertiary, hoverTone: nil, ringed: false, plate: ready ? \.onInverse : nil, hover: .none,
                          pressed: false, action: send)
         }
@@ -262,7 +262,7 @@ struct AssistantMessage: View {
     }
 
     private var retryButton: some View {
-        TextButton(label: appearance.text("shell.textButton.assistantRetry.text"), kind: .inverse, action: retry)
+        TextButton(label: appearance.text("mail.list.failed.act"), kind: .inverse, action: retry)
     }
 
     private var blocks: some View {
@@ -354,7 +354,7 @@ struct AssistantToast: View {
         if let note = conversation.note {
             switch note {
             case .cleared:
-                ToastView(message: appearance.text("shell.assistantThread.cleared"), undoLabel: appearance.text("shell.confirmUndo.undo.text"),
+                ToastView(message: appearance.text("shell.assistantThread.cleared"), undoLabel: appearance.text("mail.toast.undo"),
                           onUndo: conversation.undo, onDismiss: conversation.dismiss)
                     .id(conversation.noteSerial)
             case .rejected(let failure):

@@ -53,12 +53,8 @@ struct Appearance: Equatable {
         String(localized: String.LocalizationValue(key), bundle: bundle)
     }
 
-    func format(_ key: String, _ arguments: CVarArg...) -> String {
-        let text = string(key)
-        guard text.range(of: #"\{\d+\}"#, options: .regularExpression) != nil else {
-            return String(format: text, arguments: arguments)
-        }
-        return PlaceholderEngine.fill(text, arguments.map { String(describing: $0) })
+    func format(_ key: String, _ arguments: String...) -> String {
+        PlaceholderEngine.fill(string(key), arguments)
     }
 }
 

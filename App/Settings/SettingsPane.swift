@@ -210,7 +210,7 @@ struct SettingsContext {
 enum SettingsKeys {
     static let failedUnknown = "settings.failed.unknown"
     static let valueEmpty = "settings.value.empty"
-    static let menuCheck = "settings.menu.check"
+    static let menuCheck = "mail.menu.check"
 }
 
 struct SettingsFace: Identifiable {
@@ -255,7 +255,7 @@ struct SettingsToast: View {
     var body: some View {
         if let key = state.toast {
             ToastView(message: state.toastName.map { Text(verbatim: appearance.format(key, $0)) } ?? appearance.text(key),
-                      undoLabel: state.toastRetry == nil ? nil : appearance.text("settings.toast.retry"),
+                      undoLabel: state.toastRetry == nil ? nil : appearance.text("mail.list.failed.act"),
                       onUndo: state.toastRetry.map { retry in { state.dismissToast(); retry() } },
                       failed: state.toastFailed,
                       onDismiss: { state.dismissToast() })

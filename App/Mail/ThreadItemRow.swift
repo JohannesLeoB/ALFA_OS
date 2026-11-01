@@ -61,7 +61,7 @@ struct ThreadItemRow: View {
                 }
             }
             if let quote = item.quote {
-                QuoteToggle(label: item.quoteOpen ? appearance.text("mail.quote.hide") : Text(verbatim: appearance.format("mail.quote.show", quote.lines))) {
+                QuoteToggle(label: item.quoteOpen ? appearance.text("mail.quote.hide") : Text(verbatim: appearance.format("mail.quote.show", String(quote.lines)))) {
                     session.inbox.toggleQuote(card.id, message: item.id)
                 }
                 if item.quoteOpen {

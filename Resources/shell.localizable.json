@@ -1,29 +1,25 @@
 {
  "_rule": "Keys used by the shell views in App/Shell; text is resolved by the app.",
  "keys": {
-  "shell.assistantActivity.categoryOff": {
-   "de": "%@ ist für den Assistenten aus",
-   "en": "%@ is off for the assistant"
-  },
   "shell.assistantAttachment.tooLarge": {
-   "de": "%@ ist zu groß",
-   "en": "%@ is too large"
+   "de": "{1} ist zu groß",
+   "en": "{1} is too large"
   },
   "shell.assistantAttachment.unreadable": {
-   "de": "%@ ist nicht lesbar",
-   "en": "%@ can’t be read"
+   "de": "{1} ist nicht lesbar",
+   "en": "{1} can’t be read"
   },
   "shell.assistantAttachment.unsupported": {
-   "de": "%@ wird nicht unterstützt",
-   "en": "%@ isn’t supported"
+   "de": "{1} wird nicht unterstützt",
+   "en": "{1} isn’t supported"
   },
   "shell.assistantCard.breakdownLines": {
-   "de": "%@ Positionen",
-   "en": "%@ items"
+   "de": "{1} Positionen",
+   "en": "{1} items"
   },
   "shell.assistantCard.estimateRange": {
-   "de": "%@ – %@ € netto",
-   "en": "%@ – %@ € net"
+   "de": "{1} – {2} € netto",
+   "en": "{1} – {2} € net"
   },
   "shell.assistantCard.kind.appointment": {
    "de": "Termin",
@@ -56,10 +52,6 @@
   "shell.assistantCard.kind.task": {
    "de": "Aufgabe",
    "en": "Task"
-  },
-  "shell.assistantCard.mailTo": {
-   "de": "An %@",
-   "en": "To %@"
   },
   "shell.assistantCard.off": {
    "de": "Der Assistent ist ausgeschaltet.",
@@ -106,8 +98,8 @@
    "en": "History cleared"
   },
   "shell.attention.newMail.many": {
-   "de": "%@ neue E-Mails",
-   "en": "%@ new messages"
+   "de": "{1} neue E-Mails",
+   "en": "{1} new messages"
   },
   "shell.attention.newMail.one": {
    "de": "Neue E-Mail",
@@ -124,10 +116,6 @@
   "shell.chipRemove.assistant.tooltip": {
    "de": "Entfernen",
    "en": "Remove"
-  },
-  "shell.confirmUndo.undo.text": {
-   "de": "Rückgängig",
-   "en": "Undo"
   },
   "shell.handle.down.tooltip": {
    "de": "Ziehen · Doppelklick setzt zurück",
@@ -169,10 +157,6 @@
    "de": "Alle Postfächer abfragen",
    "en": "Check All Mailboxes"
   },
-  "shell.menu.mailbox": {
-   "de": "Postfach",
-   "en": "Mailbox"
-  },
   "shell.menu.message": {
    "de": "E-Mail",
    "en": "Message"
@@ -185,10 +169,6 @@
    "de": "Kamera-Aussparung: der Sichtbereich beginnt darunter",
    "en": "Camera housing: the visible area starts below"
   },
-  "shell.symbolButton.assistantAttach.tooltip": {
-   "de": "Datei anhängen",
-   "en": "Attach File"
-  },
   "shell.symbolButton.assistantAttachOff.tooltip": {
    "de": "Dateien im Chat sind aus",
    "en": "Files in chat are off"
@@ -196,18 +176,6 @@
   "shell.symbolButton.assistantClear.tooltip": {
    "de": "Verlauf löschen",
    "en": "Clear History"
-  },
-  "shell.symbolButton.assistantSend.tooltip": {
-   "de": "Senden",
-   "en": "Send"
-  },
-  "shell.textButton.assistantOff.text": {
-   "de": "Einstellungen öffnen",
-   "en": "Open Settings"
-  },
-  "shell.textButton.assistantRetry.text": {
-   "de": "Erneut versuchen",
-   "en": "Try Again"
   },
   "shell.menu.redo": {
    "de": "Wiederholen",
@@ -262,8 +230,8 @@
    "en": "Width of right lane"
   },
   "lane.handle.value": {
-   "de": "%lld pt",
-   "en": "%lld pt"
+   "de": "{1} pt",
+   "en": "{1} pt"
   },
   "menu.empty": {
    "de": "Nichts gefunden",
@@ -296,10 +264,6 @@
   "sync.fresh": {
    "de": "Neu laden · Gerade abgeglichen",
    "en": "Reload · Just synced"
-  },
-  "sync.running": {
-   "de": "Gleicht ab …",
-   "en": "Syncing …"
   },
   "text.common.cancel": {
    "de": "Abbrechen",

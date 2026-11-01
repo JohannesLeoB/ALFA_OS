@@ -218,7 +218,7 @@ struct DeskLane: View {
         let name = self.name.string(appearance)
         if lane == .center {
             let maxed = desk.laneMode(desk.currentID).maximized == .center
-            SymbolButton(help: maxed ? appearance.string("mail.lane.back") : appearance.format("mail.grow.named", name),
+            SymbolButton(help: maxed ? appearance.string("settings.account.back") : appearance.format("mail.grow.named", name),
                          glyph: maxed ? .shrink : .expand, pressed: false) { desk.toggleMaximize(.center) }
         }
         if open > 1 {
@@ -243,7 +243,7 @@ struct LaneHandle: View {
 
     var body: some View {
         let width = desk.widths.width(lane)
-        let value = appearance.format("lane.handle.value", Int(width.rounded()))
+        let value = appearance.format("lane.handle.value", String(Int(width.rounded())))
         let thick = CGFloat(active ? Tokens.Size.handleThicknessActive : Tokens.Size.hairline)
         let long = CGFloat(active ? Tokens.Size.handleLengthActive : Tokens.Size.handleLength)
         let tone = appearance.color(active ? \.ink : \.inkTertiary)
@@ -394,7 +394,7 @@ struct SyncButton: View {
         let failed = session.syncFailed
         let profile = session.settings.profile
         let face = Initials.avatar(code: profile.code, name: profile.name)
-        let title = session.syncing ? "sync.running" : failed ? "sync.failed" : "sync.fresh"
+        let title = session.syncing ? "settings.link.working" : failed ? "sync.failed" : "sync.fresh"
         let ring = CGFloat(Tokens.Size.symbolSize)
         let line = CGFloat(Tokens.Size.hairline)
         Button(action: run) {

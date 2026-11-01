@@ -160,7 +160,7 @@ enum ProjectFolderList {
     }
 
     static func save(_ session: AppSession, appearance: Appearance, message id: String, attachment: AttachmentEntry, anchor: AnchorBox) {
-        projects(session, appearance: appearance, title: "mail.attachment.otherProject", anchor: anchor) { project in
+        projects(session, appearance: appearance, title: "mail.action.otherProject", anchor: anchor) { project in
             Task { await session.inbox.attachmentToProjectFolder(id, attachmentID: attachment.id, name: attachment.name, project: project) }
         }
     }
@@ -253,7 +253,7 @@ enum ProjectFolderList {
     }
 
     private static func retry(appearance: Appearance, action: @escaping () -> Void) -> MenuEntry {
-        .row(MenuItem(id: "retry", label: appearance.text("mail.projectFiles.retry"), action: action))
+        .row(MenuItem(id: "retry", label: appearance.text("mail.list.failed.act"), action: action))
     }
 }
 

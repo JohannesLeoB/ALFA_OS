@@ -147,7 +147,7 @@ struct MessageLane: View {
             }
         }
         if !(width < SheetValues.tilesBreakpoint && inbox.tiles && !maxed) {
-            SymbolButton(help: maxed ? appearance.string("mail.lane.back") : appearance.format("mail.grow.named", title),
+            SymbolButton(help: maxed ? appearance.string("settings.account.back") : appearance.format("mail.grow.named", title),
                          glyph: maxed ? .shrink : .expand, hover: .none, pressed: false) {
                 desk.toggleMaximize(.center)
             }
@@ -202,7 +202,7 @@ struct MessageLane: View {
         Notice(kind: .failure, title: appearance.text("mail.notice.outboxUnsaved.title"),
                text: Text(verbatim: appearance.format("mail.notice.outboxUnsaved.text", Format.number(inbox.outboxUnsaved))),
                glyph: { Glyph(.alert) },
-               actions: { TextButton(label: appearance.text("mail.notice.outboxUnsaved.act"), kind: .accent) { inbox.resaveOutbox() } })
+               actions: { TextButton(label: appearance.text("mail.draft.saveFailed.retry"), kind: .accent) { inbox.resaveOutbox() } })
             .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
             .padding(.top, CGFloat(Tokens.Spacing.step8))
     }
@@ -211,7 +211,7 @@ struct MessageLane: View {
         Notice(kind: .failure, title: Text(verbatim: appearance.format("mail.list.signInExpired", address)),
                text: appearance.text("mail.list.signInExpired.text"),
                glyph: { Glyph(.alert) },
-               actions: { TextButton(label: appearance.text("mail.list.signInExpired.act"), kind: .accent) { openExpired() } })
+               actions: { TextButton(label: appearance.text("settings.action.reconnect"), kind: .accent) { openExpired() } })
             .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
             .padding(.top, CGFloat(Tokens.Spacing.step8))
     }
@@ -303,7 +303,7 @@ struct MessageLane: View {
 
     private func loadingText(_ progress: SyncProgress?) -> Text {
         guard let progress else { return appearance.text("mail.list.loading") }
-        let line = appearance.format("mail.list.progress", progress.done, progress.total)
+        let line = appearance.format("mail.list.progress", String(progress.done), String(progress.total))
         return Text(verbatim: appearance.string("mail.list.loading") + "\n" + line)
     }
 
@@ -489,7 +489,7 @@ extension MessageCard {
                 let more = max(0, draftPeople.count - 1)
                 if !front && more > 0 {
                     Spacer(minLength: 0)
-                    Text(verbatim: appearance.format("mail.card.more", Format.number(more)))
+                    Text(verbatim: appearance.format("mail.read.more", Format.number(more)))
                         .lineLimit(1)
                 } else {
                     draftMeta(card)
@@ -540,7 +540,7 @@ extension MessageCard {
         @ViewBuilder
         private func slotView(_ slot: Slot) -> some View {
             if slot.kind == .more {
-                SymbolButton(help: appearance.string("mail.action.more"), glyph: .more, tone: \.inkSecondary, hover: .fill) { openMore() }
+                SymbolButton(help: appearance.string("settings.action.more"), glyph: .more, tone: \.inkSecondary, hover: .fill) { openMore() }
                     .background(AnchorMarker(box: moreAnchor))
             } else if slot.action == .send, slot.cost > ShellValues.commandIconCost {
                 TextButton(label: appearance.text("mail.action.send"), kind: .accent, disabled: slot.off, action: { perform(.send) }) { Glyph(.send) }
