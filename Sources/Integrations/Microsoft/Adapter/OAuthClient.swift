@@ -14,7 +14,7 @@ struct OAuthClient: TokenRefreshPort {
     let http: any HttpPort
 
     func authorization(redirectURI: String, loginHint: String? = nil) throws -> AuthorizationParams {
-        let pkce = PkceChallenge.generate()
+        let pkce = try PkceChallenge.generate()
         let state = UUID().uuidString
         var query = [
             URLQueryItem(name: "client_id", value: registration.clientID),

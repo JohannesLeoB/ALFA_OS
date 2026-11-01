@@ -115,9 +115,9 @@ struct PkceChallenge: Sendable {
     let verifier: String
     let challenge: String
 
-    static func generate() -> PkceChallenge {
+    static func generate() throws -> PkceChallenge {
         var bytes = [UInt8](repeating: 0, count: verifierBytes)
-        _ = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
+        guard SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes) == errSecSuccess else { throw SignInFailure.randomUnavailable }
         let verifier = URLSafeEngine.encodeURL(Data(bytes))
         let challenge = URLSafeEngine.encodeURL(Data(SHA256.hash(data: Data(verifier.utf8))))
         return PkceChallenge(verifier: verifier, challenge: challenge)
@@ -133,4 +133,5 @@ enum SignInFailure: Error, Equatable, Sendable {
     case loopbackStartupFailed
     case loopbackCancelled
     case browserFailed
+    case randomUnavailable
 }

@@ -79,6 +79,7 @@ enum SignInFailure: Error, Equatable, Sendable {
     case loopbackStartupFailed
     case loopbackCancelled
     case browserFailed
+    case randomUnavailable
 }
 
 enum Product: String, Sendable {

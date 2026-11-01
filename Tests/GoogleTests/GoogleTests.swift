@@ -318,11 +318,11 @@ final class GoogleTests: XCTestCase {
         XCTAssertNil(oauth.code(from: try XCTUnwrap(URL(string: "http://127.0.0.1:5/?state=\(params.state)")), expectedState: params.state))
     }
 
-    func testPkceChallengeIsTheSha256OfTheVerifier() {
-        let pkce = PkceChallenge.generate()
+    func testPkceChallengeIsTheSha256OfTheVerifier() throws {
+        let pkce = try PkceChallenge.generate()
         XCTAssertGreaterThanOrEqual(pkce.verifier.count, 43)
         XCTAssertFalse(pkce.verifier.contains("="))
-        XCTAssertNotEqual(PkceChallenge.generate().verifier, pkce.verifier)
+        XCTAssertNotEqual(try PkceChallenge.generate().verifier, pkce.verifier)
     }
 
     func testTokenRequestsCarryTheSecretOnlyWhenConfigured() async throws {

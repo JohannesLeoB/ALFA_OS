@@ -138,10 +138,10 @@ final class MicrosoftTests: XCTestCase {
         XCTAssertNil(query(try client(FakeHttp()).authorization(redirectURI: "http://localhost:5", loginHint: "").url)["login_hint"])
     }
 
-    func testPkceChallengeIsTheHashOfTheVerifier() {
-        let pkce = PkceChallenge.generate()
+    func testPkceChallengeIsTheHashOfTheVerifier() throws {
+        let pkce = try PkceChallenge.generate()
         XCTAssertGreaterThanOrEqual(pkce.verifier.count, 43)
-        XCTAssertNotEqual(pkce.verifier, PkceChallenge.generate().verifier)
+        XCTAssertNotEqual(pkce.verifier, try PkceChallenge.generate().verifier)
         XCTAssertFalse(pkce.challenge.contains("="))
     }
 
