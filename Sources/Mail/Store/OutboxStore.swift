@@ -82,10 +82,16 @@ public final class OutboxStore: OutboxPort {
             do {
                 try await deleteDraft(entry.inlet, draftID: entry.id)
             } catch {
+                if Self.isGone(error) { continue }
                 remaining.append(entry)
             }
         }
         if remaining.count != pending.count { storePending(remaining) }
+    }
+
+    private static func isGone(_ error: any Error) -> Bool {
+        guard case HubFailure.provider(let hint) = error, let original = hint.original else { return false }
+        return original.status == 404 || original.code?.hasPrefix("messageNotFound") == true
     }
 
     private func pendingDeletes() -> [PendingDraftDelete] {

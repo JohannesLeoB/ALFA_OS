@@ -729,6 +729,25 @@ final class MailTests: XCTestCase {
     }
 
     @MainActor
+    func testAPendingDraftDeleteThatFindsNothingIsDroppedButATimeoutIsKept() async throws {
+        let rig = try Rig()
+        rig.transport.failure.with { $0 = MailFailure.messageNotFound("x") }
+        await rig.outbox.abandonDraft("a", draftID: "gone")
+        await rig.outbox.retryPendingDeletes()
+        rig.transport.failure.with { $0 = nil }
+        rig.transport.calls.with { $0 = [] }
+        await rig.outbox.retryPendingDeletes()
+        XCTAssertFalse(rig.transport.calls.with { $0.contains("deleteDraft") })
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        await rig.outbox.abandonDraft("a", draftID: "later")
+        await rig.outbox.retryPendingDeletes()
+        rig.transport.failure.with { $0 = nil }
+        rig.transport.calls.with { $0 = [] }
+        await rig.outbox.retryPendingDeletes()
+        XCTAssertTrue(rig.transport.calls.with { $0.contains("deleteDraft") })
+    }
+
+    @MainActor
     func testADraftWithOnlyCcOrBccCanBeSent() async throws {
         let rig = try Rig()
         let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
