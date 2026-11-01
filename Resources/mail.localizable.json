@@ -459,15 +459,15 @@
   },
   "mail.notice.tooLarge.title": {
    "de": "Mail zu groß",
-   "en": "Mail too large"
+   "en": "Message too large"
   },
   "mail.notice.tooLarge.text": {
    "de": "Mit den Anhängen ist die Mail größer, als das Postfach senden darf.",
-   "en": "With its attachments the mail is larger than the mailbox may send."
+   "en": "With its attachments, the message is larger than the mailbox can send."
   },
   "mail.notice.tooLarge.act": {
    "de": "Anhänge ändern",
-   "en": "Change attachments"
+   "en": "Change Attachments"
   },
   "mail.draft.tooLarge": {
    "de": "Zu groß",
@@ -807,7 +807,7 @@
   },
   "mail.failure.projectSave": {
    "de": "Nicht gesichert · Projektordner nicht erreichbar",
-   "en": "Not saved · project folder unreachable"
+   "en": "Not saved · project folder unavailable"
   },
   "mail.failure.pdf": {
    "de": "PDF nicht gesichert",

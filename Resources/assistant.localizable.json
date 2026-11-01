@@ -1931,7 +1931,7 @@
   },
   "settings.usage.estimate.value": {
    "de": "ca. {1} €",
-   "en": "approx. {1} €"
+   "en": "approx. €{1}"
   },
   "settings.usage.prices.missing": {
    "de": "Preise fehlen. Trage die Preise je Million Tokens ein, dann schätzt ALFA_OS die Kosten.",

@@ -143,7 +143,7 @@
   },
   "settings.account.remove": {
    "de": "Konto entfernen",
-   "en": "Remove account"
+   "en": "Remove Account"
   },
   "settings.account.remove.ask": {
    "de": "Konto entfernen?",
@@ -159,7 +159,7 @@
   },
   "settings.toast.accountAdded": {
    "de": "Eingang und Ausgang erreichbar.",
-   "en": "Incoming and outgoing servers reachable."
+   "en": "Incoming and outgoing reachable."
   },
   "settings.toast.syncFailed": {
    "de": "Abgleich fehlgeschlagen.",

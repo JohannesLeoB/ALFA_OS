@@ -13240,7 +13240,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Not saved · project folder unreachable"
+            "value" : "Not saved · project folder unavailable"
           }
         }
       }
@@ -14308,7 +14308,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Change attachments"
+            "value" : "Change Attachments"
           }
         }
       }
@@ -14324,7 +14324,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "With its attachments the mail is larger than the mailbox may send."
+            "value" : "With its attachments, the message is larger than the mailbox can send."
           }
         }
       }
@@ -14340,7 +14340,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mail too large"
+            "value" : "Message too large"
           }
         }
       }
@@ -16452,7 +16452,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Remove account"
+            "value" : "Remove Account"
           }
         }
       }
@@ -21023,7 +21023,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incoming and outgoing servers reachable."
+            "value" : "Incoming and outgoing reachable."
           }
         }
       }
@@ -21247,7 +21247,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "approx. {1} €"
+            "value" : "approx. €{1}"
           }
         }
       }
