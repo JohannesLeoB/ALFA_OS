@@ -1,16 +1,20 @@
 import Foundation
 
-struct ContactStore {
+public struct ContactStore: ContactBookPort {
     static let storageKey = "mail.contacts"
 
     let defaults: UserDefaults?
 
-    func load() -> [Contact] {
+    public init(defaults: UserDefaults?) {
+        self.defaults = defaults
+    }
+
+    public func load() -> [Contact] {
         guard let data = defaults?.data(forKey: Self.storageKey) else { return [] }
         return (try? JSONDecoder().decode([Contact].self, from: data)) ?? []
     }
 
-    func save(_ contacts: [Contact]) {
+    public func save(_ contacts: [Contact]) {
         guard let defaults else { return }
         defaults.set(try? JSONEncoder().encode(contacts), forKey: Self.storageKey)
     }

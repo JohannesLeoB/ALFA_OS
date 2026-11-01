@@ -2402,10 +2402,10 @@ final class MailTests: XCTestCase {
     func testContactsPersistAndSuggest() throws {
         let suite = "mail.tests." + UUID().uuidString
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
-        let contacts = ContactState(defaults: defaults)
+        let contacts = ContactState(book: ContactStore(defaults: defaults))
         XCTAssertEqual(contacts.save(name: "Ann", address: "ann@x.de"), .contactSaved("Ann"))
         XCTAssertEqual(contacts.save(name: "Ann", address: "ANN@x.de"), .contactExists("Ann"))
-        XCTAssertEqual(ContactState(defaults: defaults).items.count, 1)
+        XCTAssertEqual(ContactState(book: ContactStore(defaults: defaults)).items.count, 1)
         defaults.removePersistentDomain(forName: suite)
     }
 

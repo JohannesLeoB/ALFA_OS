@@ -75,7 +75,7 @@ final class Assembly {
                                    serverCopy: { [settings] inlet in settings.serverCopy(inlet) },
                                    attachmentDirectory: directory,
                                    attachmentSettings: { [settings] in settings.mailStore })
-        let inbox = InboxState(mailbox: mailbox, outbox: outbox, contacts: ContactState(defaults: defaults),
+        let inbox = InboxState(mailbox: mailbox, outbox: outbox, contacts: ContactState(book: ContactStore(defaults: defaults)),
                                directory: ContactSourceState(settings: settingStore),
                                signatures: { [settings] inlet in settings.signature(inlet) },
                                quoteTexts: {
@@ -323,5 +323,11 @@ extension ToolShelf {
             if customers.configured { feeds.append(ContactFeed(source: .airtable, port: customers)) }
         }
         return feeds
+    }
+}
+
+extension IntegrationCatalogStore: @retroactive CardLookupPort {
+    public func cardID(forProvider provider: String) -> String? {
+        info(forProvider: provider)?.id
     }
 }

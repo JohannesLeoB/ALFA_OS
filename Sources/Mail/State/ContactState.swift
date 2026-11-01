@@ -3,14 +3,14 @@ import Observation
 
 @MainActor @Observable
 public final class ContactState {
-    public private(set) var items: [Contact] = [] { didSet { store.save(items) } }
+    public private(set) var items: [Contact] = [] { didSet { book?.save(items) } }
     public var editing: String?
 
-    @ObservationIgnored private let store: ContactStore
+    @ObservationIgnored private let book: (any ContactBookPort)?
 
-    public init(defaults: UserDefaults? = nil) {
-        store = ContactStore(defaults: defaults)
-        items = store.load()
+    public init(book: (any ContactBookPort)? = nil) {
+        self.book = book
+        items = book?.load() ?? []
     }
 
     func contact(_ address: String) -> Contact? {

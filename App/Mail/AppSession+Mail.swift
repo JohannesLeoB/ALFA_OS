@@ -10,7 +10,7 @@ import UniformTypeIdentifiers
 
 extension AppSession {
     func perform(_ action: Action, message id: String, undoable: Bool = true, fromMenu: Bool = false) {
-        if ActionRouter(state: inbox).message(action, id, undoable: undoable, fromMenu: fromMenu) { return }
+        if inbox.perform(action, message: id, undoable: undoable, fromMenu: fromMenu) { return }
         switch action {
         case .print: Task { await MessageExport.printMail(inbox, id, settings: settings) }
         case .pdf: Task { await MessageExport.savePDF(inbox, id, settings: settings) }
@@ -19,7 +19,7 @@ extension AppSession {
     }
 
     func perform(_ action: Action, name: String, address: String) {
-        if ActionRouter(state: inbox).person(action, name: name, address: address) { return }
+        if inbox.perform(action, name: name, address: address) { return }
         switch action {
         case .copyAddress:
             NSPasteboard.general.clearContents()
@@ -137,7 +137,7 @@ enum MoveFolderList {
     static func entries(_ inbox: InboxState, appearance: Appearance, message id: String) -> [MenuEntry] {
         let rows = inbox.moveTargets(id).map { folder in
             MenuEntry.row(MenuItem(id: folder.id, label: Text(verbatim: FolderTitle.text(inbox.folderName(folder.id)) { appearance.string($0) })) {
-                ActionRouter(state: inbox).move(id, to: folder.id)
+                inbox.startMove(id, to: folder.id)
             })
         }
         return [.head(id: "head", label: appearance.text("mail.action.move"))] + rows

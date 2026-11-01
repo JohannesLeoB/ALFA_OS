@@ -106,9 +106,9 @@ extension InboxState {
         return nil
     }
 
-    public func fixCard(in catalog: IntegrationCatalogStore) -> String? {
+    public func fixCard(in catalog: any CardLookupPort) -> String? {
         guard let account = selectedAccount, case .failed(let hint) = account.state, hint.fixIn == .inlet(account.id) else { return nil }
-        return catalog.info(forProvider: account.provider)?.id
+        return catalog.cardID(forProvider: account.provider)
     }
 
     public var emptyKind: EmptyKind? {
