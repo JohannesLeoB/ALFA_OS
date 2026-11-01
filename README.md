@@ -28,10 +28,13 @@ All commands use Python 3.9 or later and the standard library only.
 ```sh
 python3 -I tools/validate.py
 python3 -I -m unittest discover -s rules -p "test_*.py"
+python3 -I tools/build_xray.py
 ```
 
 `validate.py` checks every record against its schema, checks that each source reference exists, and checks that IDs are unique. It ends with exit code 0 when all checks pass.
 
+`build_xray.py` writes `build/xray.html`. The page shows the layers, one drawer calculated by the rules, all atoms, the open points and the limits. Do not edit the page by hand.
+
 ## Status
 
-The first scope is the standard base cabinet with drawers. The drawer rules for Blum TANDEM, MOVENTO and LEGRABOX are in `rules/drawer.py`. The coordination strand for this work is `straenge/kuechenwissen.md` in the repository `ALFA-Knowledge`.
+The first scope is the standard base cabinet with drawers. The drawer rules for Blum TANDEM, MOVENTO and LEGRABOX are in `rules/drawer.py`. The coordination strand for this work is `strands/S-kitchen-knowledge.md` in the repository `ALFA-Knowledge`.

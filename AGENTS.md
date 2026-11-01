@@ -44,4 +44,5 @@ Each library entry has the field `sharing`. Use `setup_only` until the licence o
 2. Change the records.
 3. Run `python3 -I tools/validate.py` and the tests. Both must pass.
 4. Commit on a branch and open a pull request against `knowledge`. Johannes merges.
-5. Update the strand `straenge/kuechenwissen.md` in `ALFA-Knowledge` at the end of each task.
+5. Update the strand `strands/S-kitchen-knowledge.md` in `ALFA-Knowledge` at the end of each task.
+6. Run `python3 -I tools/build_xray.py` and publish the page again when the data changed.
