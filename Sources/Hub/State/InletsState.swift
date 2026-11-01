@@ -348,7 +348,7 @@ extension InletsState: AccessPort {
                 for (kind, items) in outcome.deliveries {
                     delivered[kind, default: [:]][inletID] = (items, now)
                     for feed in feeds[kind] ?? [] { feed.apply(inlet: inletID, records: items, at: now) }
-                    emit(.newItems(kind))
+                    emit(.itemsArrived(kind))
                 }
                 probed(inletID, at: now)
             }

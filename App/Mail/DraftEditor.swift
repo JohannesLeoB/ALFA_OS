@@ -388,7 +388,7 @@ struct BodyEditor: NSViewRepresentable {
         view.drawsBackground = false
         view.textContainerInset = .zero
         view.textContainer?.lineFragmentPadding = 0
-        view.typingAttributes = base
+        view.typingAttributes = defaultAttributes
         view.textStorage?.setAttributedString(content(html: html))
         view.delegate = context.coordinator
         view.mark(signature, colors: appearance.colors)
@@ -412,7 +412,7 @@ struct BodyEditor: NSViewRepresentable {
         (view as? SignatureTextView)?.mark(signature, colors: appearance.colors)
     }
 
-    private var base: [NSAttributedString.Key: Any] {
+    private var defaultAttributes: [NSAttributedString.Key: Any] {
         let style = Tokens.TextStyle.mailBody
         let paragraph = NSMutableParagraphStyle()
         let face = Typeface.draft(size: style.size)
@@ -427,7 +427,7 @@ struct BodyEditor: NSViewRepresentable {
               let parsed = try? NSMutableAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html,
                                                                                 .characterEncoding: String.Encoding.utf8.rawValue],
                                                           documentAttributes: nil) else {
-            return NSAttributedString(string: text, attributes: base)
+            return NSAttributedString(string: text, attributes: defaultAttributes)
         }
         let whole = NSRange(location: 0, length: parsed.length)
         let font = Typeface.draft(size: Tokens.TextStyle.mailBody.size)
@@ -436,7 +436,7 @@ struct BodyEditor: NSViewRepresentable {
             let traits = (value as? NSFont).map { manager.traits(of: $0) } ?? []
             parsed.addAttribute(.font, value: manager.convert(font, toHaveTrait: traits.intersection([.boldFontMask, .italicFontMask])), range: part)
         }
-        for key in [NSAttributedString.Key.foregroundColor, .paragraphStyle] { parsed.addAttribute(key, value: base[key] as Any, range: whole) }
+        for key in [NSAttributedString.Key.foregroundColor, .paragraphStyle] { parsed.addAttribute(key, value: defaultAttributes[key] as Any, range: whole) }
         return parsed
     }
 

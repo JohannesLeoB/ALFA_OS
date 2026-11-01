@@ -12,24 +12,24 @@ private struct EventMonitor: ViewModifier {
     @Environment(\.appLocked) private var locked
     let mask: NSEvent.EventTypeMask
     let active: Bool
-    let handler: (EventSample) -> Bool
+    let onEvent: (EventSample) -> Bool
 
     func body(content: Content) -> some View {
-        content.background(MonitorAnchor(mask: mask, active: active && !locked, handler: handler))
+        content.background(MonitorAnchor(mask: mask, active: active && !locked, onEvent: onEvent))
     }
 }
 
 private struct MonitorAnchor: NSViewRepresentable {
     let mask: NSEvent.EventTypeMask
     let active: Bool
-    let handler: (EventSample) -> Bool
+    let onEvent: (EventSample) -> Bool
 
     func makeNSView(context: Context) -> MonitorView {
         MonitorView()
     }
 
     func updateNSView(_ view: MonitorView, context: Context) {
-        view.handler = handler
+        view.onEvent = onEvent
         view.listen(active, mask: mask)
     }
 
@@ -39,7 +39,7 @@ private struct MonitorAnchor: NSViewRepresentable {
 }
 
 private final class MonitorView: NSView {
-    var handler: (EventSample) -> Bool = { _ in false }
+    var onEvent: (EventSample) -> Bool = { _ in false }
     private var monitor: Any?
 
     override var isFlipped: Bool { true }
@@ -60,13 +60,13 @@ private final class MonitorView: NSView {
 
     private func deliver(_ event: NSEvent) -> Bool {
         let local = event.window === window ? convert(event.locationInWindow, from: nil) : nil
-        return handler(EventSample(event: event, local: local))
+        return onEvent(EventSample(event: event, local: local))
     }
 }
 
 extension View {
-    func eventMonitor(_ mask: NSEvent.EventTypeMask, active: Bool = true, _ handler: @escaping (EventSample) -> Bool) -> some View {
-        modifier(EventMonitor(mask: mask, active: active, handler: handler))
+    func eventMonitor(_ mask: NSEvent.EventTypeMask, active: Bool = true, _ onEvent: @escaping (EventSample) -> Bool) -> some View {
+        modifier(EventMonitor(mask: mask, active: active, onEvent: onEvent))
     }
 }
 

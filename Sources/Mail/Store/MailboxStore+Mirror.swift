@@ -222,7 +222,7 @@ extension MailboxStore {
         }
         await storeCount(inlet, folder, transport)
         announceChange(inlet, folder)
-        if hadSync, fresh > 0, folder == inboxID(inlet) { eventBus.emit(.newMail(inlet, count: fresh)) }
+        if hadSync, fresh > 0, folder == inboxID(inlet) { eventBus.emit(.mailArrived(inlet, count: fresh)) }
     }
 
     func isDirty(_ inlet: Inlet.ID, _ messageID: String) -> Bool {

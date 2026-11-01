@@ -111,7 +111,7 @@ final class AppSession {
         arrivals = Task { [weak self] in
             guard let events = self?.assembly.mailEvents.stream else { return }
             for await event in events {
-                if case .newMail(_, let count) = event { await self?.announce(arrivals: count) }
+                if case .mailArrived(_, let count) = event { await self?.announce(arrivals: count) }
             }
         }
         await inbox.start()

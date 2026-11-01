@@ -107,7 +107,7 @@ public enum InletEvent: Equatable, Sendable {
     case inletRemoved(Inlet.ID)
     case syncFinished(Capability, Inlet.ID)
     case syncFailed(Capability, Inlet.ID, Hint)
-    case newItems(DataKind)
+    case itemsArrived(DataKind)
 }
 
 public struct Person: Identifiable, Equatable, Codable, Sendable {

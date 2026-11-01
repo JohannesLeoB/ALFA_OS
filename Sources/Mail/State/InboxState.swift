@@ -426,7 +426,7 @@ public final class InboxState {
         case .messagesChanged(let inlet, let folder):
             scheduleReload(inlet: inlet, folder: folder)
             refreshCounts()
-        case .newMail(let inlet, _):
+        case .mailArrived(let inlet, _):
             if let folder = selectedFolder, inlet == selectedInlet,
                folders.first(where: { $0.id == folder })?.role == .inbox {
                 scheduleReload(inlet: inlet, folder: folder)

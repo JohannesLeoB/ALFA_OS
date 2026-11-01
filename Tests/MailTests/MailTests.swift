@@ -2165,13 +2165,13 @@ final class MailTests: XCTestCase {
         await state.start()
         try await Task.sleep(for: .milliseconds(100))
         state.summaries = []
-        rig.events.emit(.newMail("a", count: 1))
+        rig.events.emit(.mailArrived("a", count: 1))
         for _ in 0..<50 where state.rows.isEmpty { try await Task.sleep(for: .milliseconds(20)) }
         XCTAssertEqual(state.rows.map(\.id), ["1:1:INBOX"])
         await state.selectFolder("Archive")
         try await Task.sleep(for: .milliseconds(100))
         state.summaries = []
-        rig.events.emit(.newMail("a", count: 1))
+        rig.events.emit(.mailArrived("a", count: 1))
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(state.rows.isEmpty)
     }
@@ -2200,7 +2200,7 @@ final class MailTests: XCTestCase {
             if event == .syncFinished("end") { break }
             seen.append(event)
         }
-        XCTAssertFalse(seen.contains { if case .newMail = $0 { true } else { false } })
+        XCTAssertFalse(seen.contains { if case .mailArrived = $0 { true } else { false } })
         XCTAssertEqual(seen.filter { $0 == .messagesChanged("a", folder: "INBOX") }.count, 3)
     }
 
@@ -3001,12 +3001,12 @@ final class MailTests: XCTestCase {
         let meter = CostMeter(inlet: "a", capability: .mail, cost: NoCost(), clock: { Date() })
         let plain = TransportDouble()
         plain.mirrorRanges.with { $0 = [] }
-        XCTAssertEqual(MeteredMail(base: plain, meter: meter).ranges, [])
-        XCTAssertFalse(MeteredMail(base: plain, meter: meter).offersEverywhere(in: [Folder(id: "Archive", name: "A")]))
+        XCTAssertEqual(MeteredMail(wrapped: plain, meter: meter).ranges, [])
+        XCTAssertFalse(MeteredMail(wrapped: plain, meter: meter).offersEverywhere(in: [Folder(id: "Archive", name: "A")]))
         plain.mirrorRanges.with { $0 = MailboxRange.allCases }
         plain.everywhereFolder.with { $0 = "Archive" }
         plain.corpus.with { $0["INBOX"] = [MessageSummary(id: "x", subject: "s", from: "f", receivedAt: Self.epoch)] }
-        let metered = MeteredMail(base: plain, meter: meter)
+        let metered = MeteredMail(wrapped: plain, meter: meter)
         XCTAssertEqual(metered.ranges, MailboxRange.allCases)
         XCTAssertTrue(metered.offersEverywhere(in: [Folder(id: "Archive", name: "A")]))
         XCTAssertFalse(metered.offersEverywhere(in: [Folder(id: "INBOX", name: "I")]))
@@ -3018,7 +3018,7 @@ final class MailTests: XCTestCase {
         XCTAssertEqual(refreshed.cursor, "c1")
         let hits = try await metered.searchEverywhere(query: "s", pageToken: nil, maxResults: 10)
         XCTAssertEqual(hits.messages.count, 1)
-        let bare = MeteredMail(base: SingleFolderDouble(), meter: meter)
+        let bare = MeteredMail(wrapped: SingleFolderDouble(), meter: meter)
         do {
             _ = try await bare.listIDs(folderID: "INBOX", since: nil, limit: nil)
             XCTFail("must throw")

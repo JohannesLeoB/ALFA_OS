@@ -178,7 +178,7 @@ public struct KeychainStore: KeychainPort {
         self.prefix = prefix
     }
 
-    static func service(for slot: KeySlot, prefix: String = AppIdentity.keychainPrefix) -> String {
+    static func keychainService(for slot: KeySlot, prefix: String = AppIdentity.keychainPrefix) -> String {
         prefix + "hub." + slot.inlet
     }
 
@@ -189,7 +189,7 @@ public struct KeychainStore: KeychainPort {
     private func identity(_ slot: KeySlot) -> [CFString: Any] {
         [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrService: Self.service(for: slot, prefix: prefix),
+            kSecAttrService: Self.keychainService(for: slot, prefix: prefix),
             kSecAttrAccount: Self.account(for: slot),
         ]
     }

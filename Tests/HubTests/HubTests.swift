@@ -1217,7 +1217,7 @@ final class HubTests: XCTestCase {
         collector.cancel()
         XCTAssertTrue(events.contains(.inletChanged(inlet.id)))
         XCTAssertTrue(events.contains(.syncFinished(.mail, inlet.id)))
-        XCTAssertTrue(events.contains(.newItems(.mailboxes)))
+        XCTAssertTrue(events.contains(.itemsArrived(.mailboxes)))
     }
 
     @MainActor
@@ -1904,14 +1904,14 @@ final class HubTests: XCTestCase {
 
     func testKeychainNamesFollowPrefixAndInlet() {
         let slot = KeySlot(inlet: "imap-123", name: "password")
-        XCTAssertEqual(KeychainStore.service(for: slot, prefix: "p."), "p.hub.imap-123")
-        XCTAssertEqual(KeychainStore.service(for: slot), AppIdentity.keychainPrefix + "hub.imap-123")
+        XCTAssertEqual(KeychainStore.keychainService(for: slot, prefix: "p."), "p.hub.imap-123")
+        XCTAssertEqual(KeychainStore.keychainService(for: slot), AppIdentity.keychainPrefix + "hub.imap-123")
         XCTAssertEqual(KeychainStore.account(for: slot), "password")
         let a = KeySlot(inlet: "x", name: "a")
         let b = KeySlot(inlet: "x", name: "b")
-        XCTAssertEqual(KeychainStore.service(for: a), KeychainStore.service(for: b))
+        XCTAssertEqual(KeychainStore.keychainService(for: a), KeychainStore.keychainService(for: b))
         XCTAssertNotEqual(KeychainStore.account(for: a), KeychainStore.account(for: b))
-        XCTAssertNotEqual(KeychainStore.service(for: a), KeychainStore.service(for: KeySlot(inlet: "y", name: "a")))
+        XCTAssertNotEqual(KeychainStore.keychainService(for: a), KeychainStore.keychainService(for: KeySlot(inlet: "y", name: "a")))
     }
 
     func testKeychainStoreRoundTripsAndForgets() throws {

@@ -16,7 +16,7 @@ extension InletsState: SetupPort {
         guard let provider = router.provider(offer.provider) else {
             throw .probeFailed(Hint(text: HintEngine.unknownProviderText, detail: offer.provider))
         }
-        var inlet = SetupEngine.newInlet(id: offer.provider + "-" + UUID().uuidString, offer: offer)
+        var inlet = SetupEngine.inlet(id: offer.provider + "-" + UUID().uuidString, offer: offer)
         let grant: Grant
         let candidate = inlet
         let values = input.values

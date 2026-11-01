@@ -2,7 +2,7 @@ import Foundation
 import Synchronization
 
 enum SetupEngine {
-    static func newInlet(id: String, offer: Offer) -> Inlet {
+    static func inlet(id: String, offer: Offer) -> Inlet {
         Inlet(id: id, provider: offer.provider, capabilities: offer.capabilities, owner: offer.owner, title: offer.title)
     }
 

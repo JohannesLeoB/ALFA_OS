@@ -167,7 +167,7 @@ public enum MailboxEvent: Equatable, Sendable {
     case accountsChanged
     case foldersChanged(Inlet.ID)
     case messagesChanged(Inlet.ID, folder: String)
-    case newMail(Inlet.ID, count: Int)
+    case mailArrived(Inlet.ID, count: Int)
     case outboxChanged
     case progress(Inlet.ID, folder: String)
     case refused(Inlet.ID, folder: String)

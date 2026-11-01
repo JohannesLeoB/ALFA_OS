@@ -372,18 +372,18 @@ struct RowTone {
 }
 
 struct RightClickOverlay: NSViewRepresentable {
-    let handler: (NSPoint) -> Void
+    let onSecondaryClick: (NSPoint) -> Void
 
     func makeNSView(context: Context) -> ClickView {
         ClickView()
     }
 
     func updateNSView(_ view: ClickView, context: Context) {
-        view.handler = handler
+        view.onSecondaryClick = onSecondaryClick
     }
 
     final class ClickView: NSView {
-        var handler: (NSPoint) -> Void = { _ in }
+        var onSecondaryClick: (NSPoint) -> Void = { _ in }
 
         override func hitTest(_ point: NSPoint) -> NSView? {
             guard let event = NSApp.currentEvent else { return nil }
@@ -392,11 +392,11 @@ struct RightClickOverlay: NSViewRepresentable {
         }
 
         override func rightMouseDown(with event: NSEvent) {
-            handler(NSEvent.mouseLocation)
+            onSecondaryClick(NSEvent.mouseLocation)
         }
 
         override func mouseDown(with event: NSEvent) {
-            if event.modifierFlags.contains(.control) { handler(NSEvent.mouseLocation) } else { super.mouseDown(with: event) }
+            if event.modifierFlags.contains(.control) { onSecondaryClick(NSEvent.mouseLocation) } else { super.mouseDown(with: event) }
         }
     }
 }
