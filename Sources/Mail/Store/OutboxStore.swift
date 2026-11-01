@@ -4,6 +4,11 @@ import GRDB
 import Hub
 import Storage
 
+struct PendingDraftDelete: Codable, Equatable {
+    var inlet: Inlet.ID
+    var id: String
+}
+
 @MainActor
 public final class OutboxStore: OutboxPort {
     private let access: any AccessPort
@@ -60,6 +65,45 @@ public final class OutboxStore: OutboxPort {
     public func deleteDraft(_ inlet: Inlet.ID, draftID: String) async throws(HubFailure) {
         try await perform(inlet) { try await $0.deleteDraft(id: draftID) }
     }
+
+    public func abandonDraft(_ inlet: Inlet.ID, draftID: String) async {
+        do {
+            try await deleteDraft(inlet, draftID: draftID)
+        } catch {
+            remember(PendingDraftDelete(inlet: inlet, id: draftID))
+        }
+    }
+
+    public func retryPendingDeletes() async {
+        let pending = pendingDeletes()
+        guard !pending.isEmpty else { return }
+        var remaining: [PendingDraftDelete] = []
+        for entry in pending {
+            do {
+                try await deleteDraft(entry.inlet, draftID: entry.id)
+            } catch {
+                remaining.append(entry)
+            }
+        }
+        if remaining.count != pending.count { storePending(remaining) }
+    }
+
+    private func pendingDeletes() -> [PendingDraftDelete] {
+        (try? SettingStore(database: database).value(Self.pendingKey, as: [PendingDraftDelete].self)) ?? []
+    }
+
+    private func storePending(_ entries: [PendingDraftDelete]) {
+        try? SettingStore(database: database).store(entries, forKey: Self.pendingKey)
+    }
+
+    private func remember(_ entry: PendingDraftDelete) {
+        var entries = pendingDeletes()
+        guard !entries.contains(entry) else { return }
+        entries.append(entry)
+        storePending(entries)
+    }
+
+    private static let pendingKey = "mail.pendingDraftDeletes"
 
     public func send(_ inlet: Inlet.ID, _ draft: Draft) async -> SendOutcome {
         await submit(OutboxItem(inlet: inlet, draft: draft))
@@ -198,7 +242,7 @@ public final class OutboxStore: OutboxPort {
         let inlet = queued.inlet
         switch await DeliveryEngine.deliver(&item, verify: false, byUser: false, access: access,
                                             folder: { MailboxStore.folderID(self.database, inlet, role: $0) },
-                                            stored: recorder(inlet)) {
+                                            stored: recorder(inlet), leftover: leftover(inlet)) {
         case .sent:
             dropSent(inlet, item.mirrorID)
             return .sent
@@ -232,7 +276,7 @@ public final class OutboxStore: OutboxPort {
             guard let now = items.firstIndex(where: { $0.id == id }) else { return }
             items[now].proceed()
             events.emit(.outboxChanged)
-        }, stored: recorder(inlet))
+        }, stored: recorder(inlet), leftover: leftover(inlet))
         guard let current = items.firstIndex(where: { $0.id == id }) else { return }
         items[current].draftID = item.draftID
         items[current].mirrorID = item.mirrorID
@@ -255,9 +299,15 @@ public final class OutboxStore: OutboxPort {
         events.emit(.outboxChanged)
     }
 
+    private func leftover(_ inlet: Inlet.ID) -> (String) -> Void {
+        { [weak self] id in self?.remember(PendingDraftDelete(inlet: inlet, id: id)) }
+    }
+
     private func recorder(_ inlet: Inlet.ID) -> (SavedDraft, Draft, String?) -> Void {
         { [weak self] saved, draft, previous in
-            guard let self, let target = MailboxStore.folderID(database, inlet, role: .drafts) else { return }
+            guard let self else { return }
+            if let old = saved.leftover { remember(PendingDraftDelete(inlet: inlet, id: old)) }
+            guard let target = MailboxStore.folderID(database, inlet, role: .drafts) else { return }
             try? mirror?.record(saved, of: draft, replacing: previous, inlet: inlet, folder: target)
         }
     }

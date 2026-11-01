@@ -79,9 +79,9 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
         try await base.deleteDraft(id: id)
     }
 
-    func sendDraft(id: String) async throws {
+    func sendDraft(id: String) async throws -> String? {
         meter.record()
-        try await base.sendDraft(id: id)
+        return try await base.sendDraft(id: id)
     }
 
     func wasSent(messageID: String, in folderID: String?) async throws -> Bool {

@@ -989,7 +989,7 @@ final class GoogleTests: XCTestCase {
         let created = try await mail.saveDraft(draft, replacing: nil, into: nil)
         let updated = try await mail.saveDraft(draft, replacing: "d1", into: nil)
         try await mail.deleteDraft(id: "d1")
-        try await mail.sendDraft(id: "d1")
+        _ = try await mail.sendDraft(id: "d1")
         try await mail.send(draft)
         XCTAssertEqual([created, updated], [SavedDraft(id: "d9", mirrorID: "m9"), SavedDraft(id: "d9", mirrorID: "m9")])
         let drafts = "/gmail/v1/users/me/drafts"

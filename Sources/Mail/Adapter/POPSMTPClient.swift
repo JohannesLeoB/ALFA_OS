@@ -142,9 +142,10 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
         try store.remove(id)
     }
 
-    func sendDraft(id: String) async throws {
+    func sendDraft(id: String) async throws -> String? {
         try await send(try await fetchDraft(messageID: id).draft)
         try store.remove(id)
+        return nil
     }
 
     func wasSent(messageID: String, in folderID: String?) async throws -> Bool {

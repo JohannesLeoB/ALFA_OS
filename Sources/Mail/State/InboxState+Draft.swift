@@ -222,7 +222,7 @@ extension InboxState {
             let previous = card.remoteID.map { SavedDraft(id: $0, mirrorID: card.mirrorID) }
             let saved = try await outboxPort.saveDraft(card.inlet, card.draft, replacing: previous)
             guard let now = drafts.firstIndex(where: { $0.id == id }), drafts[now].inlet == card.inlet else {
-                try? await outboxPort.deleteDraft(card.inlet, draftID: saved.id)
+                await outboxPort.abandonDraft(card.inlet, draftID: saved.id)
                 return false
             }
             let queued = drafts[now].outboxID
@@ -230,7 +230,7 @@ extension InboxState {
                 if saved.id == card.remoteID {
                     drafts[now].mirrorID = saved.mirrorID
                 } else {
-                    try? await outboxPort.deleteDraft(card.inlet, draftID: saved.id)
+                    await outboxPort.abandonDraft(card.inlet, draftID: saved.id)
                 }
                 holdForOutbox(now)
                 return false

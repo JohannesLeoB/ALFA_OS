@@ -269,8 +269,15 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort, S
                 guard let uid = found.last else { throw MailFailure.messageNotFound(token) }
                 created = IMAPMessageReference(folder: folderID, uidValidity: selection.uidValidity, uid: uid)
             }
-            if let replaced { try? await Self.removeMessage(replaced, session: session) }
-            return SavedDraft(id: created.encoded)
+            var saved = SavedDraft(id: created.encoded)
+            if let replaced {
+                do {
+                    try await Self.removeMessage(replaced, session: session)
+                } catch {
+                    saved.leftover = replaced.encoded
+                }
+            }
+            return saved
         }
     }
 
@@ -329,10 +336,15 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort, S
         try await SMTPSession.sizeLimit(settings: account.outgoing, opener: opener)
     }
 
-    func sendDraft(id: String) async throws {
+    func sendDraft(id: String) async throws -> String? {
         let stored = try await fetchDraft(messageID: id)
         try await send(stored.draft)
-        try? await deleteDraft(id: id)
+        do {
+            try await deleteDraft(id: id)
+            return nil
+        } catch {
+            return id
+        }
     }
 
     func fileSent(_ draft: Draft, into folderID: String?) async throws {

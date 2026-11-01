@@ -104,10 +104,12 @@ extension Draft {
 public struct SavedDraft: Equatable, Sendable {
     public var id: String
     public var mirrorID: String
+    public var leftover: String?
 
-    public init(id: String, mirrorID: String? = nil) {
+    public init(id: String, mirrorID: String? = nil, leftover: String? = nil) {
         self.id = id
         self.mirrorID = mirrorID ?? id
+        self.leftover = leftover
     }
 }
 

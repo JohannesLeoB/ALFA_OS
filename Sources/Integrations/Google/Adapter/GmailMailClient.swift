@@ -126,8 +126,9 @@ struct GmailMailClient: GmailPort, SourcePort, LabelPort, SenderPort, UntrashPor
         try await gmail.deleteDraft(id: id)
     }
 
-    func sendDraft(id: String) async throws {
+    func sendDraft(id: String) async throws -> String? {
         try await gmail.sendDraft(id: id)
+        return nil
     }
 
     func wasSent(messageID: String, in folderID: String?) async throws -> Bool {

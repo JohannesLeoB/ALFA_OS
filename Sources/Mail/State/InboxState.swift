@@ -272,6 +272,7 @@ public final class InboxState {
 
     public func refreshFolders() async {
         guard let inlet = selectedInlet else { return }
+        await outboxPort.retryPendingDeletes()
         do {
             try await mailbox.refreshFolders(inlet)
         } catch {

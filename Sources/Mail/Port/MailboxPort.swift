@@ -62,6 +62,8 @@ public protocol OutboxPort: AnyObject {
     func saveDraft(_ inlet: Inlet.ID, _ draft: Draft, replacing previous: SavedDraft?) async throws(HubFailure) -> SavedDraft
     func loadDraft(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> StoredDraft
     func deleteDraft(_ inlet: Inlet.ID, draftID: String) async throws(HubFailure)
+    func abandonDraft(_ inlet: Inlet.ID, draftID: String) async
+    func retryPendingDeletes() async
     func send(_ inlet: Inlet.ID, _ draft: Draft) async -> SendOutcome
     func sendDraft(_ inlet: Inlet.ID, draftID: String, mirrorID: String?, _ draft: Draft) async -> SendOutcome
     func resend(_ id: OutboxItem.ID, _ draft: Draft, draftID: String?) async -> SendOutcome?

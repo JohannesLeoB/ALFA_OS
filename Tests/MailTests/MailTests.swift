@@ -181,11 +181,12 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
         removeServerDraft(id)
     }
 
-    func sendDraft(id: String) async throws {
+    func sendDraft(id: String) async throws -> String? {
         await hold("sendDraft")
         try note("sendDraft")
         if let error = sendDraftFailure.with({ $0 }) { throw error }
         removeServerDraft(id)
+        return nil
     }
 
     private func mirrorID(ofDraft id: String) -> String {
@@ -4332,7 +4333,7 @@ private final class SingleFolderDouble: MailTransportPort, @unchecked Sendable {
     func saveDraft(_ draft: Draft, replacing draftID: String?, into folderID: String?) async throws -> SavedDraft { SavedDraft(id: "") }
     func fetchDraft(messageID: String) async throws -> StoredDraft { StoredDraft(id: messageID, draft: Draft(subject: "", body: "")) }
     func deleteDraft(id: String) async throws {}
-    func sendDraft(id: String) async throws {}
+    func sendDraft(id: String) async throws -> String? { nil }
     func wasSent(messageID: String, in folderID: String?) async throws -> Bool { false }
 }
 

@@ -16,7 +16,7 @@ public protocol MailTransportPort: Sendable {
     func saveDraft(_ draft: Draft, replacing draftID: String?, into folderID: String?) async throws -> SavedDraft
     func fetchDraft(messageID: String) async throws -> StoredDraft
     func deleteDraft(id: String) async throws
-    func sendDraft(id: String) async throws
+    func sendDraft(id: String) async throws -> String?
     func wasSent(messageID: String, in folderID: String?) async throws -> Bool
 }
 
