@@ -149,7 +149,7 @@ public struct ClickUpClient: ReadPort, WritePort {
 
     func moveTask(taskID: String, toListID: String) async throws {
         let workspace = try ClickUpResponseParser.firstTeamID(from: try await send("GET", ["team"]))
-        _ = try await send("PUT", ["workspaces", workspace, "tasks", taskID, "home_list", toListID], version3: true)
+        _ = try await send("PUT", ["workspaces", workspace, "tasks", taskID, "home_list", toListID], body: [:], version3: true)
     }
 
     func findOrCreateList(folderID: String, name: String, content: String?) async throws -> String {

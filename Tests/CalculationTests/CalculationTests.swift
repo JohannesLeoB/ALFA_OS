@@ -594,6 +594,39 @@ final class CalculationTests: XCTestCase {
         }
     }
 
+    func testPromotingTwiceAppliesTheFactorOnceAndRefusesPromotedCandidate() async throws {
+        let learning = LearningStore(database: try SQLiteStore.inMemory())
+        let engine = EstimationEngine(anchors: SeedAnchors(), learningStore: learning)
+        let first = try await engine.estimate(projectID: nil, text: "60cm Unterschrank")
+        for _ in 0..<3 {
+            try await engine.recordAdjustment(estimateID: first.estimateID, factor: 1.1, ground: "g", learn: true)
+        }
+        try await engine.promote(candidateID: "CAL-gut_feeling-whole_estimate")
+        do {
+            try await engine.promote(candidateID: "CAL-gut_feeling-whole_estimate")
+            XCTFail("expected failure")
+        } catch {
+            XCTAssertEqual(error as? LearningFailure, .candidateNotPromotable("CAL-gut_feeling-whole_estimate"))
+        }
+        try await engine.recordAdjustment(estimateID: first.estimateID, factor: 1.1, ground: "g", learn: true)
+        try await engine.promote(candidateID: "CAL-gut_feeling-whole_estimate")
+        XCTAssertEqual(try learning.activeFactors().count, 1)
+        let second = try await engine.estimate(projectID: nil, text: "60cm Unterschrank")
+        XCTAssertEqual(second.midNet, 824 * 1.1, accuracy: 1e-4)
+    }
+
+    func testConfirmingUnknownRecordsFailsVisibly() throws {
+        let store = LearningStore(database: try SQLiteStore.inMemory())
+        XCTAssertThrowsError(try store.confirmOffer(sourceRecordID: "ghost")) {
+            XCTAssertEqual($0 as? LearningFailure, .recordNotFound("ghost"))
+        }
+        XCTAssertThrowsError(try store.confirmPdfPosition(recordID: "ghost")) {
+            XCTAssertEqual($0 as? LearningFailure, .recordNotFound("ghost"))
+        }
+        XCTAssertTrue(try LearnedAnchorStore(store: store, referenceYear: 2026).activeAnchors().isEmpty)
+        XCTAssertTrue(try PdfAnchorStore(store: store).activeAnchors().isEmpty)
+    }
+
     func testEngineCarcassCorrectionLoopNeedsSnapshotAndKnownTarget() async throws {
         let learning = LearningStore(database: try SQLiteStore.inMemory())
         let engine = EstimationEngine(anchors: SeedAnchors(), learningStore: learning)

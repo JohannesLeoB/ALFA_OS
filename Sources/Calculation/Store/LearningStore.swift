@@ -87,6 +87,15 @@ public final class LearningStore: LearningLedgerPort {
             guard let candidate = try Self.latestByID(Self.candidates(db)).last(where: { $0.id == candidateID }) else {
                 throw LearningFailure.candidateNotFound(candidateID)
             }
+            guard candidate.status == .candidate || candidate.status == .strongCandidate else {
+                throw LearningFailure.candidateNotPromotable(candidateID)
+            }
+            for earlier in Self.latestByID(try Self.factors(db)) where earlier.candidateID == candidate.id && earlier.status == .active {
+                try StoredFactor(ActiveFactor(
+                    id: earlier.id, candidateID: earlier.candidateID, createdAt: earlier.createdAt, reason: earlier.reason,
+                    target: earlier.target, multiplier: earlier.multiplier, weightedPercentDelta: earlier.weightedPercentDelta,
+                    sampleCount: earlier.sampleCount, status: .superseded)).insert(db)
+            }
             let factor = ActiveFactor(
                 candidateID: candidate.id,
                 reason: candidate.reason,
@@ -305,6 +314,9 @@ extension LearningStore {
     func confirmOffer(sourceRecordID: String, note: String = "") throws {
         let action = ReviewAction(candidateID: sourceRecordID, kind: .releaseAsActiveAnchor, note: note)
         try database.write { db in
+            guard try StoredOfferSync.filter(Column("sourceRecordID") == sourceRecordID).fetchCount(db) > 0 else {
+                throw LearningFailure.recordNotFound(sourceRecordID)
+            }
             try StoredReviewAction(action).insert(db)
             try Self.audit(db, entityID: sourceRecordID, table: "supplier_offer_sync", action: "offer_confirmed", detail: note)
         }
@@ -346,6 +358,9 @@ extension LearningStore {
     func confirmPdfPosition(recordID: String, note: String = "") throws {
         let action = ReviewAction(candidateID: recordID, kind: .releaseAsActiveAnchor, note: note)
         try database.write { db in
+            guard try StoredPdfPosition.filter(Column("recordID") == recordID).fetchCount(db) > 0 else {
+                throw LearningFailure.recordNotFound(recordID)
+            }
             try StoredReviewAction(action).insert(db)
             try Self.audit(db, entityID: recordID, table: "pdf_extracted_positions", action: "pdf_confirmed", detail: note)
         }

@@ -313,6 +313,8 @@ final class ClickUpTests: XCTestCase {
         XCTAssertEqual(script.requests[0].url?.absoluteString, "https://api.clickup.com/api/v2/team")
         XCTAssertEqual(script.requests[1].url?.absoluteString, "https://api.clickup.com/api/v3/workspaces/W1/tasks/T/home_list/L2")
         XCTAssertEqual(script.requests[1].httpMethod, "PUT")
+        XCTAssertEqual(script.requests[1].value(forHTTPHeaderField: "Content-Type"), "application/json")
+        XCTAssertEqual(script.requests[1].httpBody, Data("{}".utf8))
         let (empty, _) = client([(200, #"{"teams":[]}"#)])
         do {
             try await empty.moveTask(taskID: "T", toListID: "L2")
