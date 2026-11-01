@@ -1,9 +1,9 @@
 import Foundation
 
 public struct CreateNoteTool: ToolPort {
-    private let notes: NoteStore
+    private let notes: any NotesPort
 
-    public init(notes: NoteStore) {
+    public init(notes: any NotesPort) {
         self.notes = notes
     }
 
@@ -33,9 +33,9 @@ public struct CreateNoteTool: ToolPort {
 }
 
 public struct ListNotesTool: ToolPort {
-    private let notes: NoteStore
+    private let notes: any NotesPort
 
-    public init(notes: NoteStore) {
+    public init(notes: any NotesPort) {
         self.notes = notes
     }
 
@@ -64,9 +64,9 @@ public struct ListNotesTool: ToolPort {
 }
 
 public struct UpdateNoteTool: ToolPort {
-    private let notes: NoteStore
+    private let notes: any NotesPort
 
-    public init(notes: NoteStore) {
+    public init(notes: any NotesPort) {
         self.notes = notes
     }
 
@@ -93,9 +93,9 @@ public struct UpdateNoteTool: ToolPort {
 }
 
 public struct DeleteNoteTool: ToolPort {
-    private let notes: NoteStore
+    private let notes: any NotesPort
 
-    public init(notes: NoteStore) {
+    public init(notes: any NotesPort) {
         self.notes = notes
     }
 
@@ -121,9 +121,9 @@ public struct DeleteNoteTool: ToolPort {
 }
 
 public struct ListTodosTool: ToolPort {
-    private let todos: TodoStore
+    private let todos: any TodosPort
 
-    public init(todos: TodoStore) {
+    public init(todos: any TodosPort) {
         self.todos = todos
     }
 
@@ -156,10 +156,10 @@ public struct ListTodosTool: ToolPort {
 }
 
 public struct CreateTodoTool: ToolPort {
-    private let todos: TodoStore
+    private let todos: any TodosPort
     private let alarm: any AlarmPort
 
-    public init(todos: TodoStore, alarm: any AlarmPort) {
+    public init(todos: any TodosPort, alarm: any AlarmPort) {
         self.todos = todos
         self.alarm = alarm
     }
@@ -205,10 +205,10 @@ public struct CreateTodoTool: ToolPort {
 }
 
 public struct CompleteTodoTool: ToolPort {
-    private let todos: TodoStore
+    private let todos: any TodosPort
     private let alarm: any AlarmPort
 
-    public init(todos: TodoStore, alarm: any AlarmPort) {
+    public init(todos: any TodosPort, alarm: any AlarmPort) {
         self.todos = todos
         self.alarm = alarm
     }
@@ -237,10 +237,10 @@ public struct CompleteTodoTool: ToolPort {
 }
 
 public struct DeleteTodoTool: ToolPort {
-    private let todos: TodoStore
+    private let todos: any TodosPort
     private let alarm: any AlarmPort
 
-    public init(todos: TodoStore, alarm: any AlarmPort) {
+    public init(todos: any TodosPort, alarm: any AlarmPort) {
         self.todos = todos
         self.alarm = alarm
     }
@@ -268,9 +268,9 @@ public struct DeleteTodoTool: ToolPort {
 }
 
 public struct JournalTool: ToolPort {
-    private let journal: JournalStore
+    private let journal: any JournalPort
 
-    public init(journal: JournalStore) {
+    public init(journal: any JournalPort) {
         self.journal = journal
     }
 

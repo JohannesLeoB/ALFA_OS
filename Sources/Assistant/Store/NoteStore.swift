@@ -29,7 +29,7 @@ private struct StoredNote: Codable, FetchableRecord, PersistableRecord {
     }
 }
 
-public actor NoteStore {
+public actor NoteStore: NotesPort {
     private let database: SQLiteStore
     private let userID: String?
 
@@ -129,7 +129,7 @@ private struct StoredTodo: Codable, FetchableRecord, PersistableRecord {
     }
 }
 
-public actor TodoStore {
+public actor TodoStore: TodosPort {
     private let database: SQLiteStore
     private let userID: String?
 
@@ -169,7 +169,7 @@ public actor TodoStore {
     }
 
     @discardableResult
-    func setDone(matching query: String, done: Bool = true, scopedTo projectID: String? = nil,
+    public func setDone(matching query: String, done: Bool = true, scopedTo projectID: String? = nil,
                  now: Date = Date()) throws -> Todo? {
         guard var todo = try find(matching: query, scopedTo: projectID) else { return nil }
         todo.done = done
@@ -216,7 +216,7 @@ private struct StoredJournalEntry: Codable, FetchableRecord, PersistableRecord {
     }
 }
 
-public actor JournalStore {
+public actor JournalStore: JournalPort {
     private let database: SQLiteStore
 
     public init(database: SQLiteStore) {

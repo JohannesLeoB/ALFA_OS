@@ -129,12 +129,12 @@ struct ReadFileTool: ToolPort {
 }
 
 struct ProposeFileTool: ToolPort {
-    private let artifacts: ArtifactStore
+    private let artifacts: any ArtifactPort
     private let projects: ProjectSearchEngine
     private let pdf: (any PdfRenderPort)?
     private let clock: @Sendable () -> Date
 
-    init(artifacts: ArtifactStore, projects: ProjectSearchEngine, pdf: (any PdfRenderPort)? = nil,
+    init(artifacts: any ArtifactPort, projects: ProjectSearchEngine, pdf: (any PdfRenderPort)? = nil,
          clock: @escaping @Sendable () -> Date = { Date() }) {
         self.artifacts = artifacts
         self.projects = projects

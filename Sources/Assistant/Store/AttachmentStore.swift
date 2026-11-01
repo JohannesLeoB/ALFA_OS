@@ -105,7 +105,7 @@ public struct AttachmentStore: AttachmentPort {
     }
 }
 
-struct ArtifactStore: Sendable {
+struct ArtifactStore: ArtifactPort {
     private let root: URL
 
     init(root: URL) {
