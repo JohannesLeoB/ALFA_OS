@@ -1,0 +1,27 @@
+{
+  "title": "setup",
+  "type": "object",
+  "required": ["id", "level", "status", "values"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^SET-[A-Z0-9-]+$"},
+    "level": {"enum": ["default", "workshop", "project"]},
+    "status": {"enum": ["decided", "proposed", "open"]},
+    "values": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["value", "status", "evidence"],
+        "additionalProperties": false,
+        "properties": {
+          "value": {},
+          "status": {"enum": ["decided", "proposed", "open"]},
+          "evidence": {"enum": ["verified", "derived", "uncertain", "master_data", "interpretation"]},
+          "atom": {"type": "string", "pattern": "^ATM-[A-Z]{3}-[0-9]{4}$"},
+          "note": {"type": "string"}
+        }
+      }
+    },
+    "note": {"type": "string"}
+  }
+}

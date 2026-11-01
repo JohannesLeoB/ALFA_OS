@@ -1,0 +1,26 @@
+{
+  "id": "LIB-HW-BLUM-MOVENTO-766H",
+  "library": "hardware",
+  "maker": "Blum",
+  "series": "MOVENTO",
+  "name": "MOVENTO 766H full extension runner for heavy wooden drawers",
+  "attributes": {
+    "runner_key": "blum_movento_766h",
+    "extension": "full",
+    "mounting": "coupling",
+    "load_kg": 70,
+    "load_kg_at_nominal_length_700_and_750": 60,
+    "nominal_lengths_mm": [450, 500, 520, 550, 580, 600, 650, 700, 750],
+    "drawer_side_thickness_max_mm": 16,
+    "drawer_drilling_diameter_mm": 6
+  },
+  "rule": "rules/drawer.py:wooden_drawer",
+  "status": "unchecked",
+  "sharing": "setup_only",
+  "sources": [
+    {"id": "SRC-BLUM-010", "locator": "type table"},
+    {"id": "SRC-BLUM-011", "locator": "page 421"}
+  ],
+  "added": "2026-11-01",
+  "note": "The MOVENTO programme page gives other load classes. The type table of the brochure is the more exact source."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "SET-STUDIO-EXAMPLE",
+  "level": "workshop",
+  "status": "proposed",
+  "values": {
+    "carcass_thickness_mm": {"value": 19, "status": "proposed", "evidence": "master_data"},
+    "back_panel_thickness_mm": {"value": 8, "status": "proposed", "evidence": "master_data"},
+    "hole_row_pitch_mm": {"value": 32, "status": "proposed", "evidence": "master_data"},
+    "hole_row_front_offset_mm": {"value": 37, "status": "proposed", "evidence": "master_data"},
+    "drawer_runner": {"value": "blum_movento_760h", "status": "proposed", "evidence": "master_data", "note": "The master data contains only MOVENTO for wooden drawers."},
+    "drawer_side_thickness_bought_mm": {"value": 13, "status": "proposed", "evidence": "master_data", "note": "Solid wood drawer sides from a supplier."},
+    "drawer_side_thickness_own_mm": {"value": 15, "status": "proposed", "evidence": "master_data", "note": "Multiplex drawer sides from the own workshop."},
+    "drawer_bottom_thickness_mm": {"value": 8, "status": "open", "evidence": "master_data", "note": "The master data gives 8 or 9 mm."},
+    "drawer_bottom_groove_depth_mm": {"value": 6, "status": "proposed", "evidence": "master_data"}
+  },
+  "note": "All values wait for the confirmation of Johannes. A project setup overrides a workshop setup."
+}

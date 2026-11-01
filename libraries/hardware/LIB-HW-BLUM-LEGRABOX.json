@@ -1,0 +1,30 @@
+{
+  "id": "LIB-HW-BLUM-LEGRABOX",
+  "library": "hardware",
+  "maker": "Blum",
+  "series": "LEGRABOX",
+  "name": "LEGRABOX pure and free box system with steel sides",
+  "attributes": {
+    "runner_key": "blum_legrabox",
+    "side_thickness_mm": 12.8,
+    "side_heights_mm": {"N": 66.5, "M": 90.5, "K": 128.5, "C": 177, "F": 241},
+    "nominal_lengths_mm": {
+      "N": [400, 450, 500, 550],
+      "M": [270, 300, 350, 400, 450, 500, 550, 600, 650],
+      "K": [300, 350, 400, 450, 500, 550, 600],
+      "F": [400, 450, 500, 550, 600, 650]
+    },
+    "load_kg": {"profile_750": 40, "profile_753": 70},
+    "wood_back_height_mm": {"N": 39, "M": 63, "K": 101, "C": 148}
+  },
+  "rule": "rules/drawer.py:legrabox_parts",
+  "status": "unchecked",
+  "sharing": "setup_only",
+  "sources": [
+    {"id": "SRC-BLUM-001", "locator": "side heights and nominal lengths"},
+    {"id": "SRC-BLUM-003", "locator": "pages 196 to 213"},
+    {"id": "SRC-BLUM-004", "locator": "pages 203 to 208"}
+  ],
+  "added": "2026-11-01",
+  "note": "The steps of the nominal lengths for height C are not complete in the sources. The wood back height for F is not found."
+}

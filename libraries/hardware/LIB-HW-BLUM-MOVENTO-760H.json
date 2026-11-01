@@ -1,0 +1,27 @@
+{
+  "id": "LIB-HW-BLUM-MOVENTO-760H",
+  "library": "hardware",
+  "maker": "Blum",
+  "series": "MOVENTO",
+  "name": "MOVENTO 760H full extension runner for wooden drawers",
+  "attributes": {
+    "runner_key": "blum_movento_760h",
+    "extension": "full",
+    "mounting": "coupling",
+    "load_kg": 40,
+    "nominal_lengths_mm": [250, 270, 300, 320, 350, 380, 400, 420, 450, 480, 500, 520, 550, 600],
+    "drawer_side_thickness_max_mm": 16,
+    "soft_close": "BLUMOTION S, can be switched off",
+    "push_to_open": "TIP-ON BLUMOTION, not with nominal length 250",
+    "drawer_drilling_diameter_mm": 6
+  },
+  "rule": "rules/drawer.py:wooden_drawer",
+  "status": "unchecked",
+  "sharing": "setup_only",
+  "sources": [
+    {"id": "SRC-BLUM-010", "locator": "type table"},
+    {"id": "SRC-BLUM-011", "locator": "page 421"}
+  ],
+  "added": "2026-11-01",
+  "note": "The minimum drawer side thickness is not found in the sources."
+}

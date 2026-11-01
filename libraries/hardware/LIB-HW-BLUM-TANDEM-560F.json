@@ -1,0 +1,25 @@
+{
+  "id": "LIB-HW-BLUM-TANDEM-560F",
+  "library": "hardware",
+  "maker": "Blum",
+  "series": "TANDEM",
+  "name": "TANDEM 560F full extension runner for wooden drawers with 17 to 19 mm sides",
+  "attributes": {
+    "runner_key": "blum_tandem_560f",
+    "extension": "full",
+    "mounting": "coupling",
+    "load_kg": 30,
+    "nominal_lengths_mm": [250, 270, 300, 320, 350, 380, 400, 420, 450, 480, 500, 520, 550, 600],
+    "drawer_side_thickness_min_mm": 17,
+    "drawer_side_thickness_max_mm": 19,
+    "drawer_drilling_diameter_mm": 6
+  },
+  "rule": "rules/drawer.py:wooden_drawer",
+  "status": "unchecked",
+  "sharing": "setup_only",
+  "sources": [
+    {"id": "SRC-BLUM-006", "locator": "TD-131/3"}
+  ],
+  "added": "2026-11-01",
+  "note": "The source gives the range 250 to 600 for the nominal lengths. The single steps are taken from 560H. Check them in TD-131/3."
+}
