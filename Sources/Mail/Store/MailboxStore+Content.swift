@@ -204,3 +204,35 @@ extension MailboxStore {
         eventBus.emit(.messagesChanged(inlet, folder: Folder.starredID))
     }
 }
+
+extension MailboxStore {
+    public func projectFolders() async throws(HubFailure) -> [ProjectFolder] {
+        guard hasFiles else { throw HubFailure.provider(Hint(text: MessageTextKey.noInlet.rawValue)) }
+        let stock = access.stock(.files, as: ProjectFolder.self)
+        if stock.items.isEmpty { await stock.refresh() }
+        if stock.items.isEmpty, case .disturbed(let hint) = stock.phase { throw HubFailure.provider(hint) }
+        return stock.items
+    }
+
+    public func listFiles(_ inlet: Inlet.ID, folder: String) async throws(HubFailure) -> [FileEntry] {
+        try await storage(inlet) { try await $0.files(in: folder) }
+    }
+
+    public func readFile(_ inlet: Inlet.ID, fileID: String) async throws(HubFailure) -> Data {
+        try await storage(inlet) { try await $0.read(fileID) }
+    }
+
+    public func putFile(_ inlet: Inlet.ID, folder: String, name: String, mimeType: String, data: Data) async throws(HubFailure)
+        -> FileEntry {
+        try await storage(inlet) { try await $0.put(name: name, mimeType: mimeType, data: data, into: folder) }
+    }
+
+    private func storage<T>(_ inlet: Inlet.ID, _ work: (any FilesPort) async throws -> T) async throws(HubFailure) -> T {
+        let port = try access.port((any FilesPort).self, for: inlet)
+        do {
+            return try await work(port)
+        } catch {
+            throw DeliveryEngine.hubFailure(error, inlet: inlet, access: access)
+        }
+    }
+}

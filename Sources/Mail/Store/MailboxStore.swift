@@ -113,39 +113,6 @@ public final class MailboxStore: MailboxPort {
         return value.flatMap { $0 }.map { Date(timeIntervalSince1970: $0) }
     }
 
-    public func searchLocal(_ inlet: Inlet.ID, query: String) -> [MessageSummary] {
-        let pattern = "%" + query.replacingOccurrences(of: "%", with: "") + "%"
-        return (try? database.read { db in
-            try Row.fetchAll(db, sql: """
-                SELECT * FROM mail_message WHERE inlet = ?1
-                AND (subject LIKE ?2 OR sender LIKE ?2 OR fromRaw LIKE ?2 OR toRaw LIKE ?2 OR ccRaw LIKE ?2 OR snippet LIKE ?2)
-                GROUP BY id ORDER BY receivedAt DESC
-                """,
-                arguments: [inlet, pattern]).map(Self.summary)
-        }) ?? []
-    }
-
-    public func searchOpen(_ inlet: Inlet.ID, query: String, excluding folders: Set<String>) async -> [MessageSummary] {
-        let database = database
-        return await Task.detached { Self.queryOpen(database, inlet: inlet, query: query, excluding: folders) }.value
-    }
-
-    nonisolated private static func queryOpen(_ database: SQLiteStore, inlet: Inlet.ID, query: String,
-                                              excluding folders: Set<String>) -> [MessageSummary] {
-        let pattern = "%" + query.replacingOccurrences(of: "%", with: "") + "%"
-        let marks = Array(repeating: "?", count: folders.count).joined(separator: ",")
-        return (try? database.read { db in
-            try Row.fetchAll(db, sql: """
-                SELECT * FROM mail_message WHERE inlet = ?
-                AND (subject LIKE ? OR sender LIKE ? OR fromRaw LIKE ? OR toRaw LIKE ? OR ccRaw LIKE ? OR snippet LIKE ?)
-                AND folder NOT IN (\(marks))
-                GROUP BY id ORDER BY receivedAt DESC
-                """,
-                arguments: StatementArguments([inlet, pattern, pattern, pattern, pattern, pattern, pattern] + folders.sorted()))
-                .map(summary)
-        }) ?? []
-    }
-
     public func unreadCount(_ inlet: Inlet.ID) -> Int {
         guard let inbox = inboxID(inlet) else { return 0 }
         return unseenCount(inlet, folder: inbox) ?? localUnseen(inlet, inbox)
@@ -360,36 +327,6 @@ public final class MailboxStore: MailboxPort {
 
     public func thread(_ inlet: Inlet.ID, messageID: String, threadID: String) async throws(HubFailure) -> [MessageSummary] {
         try await perform(inlet) { try await $0.fetchThread(messageID: messageID, threadID: threadID) }
-    }
-
-    public func projectFolders() async throws(HubFailure) -> [ProjectFolder] {
-        guard hasFiles else { throw HubFailure.provider(Hint(text: MessageTextKey.noInlet.rawValue)) }
-        let stock = access.stock(.files, as: ProjectFolder.self)
-        if stock.items.isEmpty { await stock.refresh() }
-        if stock.items.isEmpty, case .disturbed(let hint) = stock.phase { throw HubFailure.provider(hint) }
-        return stock.items
-    }
-
-    public func listFiles(_ inlet: Inlet.ID, folder: String) async throws(HubFailure) -> [FileEntry] {
-        try await storage(inlet) { try await $0.files(in: folder) }
-    }
-
-    public func readFile(_ inlet: Inlet.ID, fileID: String) async throws(HubFailure) -> Data {
-        try await storage(inlet) { try await $0.read(fileID) }
-    }
-
-    public func putFile(_ inlet: Inlet.ID, folder: String, name: String, mimeType: String, data: Data) async throws(HubFailure)
-        -> FileEntry {
-        try await storage(inlet) { try await $0.put(name: name, mimeType: mimeType, data: data, into: folder) }
-    }
-
-    private func storage<T>(_ inlet: Inlet.ID, _ work: (any FilesPort) async throws -> T) async throws(HubFailure) -> T {
-        let port = try access.port((any FilesPort).self, for: inlet)
-        do {
-            return try await work(port)
-        } catch {
-            throw DeliveryEngine.hubFailure(error, inlet: inlet, access: access)
-        }
     }
 
     private func perform<T>(_ inlet: Inlet.ID, _ work: (any MailTransportPort) async throws -> T) async throws(HubFailure) -> T {

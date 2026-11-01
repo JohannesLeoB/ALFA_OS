@@ -416,6 +416,39 @@ extension MailboxStore {
         return SearchPage(messages: MirrorEngine.sorted(unique), continuation: tokens.isEmpty ? nil : SearchContinuation(tokens: tokens),
                           skipped: skipped, total: continuation == nil ? total : nil)
     }
+
+    public func searchLocal(_ inlet: Inlet.ID, query: String) -> [MessageSummary] {
+        let pattern = "%" + query.replacingOccurrences(of: "%", with: "") + "%"
+        return (try? database.read { db in
+            try Row.fetchAll(db, sql: """
+                SELECT * FROM mail_message WHERE inlet = ?1
+                AND (subject LIKE ?2 OR sender LIKE ?2 OR fromRaw LIKE ?2 OR toRaw LIKE ?2 OR ccRaw LIKE ?2 OR snippet LIKE ?2)
+                GROUP BY id ORDER BY receivedAt DESC
+                """,
+                arguments: [inlet, pattern]).map(Self.summary)
+        }) ?? []
+    }
+
+    public func searchOpen(_ inlet: Inlet.ID, query: String, excluding folders: Set<String>) async -> [MessageSummary] {
+        let database = database
+        return await Task.detached { Self.queryOpen(database, inlet: inlet, query: query, excluding: folders) }.value
+    }
+
+    nonisolated private static func queryOpen(_ database: SQLiteStore, inlet: Inlet.ID, query: String,
+                                              excluding folders: Set<String>) -> [MessageSummary] {
+        let pattern = "%" + query.replacingOccurrences(of: "%", with: "") + "%"
+        let marks = Array(repeating: "?", count: folders.count).joined(separator: ",")
+        return (try? database.read { db in
+            try Row.fetchAll(db, sql: """
+                SELECT * FROM mail_message WHERE inlet = ?
+                AND (subject LIKE ? OR sender LIKE ? OR fromRaw LIKE ? OR toRaw LIKE ? OR ccRaw LIKE ? OR snippet LIKE ?)
+                AND folder NOT IN (\(marks))
+                GROUP BY id ORDER BY receivedAt DESC
+                """,
+                arguments: StatementArguments([inlet, pattern, pattern, pattern, pattern, pattern, pattern] + folders.sorted()))
+                .map(summary)
+        }) ?? []
+    }
 }
 
 extension MailboxStore {
