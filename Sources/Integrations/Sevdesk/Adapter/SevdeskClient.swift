@@ -21,17 +21,17 @@ struct SevdeskClient: Sendable {
 
     func contact(id: String) async throws -> Contact? {
         guard let data = try await get(path: "Contact/\(id)") else { return nil }
-        return try ResponseParser.contact(from: data)
+        return try SevdeskResponseParser.contact(from: data)
     }
 
     func order(id: String) async throws -> Order? {
         guard let data = try await get(path: "Order/\(id)") else { return nil }
-        return try ResponseParser.orders(from: data).first
+        return try SevdeskResponseParser.orders(from: data).first
     }
 
     func orders(type: String = "AN") async throws -> [Order] {
         guard let data = try await get(path: "Order", query: [URLQueryItem(name: "orderType", value: type)]) else { return [] }
-        return try ResponseParser.orders(from: data)
+        return try SevdeskResponseParser.orders(from: data)
     }
 
     func contact(customerNumber: String) async throws -> ContactMatch {
@@ -41,7 +41,7 @@ struct SevdeskClient: Sendable {
             URLQueryItem(name: "customerNumber", value: number),
             URLQueryItem(name: "depth", value: "1"),
         ]) else { return .none }
-        return ResponseParser.match(byNumber: number, from: data)
+        return SevdeskResponseParser.match(byNumber: number, from: data)
     }
 
     func contact(name: String) async throws -> ContactMatch {
@@ -51,19 +51,19 @@ struct SevdeskClient: Sendable {
             URLQueryItem(name: "name", value: wanted),
             URLQueryItem(name: "depth", value: "1"),
         ]) else { return .none }
-        return ResponseParser.match(byName: wanted, from: data)
+        return SevdeskResponseParser.match(byName: wanted, from: data)
     }
 
     func tenant(orderNumber: String? = nil) async throws -> TenantFinding {
         var gaps: [TenantFinding.Gap] = []
         let numbered = orderNumber?.isEmpty == false
 
-        let version = try await get(path: Self.versionPath).flatMap { ResponseParser.version(from: $0) }
+        let version = try await get(path: Self.versionPath).flatMap { SevdeskResponseParser.version(from: $0) }
         if version == nil { gaps.append(.versionUnreadable) }
 
         var query = [URLQueryItem(name: "orderType", value: Self.offerType), URLQueryItem(name: "limit", value: "1")]
         if let orderNumber, numbered { query.append(URLQueryItem(name: "orderNumber", value: orderNumber)) }
-        let template = try await get(path: "Order", query: query).flatMap { ResponseParser.template(from: $0) }
+        let template = try await get(path: "Order", query: query).flatMap { SevdeskResponseParser.template(from: $0) }
         if let template {
             if template.contactPersonID == nil { gaps.append(.contactPersonMissing) }
             if template.addressCountryID == nil { gaps.append(.addressCountryMissing) }
@@ -77,8 +77,8 @@ struct SevdeskClient: Sendable {
         if let orderID = template?.orderID {
             if let data = try await get(
                 path: "Order/\(orderID)/getPositions", query: [URLQueryItem(name: "embed", value: "unity")]) {
-                units = ResponseParser.units(from: data)
-                positionTaxRate = ResponseParser.positionTaxRate(from: data)
+                units = SevdeskResponseParser.units(from: data)
+                positionTaxRate = SevdeskResponseParser.positionTaxRate(from: data)
             }
             if units.isEmpty { gaps.append(.unitsMissing) }
             if positionTaxRate == nil { gaps.append(.positionTaxRateMissing) }
@@ -101,7 +101,7 @@ struct SevdeskClient: Sendable {
             URLQueryItem(name: "useNextNumber", value: "false"),
         ]
         guard let data = try? await get(path: "Order/Factory/getNextOrderNumber", query: query) else { return nil }
-        return ResponseParser.nextNumber(from: data)
+        return SevdeskResponseParser.nextNumber(from: data)
     }
 
     static func url(path: String, query: [URLQueryItem]) -> URL? {

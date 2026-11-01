@@ -25,7 +25,7 @@ public struct ClickUpClient: ReadPort, WritePort {
                 URLQueryItem(name: "subtasks", value: "false"),
                 URLQueryItem(name: "page", value: String(page)),
             ]
-            let batch = try ResponseParser.tasks(from: try await send("GET", ["list", listID, "task"], query: query))
+            let batch = try ClickUpResponseParser.tasks(from: try await send("GET", ["list", listID, "task"], query: query))
             all += batch
             if batch.count < Self.pageSize { break }
         }
@@ -33,7 +33,7 @@ public struct ClickUpClient: ReadPort, WritePort {
     }
 
     func dependencies(taskID: String) async throws -> TaskDependencies {
-        let ids = try ResponseParser.dependencyIDs(from: try await detail(taskID), ownTaskID: taskID)
+        let ids = try ClickUpResponseParser.dependencyIDs(from: try await detail(taskID), ownTaskID: taskID)
         guard ids.waitingOn.isEmpty == false || ids.blocking.isEmpty == false else { return .empty }
         async let waitingOn = references(ids.waitingOn)
         async let blocking = references(ids.blocking)
@@ -41,38 +41,38 @@ public struct ClickUpClient: ReadPort, WritePort {
     }
 
     func comments(taskID: String) async throws -> [Comment] {
-        try ResponseParser.comments(from: try await send("GET", ["task", taskID, "comment"]))
+        try ClickUpResponseParser.comments(from: try await send("GET", ["task", taskID, "comment"]))
     }
 
     func customFields(taskID: String) async throws -> [CustomField] {
-        try ResponseParser.customFields(from: try await detail(taskID))
+        try ClickUpResponseParser.customFields(from: try await detail(taskID))
     }
 
     func subtasks(taskID: String) async throws -> [ClickUpTask] {
         let query = [URLQueryItem(name: "include_subtasks", value: "true")]
-        return try ResponseParser.subtasks(from: try await send("GET", ["task", taskID], query: query))
+        return try ClickUpResponseParser.subtasks(from: try await send("GET", ["task", taskID], query: query))
     }
 
     func taskContent(taskID: String) async throws -> String? {
-        try ResponseParser.content(from: try await detail(taskID))
+        try ClickUpResponseParser.content(from: try await detail(taskID))
     }
 
     public func listMembers(listID: String) async throws -> [Member] {
-        try ResponseParser.members(from: try await send("GET", ["list", listID, "member"]))
+        try ClickUpResponseParser.members(from: try await send("GET", ["list", listID, "member"]))
     }
 
     func fieldCatalog(listID: String) async throws -> [CustomField] {
-        try ResponseParser.fieldCatalog(from: try await send("GET", ["list", listID, "field"]))
+        try ClickUpResponseParser.fieldCatalog(from: try await send("GET", ["list", listID, "field"]))
     }
 
     func currentUser() async throws -> Member {
-        try ResponseParser.user(from: try await send("GET", ["user"]))
+        try ClickUpResponseParser.user(from: try await send("GET", ["user"]))
     }
 
     public func createTask(listID: String, name: String, content: String?) async throws -> String {
         var body: [String: Any] = ["name": name]
         if let content, content.isEmpty == false { body["content"] = content }
-        return try ResponseParser.createdID(from: try await send("POST", ["list", listID, "task"], body: body))
+        return try ClickUpResponseParser.createdID(from: try await send("POST", ["list", listID, "task"], body: body))
     }
 
     public func setStatus(taskID: String, status: String) async throws {
@@ -111,7 +111,7 @@ public struct ClickUpClient: ReadPort, WritePort {
 
     func addComment(taskID: String, text: String) async throws -> String {
         let body: [String: Any] = ["comment_text": text, "notify_all": false]
-        return try ResponseParser.createdID(from: try await send("POST", ["task", taskID, "comment"], body: body))
+        return try ClickUpResponseParser.createdID(from: try await send("POST", ["task", taskID, "comment"], body: body))
     }
 
     func addTag(taskID: String, tagName: String) async throws {
@@ -144,20 +144,20 @@ public struct ClickUpClient: ReadPort, WritePort {
 
     func createSubtask(listID: String, parentTaskID: String, name: String) async throws -> String {
         let body: [String: Any] = ["name": name, "parent": parentTaskID]
-        return try ResponseParser.createdID(from: try await send("POST", ["list", listID, "task"], body: body))
+        return try ClickUpResponseParser.createdID(from: try await send("POST", ["list", listID, "task"], body: body))
     }
 
     func moveTask(taskID: String, toListID: String) async throws {
-        let workspace = try ResponseParser.firstTeamID(from: try await send("GET", ["team"]))
+        let workspace = try ClickUpResponseParser.firstTeamID(from: try await send("GET", ["team"]))
         _ = try await send("PUT", ["workspaces", workspace, "tasks", taskID, "home_list", toListID], version3: true)
     }
 
     func findOrCreateList(folderID: String, name: String, content: String?) async throws -> String {
         let existing = try await send("GET", ["folder", folderID, "list"])
-        if let id = try ResponseParser.listID(named: name, from: existing) { return id }
+        if let id = try ClickUpResponseParser.listID(named: name, from: existing) { return id }
         var body: [String: Any] = ["name": name]
         if let content, content.isEmpty == false { body["content"] = content }
-        return try ResponseParser.createdID(from: try await send("POST", ["folder", folderID, "list"], body: body))
+        return try ClickUpResponseParser.createdID(from: try await send("POST", ["folder", folderID, "list"], body: body))
     }
 
     private func detail(_ taskID: String) async throws -> Data {
@@ -169,7 +169,7 @@ public struct ClickUpClient: ReadPort, WritePort {
             for id in ids {
                 group.addTask {
                     let data = try? await self.detail(id)
-                    return data.map { ResponseParser.reference(id: id, from: $0) }
+                    return data.map { ClickUpResponseParser.reference(id: id, from: $0) }
                         ?? TaskDependencies.Reference(id: id, name: id, status: "")
                 }
             }

@@ -340,7 +340,7 @@ private final class FakeAccess: AccessPort {
 
     func inlets(for capability: Capability) -> [Inlet] { records.filter { $0.capabilities.contains(capability) } }
     func configured(for capability: Capability) -> [Inlet] { inlets(for: capability) }
-    func classify(_ error: any Error, inlet: Inlet.ID) -> Classification { FailureEngine.classify(error) }
+    func classify(_ error: any Error, inlet: Inlet.ID) -> Classification { MailFailureEngine.classify(error) }
 
     var events: AsyncStream<InletEvent> {
         let (stream, continuation) = AsyncStream<InletEvent>.makeStream()
@@ -992,12 +992,12 @@ final class MailTests: XCTestCase {
     }
 
     func testFailureClassification() {
-        XCTAssertEqual(FailureEngine.classify(MailFailure.authenticationRejected("NO [AUTHENTICATIONFAILED] bad")).kind, .signIn)
-        XCTAssertEqual(FailureEngine.classify(MailFailure.timeout).kind, .transient)
-        XCTAssertEqual(FailureEngine.classify(MailFailure.smtpRejected(451, "4.3.0 try later")).kind, .transient)
-        XCTAssertEqual(FailureEngine.classify(MailFailure.smtpRejected(535, "5.7.8 bad")).kind, .signIn)
-        XCTAssertEqual(FailureEngine.classify(MailFailure.recipientRejected("x@y", 550, "5.1.1 no")).original.extra["recipient"], "x@y")
-        XCTAssertEqual(FailureEngine.classify(MailFailure.messageNotFound("1")).kind, .rejected)
+        XCTAssertEqual(MailFailureEngine.classify(MailFailure.authenticationRejected("NO [AUTHENTICATIONFAILED] bad")).kind, .signIn)
+        XCTAssertEqual(MailFailureEngine.classify(MailFailure.timeout).kind, .transient)
+        XCTAssertEqual(MailFailureEngine.classify(MailFailure.smtpRejected(451, "4.3.0 try later")).kind, .transient)
+        XCTAssertEqual(MailFailureEngine.classify(MailFailure.smtpRejected(535, "5.7.8 bad")).kind, .signIn)
+        XCTAssertEqual(MailFailureEngine.classify(MailFailure.recipientRejected("x@y", 550, "5.1.1 no")).original.extra["recipient"], "x@y")
+        XCTAssertEqual(MailFailureEngine.classify(MailFailure.messageNotFound("1")).kind, .rejected)
     }
 
     func testConnectionValuesAreValidated() throws {

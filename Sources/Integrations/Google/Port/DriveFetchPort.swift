@@ -1,6 +1,6 @@
 import Foundation
 
-protocol DrivePort: Sendable {
+protocol DriveFetchPort: Sendable {
     func listFolder(folderID: String) async throws -> [DriveFile]
     func listDrives() async throws -> [DriveFile]
     func fileName(of fileID: String) async throws -> String

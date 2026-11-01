@@ -89,7 +89,7 @@ struct ProbeClient: ProbePort {
     }
 
     static func hint(_ text: String, _ error: any Error) -> Hint {
-        let classification = FailureEngine.classify(error)
+        let classification = GoogleFailureEngine.classify(error)
         return Hint(text: text, detail: detail(of: error, classification), kind: classification.kind,
                     original: classification.original)
     }

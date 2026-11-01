@@ -98,7 +98,7 @@ enum DeliveryEngine {
     }
 }
 
-enum FailureEngine {
+enum MailFailureEngine {
     private static let successMin = 200
     private static let rejectMax = 599
     private static let transientMin = 400

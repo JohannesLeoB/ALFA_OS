@@ -143,7 +143,7 @@ private func file(_ id: String, _ name: String, _ mime: String = "application/pd
     DriveFile(id: id, name: name, mimeType: mime, modifiedAt: nil, webViewLink: nil)
 }
 
-private struct FakeDrive: Google.DrivePort {
+private struct FakeDrive: Google.DriveFetchPort {
     let tree: [String: [DriveFile]]
 
     func listFolder(folderID: String) async throws -> [DriveFile] { tree[folderID] ?? [] }
@@ -162,7 +162,7 @@ private let folder = DriveFile.folderMime
 final class GoogleTests: XCTestCase {
     func testGmailFailureKeepsStatusReasonTextAndExtra() {
         let body = Data(#"{"error":{"code":403,"message":"User-rate limit exceeded.","errors":[{"domain":"usageLimits","reason":"userRateLimitExceeded"}],"status":"PERMISSION_DENIED"}}"#.utf8)
-        let result = FailureEngine.classify(GoogleFailure.api(.gmail, APIFault(status: 403, data: body)))
+        let result = GoogleFailureEngine.classify(GoogleFailure.api(.gmail, APIFault(status: 403, data: body)))
         XCTAssertEqual(result.kind, .transient)
         XCTAssertEqual(result.original.provider, "gmail")
         XCTAssertEqual(result.original.status, 403)
@@ -180,35 +180,35 @@ final class GoogleTests: XCTestCase {
             (404, "notFound", .rejected),
         ]
         for (status, reason, kind) in table {
-            XCTAssertEqual(FailureEngine.classify(GoogleFailure.api(.gmail, APIFault(status: status, reason: reason))).kind, kind)
+            XCTAssertEqual(GoogleFailureEngine.classify(GoogleFailure.api(.gmail, APIFault(status: status, reason: reason))).kind, kind)
         }
     }
 
     func testOAuthFailureKeepsErrorAndDescription() {
         let body = Data(#"{"error":"invalid_grant","error_description":"Token has been expired or revoked."}"#.utf8)
-        let result = FailureEngine.classify(GoogleFailure.api(.oauth, APIFault(status: 400, data: body)))
+        let result = GoogleFailureEngine.classify(GoogleFailure.api(.oauth, APIFault(status: 400, data: body)))
         XCTAssertEqual(result.kind, .signIn)
         XCTAssertEqual(result.original.label, "oauth.400.invalid_grant")
         XCTAssertEqual(result.original.text, "Token has been expired or revoked.")
-        XCTAssertEqual(FailureEngine.classify(GoogleFailure.api(.oauth, APIFault(status: 400, reason: "invalid_request"))).kind, .rejected)
-        XCTAssertEqual(FailureEngine.classify(GoogleFailure.api(.oauth, APIFault(status: 503))).kind, .transient)
+        XCTAssertEqual(GoogleFailureEngine.classify(GoogleFailure.api(.oauth, APIFault(status: 400, reason: "invalid_request"))).kind, .rejected)
+        XCTAssertEqual(GoogleFailureEngine.classify(GoogleFailure.api(.oauth, APIFault(status: 503))).kind, .transient)
     }
 
     func testDriveForbiddenAndNotConnectedAndRefreshClassification() {
-        XCTAssertEqual(FailureEngine.classify(GoogleFailure.api(.drive, APIFault(status: 403))).kind, .signIn)
-        XCTAssertEqual(FailureEngine.classify(GoogleFailure.api(.drive, APIFault(status: 500))).kind, .transient)
-        let offline = FailureEngine.classify(GoogleFailure.notConnected(.calendar))
+        XCTAssertEqual(GoogleFailureEngine.classify(GoogleFailure.api(.drive, APIFault(status: 403))).kind, .signIn)
+        XCTAssertEqual(GoogleFailureEngine.classify(GoogleFailure.api(.drive, APIFault(status: 500))).kind, .transient)
+        let offline = GoogleFailureEngine.classify(GoogleFailure.notConnected(.calendar))
         XCTAssertEqual(offline.kind, .transient)
         XCTAssertEqual(offline.original.label, "calendar.notConnected")
-        XCTAssertEqual(FailureEngine.classify(SignInFailure.refreshUnavailable).kind, .signIn)
-        XCTAssertEqual(FailureEngine.classify(GoogleFailure.uploadDestinationForbidden("x")).kind, .rejected)
-        XCTAssertEqual(FailureEngine.classify(URLError(.timedOut)).kind, .transient)
+        XCTAssertEqual(GoogleFailureEngine.classify(SignInFailure.refreshUnavailable).kind, .signIn)
+        XCTAssertEqual(GoogleFailureEngine.classify(GoogleFailure.uploadDestinationForbidden("x")).kind, .rejected)
+        XCTAssertEqual(GoogleFailureEngine.classify(URLError(.timedOut)).kind, .transient)
     }
 
     func testPortFailureMappingKeepsNotConnectedAndCancellation() {
-        XCTAssertEqual(FailureEngine.port(GoogleFailure.notConnected(.gmail)) as? PortFailure, .notConnected)
-        XCTAssertTrue(FailureEngine.port(CancellationError()) is CancellationError)
-        XCTAssertNotNil((FailureEngine.port(GoogleFailure.decodingFailed) as? PortFailure).map(\.detail))
+        XCTAssertEqual(GoogleFailureEngine.port(GoogleFailure.notConnected(.gmail)) as? PortFailure, .notConnected)
+        XCTAssertTrue(GoogleFailureEngine.port(CancellationError()) is CancellationError)
+        XCTAssertNotNil((GoogleFailureEngine.port(GoogleFailure.decodingFailed) as? PortFailure).map(\.detail))
     }
 
     func testFaultParsesBothErrorShapes() {
@@ -1567,7 +1567,7 @@ final class GoogleTests: XCTestCase {
     }
 }
 
-private struct LongDrive: Google.DrivePort {
+private struct LongDrive: Google.DriveFetchPort {
     func listFolder(folderID: String) async throws -> [DriveFile] { [] }
     func listDrives() async throws -> [DriveFile] { [] }
     func fileName(of fileID: String) async throws -> String { "" }
@@ -1577,7 +1577,7 @@ private struct LongDrive: Google.DrivePort {
     func uploadFile(name: String, mimeType: String, data: Data, parentFolderID: String) async throws -> DriveFile { file("", "") }
 }
 
-private struct BlankDrive: Google.DrivePort {
+private struct BlankDrive: Google.DriveFetchPort {
     func listFolder(folderID: String) async throws -> [DriveFile] { [] }
     func listDrives() async throws -> [DriveFile] { [] }
     func fileName(of fileID: String) async throws -> String { "" }

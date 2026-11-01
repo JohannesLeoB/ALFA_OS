@@ -295,8 +295,8 @@ extension SevdeskTests {
     }
 
     func testNextNumberReadsTheFirstNonEmptyListEntry() {
-        XCTAssertEqual(ResponseParser.nextNumber(from: Data(#"{"objects":["AN-3","AN-4"]}"#.utf8)), "AN-3")
-        XCTAssertNil(ResponseParser.nextNumber(from: Data(#"{"objects":[""]}"#.utf8)))
-        XCTAssertNil(ResponseParser.nextNumber(from: Data(#"{"objects":[]}"#.utf8)))
+        XCTAssertEqual(SevdeskResponseParser.nextNumber(from: Data(#"{"objects":["AN-3","AN-4"]}"#.utf8)), "AN-3")
+        XCTAssertNil(SevdeskResponseParser.nextNumber(from: Data(#"{"objects":[""]}"#.utf8)))
+        XCTAssertNil(SevdeskResponseParser.nextNumber(from: Data(#"{"objects":[]}"#.utf8)))
     }
 }

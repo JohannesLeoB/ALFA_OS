@@ -197,7 +197,7 @@ final class AccessTokenClient: AccessTokenPort, Sendable {
 
     static func isRejection(_ error: any Error) -> Bool {
         switch error {
-        case is GoogleFailure, SignInFailure.refreshUnavailable: FailureEngine.classify(error).kind == .signIn
+        case is GoogleFailure, SignInFailure.refreshUnavailable: GoogleFailureEngine.classify(error).kind == .signIn
         default: false
         }
     }

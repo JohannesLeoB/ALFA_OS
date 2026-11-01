@@ -52,7 +52,7 @@ public struct IMAPAccess: ProviderPort {
         values[security] = template.security.rawValue
     }
 
-    public func classify(_ error: any Error) -> Classification { FailureEngine.classify(error) }
+    public func classify(_ error: any Error) -> Classification { MailFailureEngine.classify(error) }
 
     public func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P {
         let wantsChanges = ObjectIdentifier(port) == ObjectIdentifier((any ChangePort).self)
@@ -259,7 +259,7 @@ public final class OAuthMailClient: Sendable {
     }
 
     public func classify(_ error: any Error) -> Classification {
-        FailureEngine.classify(error)
+        MailFailureEngine.classify(error)
     }
 
     private func client(for inlet: Inlet.ID, address: String, name: String, endpoints: OAuthMailEndpoints,

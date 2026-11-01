@@ -421,7 +421,7 @@ final class MicrosoftTests: XCTestCase {
     }
 
     func testFailuresAreClassified() {
-        func kind(_ error: any Error) -> FailureKind? { FailureEngine.classify(error)?.kind }
+        func kind(_ error: any Error) -> FailureKind? { MicrosoftFailureEngine.classify(error)?.kind }
         XCTAssertEqual(kind(MicrosoftFailure.api(OAuthFault(status: 400, reason: "invalid_grant"))), .signIn)
         XCTAssertEqual(kind(MicrosoftFailure.api(OAuthFault(status: 400, reason: "interaction_required"))), .signIn)
         XCTAssertEqual(kind(MicrosoftFailure.api(OAuthFault(status: 400, reason: "access_denied"))), .rejected)
@@ -431,8 +431,8 @@ final class MicrosoftTests: XCTestCase {
         XCTAssertEqual(kind(SignInFailure.refreshUnavailable), .signIn)
         XCTAssertEqual(kind(MicrosoftFailure.identityMissing), .rejected)
         XCTAssertEqual(kind(MicrosoftFailure.decodingFailed), .rejected)
-        XCTAssertNil(FailureEngine.classify(URLError(.timedOut)))
-        XCTAssertEqual(FailureEngine.classify(MicrosoftFailure.api(OAuthFault(status: 400, reason: "invalid_grant",
+        XCTAssertNil(MicrosoftFailureEngine.classify(URLError(.timedOut)))
+        XCTAssertEqual(MicrosoftFailureEngine.classify(MicrosoftFailure.api(OAuthFault(status: 400, reason: "invalid_grant",
                                                                               message: "m")))?.detail, "m")
     }
 

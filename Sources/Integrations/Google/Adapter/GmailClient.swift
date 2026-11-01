@@ -235,7 +235,7 @@ struct MailSearchClient: MailSearchPort {
             await cache.store(fresh, for: key)
             return fresh.map(Self.hit)
         } catch {
-            throw FailureEngine.port(error)
+            throw GoogleFailureEngine.port(error)
         }
     }
 
@@ -243,7 +243,7 @@ struct MailSearchClient: MailSearchPort {
         do {
             return try await gmail.fetchBody(messageID: messageID)
         } catch {
-            throw FailureEngine.port(error)
+            throw GoogleFailureEngine.port(error)
         }
     }
 

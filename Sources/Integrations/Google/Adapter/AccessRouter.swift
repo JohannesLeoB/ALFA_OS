@@ -62,7 +62,7 @@ public struct AccessRouter: ProviderPort {
         ]
     }
 
-    public func classify(_ error: any Error) -> Classification { FailureEngine.classify(error) }
+    public func classify(_ error: any Error) -> Classification { GoogleFailureEngine.classify(error) }
 
     private func make(_ key: ObjectIdentifier, inlet: Inlet, tokens: AccessTokenClient) -> Any? {
         func requests(_ product: Product) -> RequestClient {
@@ -112,7 +112,7 @@ struct ContactSearchClient: GoogleContactsPort {
                               phone: $0.phone)
             }
         } catch {
-            throw FailureEngine.port(error)
+            throw GoogleFailureEngine.port(error)
         }
     }
 }
@@ -126,7 +126,7 @@ struct CalendarListingClient: CalendarPort {
         do {
             return try await calendar.listCalendars().map { CalendarRef(id: $0.id, title: $0.title) }
         } catch {
-            throw FailureEngine.port(error)
+            throw GoogleFailureEngine.port(error)
         }
     }
 
@@ -136,13 +136,13 @@ struct CalendarListingClient: CalendarPort {
                 .map { CalendarEntry(id: $0.id, title: $0.title, startsAt: $0.startsAt, isAllDay: $0.isAllDay,
                                      location: $0.location) }
         } catch {
-            throw FailureEngine.port(error)
+            throw GoogleFailureEngine.port(error)
         }
     }
 }
 
 struct DriveFilesClient: FilesPort {
-    let drive: any DrivePort
+    let drive: any DriveFetchPort
     let projectsRoot: String
 
     func projectFolders() async throws -> [FileFolder] {
@@ -176,7 +176,7 @@ extension ContactSearchClient: ContactFeedPort {
                 contact.email.map { ContactPerson(name: contact.displayName, address: $0) }
             }
         } catch {
-            throw FailureEngine.port(error)
+            throw GoogleFailureEngine.port(error)
         }
     }
 }

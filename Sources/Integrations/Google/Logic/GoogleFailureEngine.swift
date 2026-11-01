@@ -2,7 +2,7 @@ import Assistant
 import Foundation
 import Hub
 
-enum FailureEngine {
+enum GoogleFailureEngine {
     static func classify(_ error: any Error) -> Classification {
         switch error {
         case let failure as GoogleFailure: classify(failure, error: error)

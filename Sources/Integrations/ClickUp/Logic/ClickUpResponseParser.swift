@@ -1,6 +1,6 @@
 import Foundation
 
-enum ResponseParser {
+enum ClickUpResponseParser {
     static let phaseFieldName = "project_phase"
 
     static func tasks(from data: Data) throws -> [ClickUpTask] {

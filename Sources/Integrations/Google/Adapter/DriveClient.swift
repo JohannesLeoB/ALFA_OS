@@ -2,7 +2,7 @@ import Assistant
 import Foundation
 import PDFKit
 
-struct DriveClient: DrivePort {
+struct DriveClient: DriveFetchPort {
     static let filesEndpoint = "https://www.googleapis.com/drive/v3/files"
     static let uploadEndpoint = "https://www.googleapis.com/upload/drive/v3/files"
     static let drivesEndpoint = "https://www.googleapis.com/drive/v3/drives"
@@ -123,11 +123,11 @@ struct DriveClient: DrivePort {
 }
 
 struct DriveListingClient: Assistant.DrivePort {
-    let drive: any DrivePort
+    let drive: any DriveFetchPort
     let reader: DriveTextClient
     let convention: OfferConvention
 
-    init(drive: any DrivePort, offers: OfferConvention) {
+    init(drive: any DriveFetchPort, offers: OfferConvention) {
         self.drive = drive
         self.reader = DriveTextClient(drive: drive)
         self.convention = offers
@@ -137,7 +137,7 @@ struct DriveListingClient: Assistant.DrivePort {
         do {
             return try await drive.listFolder(folderID: folderID).map(Self.entry)
         } catch {
-            throw FailureEngine.port(error)
+            throw GoogleFailureEngine.port(error)
         }
     }
 
@@ -146,7 +146,7 @@ struct DriveListingClient: Assistant.DrivePort {
             let result = try await OfferScanEngine.load(rootFolderID: folderID, drive: drive, convention: convention)
             return OfferListing(outgoing: result.outgoing.map(Self.offer), incoming: result.incoming.map(Self.offer))
         } catch {
-            throw FailureEngine.port(error)
+            throw GoogleFailureEngine.port(error)
         }
     }
 
@@ -154,7 +154,7 @@ struct DriveListingClient: Assistant.DrivePort {
         do {
             return try await reader.findFile(named: name, in: folderID).map(Self.entry)
         } catch {
-            throw FailureEngine.port(error)
+            throw GoogleFailureEngine.port(error)
         }
     }
 
@@ -163,7 +163,7 @@ struct DriveListingClient: Assistant.DrivePort {
             return try await reader.text(of: DriveFile(id: file.id, name: file.name, mimeType: file.mimeType,
                                                      modifiedAt: file.modifiedAt, webViewLink: file.webViewLink))
         } catch {
-            throw FailureEngine.port(error)
+            throw GoogleFailureEngine.port(error)
         }
     }
 
@@ -183,7 +183,7 @@ struct DriveTextClient: Sendable {
     static let maxDepth = 4
     static let truncationMark = "\n\u{2026}"
 
-    let drive: any DrivePort
+    let drive: any DriveFetchPort
 
     func findFile(named query: String, in rootFolderID: String) async throws -> DriveFile? {
         let needle = query.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)

@@ -1,6 +1,6 @@
 import Foundation
 
-enum ResponseParser {
+enum SevdeskResponseParser {
     static func contact(from data: Data) throws -> Contact? {
         guard let entity = try decode(ContactEntity.self, from: data).first else { return nil }
         return Contact(id: entity.id ?? "", name: entity.name ?? "", customerNumber: entity.customerNumber)

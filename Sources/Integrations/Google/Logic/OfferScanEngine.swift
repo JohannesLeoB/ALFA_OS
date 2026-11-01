@@ -8,7 +8,7 @@ enum OfferScanEngine {
         let parentName: String?
     }
 
-    static func load(rootFolderID: String, drive: any DrivePort, convention: OfferConvention,
+    static func load(rootFolderID: String, drive: any DriveFetchPort, convention: OfferConvention,
                      maxDepth: Int = defaultDepth) async throws -> OfferScanResult {
         let (incomingFolder, outgoingFolder) = try await findFolders(
             rootFolderID: rootFolderID, drive: drive, convention: convention, maxDepth: maxDepth)
@@ -20,7 +20,7 @@ enum OfferScanEngine {
             outgoing: classify(rawOutgoing, isIncoming: false, convention: convention))
     }
 
-    static func findFolders(rootFolderID: String, drive: any DrivePort, convention: OfferConvention,
+    static func findFolders(rootFolderID: String, drive: any DriveFetchPort, convention: OfferConvention,
                             maxDepth: Int) async throws -> (incoming: DriveFile?, outgoing: DriveFile?) {
         var incoming: DriveFile?
         var outgoing: DriveFile?
@@ -43,7 +43,7 @@ enum OfferScanEngine {
         return (incoming, outgoing)
     }
 
-    private static func collect(in folder: DriveFile?, drive: any DrivePort, depth: Int, parentName: String?,
+    private static func collect(in folder: DriveFile?, drive: any DriveFetchPort, depth: Int, parentName: String?,
                                 maxDepth: Int) async throws -> [Located] {
         guard let folder, depth < maxDepth else { return [] }
         let children = try await drive.listFolder(folderID: folder.id)

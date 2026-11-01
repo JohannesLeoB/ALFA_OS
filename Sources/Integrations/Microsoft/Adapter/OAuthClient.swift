@@ -111,7 +111,7 @@ final class MailTokenClient: MailTokenPort, Sendable {
             renewal.renewed(renewed.grant)
             return renewed.accessToken
         } catch {
-            if FailureEngine.isRejection(error) { renewal.failed(error) }
+            if MicrosoftFailureEngine.isRejection(error) { renewal.failed(error) }
             throw error
         }
     }
@@ -200,7 +200,7 @@ public struct OutlookAccess: ProviderPort {
     }
 
     public func classify(_ error: any Error) -> Classification {
-        FailureEngine.classify(error) ?? mail.classify(error)
+        MicrosoftFailureEngine.classify(error) ?? mail.classify(error)
     }
 }
 
@@ -234,7 +234,7 @@ struct ProbeClient: ProbePort {
     }
 
     static func hint(_ error: any Error) -> Hint {
-        let classification = FailureEngine.classify(error) ?? Classification.generic(error)
+        let classification = MicrosoftFailureEngine.classify(error) ?? Classification.generic(error)
         return Hint(text: tokenKey, detail: classification.detail ?? String(describing: error), kind: classification.kind,
                     original: classification.original)
     }

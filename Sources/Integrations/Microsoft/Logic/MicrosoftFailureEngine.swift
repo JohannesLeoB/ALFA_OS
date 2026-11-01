@@ -2,7 +2,7 @@ import Core
 import Foundation
 import Hub
 
-enum FailureEngine {
+enum MicrosoftFailureEngine {
     static let provider = "oauth"
 
     static func classify(_ error: any Error) -> Classification? {
