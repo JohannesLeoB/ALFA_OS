@@ -176,7 +176,11 @@ extension InletsState: SetupPort {
         let names = try inletStore.slots(of: inletID)
         var saved: [String: String] = [:]
         for name in names {
-            if let value = (try? configuration.keychain.get(KeySlot(inlet: inletID, name: name))) ?? nil { saved[name] = value }
+            if let value = (try? configuration.keychain.get(KeySlot(inlet: inletID, name: name))) ?? nil {
+                saved[name] = value
+            } else if let cached = grants[inletID]?.values[name] {
+                saved[name] = cached
+            }
         }
         func restore(_ done: [String]) {
             for name in done {

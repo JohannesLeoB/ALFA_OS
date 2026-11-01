@@ -19,6 +19,7 @@ public final class MailboxStore: MailboxPort {
     var expunging: [Inlet.ID: Bool] = [:]
     var passes: [String: Task<Result<Void, HubFailure>, Never>] = [:]
     var followUps: [String: Task<Result<Void, HubFailure>, Never>] = [:]
+    var syncLoops: [Inlet.ID: Task<Void, Never>] = [:]
     var olderOffered: [String: Bool] = [:]
     var dirty: [Inlet.ID: Set<String>] = [:]
     var running: [Inlet.ID: Int] = [:]
@@ -371,7 +372,10 @@ public final class MailboxStore: MailboxPort {
         let prefix = inlet + "\n"
         let running = passes.filter { $0.key.hasPrefix(prefix) }.map(\.value) + followUps.filter { $0.key.hasPrefix(prefix) }.map(\.value)
         running.forEach { $0.cancel() }
+        let loop = syncLoops.removeValue(forKey: inlet)
+        loop?.cancel()
         for task in running { _ = await task.value }
+        await loop?.value
         attachments.removeInlet(inlet)
         let purge = { [database] in
             try database.write { db in
@@ -410,12 +414,13 @@ public final class MailboxStore: MailboxPort {
             return
         }
         syncing.insert(inlet)
-        Task {
+        syncLoops[inlet] = Task {
             repeat {
                 resync.remove(inlet)
                 await sync(inlet)
-            } while resync.contains(inlet)
+            } while resync.contains(inlet) && !Task.isCancelled
             syncing.remove(inlet)
+            syncLoops[inlet] = nil
         }
     }
 
