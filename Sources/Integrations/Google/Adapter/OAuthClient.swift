@@ -170,32 +170,43 @@ final class AccessTokenClient: AccessTokenPort, Sendable {
     private let refresher: any TokenRefreshPort
     private let clock: @Sendable () -> Date
     private let renewal: GrantRenewal
-    private let flight = SingleFlight<String>()
+    private let flight: RefreshFlight<StoredToken>
 
     init(state: StoredToken, refresher: any TokenRefreshPort, clock: @escaping @Sendable () -> Date,
-         renewal: GrantRenewal = .ignoring) {
+         renewal: GrantRenewal = .ignoring, flight: RefreshFlight<StoredToken> = RefreshFlight()) {
         self.state = Mutex(state)
         self.refresher = refresher
         self.clock = clock
         self.renewal = renewal
+        self.flight = flight
     }
 
     func validAccessToken() async throws -> String {
         let current = state.withLock { $0 }
-        if current.expiresAt.timeIntervalSince(clock()) > Self.expirySkew { return current.accessToken }
-        return try await flight.run { [self] in try await refreshed() }
+        if fresh(current) { return current.accessToken }
+        guard let refreshToken = current.refreshToken else {
+            if Self.isRejection(SignInFailure.refreshUnavailable) { renewal.failed(SignInFailure.refreshUnavailable) }
+            throw SignInFailure.refreshUnavailable
+        }
+        if let known = flight.recent(refreshToken), fresh(known) {
+            state.withLock { $0 = known }
+            return known.accessToken
+        }
+        let renewed = try await flight.run(refreshToken) { [self] in try await refresh(refreshToken) }
+        state.withLock { $0 = renewed }
+        return renewed.accessToken
     }
 
-    private func refreshed() async throws -> String {
-        let current = state.withLock { $0 }
-        if current.expiresAt.timeIntervalSince(clock()) > Self.expirySkew { return current.accessToken }
+    private func fresh(_ token: StoredToken) -> Bool {
+        token.expiresAt.timeIntervalSince(clock()) > Self.expirySkew
+    }
+
+    private func refresh(_ refreshToken: String) async throws -> StoredToken {
         do {
-            guard let refreshToken = current.refreshToken else { throw SignInFailure.refreshUnavailable }
             let token = try await refresher.refresh(refreshToken: refreshToken)
             let renewed = StoredToken(token: token, previousRefresh: refreshToken, now: clock())
-            state.withLock { $0 = renewed }
             renewal.renewed(renewed.grant)
-            return renewed.accessToken
+            return renewed
         } catch {
             if Self.isRejection(error) { renewal.failed(error) }
             throw error

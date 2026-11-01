@@ -1,4 +1,5 @@
 import Assistant
+import Core
 import Foundation
 import Hub
 import Mail
@@ -13,6 +14,7 @@ public struct AccessRouter: ProviderPort {
     public let signIn: any SignInPort
     public let probe: any ProbePort
     private let oauth: OAuthClient
+    private let flight = RefreshFlight<StoredToken>()
     private let drive: DriveConfig
     private let roots: DriveRootStore?
     private let clock: @Sendable () -> Date
@@ -47,7 +49,8 @@ public struct AccessRouter: ProviderPort {
             throw HubFailure.capabilityMissing(inlet.id, inlet.capabilities.first ?? .mail)
         }
         guard inlet.capabilities.contains(capability) else { throw HubFailure.capabilityMissing(inlet.id, capability) }
-        let tokens = AccessTokenClient(state: try StoredToken(grant: grant), refresher: oauth, clock: clock, renewal: renewal)
+        let tokens = AccessTokenClient(state: try StoredToken(grant: grant), refresher: oauth, clock: clock, renewal: renewal,
+                                       flight: flight)
         guard let typed = make(key, inlet: inlet, tokens: tokens) as? P else {
             throw HubFailure.capabilityMissing(inlet.id, capability)
         }

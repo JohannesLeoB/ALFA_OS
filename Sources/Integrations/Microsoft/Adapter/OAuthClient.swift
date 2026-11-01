@@ -91,32 +91,44 @@ final class MailTokenClient: MailTokenPort, Sendable {
     private let refresher: any TokenRefreshPort
     private let clock: @Sendable () -> Date
     private let renewal: GrantRenewal
-    private let flight = SingleFlight<String>()
+    private let flight: RefreshFlight<StoredToken>
 
     init(state: StoredToken, refresher: any TokenRefreshPort, clock: @escaping @Sendable () -> Date,
-         renewal: GrantRenewal = .ignoring) {
+         renewal: GrantRenewal = .ignoring, flight: RefreshFlight<StoredToken> = RefreshFlight()) {
         self.state = Mutex(state)
         self.refresher = refresher
         self.clock = clock
         self.renewal = renewal
+        self.flight = flight
     }
 
     func accessToken() async throws -> String {
         let current = state.withLock { $0 }
-        if current.expiresAt.timeIntervalSince(clock()) > Self.expirySkew { return current.accessToken }
-        return try await flight.run { [self] in try await refreshed() }
+        if fresh(current) { return current.accessToken }
+        guard let refreshToken = current.refreshToken else {
+            if MicrosoftFailureEngine.isRejection(SignInFailure.refreshUnavailable) { renewal.failed(SignInFailure.refreshUnavailable) }
+            throw SignInFailure.refreshUnavailable
+        }
+        if let known = flight.recent(refreshToken), fresh(known) {
+            state.withLock { $0 = known }
+            return known.accessToken
+        }
+        let identity = current.identity
+        let renewed = try await flight.run(refreshToken) { [self] in try await refresh(refreshToken, identity: identity) }
+        state.withLock { $0 = renewed }
+        return renewed.accessToken
     }
 
-    private func refreshed() async throws -> String {
-        let current = state.withLock { $0 }
-        if current.expiresAt.timeIntervalSince(clock()) > Self.expirySkew { return current.accessToken }
+    private func fresh(_ token: StoredToken) -> Bool {
+        token.expiresAt.timeIntervalSince(clock()) > Self.expirySkew
+    }
+
+    private func refresh(_ refreshToken: String, identity: MailIdentity) async throws -> StoredToken {
         do {
-            guard let refreshToken = current.refreshToken else { throw SignInFailure.refreshUnavailable }
             let token = try await refresher.refresh(refreshToken: refreshToken)
-            let renewed = StoredToken(token: token, identity: current.identity, previousRefresh: refreshToken, now: clock())
-            state.withLock { $0 = renewed }
+            let renewed = StoredToken(token: token, identity: identity, previousRefresh: refreshToken, now: clock())
             renewal.renewed(renewed.grant)
-            return renewed.accessToken
+            return renewed
         } catch {
             if MicrosoftFailureEngine.isRejection(error) { renewal.failed(error) }
             throw error
@@ -166,6 +178,7 @@ public struct OutlookAccess: ProviderPort {
     public let probe: any ProbePort
     private let oauth: OAuthClient
     private let mail = OAuthMailClient()
+    private let flight = RefreshFlight<StoredToken>()
     private let clock: @Sendable () -> Date
 
     public init(registration: Registration, http: any HttpPort = URLSession.shared,
@@ -192,7 +205,7 @@ public struct OutlookAccess: ProviderPort {
             throw HubFailure.capabilityMissing(inlet.id, inlet.capabilities.first ?? .mail)
         }
         let state = try StoredToken(grant: grant)
-        let tokens = MailTokenClient(state: state, refresher: oauth, clock: clock, renewal: renewal)
+        let tokens = MailTokenClient(state: state, refresher: oauth, clock: clock, renewal: renewal, flight: flight)
         let made: Any = wantsChanges
             ? mail.changes(for: inlet.id, address: state.identity.address, name: state.identity.name,
                            endpoints: Self.endpoints, tokens: tokens)

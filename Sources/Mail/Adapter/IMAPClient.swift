@@ -448,6 +448,7 @@ actor IMAPClient {
 actor IMAPChannel {
     private var session: IMAPClient?
     private var busy = false
+    private var retired = false
     private var waiting: [CheckedContinuation<Void, Never>] = []
 
     deinit {
@@ -474,6 +475,11 @@ actor IMAPChannel {
         await live?.close()
     }
 
+    func retire() async {
+        retired = true
+        await close()
+    }
+
     private func attempt<T: Sendable>(
         open: @Sendable () async throws -> IMAPClient,
         body: @Sendable (IMAPClient) async throws -> T
@@ -482,6 +488,7 @@ actor IMAPChannel {
         if let session {
             live = session
         } else {
+            guard !retired else { throw MailFailure.connectionClosed }
             live = try await open()
             session = live
         }
@@ -537,12 +544,12 @@ final class IMAPChannelRegistry: Sendable {
             entries[id] = (fingerprint, fresh)
             return (fresh, old)
         }
-        if let stale { Task { await stale.close() } }
+        if let stale { Task { await stale.retire() } }
         return channel
     }
 
     func release(_ id: String) {
         let old = entries.withLock { $0.removeValue(forKey: id)?.channel }
-        if let old { Task { await old.close() } }
+        if let old { Task { await old.retire() } }
     }
 }
