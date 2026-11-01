@@ -243,7 +243,7 @@ struct InboxRow: View {
                 rowAction(item.unread ? "mail.action.markRead" : "mail.action.markUnread", glyph: .envelope) {
                     session.perform(item.unread ? .markRead : .markUnread, message: item.id)
                 }
-                if inbox.folderActions {
+                if inbox.offersArchive {
                     rowAction("mail.action.archive", glyph: .archive) {
                         session.perform(.archive, message: item.id)
                     }
@@ -273,7 +273,8 @@ struct InboxRow: View {
 
     private func contextMenu(at point: NSPoint) {
         guard item.outbox == nil else { return }
-        let lines = MenuEngine.row(unread: item.unread, draft: item.draft, folders: inbox.folderActions, trashes: !inbox.inTrash(item.id))
+        let lines = MenuEngine.row(unread: item.unread, draft: item.draft, folders: inbox.folderActions, trashes: !inbox.inTrash(item.id),
+                                  archives: inbox.offersArchive)
         let entries = MenuLine.entries(lines, appearance: appearance) { action in
             if action == .move {
                 menuOpen = true

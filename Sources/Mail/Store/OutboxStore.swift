@@ -149,6 +149,7 @@ public final class OutboxStore: OutboxPort {
         } catch {
             unremoved.insert(id)
         }
+        arm()
         events.emit(.outboxChanged)
         return true
     }

@@ -114,6 +114,7 @@ extension InboxState {
         let removed = outboxPort.discard(item.id)
         outbox = outboxPort.outbox
         if removed {
+            plannedMirrors[item.id] = nil
             for index in drafts.indices where drafts[index].outboxID == item.id { drafts[index].outboxID = nil }
         }
         await refreshOutboxList()

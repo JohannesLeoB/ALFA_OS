@@ -95,7 +95,7 @@ struct StackLane: View {
         guard sample.event.modifierFlags.intersection([.command, .control]).isEmpty else { return false }
         if sample.event.window?.firstResponder is NSText { return false }
         let key = sample.event.charactersIgnoringModifiers?.lowercased() ?? ""
-        if key == StackKeys.archive, inbox.folderActions {
+        if key == StackKeys.archive, inbox.offersArchive {
             session.perform(.archive, message: id)
             return true
         }
@@ -167,7 +167,7 @@ struct OverviewList: View {
         },
          OverviewCommand(id: Action.trash.rawValue, help: appearance.string(Action.trash.key), icon: .trash, tone: \.signal) {
             session.perform(.trash, message: id)
-        }].filter { (inbox.folderActions || $0.id != Action.archive.rawValue) && (!inbox.inTrash(id) || $0.id != Action.trash.rawValue) }
+        }].filter { (inbox.offersArchive || $0.id != Action.archive.rawValue) && (!inbox.inTrash(id) || $0.id != Action.trash.rawValue) }
     }
 
     var body: some View {
@@ -220,7 +220,7 @@ struct MessageTiles: View {
         },
          OverviewCommand(id: Action.trash.rawValue, help: appearance.string(Action.trash.key), icon: .trash, tone: \.signal) {
             session.perform(.trash, message: id)
-        }].filter { (inbox.folderActions || $0.id != Action.archive.rawValue) && (!inbox.inTrash(id) || $0.id != Action.trash.rawValue) }
+        }].filter { (inbox.offersArchive || $0.id != Action.archive.rawValue) && (!inbox.inTrash(id) || $0.id != Action.trash.rawValue) }
     }
 }
 

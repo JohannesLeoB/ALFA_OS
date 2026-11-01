@@ -193,6 +193,7 @@ final class QuitDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSWindow.allowsAutomaticWindowTabbing = false
+        AttachmentPreview.shared.discard()
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {

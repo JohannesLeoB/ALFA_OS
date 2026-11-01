@@ -391,6 +391,13 @@ public final class MailboxStore: MailboxPort {
             }
         }
         olderOffered = olderOffered.filter { !$0.key.hasPrefix(prefix) }
+        progresses = progresses.filter { !$0.key.hasPrefix(prefix) }
+        syncing.remove(inlet)
+        storing.remove(inlet)
+        resync.remove(inlet)
+        dirty[inlet] = nil
+        sendLimits[inlet] = nil
+        fetched[inlet] = nil
         let changed = outboxStore.forget(inlet)
         eventBus.emit(.foldersChanged(inlet))
         if changed { eventBus.emit(.outboxChanged) }

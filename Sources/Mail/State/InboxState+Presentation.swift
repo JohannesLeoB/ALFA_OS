@@ -419,6 +419,7 @@ extension InboxState {
         }
         return CommandEngine.commands(front: front, stackCount: stackCount, fanned: overview.open,
                                       hasFiles: mailbox.hasFiles, confirmDiscard: confirmDiscard, canFold: canFold,
-                                      sendLabelled: sendLabelled, formatting: formatting, folders: folderActions, trashes: trashes)
+                                      sendLabelled: sendLabelled, formatting: formatting, folders: folderActions, trashes: trashes,
+                                      archives: offersArchive)
     }
 }

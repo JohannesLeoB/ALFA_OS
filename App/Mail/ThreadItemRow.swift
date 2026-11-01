@@ -450,11 +450,12 @@ struct AttachmentRow: View {
 @MainActor
 final class AttachmentPreview: NSObject, @preconcurrency QLPreviewPanelDataSource {
     static let shared = AttachmentPreview()
+    static let root = FileManager.default.temporaryDirectory.appendingPathComponent("AttachmentPreview", isDirectory: true)
     private var file: URL?
 
     static func show(_ data: Data, name: String) -> Bool {
         shared.discard()
-        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let folder = root.appendingPathComponent(UUID().uuidString, isDirectory: true)
         let url = folder.appendingPathComponent((name as NSString).lastPathComponent)
         do {
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
@@ -480,9 +481,8 @@ final class AttachmentPreview: NSObject, @preconcurrency QLPreviewPanelDataSourc
     }
 
     func discard() {
-        guard let file else { return }
-        self.file = nil
-        try? FileManager.default.removeItem(at: file.deletingLastPathComponent())
+        file = nil
+        try? FileManager.default.removeItem(at: Self.root)
     }
 }
 

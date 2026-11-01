@@ -9,7 +9,7 @@ enum CommandEngine {
 
     static func commands(front: Front?, stackCount: Int, fanned: Bool, hasFiles: Bool, confirmDiscard: Bool,
                                 canFold: Bool, sendLabelled: Bool, formatting: Bool = false, folders: Bool = true,
-                                trashes: Bool = true) -> CommandSet {
+                                trashes: Bool = true, archives: Bool = true) -> CommandSet {
         var state = HeadState.empty
         var main: [Slot] = []
         var tail: [Slot] = []
@@ -20,7 +20,7 @@ enum CommandEngine {
         } else if case .message(let hasCopy) = front {
             state = .reading
             let bin = trashes ? [Slot(id: "trash", action: .trash, priority: 3, signal: true)] : []
-            let moves = (folders ? [Slot(id: "archive", action: .archive, priority: 5)] : []) + bin
+            let moves = (folders && archives ? [Slot(id: "archive", action: .archive, priority: 5)] : []) + bin
             main = [
                 Slot(id: "reply", action: .reply, priority: 1),
                 Slot(id: "replyAll", action: .replyAll, priority: 4, off: !hasCopy),
@@ -106,10 +106,10 @@ public enum SlotRouter {
 public enum MenuEngine {
     private static let printableExtensions: Set<String> = ["pdf", "png", "jpg", "jpeg", "gif", "heic", "txt"]
 
-    public static func row(unread: Bool, draft: Bool, folders: Bool = true, trashes: Bool = true) -> [MenuLine] {
+    public static func row(unread: Bool, draft: Bool, folders: Bool = true, trashes: Bool = true, archives: Bool = true) -> [MenuLine] {
         if draft { return [.item(.openDraft)] }
         let bin: [MenuLine] = trashes ? [.separator, .item(.trash)] : []
-        return [.item(.reply), .item(.forward), .separator] + (folders ? [.item(.archive)] : [])
+        return [.item(.reply), .item(.forward), .separator] + (folders && archives ? [.item(.archive)] : [])
             + [.item(unread ? .markRead : .markUnread)] + (folders ? [.item(.move)] : []) + bin
     }
 

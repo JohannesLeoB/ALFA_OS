@@ -122,6 +122,11 @@ extension InboxState {
         selectedInlet.map { mailbox.offersSource($0) } ?? false
     }
 
+    public var offersArchive: Bool {
+        guard folderActions, let role = currentFolder?.role else { return folderActions }
+        return ![.archive, .sent, .drafts].contains(role)
+    }
+
     public var offersSpam: Bool {
         folderActions && currentFolder?.role != .spam && folders.contains { $0.role == .spam }
     }

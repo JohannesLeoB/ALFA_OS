@@ -120,7 +120,7 @@ struct MessageLane: View {
             SymbolButton(help: appearance.string("mail.pick.read"), glyph: .envelope, hover: .none, pressed: false) {
                 Task { await inbox.bulk(.read) }
             }
-            if inbox.folderActions {
+            if inbox.offersArchive {
                 SymbolButton(help: appearance.string("mail.action.archive"), glyph: .archive, hover: .none, pressed: false) {
                     Task { await inbox.bulk(.archive) }
                 }
