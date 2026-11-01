@@ -104,7 +104,7 @@ final class Assembly {
             notes: NoteStore(database: database, userID: person.id), todos: TodoStore(database: database, userID: person.id),
             journal: JournalStore(database: database), alarm: TodoAlarmClient(text: text), receipts: receipts,
             learning: LearningStore(database: database), audit: AuditStore(database: database), workshop: workshop,
-            personID: person.id)
+            personID: person.id, anchorsFailed: { [settings] in settings.notify(SettingsKeys.failedUnknown, failed: true) })
 
         self.directory = directory
         self.database = database
@@ -217,6 +217,7 @@ struct ToolShelf {
     let audit: AuditStore
     let workshop: WorkshopFactors
     let personID: String
+    let anchorsFailed: @MainActor () -> Void
 
     func registry() -> ToolRegistry {
         ToolRegistry(tools: local() + google() + clickUp() + clockodo() + sevdesk() + shipping() + airtable())
@@ -297,7 +298,9 @@ struct ToolShelf {
         var primary: any PriceAnchorPort = SeedAnchors()
         if let client {
             let anchors = AnchorStore(source: AnchorRowStore(fetch: client), fallback: SeedAnchors())
-            Task { _ = await anchors.warmUp() }
+            Task {
+                do { _ = try await anchors.warmUp() } catch { anchorsFailed() }
+            }
             primary = anchors
         }
         return learning.estimationEngine(

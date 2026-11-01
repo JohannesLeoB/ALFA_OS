@@ -15,8 +15,8 @@ public final class AnchorStore: PriceAnchorPort {
     }
 
     @discardableResult
-    public func warmUp() async -> Int {
-        guard let rows = try? await source.fetchAnchorRows() else { return 0 }
+    public func warmUp() async throws -> Int {
+        let rows = try await source.fetchAnchorRows()
         let anchors = rows.compactMap(CorpusAnchorStore.anchor(from:))
         guard anchors.isEmpty == false else { return 0 }
         cache.withLock { $0 = anchors }
