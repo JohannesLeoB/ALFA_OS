@@ -19,7 +19,7 @@ def dump(value):
 
 def rows(loaded):
     tables = {name: [] for name in ("sources", "concepts", "atoms", "library_entries", "media",
-                                    "setups", "setup_values", "edges")}
+                                    "setups", "setup_values", "catalog_sections", "edges")}
     edges = set()
     for _, s in loaded["source"]:
         tables["sources"].append((s["id"], s["kind"], s["publisher"], s["title"], s.get("edition"),
@@ -57,6 +57,13 @@ def rows(loaded):
         for key, entry in s["values"].items():
             tables["setup_values"].append((s["id"], key, dump(entry["value"]), entry["status"],
                                            entry["evidence"], entry.get("note")))
+    for _, section in loaded["catalog-section"]:
+        tables["catalog_sections"].append((section["id"], section["source"], section["level"],
+                                           " > ".join(section["path"]), section.get("printed_from"),
+                                           section.get("printed_to"), section["pdf_from"], section["pdf_to"]))
+        edges.add((section["id"], "cites", section["source"]))
+        for concept in section.get("concepts", []):
+            edges.add((section["id"], "about", concept))
     tables["edges"] = sorted(edges)
     return tables
 
@@ -79,6 +86,7 @@ def build():
                "label_de || ' ' || synonyms_de from concepts")
     db.execute("insert into search select id, 'library', maker || ' ' || series || ' ' || name, '' from library_entries")
     db.execute("insert into search select id, 'media', caption_en, coalesce(caption_de, '') from media")
+    db.execute("insert into search select id, 'catalog', '', path from catalog_sections")
     db.commit()
     counts = {t: db.execute(f"select count(*) from {t}").fetchone()[0] for t in ("atoms", "concepts", "edges")}
     print(f"Wrote {DB.relative_to(root)}: {counts['atoms']} atoms, {counts['concepts']} concepts, {counts['edges']} edges.")
@@ -95,13 +103,17 @@ def query(text, limit):
     terms = [t for t in re.findall(r"\w+", text, re.UNICODE) if len(t) > 1]
     if not terms:
         return
-    match = " OR ".join(f'"{t}"' + ("*" if len(t) > 3 else "") for t in terms)
-    hits = db.execute("select id, kind from search where search match ? order by rank limit 40", (match,)).fetchall()
-    concepts = [i for i, k in hits if k == "concept"]
+    hits = []
+    for term in terms:
+        match = f'"{term}"' + ("*" if len(term) > 3 else "")
+        hits.append(db.execute("select id, kind from search where search match ? order by rank limit 100",
+                               (match,)).fetchall())
+    concepts = list(dict.fromkeys(i for found in hits for i, k in found if k == "concept"))
     scores = {}
-    for rank, (identifier, kind) in enumerate(hits):
-        if kind != "concept":
-            scores[identifier] = scores.get(identifier, 0) + 40 - rank
+    for found in hits:
+        for rank, (identifier, kind) in enumerate(found):
+            if kind != "concept":
+                scores[identifier] = scores.get(identifier, 0) + max(0, 40 - rank) + (30 if kind == "atom" else 0)
     for concept in concepts:
         for (atom,) in db.execute("select src from edges where rel = 'about' and dst = ?", (concept,)):
             scores[atom] = scores.get(atom, 0) + 5
@@ -118,6 +130,11 @@ def query(text, limit):
         row = db.execute("select name, status, sharing from library_entries where id = ?", (identifier,)).fetchone()
         if row:
             print(f"{identifier} [library, {row[1]}, {row[2]}] {row[0]}")
+            continue
+        row = db.execute("select path, source, printed_from, printed_to, pdf_from from catalog_sections where id = ?",
+                         (identifier,)).fetchone()
+        if row:
+            print(f"{identifier} [catalog {row[1]}, printed {row[2]}-{row[3] or ''}, pdf {row[4]}] {row[0]}")
 
 
 def concept(identifier):

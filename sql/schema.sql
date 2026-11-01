@@ -81,6 +81,17 @@ create table if not exists setup_values (
   primary key (setup_id, key)
 );
 
+create table if not exists catalog_sections (
+  id text primary key,
+  source text not null,
+  level integer not null,
+  path text not null,
+  printed_from text,
+  printed_to text,
+  pdf_from integer not null,
+  pdf_to integer not null
+);
+
 create table if not exists edges (
   src text not null,
   rel text not null,

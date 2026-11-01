@@ -1,0 +1,19 @@
+{
+  "title": "catalog section",
+  "type": "object",
+  "required": ["id", "source", "level", "path", "pdf_from", "pdf_to", "added"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^CAT-[A-Z0-9]+-[0-9]{4}$"},
+    "source": {"type": "string", "pattern": "^SRC-[A-Z0-9]+-[0-9]{3}$"},
+    "level": {"type": "integer", "minimum": 1},
+    "path": {"type": "array", "items": {"type": "string"}},
+    "printed_from": {"type": "string"},
+    "printed_to": {"type": "string"},
+    "pdf_from": {"type": "integer", "minimum": 1},
+    "pdf_to": {"type": "integer", "minimum": 1},
+    "concepts": {"type": "array", "items": {"type": "string", "pattern": "^CON-[A-Z0-9-]+$"}},
+    "added": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "note": {"type": "string"}
+  }
+}

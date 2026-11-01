@@ -10,6 +10,7 @@ KINDS = (
     ("media", "media/*.jsonl"),
     ("library-entry", "libraries/*/*.json"),
     ("setup", "setups/*.json"),
+    ("catalog-section", "catalogs/*.jsonl"),
 )
 
 

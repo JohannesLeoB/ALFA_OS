@@ -82,12 +82,14 @@ def main():
             if record.get(key) and record[key] not in concepts:
                 errors.append(f"{where}: {key} '{record[key]}' does not exist")
 
-    for kind in ("atom", "library-entry", "media"):
+    for kind in ("atom", "library-entry", "media", "catalog-section"):
         for where, record in loaded[kind]:
             for reference in record.get("sources", []):
                 if reference.get("id") not in sources:
                     errors.append(f"{where}: source '{reference.get('id')}' does not exist")
-            if kind == "media" and record.get("source") not in sources:
+            if kind == "catalog-section" and record["pdf_to"] < record["pdf_from"]:
+                errors.append(f"{where}: pdf_to is before pdf_from")
+            if kind in ("media", "catalog-section") and record.get("source") not in sources:
                 errors.append(f"{where}: source '{record.get('source')}' does not exist")
             for concept in record.get("concepts", []):
                 if concept not in concepts:

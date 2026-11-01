@@ -17,6 +17,7 @@ This branch has no shared history with `main`. The rules of `main` (`AGENTS.md`,
 | Libraries | `libraries/` | One file per product or material entry: hardware, material, edge, appliance. |
 | Rules | `rules/` | Formulas as Python functions, with tests. |
 | Setups | `setups/` | Layers of values: default, company, workshop, user, project. A lower layer overrides only the values that it sets. |
+| Catalogues | `catalogs/` | One record per catalogue section: path of headings, printed and PDF pages, concepts. A map to read the right pages. No catalogue text. |
 | Skills | `skills/` | Packages for Claude. Not yet built. |
 
 Record formats are in `schema/`. The table schema is in `sql/`. [GLOSSARY.md](GLOSSARY.md) explains the terms for people. The concepts in `concepts/` are the terms for machines.
@@ -41,17 +42,30 @@ python3 -I tools/export_supabase.py
 - `kb.py query` finds atoms in English or German. It also follows the concepts that match the words.
 - `kb.py setup` shows the values of a setup after all parent layers are applied.
 - `build_xray.py` writes `build/xray.html`. Do not edit the page by hand.
-- `export_supabase.py` writes `build/supabase_seed.sql`. It leaves out library entries with `sharing: setup_only`.
+- `export_supabase.py` writes `build/supabase_schema.sql` and `build/supabase_seed.sql`. It leaves out library entries with `sharing: setup_only`.
+
+## Catalogue text
+
+The page text of a catalogue stays on the studio Mac in `creative claude/Training/05_Eingang_Quellen/verarbeitet/<catalogue>/pages.jsonl`. It is not in Git and not in Supabase, because the text belongs to the maker. Use `catalogs/` to find the pages, read them, and write atoms in your own words.
 
 ## Supabase
 
-Supabase is a mirror for online access. The files of this branch stay the source.
+Supabase is a read mirror for agents and apps. The files of this branch stay the source.
 
-1. Create a project in an EU region.
-2. Run `sql/schema.sql`, then `sql/postgres.sql`, in the SQL editor.
-3. Run `python3 -I tools/export_supabase.py` and run `build/supabase_seed.sql` in the SQL editor.
+- All tables are in the schema `kb`.
+- `kb.search(query, max_rows)` searches atoms, concepts and catalogue sections in German and English.
+- `kb.setup_resolved(setup)` returns the values of a setup after all parent layers.
+- `kb.atom_cards` gives one row per atom with concepts, sources and links.
+- Signed-in users can read. Only the service role writes. Library entries with `sharing: setup_only` are not exported.
+- The columns `embedding` are empty. They are for semantic search later.
 
-The seed deletes and refills all tables. Do not edit data in Supabase.
+To fill or refresh the mirror:
+
+1. Run `python3 -I tools/export_supabase.py`.
+2. Apply `build/supabase_schema.sql` once as a migration.
+3. Run `build/supabase_seed.sql`. The seed deletes and refills all tables.
+
+Do not edit data in Supabase.
 
 ## Status
 
