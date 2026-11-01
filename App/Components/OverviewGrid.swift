@@ -2,6 +2,33 @@ import Design
 import Shell
 import SwiftUI
 
+enum OverviewMark {
+    case text(String)
+    case icon(Icon)
+}
+
+struct OverviewCommand: Identifiable {
+    let id: String
+    let help: String
+    let icon: Icon
+    let tone: KeyPath<Colors, ColorValue>
+    let run: () -> Void
+}
+
+struct OverviewEntry: Identifiable {
+    let id: String
+    let mark: OverviewMark
+    let title: Text
+    let date: Text
+    let unread: Bool
+    let subject: String
+    let preview: String
+    let current: Bool
+    var close: (() -> Void)?
+    var commands: [OverviewCommand] = []
+    let choose: () -> Void
+}
+
 struct OverviewGrid: View {
     let entries: [OverviewEntry]
     let size: OverviewSize
