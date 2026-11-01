@@ -14,8 +14,8 @@ public struct ContactStore: ContactBookPort {
         return (try? JSONDecoder().decode([Contact].self, from: data)) ?? []
     }
 
-    public func save(_ contacts: [Contact]) {
+    public func save(_ contacts: [Contact]) throws {
         guard let defaults else { return }
-        defaults.set(try? JSONEncoder().encode(contacts), forKey: Self.storageKey)
+        defaults.set(try JSONEncoder().encode(contacts), forKey: Self.storageKey)
     }
 }

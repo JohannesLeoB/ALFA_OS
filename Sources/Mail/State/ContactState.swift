@@ -3,7 +3,7 @@ import Observation
 
 @MainActor @Observable
 public final class ContactState {
-    public private(set) var items: [Contact] = [] { didSet { book?.save(items) } }
+    public private(set) var items: [Contact] = [] { didSet { try? book?.save(items) } }
     public var editing: String?
 
     @ObservationIgnored private let book: (any ContactBookPort)?
