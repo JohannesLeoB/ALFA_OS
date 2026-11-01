@@ -94,7 +94,7 @@ enum ArticleEngine {
     }
 }
 
-public enum StockEngine {
+enum StockEngine {
     static let labelField = "Bezeichnung"
     static let categoryField = "Kategorie"
     static let manufacturerField = "Hersteller"

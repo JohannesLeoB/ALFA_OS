@@ -1,7 +1,7 @@
 import Foundation
 
-public enum ExportEngine {
-    public static let formatVersion = 1
+enum ExportEngine {
+    static let formatVersion = 1
 
     static let secretMarks = [
         "password", "passwd", "passphrase", "secret", "token", "apikey", "api_key", "credential", "authorization", "bearer",
@@ -16,26 +16,26 @@ public enum ExportEngine {
         "settings.lock.", "settings.privacy.", "settings.contacts.source.", "cadence|", "lastsync|", "calculation.",
     ]
 
-    public static func isSecret(_ name: String) -> Bool {
+    static func isSecret(_ name: String) -> Bool {
         let lowered = name.lowercased()
         return secretMarks.contains { lowered.contains($0) }
     }
 
-    public static func fileName(at date: Date) -> String {
+    static func fileName(at date: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy-MM-dd"
         return "ALFA_OS-Export-" + formatter.string(from: date) + ".zip"
     }
 
-    public static func component(_ text: String) -> String {
+    static func component(_ text: String) -> String {
         let allowed = Set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._-@")
         let mapped = String(text.map { allowed.contains($0) ? $0 : "_" })
         let trimmed = mapped.drop { $0 == "." }
         return trimmed.isEmpty ? "_" : String(trimmed)
     }
 
-    public static func files(from source: ExportSource) -> [ExportFile] {
+    static func files(from source: ExportSource) -> [ExportFile] {
         var collected = Collector()
         settingFiles(source.settings, into: &collected)
         collected.add("contacts.json", contacts(source.contacts))
@@ -183,7 +183,7 @@ public enum ExportEngine {
     }
 }
 
-public enum ArchiveEngine {
+enum ArchiveEngine {
     private static let table: [UInt32] = (0..<256).map { index in
         var value = UInt32(index)
         for _ in 0..<8 { value = value & 1 == 1 ? 0xEDB8_8320 ^ (value >> 1) : value >> 1 }
@@ -196,7 +196,7 @@ public enum ArchiveEngine {
         return ~value
     }
 
-    public static func archive(_ files: [ExportFile], at date: Date) throws(ExportFailure) -> Data {
+    static func archive(_ files: [ExportFile], at date: Date) throws(ExportFailure) -> Data {
         guard files.count <= Int(UInt16.max) else { throw .tooLarge }
         let stamp = dosStamp(date)
         let limit = Int(UInt32.max)

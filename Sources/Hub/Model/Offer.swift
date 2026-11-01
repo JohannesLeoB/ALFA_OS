@@ -64,7 +64,7 @@ public struct Field: Identifiable, Equatable, Sendable {
 
 public enum Input: Equatable, Sendable {
     public static let expectedAccountKey = "expectedAccount"
-    public static let renewsKey = "renews"
+    static let renewsKey = "renews"
 
     case none
     case fields([Field.ID: String])

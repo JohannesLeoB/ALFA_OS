@@ -35,7 +35,7 @@ public final class SettingsState {
     @ObservationIgnored private let settings: any SettingPort
     @ObservationIgnored private let templateStore: any TemplatePort
 
-    public var hasTemplates: Bool { !templates.isEmpty }
+    var hasTemplates: Bool { !templates.isEmpty }
 
     public var currentTemplate: TemplateFile? { templates.first }
 

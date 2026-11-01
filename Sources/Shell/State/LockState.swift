@@ -15,7 +15,7 @@ public enum LockPhase: Equatable, Sendable {
 }
 
 public struct LockPause: Equatable, Sendable {
-    public let onLeaving: Bool
+    let onLeaving: Bool
     public let idle: TimeInterval
 
     static let shortest: TimeInterval = 60

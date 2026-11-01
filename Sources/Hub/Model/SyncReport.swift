@@ -93,7 +93,7 @@ public struct ReportEntry: Identifiable, Equatable, Codable, Sendable {
     }
 }
 
-public enum ReportEvent: String, Codable, Equatable, Sendable {
+enum ReportEvent: String, Codable, Equatable, Sendable {
     case signIn
     case probe
     case sync
@@ -101,7 +101,7 @@ public enum ReportEvent: String, Codable, Equatable, Sendable {
     case write
 }
 
-public struct Cost: Equatable, Sendable {
+struct Cost: Equatable, Sendable {
     var calls: Int
     var bytes: Int
     var tokens: Int
@@ -201,7 +201,7 @@ public struct ContactSource: Identifiable, Equatable, Sendable {
 
     public static let mail = ContactSource(id: ContactSourceKind.mail.rawValue, kind: .mail)
 
-    public static func googleID(_ inlet: Inlet.ID) -> String { ContactSourceKind.google.rawValue + "." + inlet }
+    static func googleID(_ inlet: Inlet.ID) -> String { ContactSourceKind.google.rawValue + "." + inlet }
 
     public static func google(_ inlet: Inlet) -> ContactSource {
         ContactSource(id: googleID(inlet.id), kind: .google, account: inlet.account)

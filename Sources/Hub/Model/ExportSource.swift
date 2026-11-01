@@ -22,11 +22,11 @@ public struct ExportRawMail: Equatable, Sendable {
     }
 }
 
-public struct ExportFile: Equatable, Sendable {
-    public var path: String
-    public var data: Data
+struct ExportFile: Equatable, Sendable {
+    var path: String
+    var data: Data
 
-    public init(path: String, data: Data) {
+    init(path: String, data: Data) {
         self.path = path
         self.data = data
     }
@@ -73,7 +73,7 @@ public enum ExportTable: String, CaseIterable, Hashable, Sendable {
     case privacy
     case audit
 
-    public var sqlName: String {
+    var sqlName: String {
         switch self {
         case .services: "inlet"
         case .mailFolders: "mail_folder"
@@ -115,7 +115,7 @@ public enum ExportTable: String, CaseIterable, Hashable, Sendable {
         }
     }
 
-    public var jsonColumns: Set<String> {
+    var jsonColumns: Set<String> {
         switch self {
         case .services: ["json"]
         case .mailMessages, .mailBodies: ["attachments"]
@@ -125,16 +125,16 @@ public enum ExportTable: String, CaseIterable, Hashable, Sendable {
         }
     }
 
-    public var mergedColumn: String? { self == .services ? "json" : nil }
+    var mergedColumn: String? { self == .services ? "json" : nil }
 
-    public var droppedKeys: Set<String> {
+    var droppedKeys: Set<String> {
         switch self {
         case .mailOutbox, .mailDrafts: ["data"]
         default: []
         }
     }
 
-    public var inletColumn: String? {
+    var inletColumn: String? {
         switch self {
         case .mailFolders, .mailMessages, .mailBodies, .popMessages: "inlet"
         default: nil

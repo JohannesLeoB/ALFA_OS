@@ -84,8 +84,8 @@ public struct OfferConvention: Codable, Equatable, Sendable {
     public var orderFolderKeyword: String
     public var prefixes: [String: OfferDocumentType]
     public var documentNumberPattern: String
-    public var customerNumberPattern: String
-    public var versionPattern: String
+    var customerNumberPattern: String
+    var versionPattern: String
 
     public init(incomingFolderKeyword: String, outgoingFolderKeyword: String, purchaseOrderFolderKeyword: String,
                 invoiceFolderKeyword: String, offerFolderKeyword: String, orderFolderKeyword: String,
