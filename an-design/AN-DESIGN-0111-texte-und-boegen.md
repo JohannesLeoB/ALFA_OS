@@ -1,6 +1,6 @@
 # Code → Design · Texte und Bögen, die fehlen · 01.11.2026 (Stand `main` a0e2553e)
 
-Aus dem Klick-Audit, dem Text-Abgleich mit Master 2910 und der Fehler-Härtung. Code hat nichts davon erfunden; überall steht vorerst ein vorhandener, allgemeiner Text oder gar nichts.
+Aus dem Klick-Audit, dem Text-Abgleich mit Master 2910 und der Fehler-Härtung. Code hat nichts davon erfunden; überall steht vorerst ein vorhandener, allgemeiner Text oder gar nichts. Freigegeben von Johannes im Chat am 01.11. („update designchannel!“).
 
 ## A · Fehlende Texte (Code nutzt bis dahin „Keine Antwort“ bzw. den allgemeinen Fehlertext)
 1. Preisanker konnten nicht geladen werden (Kalkulation).
@@ -25,3 +25,9 @@ Anheften (`mail.symbolButton.pin.aria`), Stapel-Knopf (`mail.button.s015`), Als 
 - Platzhalter: Die App nutzt positionell `{1}`, `{2}`; der Master benannt `{count}`. Der Wortlaut ist gleich. Bitte im nächsten Master positionell oder eine Zuordnung liefern.
 - Mehrere Master-Schlüssel mit gleichem Text sind in der App auf einen Schlüssel zusammengelegt (z. B. Erneut versuchen, Abbrechen, Senden, Rückgängig). Beim Abgleich als Alias lesen.
 - „ALFA“ im Master an vier Stellen bleibt in der App „ALFA_OS“ (Johannes 31.10.).
+
+## E · Seit dem Bericht 669d1a97 sichtbar geändert (Johannes 01.11.)
+- Fehlerzeilen zeigen nur noch den deutschen Text; die technische Ursache steht im Tooltip und im Protokoll (`a303a3a5`).
+- Sind die Datenschutz-Einstellungen nicht lesbar, ist alles gesperrt statt offen (`e04136c0`). Dafür fehlt der Text aus A 3.
+- Kategorie „Dateiordner“ heißt im Code jetzt so (`settings.section.folders`); Schlüssel `mail.deck.showNew` heißt `mail.deck.showUnread`, der Text ist gleich.
+- Kein neuer Bau seit 1024; der nächste Bau kommt nur auf Johannes' Wort.
