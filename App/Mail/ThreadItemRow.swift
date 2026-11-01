@@ -40,8 +40,8 @@ struct ThreadItemRow: View {
                 if let date = item.date { threadDate(date) }
             }
             if !item.current, !item.recipients.all.isEmpty { recipientLines }
-            if let html = item.html, case .html(_, let inline) = card.content {
-                HTMLBody(inbox: session.inbox, card: card, html: allowRemote ? html : item.blockedHTML ?? html, inlineImages: inline,
+            if let html = allowRemote ? item.html : item.blockedHTML, case .html(_, let inline) = card.content {
+                HTMLBody(inbox: session.inbox, card: card, html: html, inlineImages: inline,
                          allowRemote: allowRemote)
             } else {
                 Text(linked(item.text))
@@ -300,11 +300,12 @@ struct WebBody: NSViewRepresentable {
                 webView.loadHTMLString(next.document, baseURL: nil)
                 return
             }
+            let blocked = next.document
             pending = Task { [weak self, weak webView] in
                 let list = await self?.rules()
-                guard let self, let webView, !Task.isCancelled else { return }
+                guard self != nil, let webView, !Task.isCancelled else { return }
                 if let list { webView.configuration.userContentController.add(list) }
-                webView.loadHTMLString(self.parent.document, baseURL: nil)
+                webView.loadHTMLString(blocked, baseURL: nil)
             }
         }
 
