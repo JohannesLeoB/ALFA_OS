@@ -98,9 +98,6 @@ public enum FolderRole: String, Sendable, CaseIterable {
     case all
     case other
 
-    public static let unseenRoles: [FolderRole] = [.spam, .archive]
-    public static let countedRoles: [FolderRole] = unseenRoles + [.other]
-
     public var nameKey: String {
         switch self {
         case .outbox: "mail.folder.outbox"

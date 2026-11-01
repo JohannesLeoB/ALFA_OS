@@ -3413,23 +3413,6 @@ final class MailTests: XCTestCase {
     }
 
     @MainActor
-    func testSpamAndArchiveCountsComeFromTheServerWithoutMirroringThoseFolders() async throws {
-        let rig = try mirrored()
-        rig.transport.folderList.with {
-            $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Spam", name: "Spam", role: .spam),
-                  Folder(id: "Archive", name: "Archive", role: .archive)]
-        }
-        try await rig.mailbox.refreshFolders("a")
-        rig.transport.counts.with { $0["Spam"] = FolderCount(unseen: 4, total: 10) }
-        await rig.mailbox.countUnmirrored("a")
-        XCTAssertEqual(rig.mailbox.unseenCount("a", folder: "Spam"), 4)
-        XCTAssertNil(rig.mailbox.unseenCount("a", folder: "Archive"))
-        XCTAssertTrue(rig.mailbox.messages("a", folder: "Spam").isEmpty)
-        let state = await started(rig)
-        XCTAssertEqual(state.folderRows.first { $0.folder.role == .spam }?.count, 0)
-    }
-
-    @MainActor
     func testAPassReportsHowManyMessagesAreFetchedUntilItEnds() async throws {
         let rig = try mirrored()
         try await rig.mailbox.refreshFolders("a")

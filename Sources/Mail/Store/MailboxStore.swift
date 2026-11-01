@@ -410,7 +410,6 @@ public final class MailboxStore: MailboxPort {
             for role in [FolderRole.drafts, .sent] {
                 if let folder = folderID(inlet, role: role) { try await refresh(inlet, folder: folder) }
             }
-            await countUnmirrored(inlet)
         } catch {
             eventBus.emit(.syncFailed(inlet, Self.syncHint(error, inlet: inlet)))
             return

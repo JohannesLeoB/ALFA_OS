@@ -452,7 +452,7 @@ extension MailboxStore {
 }
 
 extension MailboxStore {
-    public func unseenCount(_ inlet: Inlet.ID, folder: String) -> Int? {
+    func unseenCount(_ inlet: Inlet.ID, folder: String) -> Int? {
         guard let text = cursor(inlet, Self.countKey(folder)), let cached = CountEngine.decode(text) else { return nil }
         return CountEngine.shown(cached, local: localUnseen(inlet, folder))
     }
@@ -477,16 +477,8 @@ extension MailboxStore {
         eventBus.emit(.progress(inlet, folder: folder))
     }
 
-    func countUnmirrored(_ inlet: Inlet.ID) async {
-        guard let transport = try? transport(inlet) else { return }
-        for folder in Self.folders(database, inlet) where FolderRole.countedRoles.contains(folder.role) {
-            await storeCount(inlet, folder.id, transport)
-            announceChange(inlet, folder.id)
-        }
-    }
-
     func storeCount(_ inlet: Inlet.ID, _ folder: String, _ transport: any MailTransportPort) async {
-        guard let port = transport as? any UnseenCountPort, !Task.isCancelled,
+        guard folder == inboxID(inlet), let port = transport as? any UnseenCountPort, !Task.isCancelled,
               let count = try? await port.unseen(folderID: folder) else { return }
         let text = CountEngine.encode(count, local: localUnseen(inlet, folder))
         try? setCursor(inlet, Self.countKey(folder), text)

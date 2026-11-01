@@ -86,7 +86,7 @@ extension InboxState {
 
     public var labelRows: [FolderEntry] {
         sortedFolders.filter { $0.role == .other }.map { folder in
-            FolderEntry(folder: folder, glyph: .tag, count: folderUnseen[folder.id] ?? 0, selected: folder.id == selectedFolder, attention: false)
+            FolderEntry(folder: folder, glyph: .tag, count: 0, selected: folder.id == selectedFolder, attention: false)
         }
     }
 

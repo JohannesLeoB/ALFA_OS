@@ -25,7 +25,6 @@ public final class InboxState {
     var crossQuery = ""
     var typeGeneration = 0
     public var unread: [Inlet.ID: Int] = [:]
-    var folderUnseen: [String: Int] = [:]
     var progressSerial = 0
     var mirroredDrafts: [Inlet.ID: Set<String>] = [:]
     var goneDrafts: [Inlet.ID: Set<String>] = [:]
@@ -401,13 +400,6 @@ public final class InboxState {
         var counts: [Inlet.ID: Int] = [:]
         for account in accounts { counts[account.id] = mailbox.unreadCount(account.id) }
         unread = counts
-        var seen: [String: Int] = [:]
-        if let inlet = selectedInlet {
-            for folder in folders where FolderRole.countedRoles.contains(folder.role) {
-                if let count = mailbox.unseenCount(inlet, folder: folder.id) { seen[folder.id] = count }
-            }
-        }
-        folderUnseen = seen
         mirroredDrafts = Dictionary(accounts.map { ($0.id, mailbox.draftIDs($0.id)) }, uniquingKeysWith: { first, _ in first })
         goneDrafts = goneDrafts.reduce(into: [:]) { result, entry in
             let kept = entry.value.intersection(mirroredDrafts[entry.key] ?? [])
