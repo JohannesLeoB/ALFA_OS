@@ -110,7 +110,6 @@ extension InletsState: SetupPort {
             grants[inlet.id] = grant
             if let index = records.firstIndex(where: { $0.id == inlet.id }) { records[index] = inlet }
             rest(inlet.id, as: inlet.state, persist: .never)
-            emit(.inletChanged(inlet.id))
             for capability in inlet.capabilities { plan(inlet.id, capability) }
             return inlet
         } catch {
@@ -194,6 +193,11 @@ extension InletsState: SetupPort {
             restore(attempted)
             throw error
         }
+        grants[inletID] = nil
+        forget(inletID)
+        reports[inletID] = nil
+        for kind in delivered.keys { delivered[kind]?[inletID] = nil }
+        records.removeAll { $0.id == inletID }
         for capability in inlet.capabilities {
             configuration.cadence.plan(inletID, capability, .off)
             watchers.stop(SyncEngine.key(inletID, capability))
@@ -215,11 +219,6 @@ extension InletsState: SetupPort {
                 Log.failure("RemoveSettingsLeft", detail: String(describing: error))
             }
         }
-        grants[inletID] = nil
-        forget(inletID)
-        reports[inletID] = nil
-        for kind in delivered.keys { delivered[kind]?[inletID] = nil }
-        records.removeAll { $0.id == inletID }
         for list in feeds.values { list.forEach { $0.drop(inlet: inletID) } }
         emit(.inletRemoved(inletID))
     }

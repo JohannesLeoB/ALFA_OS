@@ -35,6 +35,10 @@ final class InletStore: InletPort {
             try db.execute(sql: "INSERT INTO inlet (id, json) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET json = excluded.json",
                            arguments: [inlet.id, data])
             if let slots {
+                let marks = slots.map { _ in "?" }.joined(separator: ", ")
+                let keep = slots.isEmpty ? "" : " AND name NOT IN (\(marks))"
+                try db.execute(sql: "DELETE FROM key_slot WHERE inlet = ?" + keep,
+                               arguments: StatementArguments([inlet.id] + slots))
                 for name in slots {
                     try db.execute(sql: "INSERT OR REPLACE INTO key_slot (inlet, name) VALUES (?, ?)",
                                    arguments: [inlet.id, name])

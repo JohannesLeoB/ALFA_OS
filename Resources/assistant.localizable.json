@@ -497,10 +497,6 @@
    "de": "Ich konnte dazu keine neuen Daten finden — magst du die Frage anders stellen oder mir mehr Kontext geben?",
    "en": "I could not find any new data on this — would you like to ask differently or give me more context?"
   },
-  "assistant.engine.noResponse": {
-   "de": "Keine Antwort erhalten.",
-   "en": "No answer received."
-  },
   "assistant.engine.repeated": {
    "de": "Diese Anfrage wurde in diesem Gespräch bereits identisch gestellt — wird nicht wiederholt.",
    "en": "This request was already made identically in this conversation — it is not repeated."

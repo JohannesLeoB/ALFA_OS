@@ -123,8 +123,9 @@ extension InboxState {
     }
 
     public var offersArchive: Bool {
-        guard folderActions, let role = currentFolder?.role else { return folderActions }
-        return ![.archive, .sent, .drafts].contains(role)
+        guard folderActions, folders.contains(where: { $0.role == .archive || $0.role == .all }) else { return false }
+        guard let role = currentFolder?.role else { return true }
+        return ![.archive, .sent, .drafts, .outbox, .later].contains(role)
     }
 
     public var offersSpam: Bool {

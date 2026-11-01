@@ -276,6 +276,8 @@ public final class ConversationEngine {
             return try await Deadline.run(timeout) {
                 await registry.run(name: use.name, inputJSON: use.inputJSON, scope: scope, allowed: allowed)
             }
+        } catch is CancellationError {
+            return .failure("assistant.engine.cancelled")
         } catch {
             return .failure("assistant.engine.toolTimeout")
         }

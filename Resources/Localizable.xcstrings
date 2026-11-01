@@ -2070,22 +2070,6 @@
         }
       }
     },
-    "assistant.engine.noResponse" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine Antwort erhalten."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No answer received."
-          }
-        }
-      }
-    },
     "assistant.engine.repeated" : {
       "localizations" : {
         "de" : {
