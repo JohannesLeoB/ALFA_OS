@@ -77,6 +77,7 @@ private let integrationLogLimit = 500
 @MainActor
 public final class IntegrationLogStore {
     public private(set) var entries: [IntegrationEntry] = []
+    public private(set) var writeFailed = false
 
     private let database: SQLiteStore
 
@@ -87,8 +88,13 @@ public final class IntegrationLogStore {
     public func log(integrationID: String, actorUserID: String, action: IntegrationAction, errorMessage: String? = nil, summary: String) {
         let entry = IntegrationEntry(integrationID: integrationID, actorUserID: actorUserID, action: action,
                                      errorMessage: errorMessage, summary: summary)
-        try? database.write { db in
-            try IntegrationLogRecord(entry).insert(db)
+        do {
+            try database.write { db in
+                try IntegrationLogRecord(entry).insert(db)
+            }
+            writeFailed = false
+        } catch {
+            writeFailed = true
         }
         entries.insert(entry, at: 0)
         if entries.count > integrationLogLimit { entries.removeLast(entries.count - integrationLogLimit) }
