@@ -60,15 +60,3 @@ public protocol LabelPort: Sendable {
 public protocol InboxOnlyPort: Sendable {
     var inboxOnly: Bool { get }
 }
-
-struct IMAPChangePort: ChangePort {
-    let transport: IMAPSMTPClient
-
-    func changes() -> AsyncThrowingStream<Void, any Error> { transport.changes() }
-}
-
-struct POPChangePort: ChangePort {
-    let transport: POPSMTPClient
-
-    func changes() -> AsyncThrowingStream<Void, any Error> { transport.changes() }
-}

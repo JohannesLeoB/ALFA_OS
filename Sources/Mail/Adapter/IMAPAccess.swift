@@ -64,7 +64,7 @@ public struct IMAPAccess: ProviderPort {
         if connection.incomingProtocol == .pop3 {
             guard let database else { throw HubFailure.capabilityMissing(inlet.id, .mail) }
             let pop = POPSMTPClient(account: connection.account(id: inlet.id), database: database, password: { password })
-            let made: Any = wantsChanges ? POPChangePort(transport: pop) : pop
+            let made: Any = wantsChanges ? POPChangeFeed(transport: pop) : pop
             guard let typed = made as? P else { throw HubFailure.capabilityMissing(inlet.id, .mail) }
             return typed
         }
@@ -72,7 +72,7 @@ public struct IMAPAccess: ProviderPort {
         let transport = IMAPSMTPClient(
             account: connection.account(id: inlet.id), password: { password },
             channel: channels.channel(for: inlet.id, fingerprint: fingerprint))
-        let made: Any = wantsChanges ? IMAPChangePort(transport: transport) : transport
+        let made: Any = wantsChanges ? IMAPChangeFeed(transport: transport) : transport
         guard let typed = made as? P else {
             throw HubFailure.capabilityMissing(inlet.id, .mail)
         }
@@ -234,7 +234,7 @@ public final class OAuthMailClient: Sendable {
 
     public func changes(for inlet: Inlet.ID, address: String, name: String, endpoints: OAuthMailEndpoints,
                         tokens: any MailTokenPort) -> any ChangePort {
-        IMAPChangePort(transport: client(for: inlet, address: address, name: name, endpoints: endpoints, tokens: tokens))
+        IMAPChangeFeed(transport: client(for: inlet, address: address, name: name, endpoints: endpoints, tokens: tokens))
     }
 
     public func probe(inlet: Inlet.ID, address: String, name: String, endpoints: OAuthMailEndpoints,
@@ -272,4 +272,16 @@ public final class OAuthMailClient: Sendable {
             channel: channels.channel(for: inlet, fingerprint: fingerprint),
             filesSentCopy: !endpoints.serverFilesSent)
     }
+}
+
+struct IMAPChangeFeed: ChangePort {
+    let transport: IMAPSMTPClient
+
+    func changes() -> AsyncThrowingStream<Void, any Error> { transport.changes() }
+}
+
+struct POPChangeFeed: ChangePort {
+    let transport: POPSMTPClient
+
+    func changes() -> AsyncThrowingStream<Void, any Error> { transport.changes() }
 }
