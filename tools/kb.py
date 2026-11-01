@@ -75,7 +75,7 @@ def build():
     db.execute("create virtual table search using fts5(id unindexed, kind unindexed, text_en, text_de, "
                "tokenize='unicode61 remove_diacritics 2')")
     db.execute("insert into search select id, 'atom', statement_en || ' ' || coalesce(formula, ''), statement_de from atoms")
-    db.execute("insert into search select id, 'concept', label_en || ' ' || synonyms_en || ' ' || coalesce(definition_en, ''), "
+    db.execute("insert into search select id, 'concept', label_en || ' ' || synonyms_en, "
                "label_de || ' ' || synonyms_de from concepts")
     db.execute("insert into search select id, 'library', maker || ' ' || series || ' ' || name, '' from library_entries")
     db.execute("insert into search select id, 'media', caption_en, coalesce(caption_de, '') from media")
@@ -95,7 +95,7 @@ def query(text, limit):
     terms = [t for t in re.findall(r"\w+", text, re.UNICODE) if len(t) > 1]
     if not terms:
         return
-    match = " OR ".join(f'"{t}"*' for t in terms)
+    match = " OR ".join(f'"{t}"' + ("*" if len(t) > 3 else "") for t in terms)
     hits = db.execute("select id, kind from search where search match ? order by rank limit 40", (match,)).fetchall()
     concepts = [i for i, k in hits if k == "concept"]
     scores = {}
