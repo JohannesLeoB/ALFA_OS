@@ -1,0 +1,11 @@
+{
+  "schema": "bibliothekseintrag/v0.2",
+  "bibliothek": "kante",
+  "id": "abs-weiss-1",
+  "bezeichnung": "ABS-Kante weiss 1 x 23 mm",
+  "material": {"traeger": "ABS", "dekor": "weiss", "dicken": [1]},
+  "bestellung": {"mengeneinheit": "m"},
+  "quelle": {"art": "eigen", "stand": "2026-10-31"},
+  "status": "ungeprueft",
+  "weitergabe": "frei"
+}

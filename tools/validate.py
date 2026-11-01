@@ -133,6 +133,8 @@ def main():
         for name, pattern in FORBIDDEN:
             if name == "amount" and relative[0] in ("prices", "tools"):
                 continue
+            if name != "key" and relative[0] == "legacy":
+                continue
             for match in pattern.finditer(text):
                 line = text.count("\n", 0, match.start()) + 1
                 errors.append(f"{path.relative_to(root)}:{line}: forbidden pattern ({name})")

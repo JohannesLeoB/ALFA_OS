@@ -1,0 +1,439 @@
+{
+ "schema": "kuechenmodell/v0.2",
+ "id": "nische-2460",
+ "revision": 1,
+ "variante": 1,
+ "planungsbogen": {
+  "id": "nische-2460",
+  "revision": 2
+ },
+ "setup": {
+  "id": "studio-beispiel",
+  "version": 2
+ },
+ "kern_version": "0.2",
+ "werte": {
+  "korpus_d": {
+   "wert": 19,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "korpus_t": {
+   "wert": 560,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "rueckwand_d": {
+   "wert": 8,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "front_d": {
+   "wert": 19,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "fuge_front": {
+   "wert": 3,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "sockel_h": {
+   "wert": 100,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "lochreihe_teilung": {
+   "wert": 32,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "lochreihe_abstand_vk": {
+   "wert": 37,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "lochreihe_durchmesser": {
+   "wert": 5,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "lochreihe_tiefe": {
+   "wert": 12,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "verbinder": {
+   "wert": "duebel",
+   "einheit": "-",
+   "herkunft": "setup"
+  },
+  "rueckwand_einbau": {
+   "wert": "nut",
+   "einheit": "-",
+   "herkunft": "setup"
+  },
+  "rueckwand_einstand": {
+   "wert": 16,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "rueckwand_nut_tiefe": {
+   "wert": 8,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "rueckwand_nut_breite": {
+   "wert": 8.5,
+   "einheit": "mm",
+   "herkunft": "setup"
+  },
+  "sockel_rueckversatz": {
+   "wert": 60,
+   "einheit": "mm",
+   "herkunft": "annahme"
+  },
+  "arbeitshoehe": {
+   "wert": 910,
+   "einheit": "mm",
+   "herkunft": "projekt",
+   "beleg": {
+    "quelle": "frage-ok-ap"
+   }
+  },
+  "ap_d": {
+   "wert": 5,
+   "einheit": "mm",
+   "herkunft": "projekt"
+  },
+  "korpus_h": {
+   "wert": 805,
+   "einheit": "mm",
+   "herkunft": "annahme",
+   "beleg": {
+    "quelle": "kern.formel.korpus_h",
+    "ableitung": "arbeitshoehe - sockel_h - ap_d = 910 - 100 - 5"
+   }
+  }
+ },
+ "solver": {
+  "name": "layout-dp",
+  "version": "0.1",
+  "seed": 1,
+  "zeitlimit_s": 5,
+  "worker": 1
+ },
+ "scores": {
+  "ergonomie": {
+   "wert": 0.7,
+   "begruendung": "Arbeitshoehe ist Annahme, Ellenbogenhoehe fehlt"
+  }
+ },
+ "elemente": [
+  {
+   "id": "z1",
+   "typ": "bereich",
+   "name": "Zeile Nische",
+   "lage": {
+    "pos": [
+     0,
+     0,
+     0
+    ]
+   },
+   "masse": {
+    "b": 2460,
+    "t": 600,
+    "h": 910
+   },
+   "kinder": [
+    {
+     "id": "z1-02",
+     "typ": "unterschrank",
+     "baustein": "unterschrank",
+     "name": "Spuelenschrank 600",
+     "lage": {
+      "pos": [
+       600,
+       0,
+       100
+      ]
+     },
+     "masse": {
+      "b": 600,
+      "t": 560,
+      "h": 805
+     },
+     "parameter": {
+      "traverse_vorn": {
+       "wert": false,
+       "herkunft": "setup",
+       "beleg": {
+        "quelle": "spuelenschrank_ohne_traverse_vorn"
+       }
+      }
+     },
+     "fest": true,
+     "fronten": [
+      {
+       "art": "schubkasten",
+       "hoehe": 800,
+       "griff": "grifflos_pto"
+      }
+     ],
+     "teile": [
+      "nische-2460-z1-02-seite_links",
+      "nische-2460-z1-02-boden"
+     ],
+     "freiraum": [
+      {
+       "zweck": "auszug",
+       "min": [
+        600,
+        579,
+        100
+       ],
+       "max": [
+        1200,
+        1100,
+        905
+       ]
+      }
+     ],
+     "montage": {
+      "schritt": 1,
+      "ort": "baustelle",
+      "befestigung": "Sockelfuesse, mit Nachbar verschraubt"
+     },
+     "herkunft": "projekt"
+    }
+   ]
+  }
+ ],
+ "teile": [
+  {
+   "id": "nische-2460-z1-02-seite_links",
+   "nr": "N2460-0001",
+   "name": "Seite links",
+   "rolle": "seite_links",
+   "gruppe": "z1-02",
+   "art": "platte",
+   "anzahl": 1,
+   "material": {
+    "bibliothek": "material",
+    "id": "spanplatte-mfc-weiss-19",
+    "stand": "2026-10-31"
+   },
+   "dicke": 19,
+   "fertig": {
+    "l": 805,
+    "b": 560
+   },
+   "zuschnitt": {
+    "l": 805,
+    "b": 559,
+    "zugabe": 0
+   },
+   "faser": "keine",
+   "drehbar": true,
+   "sichtseite": "keine",
+   "kanten": {
+    "l1": {
+     "material": {
+      "bibliothek": "kante",
+      "id": "abs-weiss-1",
+      "stand": "2026-10-31"
+     },
+     "dicke": 1,
+     "hoehe": 23,
+     "fuge": "pur",
+     "folge": 1
+    },
+    "l2": null,
+    "b1": null,
+    "b2": null
+   },
+   "bearbeitungen": [
+    {
+     "art": "nut",
+     "seite": "oben",
+     "x": 0,
+     "y": 535.5,
+     "richtung": "x",
+     "laenge": 805,
+     "breite": 8.5,
+     "tiefe": 8,
+     "quelle": "werte.rueckwand_*"
+    },
+    {
+     "art": "bohrreihe",
+     "seite": "oben",
+     "x": 96,
+     "y": 37,
+     "richtung": "x",
+     "durchmesser": 5,
+     "tiefe": 12,
+     "anzahl": 18,
+     "teilung": 32,
+     "quelle": "werte.lochreihe_*"
+    }
+   ],
+   "etikett": {
+    "code128": "N2460-0001",
+    "qr": "nische-2460-z1-02-seite_links",
+    "zeilen": [
+     "z1-02 Seite links",
+     "805 x 560 x 19"
+    ],
+    "kantenbild": "l1 ABS 1 / l2 - / b1 - / b2 -",
+    "position": "beliebig"
+   },
+   "montage": {
+    "schritt": 1,
+    "ort": "werkstatt"
+   },
+   "herkunft": "kern"
+  },
+  {
+   "id": "nische-2460-z1-02-boden",
+   "nr": "N2460-0002",
+   "name": "Boden",
+   "rolle": "boden",
+   "gruppe": "z1-02",
+   "art": "platte",
+   "anzahl": 1,
+   "material": {
+    "bibliothek": "material",
+    "id": "spanplatte-mfc-weiss-19",
+    "stand": "2026-10-31"
+   },
+   "dicke": 19,
+   "fertig": {
+    "l": 562,
+    "b": 560
+   },
+   "zuschnitt": {
+    "l": 562,
+    "b": 559,
+    "zugabe": 0
+   },
+   "faser": "keine",
+   "drehbar": true,
+   "sichtseite": "keine",
+   "kanten": {
+    "l1": {
+     "material": {
+      "bibliothek": "kante",
+      "id": "abs-weiss-1",
+      "stand": "2026-10-31"
+     },
+     "dicke": 1,
+     "hoehe": 23,
+     "fuge": "pur",
+     "folge": 1
+    },
+    "l2": null,
+    "b1": null,
+    "b2": null
+   },
+   "bearbeitungen": [
+    {
+     "art": "nut",
+     "seite": "oben",
+     "x": 0,
+     "y": 535.5,
+     "richtung": "x",
+     "laenge": 562,
+     "breite": 8.5,
+     "tiefe": 8,
+     "quelle": "werte.rueckwand_*"
+    }
+   ],
+   "etikett": {
+    "code128": "N2460-0002",
+    "qr": "nische-2460-z1-02-boden",
+    "zeilen": [
+     "z1-02 Boden",
+     "562 x 560 x 19"
+    ],
+    "kantenbild": "l1 ABS 1 / l2 - / b1 - / b2 -",
+    "position": "beliebig"
+   },
+   "montage": {
+    "schritt": 2,
+    "ort": "werkstatt",
+    "nach": [
+     "nische-2460-z1-02-seite_links"
+    ]
+   },
+   "herkunft": "kern"
+  }
+ ],
+ "teile_revision": 1,
+ "anschluesse": [
+  {
+   "id": "wk-1",
+   "art": "wasser_kalt",
+   "status": "bestand",
+   "pos": [
+    900,
+    0,
+    500
+   ],
+   "wand": "wand-a",
+   "toleranz": 50,
+   "element": "z1-02",
+   "herkunft": "gemessen"
+  },
+  {
+   "id": "aw-1",
+   "art": "abwasser",
+   "status": "bestand",
+   "pos": [
+    950,
+    0,
+    420
+   ],
+   "wand": "wand-a",
+   "toleranz": 50,
+   "dimension": "DN50",
+   "element": "z1-02",
+   "herkunft": "gemessen"
+  },
+  {
+   "id": "st-1",
+   "art": "strom_230",
+   "status": "bestand",
+   "pos": [
+    600,
+    0,
+    300
+   ],
+   "wand": "wand-a",
+   "herkunft": "annahme"
+  }
+ ],
+ "pruefung": {
+  "revision": 1,
+  "stand": "2026-10-31T12:00:00+01:00",
+  "ergebnis": "gelb",
+  "befunde": [
+   {
+    "regel": "ANS-02",
+    "schwere": "warnung",
+    "elemente": [
+     "z1-02"
+    ],
+    "text": "Steckdose fuer den Geschirrspueler: Lage ist Annahme",
+    "beleg": {
+     "quelle": "st-1"
+    }
+   }
+  ]
+ },
+ "annahmen": [
+  "korpus_h",
+  "sockel_rueckversatz"
+ ],
+ "freigabe": null
+}

@@ -1,0 +1,61 @@
+{
+ "durchgang": "K2-H-A1",
+ "seiten_gelesen": "61/61",
+ "atome": [
+  {"id": "GS-RASTER-01", "bereich": "RASTER", "aussage": "Auf den Seiten 1 bis 61 sind keine Rastermaße (Korpusbreiten, Korpushöhen, Tiefen, Sockelhöhe, Arbeitshöhe, Arbeitsplattenstärke) als Zahl angegeben; die Seiten sind Bildseiten.", "werte": [], "einheit": "-", "belege": ["S.1-61"]},
+  {"id": "GS-RASTER-02", "bereich": "RASTER", "aussage": "Wandvitrine als gleichmäßiges Feldraster: zwei Reihen mit je vier gleich breiten Feldern über die Wandbreite (Sichtbild, nicht gemessen).", "werte": ["2 Reihen", "4 Felder je Reihe"], "einheit": "-", "belege": ["S.58"]},
+
+  {"id": "GS-FRONT-01", "bereich": "FRONT", "aussage": "Hochschrank-Säule mit Gerätezone: oberhalb der Geräte 2 bis 3 Frontfelder übereinander, zwischen Geräten und Unterteil eine Zwischenfront, darunter 2 Frontfelder.", "werte": ["Frontfelder oben 2 bis 3", "Zwischenfront Gerätezone", "Frontfelder unten 2"], "einheit": "-", "belege": ["S.25", "S.28", "S.32"]},
+  {"id": "GS-FRONT-02", "bereich": "FRONT", "aussage": "Unterschrank-Insel mit Frontfeldern in 3 Breiten nebeneinander und 2 Reihen übereinander.", "werte": ["3 Breiten", "2 Reihen"], "einheit": "-", "belege": ["S.13", "S.18"]},
+  {"id": "GS-FRONT-03", "bereich": "FRONT", "aussage": "Frontkombination Auszug über Tür: oberer Frontstreifen als Auszugsfront, darunter eine Tür oder ein Feld.", "werte": ["Auszugsfront oben", "Tür unten"], "einheit": "-", "belege": ["S.40", "S.47"]},
+  {"id": "GS-FRONT-04", "bereich": "FRONT", "aussage": "Frontrahmen als schmaler Profilrahmen mit 10 mm Breite, bei Holz- oder Lackfronten in Verbindung mit integriertem Griff.", "werte": [10], "einheit": "mm", "belege": ["S.43"]},
+  {"id": "GS-FRONT-05", "bereich": "FRONT", "aussage": "Frontmaterial-Gruppen im Katalog: Lack matt, Holzfurnier hell, Holzfurnier dunkel, Glasacryl, Aluminium gebürstet.", "werte": ["Lack matt", "Holzfurnier hell", "Holzfurnier dunkel", "Glasacryl", "Aluminium gebürstet"], "einheit": "-", "belege": ["S.25", "S.29", "S.51", "S.59"]},
+
+  {"id": "GS-KORPUS-01", "bereich": "KORPUS", "aussage": "Seitenwangen (Abdeckseiten) gibt es in zwei Stärken, ein- oder zweiseitig gerundet; die Radiusplanung bestimmt die Wirkung.", "werte": [50, 150], "einheit": "mm", "belege": ["S.21"]},
+  {"id": "GS-KORPUS-02", "bereich": "KORPUS", "aussage": "Geräte-Säule: zwei Einbaugeräte stehen nebeneinander in gleicher Höhe in einer Hochschrank-Säule.", "werte": ["2 Geräte nebeneinander", "Gerätehöhe mittig in Säule"], "einheit": "-", "belege": ["S.25", "S.28", "S.32"]},
+  {"id": "GS-KORPUS-03", "bereich": "KORPUS", "aussage": "Wandvitrinen sind Oberschränke mit Glastüren in Rahmen, innen Glasböden und Innenbeleuchtung.", "werte": ["Glastüren mit Rahmen", "Glasböden", "Innenbeleuchtung"], "einheit": "-", "belege": ["S.27", "S.33", "S.58"]},
+  {"id": "GS-KORPUS-04", "bereich": "KORPUS", "aussage": "Sockel ist abgesetzt und umlaufend unter Insel und Zeile, in dunkler Ausführung oder in Holzoptik.", "werte": ["abgesetzt", "dunkel oder Holzoptik"], "einheit": "-", "belege": ["S.13", "S.30", "S.51"]},
+
+  {"id": "GS-INNEN-01", "bereich": "INNEN", "aussage": "Im Unterbau der Hochschrank- und Wandzeilen sind 3 bis 4 Auszüge übereinander als Vollauszüge angeordnet.", "werte": ["3 bis 4 Auszüge übereinander"], "einheit": "-", "belege": ["S.27", "S.31", "S.33"]},
+  {"id": "GS-INNEN-02", "bereich": "INNEN", "aussage": "Schubkasten mit tiefer Innenschale und Einsatz für Geschirr, im Unterschrank eingebaut.", "werte": ["Innenschale", "Einsatz für Geschirr"], "einheit": "-", "belege": ["S.43", "S.47"]},
+  {"id": "GS-INNEN-03", "bereich": "INNEN", "aussage": "Oberschrank-Innenausstattung: Glasböden in mehreren Ebenen, mit Innenbeleuchtung je Fach.", "werte": ["mehrere Glasböden", "Innenbeleuchtung je Fach"], "einheit": "-", "belege": ["S.25", "S.58"]},
+  {"id": "GS-INNEN-04", "bereich": "INNEN", "aussage": "Hochschrank mit offenen Holzböden auf Ebenen, seitlich dunkel abgesetzt.", "werte": ["offene Holzböden", "dunkle Seitenflächen"], "einheit": "-", "belege": ["S.13", "S.14", "S.16"]},
+  {"id": "GS-INNEN-05", "bereich": "INNEN", "aussage": "Offene Tellerablage im Inselunterbau: flacher offener Fachbereich mit Tellerstapeln, ohne geschlossene Front.", "werte": ["offenes Fach", "Tellerablage"], "einheit": "-", "belege": ["S.40", "S.49"]},
+  {"id": "GS-INNEN-06", "bereich": "INNEN", "aussage": "Müllauszug ist auf den Bildseiten nicht erkennbar.", "werte": [], "einheit": "-", "belege": ["S.1-61"]},
+
+  {"id": "GS-GRIFF-01", "bereich": "GRIFF", "aussage": "Schubfronten mit schmaler Metallgriffleiste oberseitig, horizontal in der Frontbreite.", "werte": ["Griffleiste oben", "Metall"], "einheit": "-", "belege": ["S.42", "S.44", "S.47"]},
+  {"id": "GS-GRIFF-02", "bereich": "GRIFF", "aussage": "Oberschrank mit griffloser Klappfront (Hubfront) und Beleuchtung im Frontbereich.", "werte": ["griffloser Oberschrank", "Hubfront", "Beleuchtung"], "einheit": "-", "belege": ["S.44", "S.46"]},
+  {"id": "GS-GRIFF-03", "bereich": "GRIFF", "aussage": "Glastüren der Vitrine mit vertikalem Stangengriff im Rahmen.", "werte": ["vertikaler Stangengriff", "im Rahmen"], "einheit": "-", "belege": ["S.35"]},
+  {"id": "GS-GRIFF-04", "bereich": "GRIFF", "aussage": "Griff integriert als Griffprofil in der Frontkante, ohne sichtbaren Aufsatzgriff.", "werte": ["integriert in Frontkante"], "einheit": "-", "belege": ["S.43"]},
+
+  {"id": "GS-LAYOUT-01", "bereich": "LAYOUT", "aussage": "Insel mit Spüle und Kochfeld, auf der Gegenseite Sitzplätze mit Barhockern.", "werte": ["Insel", "Spüle integriert", "Kochfeld", "Barhocker"], "einheit": "-", "belege": ["S.13", "S.30", "S.49"]},
+  {"id": "GS-LAYOUT-02", "bereich": "LAYOUT", "aussage": "Zeile mit Gerätesäule an einem Ende und Vitrinen-Hochschrank am anderen Ende.", "werte": ["Gerätesäule Ende 1", "Vitrinen-Hochschrank Ende 2"], "einheit": "-", "belege": ["S.25", "S.27", "S.33"]},
+  {"id": "GS-LAYOUT-03", "bereich": "LAYOUT", "aussage": "Inselverlängerung als Theke auf freistehendem Metallgestell mit Barhockern.", "werte": ["Theke", "freistehendes Gestell"], "einheit": "-", "belege": ["S.49"]},
+  {"id": "GS-LAYOUT-04", "bereich": "LAYOUT", "aussage": "Zeile mit Oberschrankreihe über der Arbeitsfläche und Kochfeld in der Arbeitsplatte.", "werte": ["Oberschrankreihe", "Kochfeld in Arbeitsplatte"], "einheit": "-", "belege": ["S.44", "S.58"]},
+  {"id": "GS-LAYOUT-05", "bereich": "LAYOUT", "aussage": "Dunstabzug als gerahmte Deckenkonstruktion über Insel oder Zeile.", "werte": ["gerahmt", "deckenhängend", "über Insel"], "einheit": "-", "belege": ["S.40", "S.41"]},
+
+  {"id": "GS-ANSCHLUSS-01", "bereich": "ANSCHLUSS", "aussage": "Arbeitsplatte mit Wasserfall-Kante, die über die Korpuskante nach unten geführt wird.", "werte": ["Wasserfall-Kante", "über Korpuskante"], "einheit": "-", "belege": ["S.34", "S.37"]},
+  {"id": "GS-ANSCHLUSS-02", "bereich": "ANSCHLUSS", "aussage": "Unter der Arbeitsplattenkante liegt ein schmales Schattenprofil, das Platte und Korpus optisch trennt.", "werte": ["Schattenprofil unter Platte"], "einheit": "-", "belege": ["S.13", "S.18"]},
+  {"id": "GS-ANSCHLUSS-03", "bereich": "ANSCHLUSS", "aussage": "Hochschrank-Oberkante mit schmaler Abschlussblende über der Gerätezone.", "werte": ["Abschlussblende oben"], "einheit": "-", "belege": ["S.25"]},
+
+  {"id": "GS-REGEL-01", "bereich": "REGEL", "aussage": "Radiusplanung wird über Arbeitsplatten, Abdeckböden und Tischplatten einheitlich gehalten, damit das Gesamtbild gleich wirkt.", "werte": [], "einheit": "-", "belege": ["S.21"]},
+  {"id": "GS-REGEL-02", "bereich": "REGEL", "aussage": "Materialmix: helle Lacke oder dunkle Holzfronten werden mit Naturstein oder Holz kombiniert.", "werte": ["Holz", "Naturstein"], "einheit": "-", "belege": ["S.55", "S.21"]},
+  {"id": "GS-REGEL-03", "bereich": "REGEL", "aussage": "Beleuchtung ist Teil der Planung: Unterboden-Licht unter Oberschränken und Innenlicht in Vitrinen.", "werte": ["Unterboden-Licht", "Innenlicht Vitrine"], "einheit": "-", "belege": ["S.44", "S.46", "S.58"]},
+  {"id": "GS-REGEL-04", "bereich": "REGEL", "aussage": "Glas-Vitrinen mit Metallrahmen dienen als gestalterischer Akzent in der Zeile.", "werte": ["Glas-Vitrine", "Metallrahmen", "Akzent"], "einheit": "-", "belege": ["S.25", "S.35"]}
+ ],
+ "vergleich_studio": [
+  "Frontbild der Großserie: Fronten teilen sich in wenige gleichmäßige Felder (2 bis 3 Breiten, 2 Reihen). Das Studio plant ohne festes Raster und mm-genau; der Vergleich gilt nur als Bildeindruck, nicht als Maßvorgabe.",
+  "Seitenwangen in zwei festen Stärken mit optionalem Radius sind ein Typenmerkmal der Großserie. Ob solche Stärken als Vorgabe taugen, ist für das Studio offen.",
+  "Frontrahmen mit 10 mm Breite und integriertem Griff ist ein sichtbares Detail, das im Studio als Sonderdetail zu prüfen wäre.",
+  "Hubfronten mit Beleuchtung und Glasvitrinen mit Innenlicht sind Standardausstattung im Katalog; im Studio wären sie Ausstattungsfragen je Projekt.",
+  "Sockel abgesetzt und dunkel unter Insel und Zeile zeigt das Bild, eine Sockelhöhe wird nicht angegeben."
+ ],
+ "offen": [
+  "Keine Rastermaße als Zahl sichtbar (Korpusbreiten, Höhen, Tiefen, Sockelhöhe, Arbeitshöhe, Arbeitsplattenstärke) auf S.1 bis 61.",
+  "Eckschrank-Lösung auf den Bildseiten nicht erkennbar.",
+  "Müllauszug nicht erkennbar.",
+  "Öffnungsmechanik der Hubfronten (Gasdruck, Hub, Hebel) nicht beschrieben.",
+  "Spülen- und Gerätemaße nicht angegeben.",
+  "Montage- und Anschlusslogik (Passleisten, Blenden, Sockelanschluss an die Wand) nicht dargestellt."
+ ]
+}

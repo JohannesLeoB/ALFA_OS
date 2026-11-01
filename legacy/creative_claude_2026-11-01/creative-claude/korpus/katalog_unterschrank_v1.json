@@ -1,0 +1,45 @@
+{
+  "katalog": "unterschrank",
+  "version": 1,
+  "aenderungen_zu_v0": "Lernpunkte aus abgleich_runde1.md: oeffnung, zarge_h an Front, innen.lage, griffmulde_ueberstand, Element-Parameter, Spülen-Becken/Technik, Definition t",
+  "regel": "Kein Raster. Typwerte sind Startwerte; jedes Maß ist mm-genau frei und wird vom Nutzer feinjustiert. Realer Schrank = Typ + Abweichungen in Hauptmaßen und Aufteilung. Feinheiten = Default. Plan-Widersprüche nur bei Hauptmaßen notieren.",
+  "parameter": {
+    "b": "Korpusbreite außen, mm",
+    "h": "Korpushöhe ohne Sockel und Arbeitsplatte, mm",
+    "t": "Korpustiefe OHNE Front, mm",
+    "t_frontebene": "Wand bis Frontvorderseite, mm (aus Plan, wenn bemaßt)",
+    "sockel_h": "mm",
+    "front_d": "mm",
+    "korpus_d": "mm",
+    "rueckwand_d": "mm",
+    "fuge": "Fuge zwischen Fronten, mm (0 erlaubt)",
+    "griffmulde_ueberstand": "Front über Korpus-Oberkante bzw. Mulde, mm (Bedeutung offen, Runde 1)",
+    "fronten": "von oben nach unten: {art: tuer|auszug|klappe|blende|geraetefront, h, oeffnung: tuer_links|tuer_rechts|klappe_unten|klappe_oben|auszug, zarge_h?}",
+    "innen": "{art: innenschub|boden|muellsystem|geraet|technik, zarge_h?, lage?: oben|unten|mm-Wert}",
+    "traverse_vorn": "bool",
+    "traverse_hinten": "bool",
+    "geraet": "Funktion oder null"
+  },
+  "typwerte": {"h": 790, "t": 555, "sockel_h": 100, "front_d": 19, "korpus_d": 19, "rueckwand_d": 8, "fuge": 3, "griffmulde_ueberstand": null, "_hinweis": "Startwerte aus Runde 1; B: h, sockel_h; N: Rest. Je Profil überschreibbar."},
+  "typen": [
+    {"id": "US-T1", "name": "Unterschrank 1 Tür", "fronten": [{"art": "tuer", "oeffnung": "tuer_links"}], "innen": [{"art": "boden"}], "traverse_vorn": true},
+    {"id": "US-T2", "name": "Unterschrank 2 Türen", "fronten": [{"art": "tuer", "oeffnung": "tuer_links"}, {"art": "tuer", "oeffnung": "tuer_rechts"}], "innen": [{"art": "boden"}], "traverse_vorn": true},
+    {"id": "US-S1I", "name": "Unterschrank 1 Auszug + Innenschübe", "fronten": [{"art": "auszug", "oeffnung": "auszug", "zarge_h": null}], "innen": [{"art": "innenschub", "lage": "oben"}, {"art": "innenschub", "lage": "oben"}], "traverse_vorn": true, "belegt_in": ["R1 Pos 3"]},
+    {"id": "US-Sn", "name": "Unterschrank n Auszüge", "fronten": [{"art": "auszug", "oeffnung": "auszug", "anzahl": "n"}], "innen": [], "traverse_vorn": true},
+    {"id": "US-SP", "name": "Spülenunterschrank", "fronten": [{"art": "auszug", "oeffnung": "auszug"}], "innen": [{"art": "muellsystem"}, {"art": "technik"}], "traverse_vorn": false, "geraet": "spuele", "becken": {"b": null, "t": null, "h": null}, "technik": [], "belegt_in": ["R1 Pos 2"]},
+    {"id": "US-GSP", "name": "Geschirrspüler vollintegriert", "fronten": [{"art": "geraetefront", "oeffnung": "klappe_unten"}], "innen": [{"art": "geraet"}], "korpus": false, "geraet": "gsp", "belegt_in": ["R1 Pos 1"]},
+    {"id": "US-KF", "name": "Kochfeld-Unterschrank", "fronten": [{"art": "auszug", "oeffnung": "auszug", "anzahl": "n"}], "innen": [], "traverse_vorn": false, "geraet": "kochfeld"},
+    {"id": "US-BO", "name": "Backofen-Unterschrank", "fronten": [{"art": "geraetefront", "oeffnung": "klappe_unten"}, {"art": "auszug", "oeffnung": "auszug"}], "innen": [{"art": "geraet"}], "geraet": "backofen"},
+    {"id": "US-AP", "name": "Apotheker-Auszug schmal", "fronten": [{"art": "auszug", "oeffnung": "auszug"}], "innen": [{"art": "boden"}]},
+    {"id": "US-EK", "name": "Eckunterschrank", "fronten": [{"art": "tuer", "oeffnung": "tuer_links"}, {"art": "blende"}], "innen": [{"art": "boden"}], "_offen": "Varianten Blindecke/Karussell/Schwenkauszug"},
+    {"id": "US-OF", "name": "Offener Unterschrank", "fronten": [], "innen": [{"art": "boden"}]}
+  ],
+  "elemente": {
+    "stellseite": {"d": null, "t": null, "h": null, "vorstand_vor_front": null, "fuge_zur_front": null, "steckdosen": [], "belegt_in": ["R1: d≈32,5 A, t 600 B, h 2170 N, Vorstand 26 A, Fuge 5 B, 2 Steckdosen B"]},
+    "deckplatte": {"d": null, "b": null, "t": null, "auflage": "auf_stellseiten|zwischen", "belegt_in": ["R1: d 30 A, b 1875 N, auf Stellseiten N"]},
+    "sockelblende": {"h": null, "ruecksprung": null, "stoesse": "an_frontfugen|durchgehend", "belegt_in": ["R1: h 100 B, Rücksprung ≈90 N"]},
+    "arbeitsplatte": {"d": null, "t": null, "l": null, "ausschnitte": [], "belegt_in": ["R1: d 35 B, t 574 N, l 1810 A"]},
+    "passblende": {"b": null},
+    "nische_oben": {"h": null, "fuge_unten": null, "fuge_oben": null, "belegt_in": ["R1: h 1235 B, Fugen 5/5 B"]}
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schema.kueche.local/v0/bibliothekseintrag.schema.json",
+  "title": "Bibliothekseintrag",
+  "description": "Ein Eintrag in Material-, Kanten-, Beschlag-, Geraete-, Zukauf-, Asset-, Vorlagen- oder Stilbibliothek (v0.2). Jede Angabe traegt Quelle und Stand; weitergabe regelt, ob der Eintrag das Setup verlassen darf. Preise stehen nur im Setup. Maschinen und Werkzeuge stehen nur im Setup.",
+  "type": "object",
+  "properties": {
+    "schema": {"const": "bibliothekseintrag/v0.2"},
+    "bibliothek": {"type": "string", "enum": ["material", "kante", "beschlag", "geraet", "zukauf", "asset", "vorlage", "stil"]},
+    "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+    "hersteller": {"type": "string"},
+    "artikel": {"type": "string", "description": "Herstellernummer"},
+    "gtin": {"type": "string"},
+    "bezeichnung": {"type": "string"},
+    "klasse": {"type": "string", "description": "z. B. ETIM- oder eCl@ss-Klasse, falls vorhanden"},
+    "masse": {"$ref": "gemeinsam.schema.json#/$defs/masse3"},
+    "einbau": {
+      "description": "Einbau- und Nischenmasse, Ausschnitte, Mindestabstaende, Mindestbreiten. Schluessel je Bibliothek, Werte mit Herkunft und Beleg.",
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z][a-z0-9_]*$"},
+      "additionalProperties": {"$ref": "gemeinsam.schema.json#/$defs/wert"}
+    },
+    "anschluesse": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/anschluss"}},
+    "bohrbild": {
+      "description": "Bearbeitungen, die der Beschlag am Teil erzeugt, relativ zum Bezugspunkt; x, y der Bearbeitungen sind hier die Flaechenachsen u, v (Einsetzen: teil.beschlaege.bohrbild).",
+      "type": "object",
+      "properties": {
+        "bezug": {"type": "string", "description": "Beschreibung des Bezugspunkts, z. B. Vorderkante Korpusseite, Oberkante Front"},
+        "bearbeitungen": {"type": "array", "items": {"$ref": "teil.schema.json#/$defs/bearbeitung"}, "minItems": 1}
+      },
+      "required": ["bezug", "bearbeitungen"], "additionalProperties": false
+    },
+    "regeln": {
+      "description": "Auswahlregeln, z. B. Anzahl Scharniere nach Fronthoehe, Nennlaenge eines Auszugs nach Korpustiefe.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {"wenn": {"type": "string"}, "dann": {"type": "string"}, "beleg": {"$ref": "gemeinsam.schema.json#/$defs/beleg"}},
+        "required": ["wenn", "dann", "beleg"], "additionalProperties": false
+      }
+    },
+    "material": {
+      "type": "object",
+      "properties": {
+        "traeger": {"type": "string"},
+        "dekor": {"type": "string"},
+        "dicken": {"type": "array", "items": {"type": "number"}},
+        "formate": {"type": "array", "items": {"type": "object", "properties": {"l": {"type": "number"}, "b": {"type": "number"}}, "required": ["l", "b"], "additionalProperties": false}},
+        "faser": {"type": "string", "enum": ["laengs", "quer", "keine"]},
+        "sichtseiten": {"type": "string", "enum": ["eine", "beide", "keine"]},
+        "emission": {"type": "string"},
+        "darstellung": {"type": "object", "description": "Darstellung je Ausgabe, z. B. fusion: Name der Appearance, pbr: Texturdateien"}
+      },
+      "additionalProperties": false
+    },
+    "bestellung": {
+      "type": "object",
+      "properties": {
+        "lieferant": {"type": "string", "description": "Rolle oder ID im Setup, kein Personenname"},
+        "bestellnummer": {"type": "string"},
+        "mengeneinheit": {"type": "string", "enum": ["stk", "paar", "satz", "m", "m2", "platte"]},
+        "verpackungseinheit": {"type": "number"},
+        "lieferzeit_tage": {"type": "integer"}
+      },
+      "required": ["mengeneinheit"], "additionalProperties": false
+    },
+    "cad": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "format": {"type": "string", "enum": ["step", "dxf", "dwg", "ifc", "obj", "gltf", "usdz", "fbx", "3dm", "sat", "x_t", "f3d", "skp"]},
+          "datei": {"type": "string"},
+          "detail": {"type": "string", "enum": ["huelle", "einbau", "voll"]},
+          "quelle_url": {"type": "string"}
+        },
+        "required": ["format", "datei"], "additionalProperties": false
+      }
+    },
+    "quelle": {
+      "type": "object",
+      "properties": {
+        "art": {"type": "string", "enum": ["hersteller_cad", "hersteller_katalog", "montageanleitung", "datenformat_bmecat", "datenformat_idm", "portal", "aufmass", "eigen", "gelernt"]},
+        "url": {"type": "string"},
+        "stand": {"type": "string", "format": "date"},
+        "seite": {"type": "string"}
+      },
+      "required": ["art", "stand"], "additionalProperties": false
+    },
+    "status": {"type": "string", "enum": ["ungeprueft", "geprueft", "veraltet", "gesperrt"], "description": "Planung erlaubt ungeprueft (Warnung); Fertigung verlangt geprueft; gesperrt ist nie erlaubt."},
+    "lizenz": {"type": "string", "description": "Nutzungsbedingungen der Quelle in einem Satz plus URL"},
+    "weitergabe": {"type": "string", "enum": ["frei", "nur_setup", "nur_intern", "verboten"]}
+  },
+  "required": ["schema", "bibliothek", "id", "bezeichnung", "quelle", "status", "weitergabe"],
+  "additionalProperties": false
+}

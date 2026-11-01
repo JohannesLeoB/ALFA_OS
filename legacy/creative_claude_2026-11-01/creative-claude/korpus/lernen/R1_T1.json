@@ -1,0 +1,2108 @@
+{
+ "runde": 1,
+ "teil": 1,
+ "faelle": [
+  {
+   "kueche": "T01-K1",
+   "template": "T01",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Sockel nicht angegeben"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "OK AP nicht angegeben"
+    },
+    {
+     "atom": "MAS-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "AP 30 bei hellem Stein: in 12-40, aber über Startwert 20 (T01 ist bekannte Ausnahme)"
+    },
+    {
+     "atom": "MAS-006",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Zeilentiefe nicht angegeben"
+    },
+    {
+     "atom": "MAS-016",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Inseltiefe 954-961 in 908-1204"
+    },
+    {
+     "atom": "MAS-017",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Inselbreite 1436-1545 in Bereich (T01 setzt selbst das Minimum)"
+    },
+    {
+     "atom": "MAS-025",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Überstand 200 an Untergrenze 200-302"
+    },
+    {
+     "atom": "GER-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Spüle in rechter Zeile, Insel gegenüber"
+    },
+    {
+     "atom": "GER-005",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Kochfeld über Backofen in oberer Zeile, nicht auf Insel (bekannte Ausnahme)"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Backofen unter Kochfeld"
+    },
+    {
+     "atom": "GER-014",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Wenn-Teil verlangt Kochfeld auf Insel, bei T01 liegt es in der Zeile; T01 ist trotzdem als Beleg geführt: Bedingung inkonsistent"
+    },
+    {
+     "atom": "FRO-008",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Knebel in Backofenfront, keine Kochfeldblende 170"
+    },
+    {
+     "atom": "FRO-010",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Auszug unter dem Ofen nicht angegeben"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Knöpfe an Rahmen-/Kassettenfronten, nicht grifflos"
+    },
+    {
+     "atom": "GRI-002",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Knöpfe statt PTO"
+    },
+    {
+     "atom": "GRI-003",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Knöpfe statt Griffmulde"
+    },
+    {
+     "atom": "GRI-004",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Knöpfe statt Griffleiste"
+    },
+    {
+     "atom": "GRI-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Knöpfe an Rahmen-/Kassettenfronten"
+    },
+    {
+     "atom": "INN-002",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Müllsystem nicht angegeben"
+    },
+    {
+     "atom": "INN-003",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Kochendwasser/Tank nicht in den Fakten"
+    },
+    {
+     "atom": "LAY-001",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Insel mit Sitzseite gegenüber ok, aber Kochfeld liegt nicht auf der Insel"
+    },
+    {
+     "atom": "LAY-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Theke/Sitzseite mit Überhang 200"
+    },
+    {
+     "atom": "LAY-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Insel mit Sitzseite als Essplatz"
+    },
+    {
+     "atom": "LAY-010",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Oberschränke nicht angegeben"
+    },
+    {
+     "atom": "RAU-002",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Parallelität/Abwendung der Sitzseite nicht angegeben"
+    },
+    {
+     "atom": "ANS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Eckschrank verworfen, Ecke über Regale/Wangen/Rundungen"
+    }
+   ],
+   "luecken": [
+    "Rahmen-/Kassettenfronten als Frontart ohne Atom (Knopf-Regel nur GRI-007)",
+    "Kochfeld-über-Backofen-Kombi in der Zeile ohne Blende, Knebel in Ofenfront",
+    "Kaffeenische 450 x 684 (Nischenmaß, Tiefe über Zeilenstandard)",
+    "Form L: Zeile um die Ecke plus freie Insel (Zeilenlängen 3746 / 3004-3020)",
+    "Spritzschutz 20 und AP-Stärke 30 bei Stein",
+    "Inselbreite 1436-1545 wegen Sitzseite/Ecke"
+   ],
+   "aufspalten": [
+    {
+     "atom": "GER-005",
+     "vorschlag": "Splitten: Kochfeld auf Insel nur bei Insel ohne Spüle UND Kochzeile fehlt; Kochfeld in Zeile bei Rahmenfront/Kochfeld-Backofen-Kombi (T01,T18,T21,T29,T32)"
+    },
+    {
+     "atom": "GER-014",
+     "vorschlag": "Wenn: Kochfeld über Backofen als Kombi-Unterschrank (Insel ODER Zeile)"
+    },
+    {
+     "atom": "LAY-001",
+     "vorschlag": "Kochfeld-Klammer herauslösen: Insel parallel (fest) / Kochfeld auf Insel (separat)"
+    },
+    {
+     "atom": "GRI-001",
+     "vorschlag": "Nach Frontart splitten: Rahmen-/Kassettenfront -> Knopf (GRI-007), glatte Front -> grifflos"
+    }
+   ]
+  },
+  {
+   "kueche": "T02-K1",
+   "template": "T02",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Sockel 60 an Untergrenze (bekannte Ausnahme, Vitrinen-/Technikmöbel)"
+    },
+    {
+     "atom": "MAS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "2723 in 1931-3575"
+    },
+    {
+     "atom": "MAS-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Blende oben 277 an Untergrenze (T02 setzt das Minimum)"
+    },
+    {
+     "atom": "MAS-011",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Raumhöhe fehlt"
+    },
+    {
+     "atom": "BRE-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Türen 599 + 600"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Push-to-open"
+    },
+    {
+     "atom": "GRI-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Push-to-open an Türen"
+    },
+    {
+     "atom": "INN-007",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Innenleben nicht angegeben"
+    },
+    {
+     "atom": "ANS-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Rücksprung des Sockels nicht angegeben (nur Höhe 60)"
+    },
+    {
+     "atom": "ANS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Außenecke R211 (Rundung statt Eckschrank)"
+    }
+   ],
+   "luecken": [
+    "Möbel-Hochschrank ohne Küchengerät: Tiefe 480-540 (MAS-008 bezieht sich auf Gerät, 600)",
+    "Glastüren oben (1510) über Türen unten (870): Vitrine/Bar-Aufteilung",
+    "Technik hinter revisionierbarer Rückwand",
+    "Riffelglas als Material",
+    "Sockel 60 bei Technikmöbel statt 100"
+   ],
+   "aufspalten": [
+    {
+     "atom": "MAS-001",
+     "vorschlag": "Zusatzatom: Sockel 60 bei Vitrinen-/Technikmöbel, 100 bei Küchenzeile"
+    }
+   ]
+  },
+  {
+   "kueche": "T02-K2",
+   "template": "T02",
+   "pruefungen": [
+    {
+     "atom": "MAS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "2723 in 1931-3575"
+    },
+    {
+     "atom": "MAS-010",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "feste Blende 234 unter Minimum 277 (als Aufsatzzone gelesen)"
+    },
+    {
+     "atom": "BRE-001",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Türen 360 + 360, kein 600er-Modul"
+    },
+    {
+     "atom": "BRE-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Türpaar 360 und Gesamtbreite 973 im Bereich 350-1000"
+    },
+    {
+     "atom": "ANS-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Wange 19"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Push-to-open"
+    },
+    {
+     "atom": "GRI-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Push-to-open an Türen"
+    },
+    {
+     "atom": "MAS-011",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Raumhöhe fehlt"
+    }
+   ],
+   "luecken": [
+    "TV-Fach (Höhe 442, Unterkante 930) mit Türpaaren darunter/seitlich",
+    "Technikmöbel mit Verstärker unten",
+    "Höhe gleich Nachbarmöbel (2723): Möbelfamilie gleiche Höhe",
+    "Feste Blende 234 oben als Zonenhöhe"
+   ],
+   "aufspalten": [
+    {
+     "atom": "MAS-010",
+     "vorschlag": "Min senken auf 234 oder Aufsatzzone vs. feste Blende trennen"
+    }
+   ]
+  },
+  {
+   "kueche": "T03-K1",
+   "template": "T03",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Sockel 100"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "OK AP 930"
+    },
+    {
+     "atom": "MAS-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Edelstahl-AP 5"
+    },
+    {
+     "atom": "MAS-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "abgeleitet 930-100-5 = 825 in 790-847"
+    },
+    {
+     "atom": "MAS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Unterschranktiefe 652 in 600-700"
+    },
+    {
+     "atom": "MAS-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Hochschranktiefe nicht angegeben"
+    },
+    {
+     "atom": "MAS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "2897 in 1931-3575"
+    },
+    {
+     "atom": "MAS-011",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Raumhöhe fehlt"
+    },
+    {
+     "atom": "BRE-001",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Module 248/655/655/617/594: nur 594 nahe 600, übrige gerätegebunden"
+    },
+    {
+     "atom": "BRE-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Apothekerauszug 248 als Funktionsmodul am Zeilenende (2 mm unter Min 250)"
+    },
+    {
+     "atom": "BRE-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "655/617/594 im freien Bereich"
+    },
+    {
+     "atom": "BRE-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Zeile mit Funktionsfeld Apotheker als Restmaß"
+    },
+    {
+     "atom": "BRE-009",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Apothekerauszug 248 unter Min 250"
+    },
+    {
+     "atom": "BRE-014",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Kühl-Gefrier-HS 617 in 600-900"
+    },
+    {
+     "atom": "BRE-015",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "notiz": "WM/Trockner je 655"
+    },
+    {
+     "atom": "GER-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "KS-HS im Block mit Backofen-HS am Zeilenende"
+    },
+    {
+     "atom": "GER-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "keine Spüle vorhanden, nicht aussagekräftig"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Backofen im Hochschrank"
+    },
+    {
+     "atom": "GER-015",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "notiz": "WM und Trockner nebeneinander neben Apothekerauszug"
+    },
+    {
+     "atom": "GER-016",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Kühl-Gefrier als Kombi-HS"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Griffmulde bzw. Leiste, kaum sichtbarer Griff"
+    },
+    {
+     "atom": "GRI-002",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Griffmulde in der Zeile statt PTO"
+    },
+    {
+     "atom": "GRI-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Griffmulde Zeile"
+    },
+    {
+     "atom": "GRI-005",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Aufschraubgriffe an HS: Richtung nicht angegeben"
+    },
+    {
+     "atom": "INN-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Apothekerauszug im Unterschrank am Zeilenende"
+    },
+    {
+     "atom": "INN-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Schübe unter Backofen nicht angegeben"
+    },
+    {
+     "atom": "INN-015",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "notiz": "Schleppsockel vor WM/Trockner"
+    },
+    {
+     "atom": "LAY-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Hauswirtschaftszeile mit WM/Trockner"
+    },
+    {
+     "atom": "RAU-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Wandfuge 30"
+    },
+    {
+     "atom": "ANS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Wandfuge 30"
+    },
+    {
+     "atom": "ANS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Apothekerauszug als Funktionsfeld am Zeilenende"
+    },
+    {
+     "atom": "ANS-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Schleppsockel: Rücksprung nicht angegeben"
+    },
+    {
+     "atom": "ANS-011",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Grundriss 2826 vs. Ansicht 2799, Differenz 27"
+    }
+   ],
+   "luecken": [
+    "Waschmaschine/Trockner-Modul 655 als Hauswirtschafts-Raster (nur selten-Atom)",
+    "Hochschrank 2897 deutlich über Startwert 2700 ohne Deckenbezug",
+    "Griffleiste/Aufschraubgriffe an Hochschränken (Griffart HS ohne Stange)",
+    "Zeile ohne Spüle/Kochfeld: Reihenfolge Apotheker-WM-Trockner-KS-Backofen",
+    "Unterschranktiefe 652 für Geräte-Zeile"
+   ],
+   "aufspalten": [
+    {
+     "atom": "BRE-009",
+     "vorschlag": "Min von 250 auf 245 oder Apotheker am Zeilenende 248 aufnehmen"
+    },
+    {
+     "atom": "GRI-002",
+     "vorschlag": "Splitten: PTO bei Insel/Wohnküche, Griffmulde bei Funktions-/Hauswirtschaftszeile"
+    },
+    {
+     "atom": "BRE-001",
+     "vorschlag": "Splitten: Gerätezeilen (WM/Trockner/HS) haben Gerätebreiten, 600 nur bei Schrankmodulen ohne Gerät"
+    }
+   ]
+  },
+  {
+   "kueche": "T04-K1",
+   "template": "T04",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Sockel 130 an Obergrenze (bekannte Ausnahme)"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "OK AP 930"
+    },
+    {
+     "atom": "MAS-005",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Korpushöhe/AP-Stärke nicht angegeben"
+    },
+    {
+     "atom": "MAS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Unterschranktiefe 604"
+    },
+    {
+     "atom": "MAS-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Hochschranktiefe nicht angegeben"
+    },
+    {
+     "atom": "MAS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "1931 an Untergrenze (T04 setzt das Minimum)"
+    },
+    {
+     "atom": "MAS-011",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Raumhöhe fehlt; HS endet frei unter Decke"
+    },
+    {
+     "atom": "BRE-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "596-Module nahe 600"
+    },
+    {
+     "atom": "BRE-002",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Spüle/Schübe 596 und 539, kein 900er Modul"
+    },
+    {
+     "atom": "BRE-003",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Zeilenenden mit 30er Füllstücken, kein 250-330er Funktionsmodul"
+    },
+    {
+     "atom": "BRE-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "539 als Anpassungsmodul"
+    },
+    {
+     "atom": "BRE-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Restmaß in Modulbreiten 596/596/539/596 plus 30er Fugen verteilt"
+    },
+    {
+     "atom": "BRE-008",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Spülenschrank 596, unter Min 600"
+    },
+    {
+     "atom": "BRE-014",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "KS-Hochschrank 596, unter Min 600 (T04 selbst als Beleg geführt)"
+    },
+    {
+     "atom": "GER-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "GSP direkt links der Spüle"
+    },
+    {
+     "atom": "GER-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "3-fach-Müll im Spülenschrank"
+    },
+    {
+     "atom": "GER-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "KS-HS am Zeilenende"
+    },
+    {
+     "atom": "GER-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Schübe zwischen Spüle und KS"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Griffmulde, kaum sichtbarer Griff"
+    },
+    {
+     "atom": "GRI-002",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Griffmulde (A: integriert, offen) statt PTO"
+    },
+    {
+     "atom": "GRI-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Griffmulde"
+    },
+    {
+     "atom": "INN-001",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "schwarze Schubkästen statt Eiche (bekannte Ausnahme)"
+    },
+    {
+     "atom": "INN-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Müll im Spülenschrank"
+    },
+    {
+     "atom": "LAY-005",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Nischenfuge 5 nicht in Fakten (nur 30er Füllstücke)"
+    },
+    {
+     "atom": "RAU-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Luft/Füllstück 30 je Seite"
+    },
+    {
+     "atom": "RAU-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Zeile in Wandnische zwischen Pilaster und Seitenwand"
+    },
+    {
+     "atom": "RAU-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "KS-HS endet frei unter Decke"
+    },
+    {
+     "atom": "ANS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Füllstücke 30 an beiden Enden"
+    },
+    {
+     "atom": "ANS-011",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Modulsumme 2387 vs. Zeile 2403, Differenz 16"
+    }
+   ],
+   "luecken": [
+    "Sockel 130 und Hochschrank 1931 als Nischen-/Pilaster-Besonderheit",
+    "Becken 494 x 394 ohne Maß-Atom",
+    "Dekorspan Nebelblau mit schwarzen Schubkästen (Material/Innenleben)",
+    "Zeile ohne Kochfeld: Reihenfolge GSP-Spüle-Schübe-KS",
+    "KS-HS endet frei bei 1931 (Aufsatz fehlt)"
+   ],
+   "aufspalten": [
+    {
+     "atom": "BRE-008",
+     "vorschlag": "Min 600 senken auf 590 oder Raster 596 aufnehmen"
+    },
+    {
+     "atom": "BRE-014",
+     "vorschlag": "Min 600 senken auf 590"
+    },
+    {
+     "atom": "BRE-003",
+     "vorschlag": "Wenn Restmaß < 100: Füllstück 30; wenn >= 250: Funktionsmodul"
+    },
+    {
+     "atom": "ANS-006",
+     "vorschlag": "Wenn Restfeld >= 250 Funktionsfeld, bei < 100 Füllstück"
+    },
+    {
+     "atom": "BRE-002",
+     "vorschlag": "Nur bei 900er-Raster-Küchen; bei 600er-Raster Spülenschrank 600"
+    }
+   ]
+  },
+  {
+   "kueche": "T04-K2",
+   "template": "T04",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Rollenfuß 127 in 60-130"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "abgeleitet 791 + 127 + 12 = 930"
+    },
+    {
+     "atom": "MAS-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "h 791 als Korpushöhe in 790-847"
+    },
+    {
+     "atom": "MAS-016",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Tiefe 908 an Untergrenze (T04-K2 setzt das Minimum)"
+    },
+    {
+     "atom": "MAS-017",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "1800 in Bereich (Rolleninsel bekannte Ausnahme)"
+    },
+    {
+     "atom": "GER-005",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "keine Geräte auf der Insel"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Griffschlitz, fugenbetont"
+    },
+    {
+     "atom": "GRI-002",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Griffschlitz/Mulde statt PTO"
+    },
+    {
+     "atom": "GRI-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Griffschlitz oben entspricht Griffleiste am oberen Frontrand"
+    },
+    {
+     "atom": "GRI-011",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "notiz": "Griffschlitz oben und ovale Mulde an Stirnseite"
+    },
+    {
+     "atom": "INN-007",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Innenleben der Türen nicht angegeben"
+    },
+    {
+     "atom": "INN-012",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Steckdosenblende zwischen zwei Schüben"
+    },
+    {
+     "atom": "FRO-002",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Schubhöhen nicht angegeben"
+    },
+    {
+     "atom": "FRO-017",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Tiefe der Türen auf Seite A nicht angegeben"
+    },
+    {
+     "atom": "LAY-001",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Kochfeld fehlt, Parallelität nicht angegeben"
+    },
+    {
+     "atom": "LAY-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Türen auf Seite A (Fachböden nicht belegt)"
+    },
+    {
+     "atom": "LAY-013",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "notiz": "Insel 1800 x 908 vor der Zeile"
+    }
+   ],
+   "luecken": [
+    "Rolleninsel: Sockel 127 (Rollenfuß) + AP 12 + Korpus 791 = 930",
+    "Seitenwangen 130 (nur ANS-003 mit 19-23)",
+    "Insel ohne Geräte, nur Stauraum",
+    "Zweiseitige Insel: Türen Seite A, Schübe Seite B",
+    "AP-Stärke 12 (Material nicht bekannt)"
+   ],
+   "aufspalten": [
+    {
+     "atom": "MAS-001",
+     "vorschlag": "Sockel bei Rolleninsel = Rollenfuß 127 als eigene Bedingung"
+    },
+    {
+     "atom": "GRI-002",
+     "vorschlag": "PTO nicht bei Insel mit Griffschlitz/Mulde"
+    }
+   ]
+  },
+  {
+   "kueche": "T05-K1",
+   "template": "T05",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Sockel ca. 85-100"
+    },
+    {
+     "atom": "MAS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Höhe 2700"
+    },
+    {
+     "atom": "MAS-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Aufsatz ca. 576-580 in 277-1077"
+    },
+    {
+     "atom": "MAS-011",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Raumhöhe fehlt, freistehend"
+    },
+    {
+     "atom": "BRE-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "600/600"
+    },
+    {
+     "atom": "BRE-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "759 im freien Bereich"
+    },
+    {
+     "atom": "BRE-018",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Pocketdoor nicht angegeben; 1200er Modul unklar"
+    },
+    {
+     "atom": "FRO-018",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Tür/Fuge des Aufsatzes nicht angegeben"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "kurze Griffstriche, Türen ohne Griff"
+    },
+    {
+     "atom": "GRI-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Türen ohne Griff"
+    },
+    {
+     "atom": "GRI-006",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Variante C Stangen, Ausrichtung nicht angegeben"
+    },
+    {
+     "atom": "ANS-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Sockel zurückgesetzt (Rücksprung-Maß fehlt)"
+    }
+   ],
+   "luecken": [
+    "Freistehende Schrankwand aus 4 Hochschrank-Modulen (Raumteiler) ohne Atom",
+    "Farbwechsel hell/anthrazit/anthrazit/hell: Außen- gegen Mittelmodule",
+    "1200er Modul neben 600/600/759",
+    "Sockel zurückgesetzt bei freistehendem Möbel",
+    "Gesamtmaß 3159 x 2700 aus Modulsumme 3159"
+   ],
+   "aufspalten": []
+  },
+  {
+   "kueche": "T17-K1",
+   "template": "T17",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Sockel 100"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "OK AP 925-930"
+    },
+    {
+     "atom": "MAS-004",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "AP-Stärke nicht angegeben"
+    },
+    {
+     "atom": "MAS-005",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Korpushöhe nicht angegeben"
+    },
+    {
+     "atom": "MAS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Unterschranktiefe 642"
+    },
+    {
+     "atom": "BRE-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "600er Module"
+    },
+    {
+     "atom": "BRE-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Schubmodule 900"
+    },
+    {
+     "atom": "BRE-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Apothekerauszug 295 am Zeilenende"
+    },
+    {
+     "atom": "BRE-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Spülenschrank 600 in 600-900"
+    },
+    {
+     "atom": "BRE-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Apotheker 295"
+    },
+    {
+     "atom": "FRO-001",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Frontaufteilung der 900er Schubmodule nicht angegeben"
+    },
+    {
+     "atom": "GER-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Spüle direkt neben GSP"
+    },
+    {
+     "atom": "GER-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Müll im Spülenschrank"
+    },
+    {
+     "atom": "GER-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Spüle in der Wandzeile, Insel dazu"
+    },
+    {
+     "atom": "GER-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Kein Kochfeld in der Spülzeile"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Griffmulde oben, PTO unten"
+    },
+    {
+     "atom": "GRI-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "PTO unten"
+    },
+    {
+     "atom": "GRI-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Griffmulde oben"
+    },
+    {
+     "atom": "GRI-004",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Griffmulde statt Griffleiste an Schubfronten"
+    },
+    {
+     "atom": "INN-001",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Schubkastenmaterial nicht angegeben"
+    },
+    {
+     "atom": "INN-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Müll im Spülenschrank"
+    },
+    {
+     "atom": "INN-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Kochendwasser an der Spüle (Tank im Spülenschrank)"
+    },
+    {
+     "atom": "INN-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Apothekerauszug im Unterschrank"
+    },
+    {
+     "atom": "INN-005",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Schubkastenzahl des Apothekers nicht angegeben"
+    },
+    {
+     "atom": "LAY-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Wandzeile mit paralleler Insel"
+    },
+    {
+     "atom": "LAY-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Hochschrankwand getrennt von der Zeile"
+    },
+    {
+     "atom": "LAY-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Arbeitszeile ohne Oberschränke"
+    },
+    {
+     "atom": "RAU-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Passblenden 30 links, 50 rechts im Luftbereich 10-50"
+    },
+    {
+     "atom": "ANS-001",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Passblende 50 statt 70"
+    },
+    {
+     "atom": "ANS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Passblende 30 links"
+    },
+    {
+     "atom": "ANS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Apothekerauszug 295 statt Blende"
+    }
+   ],
+   "luecken": [
+    "Weinkühlschrank 600 am Zeilenanfang (Kühlgerät unterbaut)",
+    "Passblenden asymmetrisch 30 / 50",
+    "Griffmulde oben kombiniert mit PTO unten in einer Zeile",
+    "Zeile von 3975 mit Modulsumme 3895 + 80",
+    "Form L: Arbeitszeile plus Hochschrankwand plus Insel als Dreiteilung"
+   ],
+   "aufspalten": [
+    {
+     "atom": "ANS-001",
+     "vorschlag": "Passblende 70 nur bei Halbinsel-Zeilen (T35-Familie); bei Wandzeilen 30-50"
+    },
+    {
+     "atom": "GRI-004",
+     "vorschlag": "Griffleiste nur bei Front ohne Mulde; Wandzeile oben Mulde"
+    }
+   ]
+  },
+  {
+   "kueche": "T17-K2",
+   "template": "T17",
+   "pruefungen": [
+    {
+     "atom": "MAS-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Naturstein-AP 20"
+    },
+    {
+     "atom": "MAS-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "h 807 in 790-847 (als Korpushöhe gelesen)"
+    },
+    {
+     "atom": "MAS-016",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Tiefe 904-908 an Untergrenze 908"
+    },
+    {
+     "atom": "MAS-017",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "2936-2940 an Obergrenze 2940"
+    },
+    {
+     "atom": "MAS-025",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Überstand 302 an Obergrenze"
+    },
+    {
+     "atom": "BRE-002",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Kochfeldschrank 973 in Bereich, Schubschränke 800/800 außerhalb 897-973"
+    },
+    {
+     "atom": "BRE-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Apotheker 303 am Inselende"
+    },
+    {
+     "atom": "BRE-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Kochfeldschrank 973 an Obergrenze"
+    },
+    {
+     "atom": "BRE-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Apotheker 303"
+    },
+    {
+     "atom": "FRO-004",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Frontenhöhen der 3 Fronten nicht angegeben"
+    },
+    {
+     "atom": "FRO-007",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Teilung der 3 Fronten nicht angegeben"
+    },
+    {
+     "atom": "FRO-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Kochfeldblende nicht angegeben (Kochfeld über 3 Fronten)"
+    },
+    {
+     "atom": "FRO-017",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Barseite mit zwei Paneelen, Türen nicht angegeben"
+    },
+    {
+     "atom": "GER-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Kochfeld auf der Insel"
+    },
+    {
+     "atom": "GER-011",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Muldenlüfter nicht angegeben"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "PTO"
+    },
+    {
+     "atom": "GRI-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "PTO an allen Auszügen"
+    },
+    {
+     "atom": "INN-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Apothekerauszug am Inselende"
+    },
+    {
+     "atom": "INN-005",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Schubkastenzahl nicht angegeben"
+    },
+    {
+     "atom": "LAY-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Insel parallel zur Zeile mit Kochfeld"
+    },
+    {
+     "atom": "LAY-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Bar mit Überstand 302"
+    },
+    {
+     "atom": "LAY-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Barseite als Essplatz"
+    },
+    {
+     "atom": "RAU-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Insel parallel zur Zeile, Barseite zum Raum"
+    },
+    {
+     "atom": "ANS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Apothekerauszug als Funktionsfeld am Inselende"
+    },
+    {
+     "atom": "ANS-011",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Modulsumme 2876 vs. 2936-2940, Differenz 60-64"
+    }
+   ],
+   "luecken": [
+    "Müllauszug auf der Insel ohne Spüle (INN-002 verlangt Spülenschrank)",
+    "Barseite aus zwei Paneelen 1581 + 1325 statt Türen",
+    "Insel 2940 lang als Obergrenze, Module 303/973/800/800",
+    "Kochfeld über 3 Fronten ohne Blende",
+    "Insel mit Naturstein-AP und PTO an allen Auszügen"
+   ],
+   "aufspalten": [
+    {
+     "atom": "BRE-002",
+     "vorschlag": "Splitten: Zeile 900er Raster, Insel Kochfeld 973 und Schubmodule 800"
+    }
+   ]
+  },
+  {
+   "kueche": "T17-K3",
+   "template": "T17",
+   "pruefungen": [
+    {
+     "atom": "MAS-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "HS-Tiefe 650 in 582-683"
+    },
+    {
+     "atom": "MAS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "2780 in Bereich"
+    },
+    {
+     "atom": "MAS-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Aufsatz 687 in 277-1077"
+    },
+    {
+     "atom": "MAS-011",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Raumhöhe fehlt"
+    },
+    {
+     "atom": "MAS-022",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Sitzhöhe der Bank nicht angegeben"
+    },
+    {
+     "atom": "MAS-024",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Länge der Sitzbank nicht angegeben (nur Regal/Bank 430 breit)"
+    },
+    {
+     "atom": "BRE-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "600er Module"
+    },
+    {
+     "atom": "BRE-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "510 und 800 im freien Bereich"
+    },
+    {
+     "atom": "BRE-014",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "KS-Hochschrank 800 in 600-900"
+    },
+    {
+     "atom": "BRE-019",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "offenes Regal 430 an Untergrenze"
+    },
+    {
+     "atom": "GER-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "KS im Hochschrankblock neben der Kammer, nicht in Zeilenmitte"
+    },
+    {
+     "atom": "GER-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Backofen- und Dampfgarer-Spalte nebeneinander"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Backofen im Hochschrank"
+    },
+    {
+     "atom": "GER-016",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Kühl-Gefrier-Kombi"
+    },
+    {
+     "atom": "GRI-005",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Griff unbenannt, Ausrichtung nicht angegeben"
+    },
+    {
+     "atom": "INN-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Schübe unter Backofen nicht angegeben"
+    },
+    {
+     "atom": "INN-009",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "notiz": "Wärmeschublade bei Dampfgarer"
+    },
+    {
+     "atom": "FRO-018",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Tür/Fuge des Aufsatzes nicht angegeben"
+    },
+    {
+     "atom": "LAY-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Hochschrankwand schräg zur Zeile, getrennt"
+    },
+    {
+     "atom": "RAU-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Hochschrankwand folgt dem schiefwinkligen Raum"
+    },
+    {
+     "atom": "ANS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Regal/Sitzbank als Funktionsfeld am Ende"
+    },
+    {
+     "atom": "ANS-011",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Wand 2508 Grundriss vs. 2940 Ansicht, Differenz 432 (Schräge)"
+    }
+   ],
+   "luecken": [
+    "Begehbare Kammer (Tür 1990, Breite 510) im Hochschrankblock",
+    "HS-Gesamt 2780 vs. Element 2677-2680",
+    "Wand Grundriss 2508 vs. Ansicht 2940 im schiefwinkligen Raum",
+    "Offenes Regal mit gerundeter Sitzbank am Blockende",
+    "Dampfgarer-Spalte mit Wärmeschublade"
+   ],
+   "aufspalten": [
+    {
+     "atom": "ANS-011",
+     "vorschlag": "Differenz 5-90 nur bei rechtwinkligem Raum; bei Schräge Grundriss- und Ansichtsmaß getrennt führen"
+    }
+   ]
+  },
+  {
+   "kueche": "T18-K1",
+   "template": "T18",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Sockel 100"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "OK AP 941 in 915-950 (bekannte Ausnahme)"
+    },
+    {
+     "atom": "MAS-003",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "AP-Material nicht angegeben (Linoleum auf MDF an Fronten)"
+    },
+    {
+     "atom": "MAS-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Korpus 791 in 790-847"
+    },
+    {
+     "atom": "MAS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Zeilentiefe 630"
+    },
+    {
+     "atom": "MAS-015",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Ablageboden 599 über AP"
+    },
+    {
+     "atom": "BRE-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "5 x 600"
+    },
+    {
+     "atom": "BRE-005",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Rest 60 als 2 x 30 Passstreifen, weder Modulausgleich noch Funktionsfeld"
+    },
+    {
+     "atom": "GER-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "GSP direkt neben Spüle"
+    },
+    {
+     "atom": "GER-002",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "GSP liegt zwischen Spüle und Kochfeld, nicht kochfeldabgewandt"
+    },
+    {
+     "atom": "GER-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Müll an der Spüle"
+    },
+    {
+     "atom": "GER-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "GSP als Modul zwischen Spüle und Kochfeld"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Ofen unter Kochfeld"
+    },
+    {
+     "atom": "FRO-010",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Auszug unter Ofen nicht angegeben"
+    },
+    {
+     "atom": "INN-001",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Schubkastenmaterial nicht angegeben"
+    },
+    {
+     "atom": "INN-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Müll an der Spüle"
+    },
+    {
+     "atom": "INN-013",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "LED-Profil im Ablageboden"
+    },
+    {
+     "atom": "LAY-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "kein Oberschrank, Ablageboden"
+    },
+    {
+     "atom": "LAY-014",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Gliederung in Blöcke nicht angegeben (Zeile zwischen zwei Pfeilern)"
+    },
+    {
+     "atom": "RAU-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Passstücke 2 x 30"
+    },
+    {
+     "atom": "ANS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Passstücke 30"
+    },
+    {
+     "atom": "ANS-006",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Restfeld 30 als Passstück, kein Funktionsfeld"
+    }
+   ],
+   "luecken": [
+    "OK AP 941 vs. Sockel 100 + Korpus 791 + AP 20 = 911: 30 Differenz unerklärt",
+    "Spüle-Kochfeld-Abstand 1200 mit GSP dazwischen",
+    "Ablageboden 30 dick mit LED-Profil (nur MAS-015 für die Höhe)",
+    "Zubehörliste nennt Eckschrank ohne Ecke (Plan-Widerspruch)",
+    "Stauraum-Module 600 an beiden Zeilenenden",
+    "Linoleum auf dunklem MDF (Stil)"
+   ],
+   "aufspalten": [
+    {
+     "atom": "GER-002",
+     "vorschlag": "Nur wenn Platz neben Spüle frei; sonst GSP zwischen Spüle und Kochfeld erlaubt (T18)"
+    },
+    {
+     "atom": "BRE-005",
+     "vorschlag": "Rest < 100 als Passstücke 2 x 30, Rest >= 250 Funktionsfeld"
+    },
+    {
+     "atom": "ANS-006",
+     "vorschlag": "Restfeld < 100 = Passstück, >= 250 = Funktionsfeld"
+    }
+   ]
+  },
+  {
+   "kueche": "T19-K1",
+   "template": "T19",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Sockel nicht angegeben"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "OK AP 950 an Obergrenze"
+    },
+    {
+     "atom": "MAS-028",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Fliesenspiegel 400"
+    },
+    {
+     "atom": "BRE-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "7 x 600"
+    },
+    {
+     "atom": "BRE-002",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Spülen-/Schubmodule 600 statt 900"
+    },
+    {
+     "atom": "GER-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Spüle direkt neben GSP"
+    },
+    {
+     "atom": "GER-003",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Müll nicht angegeben"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Backofen in der Zeile (Einbauart nicht näher bestimmt)"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "grifflos/fugenbetont"
+    },
+    {
+     "atom": "GRI-002",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Griffmulde mit Platzhalter xx, PTO nicht bestätigt"
+    },
+    {
+     "atom": "GRI-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Griffmulde"
+    },
+    {
+     "atom": "INN-002",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Müll nicht angegeben"
+    },
+    {
+     "atom": "LAY-010",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Oberschränke nicht angegeben"
+    },
+    {
+     "atom": "LAY-015",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Hochschrank/Wandborde nicht angegeben"
+    },
+    {
+     "atom": "RAU-005",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Ausrichtung zur Dachschräge nicht angegeben"
+    },
+    {
+     "atom": "ANS-001",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Passblende 21 statt 70"
+    },
+    {
+     "atom": "ANS-002",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Passblende 21 statt 30"
+    },
+    {
+     "atom": "ANS-011",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Summe 4221 vs. 4223, Differenz 2 unter 5"
+    }
+   ],
+   "luecken": [
+    "Zeile unter Dachschräge",
+    "Kühlschrank unterbaut neben Spüle (Ausnahme zu GER-008)",
+    "Backofen am Zeilenanfang vor Kühlschrank",
+    "Mosaik-Fliesenspiegel 400",
+    "Passblende 21 als Raumanschluss",
+    "Mineralwerkstoff-AP bei 950"
+   ],
+   "aufspalten": [
+    {
+     "atom": "BRE-002",
+     "vorschlag": "Nur bei Küchen mit 900er-Raster; bei reiner 600er-Zeile Spülenschrank 600"
+    },
+    {
+     "atom": "ANS-011",
+     "vorschlag": "Differenz 1-3: Rundung (siehe ZEI-019), 5-90: Randluft"
+    },
+    {
+     "atom": "ANS-001",
+     "vorschlag": "Passblende: 70 bei Halbinsel-Zeile, 20-30 bei Zeile an Wand"
+    }
+   ]
+  },
+  {
+   "kueche": "T19-K2",
+   "template": "T19",
+   "pruefungen": [
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "OK AP 950"
+    },
+    {
+     "atom": "MAS-017",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "2146 in 1436-2940"
+    },
+    {
+     "atom": "BRE-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Kochfeldschrank 900"
+    },
+    {
+     "atom": "BRE-003",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Flaschenregal 150 unter Min 250"
+    },
+    {
+     "atom": "BRE-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Kochfeldschrank 900"
+    },
+    {
+     "atom": "BRE-017",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "notiz": "Flaschenregal 150 am Inselkopf"
+    },
+    {
+     "atom": "GER-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Kochfeld auf der Insel"
+    },
+    {
+     "atom": "GER-011",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Muldenlüfter nicht angegeben"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "grifflos"
+    },
+    {
+     "atom": "FRO-017",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Außenseite glatt statt Türen mit Fachböden"
+    },
+    {
+     "atom": "LAY-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Insel mit Kochfeld und Sitznische"
+    },
+    {
+     "atom": "LAY-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Sitznische statt Theke/Regal/Türen, Überstand nicht angegeben"
+    },
+    {
+     "atom": "LAY-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Sitznische als Essplatz"
+    },
+    {
+     "atom": "ANS-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Stellseiten 23 an Obergrenze"
+    },
+    {
+     "atom": "ANS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Flaschenregal als Funktionsfeld am Inselende"
+    }
+   ],
+   "luecken": [
+    "Innenschubmodul 600 am Inselende",
+    "Modulfolge 600/900/450/150 mit 450er Schüben",
+    "Glatte Außenseite plus Sitznische als Raumseite",
+    "Inselmaß 2146 aus 2100 + 2 x 23",
+    "Flaschenregal als Inselkopf"
+   ],
+   "aufspalten": [
+    {
+     "atom": "BRE-003",
+     "vorschlag": "Min 250 auf 150 senken oder Flaschenregal als eigene Bedingung"
+    },
+    {
+     "atom": "FRO-017",
+     "vorschlag": "Raumseite: Türen flach (T11,T17,T34,T37) oder glatt mit Sitznische (T19)"
+    }
+   ]
+  },
+  {
+   "kueche": "T19-K3",
+   "template": "T19",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Sockel 100"
+    },
+    {
+     "atom": "MAS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "2700"
+    },
+    {
+     "atom": "MAS-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "obere Tür 781,5 als Aufsatzzone in 277-1077"
+    },
+    {
+     "atom": "MAS-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Tiefe nicht angegeben"
+    },
+    {
+     "atom": "MAS-011",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Raumhöhe fehlt"
+    },
+    {
+     "atom": "BRE-001",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Modulbreiten nicht angegeben (nur Gruppe 1260)"
+    },
+    {
+     "atom": "BRE-014",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "KS-Modulbreite nicht angegeben"
+    },
+    {
+     "atom": "GER-007",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Lage der Gruppe im Raum nicht angegeben"
+    },
+    {
+     "atom": "GRI-005",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "notiz": "Griff nicht bezeichnet"
+    },
+    {
+     "atom": "INN-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Vorrat/Apotheker im Hochschrank"
+    },
+    {
+     "atom": "FRO-018",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Türen oben/unten geteilt, Aufsatz mit eigener Tür"
+    }
+   ],
+   "luecken": [
+    "Türteilung Hochschrank 781,5 oben / 1778,5 unten (ca. 30:70) ohne Atom",
+    "Softschwarz-Korpus (Korpusfarbe)",
+    "Hochschrankgruppe 1260 breit: Kühlschrank plus Vorrat/Apotheker",
+    "Hochschrankgruppe in Nische ohne Zeile"
+   ],
+   "aufspalten": []
+  },
+  {
+   "kueche": "T20-K1",
+   "template": "T20",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Sockel 100"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "OK AP 915-935"
+    },
+    {
+     "atom": "MAS-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Natursteinplatte 20"
+    },
+    {
+     "atom": "MAS-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "h 815 in 790-847"
+    },
+    {
+     "atom": "MAS-006",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Korpustiefe 413-453 unter 600 (bekannte Ausnahme, Flachtiefe)"
+    },
+    {
+     "atom": "MAS-007",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "notiz": "Flachtiefe 413-453 in 413-458"
+    },
+    {
+     "atom": "BRE-001",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "584 + 584, kein 600"
+    },
+    {
+     "atom": "BRE-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "584 als Anpassung an Bestand"
+    },
+    {
+     "atom": "BRE-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "Restmaß in zwei gleiche Module 584 plus Passblende"
+    },
+    {
+     "atom": "RAU-001",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Passblende 84 über Max 50"
+    },
+    {
+     "atom": "ANS-001",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "notiz": "Passblende 84 statt 70"
+    },
+    {
+     "atom": "GRI-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "grifflos/PTO"
+    },
+    {
+     "atom": "GRI-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "notiz": "PTO"
+    },
+    {
+     "atom": "INN-014",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "notiz": "Auszugboden mit Lüftungsgitter"
+    }
+   ],
+   "luecken": [
+    "Erweiterung einer Bestandszeile: Maße an Bestand angepasst (OK AP 915-935, Höhe 815)",
+    "Flachtiefe 413-453 mit AP 1215 x 458",
+    "Passblende 84 als Bestandsanschluss",
+    "Küchenmaschinen-Fach in Zeile",
+    "Hellgraue Natursteinplatte auf Linoleumfront"
+   ],
+   "aufspalten": [
+    {
+     "atom": "MAS-006",
+     "vorschlag": "Zeile an Wand 620 nur bei Neuzeile; Bestandserweiterung folgt MAS-007"
+    },
+    {
+     "atom": "BRE-001",
+     "vorschlag": "Raster 600 nur bei Neuplanung, nicht bei Bestandserweiterung"
+    }
+   ]
+  }
+ ]
+}

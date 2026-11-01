@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schema.kueche.local/v0/teil.schema.json",
+  "title": "Teil",
+  "description": "Fertigungseinheit (v0.2). Teilsystem rechtshaendig: das Teil liegt mit der Referenzseite nach oben; Ursprung = Ecke an Kante l1 und Kante b1 auf der Unterseite; x entlang l1 (Laenge), y von l1 nach l2 (Breite), z nach oben (Dicke, Referenzseite bei z = dicke). Kanten: l1 bei y = 0, l2 bei y = b, b1 bei x = 0, b2 bei x = l; b1 liegt links, wenn man auf die Referenzseite blickt und l1 vorn ist. Referenzseite und l1 sind je rolle fest (nicht nach Anzahl der Bearbeitungen): Korpusteile (seite_links, seite_rechts, boden, deckel, traverse_vorn, traverse_hinten, mittelseite, einlegeboden): Innenseite bzw. Seite zum Korpusinneren, l1 = Vorderkante. front, blende, schubkasten_front: Rueckseite, l1 = Unterkante. rueckwand: Innenseite, l1 = Unterkante. arbeitsplatte: Oberseite, l1 = Vorderkante. sockel, passleiste, wange: Rueckseite, l1 = Unterkante. schubkasten_seite, schubkasten_rueck: Innenseite, l1 = Unterkante. schubkasten_boden, regal: Oberseite, l1 = Vorderkante. faser laengs = Maserung parallel zu x.",
+  "type": "object",
+  "properties": {
+    "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+    "nr": {"type": "string", "pattern": "^[A-Z0-9-]{1,16}$", "description": "kurze Teilnummer fester Laenge fuer Code 128 (setup.namensschema.teil_nr)"},
+    "name": {"type": "string"},
+    "rolle": {"type": "string", "enum": ["seite_links", "seite_rechts", "boden", "deckel", "traverse_vorn", "traverse_hinten", "rueckwand", "einlegeboden", "mittelseite", "front", "blende", "sockel", "passleiste", "arbeitsplatte", "wange", "schubkasten_seite", "schubkasten_front", "schubkasten_rueck", "schubkasten_boden", "regal", "sonstiges"]},
+    "gruppe": {"$ref": "gemeinsam.schema.json#/$defs/id", "description": "Element-ID des Schranks oder der Baugruppe"},
+    "baugruppe": {"$ref": "gemeinsam.schema.json#/$defs/id", "description": "Unterbaugruppe, z. B. ein Schubkasten im Schrank"},
+    "fertigungsgruppe": {
+      "type": "object",
+      "properties": {"stapel": {"type": "string"}, "verpackung": {"type": "string"}},
+      "additionalProperties": false
+    },
+    "art": {"type": "string", "enum": ["platte", "massiv", "metall", "glas", "zukauf", "beschlag"]},
+    "anzahl": {"type": "integer", "minimum": 1},
+    "material": {"$ref": "gemeinsam.schema.json#/$defs/bibref_fest"},
+    "dicke": {"type": "number", "exclusiveMinimum": 0},
+    "fertig": {
+      "type": "object",
+      "properties": {"l": {"type": "number", "exclusiveMinimum": 0}, "b": {"type": "number", "exclusiveMinimum": 0}},
+      "required": ["l", "b"], "additionalProperties": false
+    },
+    "zuschnitt": {
+      "description": "Mass fuer die Saege, vom Kern (PartEngine) berechnet: fertig minus Kantendicken plus Fraeszugabe.",
+      "type": "object",
+      "properties": {"l": {"type": "number"}, "b": {"type": "number"}, "zugabe": {"type": "number"}},
+      "required": ["l", "b"], "additionalProperties": false
+    },
+    "faser": {"type": "string", "enum": ["laengs", "quer", "keine"]},
+    "drehbar": {"type": "boolean", "description": "darf im Zuschnitt gedreht werden; faser != keine verlangt false"},
+    "sichtseite": {"type": "string", "enum": ["oben", "unten", "beide", "keine"]},
+    "teilung": {"type": "string", "description": "Vermerk, wenn das Teil groesser als das Lagerformat ist und gestossen wird"},
+    "kanten": {
+      "type": "object",
+      "properties": {
+        "l1": {"$ref": "#/$defs/kante"}, "l2": {"$ref": "#/$defs/kante"},
+        "b1": {"$ref": "#/$defs/kante"}, "b2": {"$ref": "#/$defs/kante"}
+      },
+      "required": ["l1", "l2", "b1", "b2"], "additionalProperties": false
+    },
+    "bearbeitungen": {"type": "array", "items": {"$ref": "#/$defs/bearbeitung"}},
+    "beschlaege": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ref": {"$ref": "gemeinsam.schema.json#/$defs/bibref_fest"},
+          "anzahl": {"type": "integer", "minimum": 1},
+          "bohrbild": {
+            "description": "Einsetzen des Bohrbilds aus dem Bibliothekseintrag. u, v sind die Flaechenachsen der Seite (oben/unten: x, y; l1/l2: x, z; b1/b2: y, z). Der Bezugspunkt des Bohrbilds liegt bei (u, v); erst wird um den Bezugspunkt gedreht, dann an der genannten Achse gespiegelt.",
+            "type": "object",
+            "properties": {
+              "seite": {"type": "string", "enum": ["oben", "unten", "l1", "l2", "b1", "b2"]},
+              "u": {"type": "number"}, "v": {"type": "number"},
+              "drehung": {"type": "integer", "enum": [0, 90, 180, 270], "default": 0},
+              "spiegel": {"type": "string", "enum": ["keine", "u", "v"], "default": "keine"}
+            },
+            "required": ["seite", "u", "v"], "additionalProperties": false
+          }
+        },
+        "required": ["ref", "anzahl"], "additionalProperties": false
+      }
+    },
+    "etikett": {
+      "type": "object",
+      "properties": {
+        "code128": {"type": "string"},
+        "qr": {"type": "string"},
+        "vorlage": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+        "zeilen": {"type": "array", "items": {"type": "string"}},
+        "kantenbild": {"type": "string", "description": "z. B. l1 ABS 1 / l2 - / b1 - / b2 -"},
+        "position": {"type": "string", "enum": ["oben", "unten", "beliebig"]}
+      },
+      "additionalProperties": false
+    },
+    "montage": {
+      "type": "object",
+      "properties": {
+        "schritt": {"type": "integer", "minimum": 1},
+        "ort": {"type": "string", "enum": ["werkstatt", "baustelle"]},
+        "nach": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/id"}},
+        "hinweis": {"type": "string"}
+      },
+      "required": ["schritt", "ort"], "additionalProperties": false
+    },
+    "cad": {"type": "object", "properties": {"koerper": {"type": "string"}, "step": {"type": "string"}}, "additionalProperties": false},
+    "herkunft": {"$ref": "gemeinsam.schema.json#/$defs/herkunft"}
+  },
+  "required": ["id", "rolle", "gruppe", "art", "anzahl"],
+  "additionalProperties": false,
+  "allOf": [
+    {"if": {"properties": {"art": {"const": "platte"}}}, "then": {"required": ["nr", "material", "dicke", "fertig", "faser", "kanten"]}},
+    {"if": {"properties": {"faser": {"enum": ["laengs", "quer"]}}, "required": ["faser"]}, "then": {"required": ["drehbar"], "properties": {"drehbar": {"const": false}}}}
+  ],
+  "$defs": {
+    "kante": {
+      "description": "null = keine Kante.",
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "properties": {
+            "material": {"$ref": "gemeinsam.schema.json#/$defs/bibref_fest"},
+            "dicke": {"type": "number", "exclusiveMinimum": 0},
+            "hoehe": {"type": "number"},
+            "ueberstand": {"type": "number", "minimum": 0},
+            "vorfraesen": {"type": "boolean"},
+            "fuge": {"type": "string", "enum": ["pur", "eva", "laser", "heissluft", "nullfuge_sonst"]},
+            "folge": {"type": "integer", "minimum": 1, "description": "Reihenfolge am Kantenanleimer"}
+          },
+          "required": ["material", "dicke"], "additionalProperties": false
+        }
+      ]
+    },
+    "bearbeitung": {
+      "description": "Lage im Teilsystem. Auf oben/unten: x, y in der Flaeche. Auf Schmalflaechen: l1/l2 mit x (entlang) und z (Hoehe), b1/b2 mit y (entlang) und z. Richtung der Bohrung: senkrecht in die Flaeche. Bezugspunkt je art: bohrung und bohrreihe = Mittelpunkt (der ersten Bohrung); nut und falz = Kante mit kleinerem y (richtung x) bzw. kleinerem x (richtung y), Breite in +y bzw. +x; tasche, ausschnitt, griffmulde = Ecke mit kleinstem x, y, Ausdehnung laenge in x und breite in y; kontur = Punkte im Teilsystem.",
+      "type": "object",
+      "properties": {
+        "art": {"type": "string", "enum": ["bohrung", "bohrreihe", "nut", "falz", "tasche", "kontur", "ausschnitt", "griffmulde", "fase"]},
+        "seite": {"type": "string", "enum": ["oben", "unten", "l1", "l2", "b1", "b2"]},
+        "x": {"type": "number"}, "y": {"type": "number"}, "z": {"type": "number"},
+        "durchmesser": {"type": "number"},
+        "tiefe": {"type": "number"},
+        "durchgang": {"type": "boolean", "default": false},
+        "richtung": {"type": "string", "enum": ["x", "y"], "description": "Verlauf von Bohrreihe, Nut, Falz"},
+        "laenge": {"type": "number"}, "breite": {"type": "number"},
+        "winkel": {"type": "number", "description": "Neigung der Achse in Grad, 0 = senkrecht zur Flaeche"},
+        "anzahl": {"type": "integer", "minimum": 1}, "teilung": {"type": "number"},
+        "kontur": {
+          "description": "Polylinie; bulge wie in DXF (0 = Gerade, sonst Bogen: tan(Winkel/4)).",
+          "type": "array",
+          "items": {"type": "object", "properties": {"x": {"type": "number"}, "y": {"type": "number"}, "bulge": {"type": "number", "default": 0}}, "required": ["x", "y"], "additionalProperties": false}
+        },
+        "werkzeug_nr": {"type": "integer", "description": "nur fuer CNC-Ausgabe, aus setup.maschinen[].werkzeuge"},
+        "quelle": {"type": "string", "description": "Baustein, Beschlag-Bohrbild oder Nutzer"}
+      },
+      "required": ["art", "seite"],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,2076 @@
+{
+  "runde": "C",
+  "gruppe": "G5",
+  "gelesen": [
+    {
+      "template": "T12",
+      "seiten": "9/9",
+      "art": "Präsentation",
+      "inhalt": "Vier Küchen-Varianten (Moodboards und Renderings) mit Insel, Zeile, Herdnische und Messing- oder Edelstahl-Akzenten."
+    },
+    {
+      "template": "T13",
+      "seiten": "13/13",
+      "art": "Präsentation",
+      "inhalt": "Zwei Materialstände (V1, V2) einer Küche mit Halbinsel, je fünf Renderings A bis E."
+    },
+    {
+      "template": "T14",
+      "seiten": "6/6",
+      "art": "Präsentation",
+      "inhalt": "Zwei Wandschrankwand-Varianten mit Linienzeichnungen (Perspektive, Ansicht) und Pocket-Schiebetür-Beispielen."
+    },
+    {
+      "template": "T15",
+      "seiten": "10/10",
+      "art": "Präsentation",
+      "inhalt": "Drei Küchen-Varianten (Zeile mit Insel, Sitzbank, Halbinsel) mit Moodboard, Elemente-Tafel, Draufsicht und Perspektive sowie Gerätetafel."
+    },
+    {
+      "template": "T16",
+      "seiten": "8/8",
+      "art": "Präsentation",
+      "inhalt": "Eine L-Küche mit Insel in drei Element-Sets (Fronten, Arbeitsplatte, Armatur) sowie Produkttafel, Perspektive, Wohnzimmerblick und Draufsicht."
+    }
+  ],
+  "kuechen": [
+    {
+      "id": "T12-K1",
+      "belege": [
+        "T12 S.2",
+        "T12 S.3"
+      ],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Zeile an der Rückwand mit mittiger Herdnische; Insel frei im Raum",
+        "fenster_tuer": "Fenstertür an der Seitenwand (Rendering links)",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeilen-Unterschrank mit Spüle",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Edelstahl 5 mm (Moodboard)",
+          "innen": "Spüle",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 2,
+          "kategorie": "sonstiges",
+          "typ": "NEU:Standherd in Wandnische (Emaille, Messing-Details)",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Emaille grün, Messing",
+          "innen": null,
+          "geraet": "herd"
+        },
+        {
+          "pos": 3,
+          "kategorie": "nischenregal",
+          "typ": "NEU:Offene Regalbretter Messing über Herd",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": null,
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 4,
+          "kategorie": "insel",
+          "typ": "NEU:Insel mit Sockel und Griffmulden Messing",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Eiche",
+          "innen": "offene Fächer an der Seite (Rendering)",
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Rückwand (Zeile): Spüle links, Herd mittig in der Nische, Regal darüber",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "Wandboard mit Messing-Reling statt Oberschränke",
+        "sockel": "Insel-Sockel Messing roh (Moodboard)",
+        "eckloesung": "nicht erkennbar"
+      },
+      "griffe": "griffmulde",
+      "material_farbe": "Zeile Edelstahl 5 mm (Moodboard); Insel Eiche; Herd Emaille grün mit Messing; Spritzschutz Mosaik hell; Armatur Edelstahl",
+      "plan_widersprueche": [
+        "Moodboard: Zeilenfronten Edelstahl. Rendering: Zeilenfronten glänzend hellgrau-beige (nicht korrigiert)"
+      ]
+    },
+    {
+      "id": "T12-K2",
+      "belege": [
+        "T12 S.4",
+        "T12 S.5"
+      ],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Zeile an der Rückwand mit mittiger Herdnische; Insel frei im Raum",
+        "fenster_tuer": "Fenstertür an der Seitenwand (Rendering links)",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeilen-Unterschrank mit Spüle",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Edelstahl 5 mm (Moodboard)",
+          "innen": "Spüle",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 2,
+          "kategorie": "sonstiges",
+          "typ": "NEU:Standherd in Wandnische (Emaille, Messing-Details)",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Emaille grün, Messing",
+          "innen": null,
+          "geraet": "herd"
+        },
+        {
+          "pos": 3,
+          "kategorie": "nischenregal",
+          "typ": "NEU:Offene Regalbretter Messing vor vertikal gerillter Wandfläche",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": null,
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 4,
+          "kategorie": "insel",
+          "typ": "NEU:Insel mit Sockel und Griffmulden Messing",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Eiche",
+          "innen": "offene Fächer an der Seite (Rendering)",
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Rückwand (Zeile): Spüle links, Herd mittig in der Nische, Regal darüber",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "Wandboard mit Messing-Reling statt Oberschränke; Wandfläche hinter Herd als gerillte Fliese",
+        "sockel": "Insel-Sockel Messing roh (Moodboard)",
+        "eckloesung": "nicht erkennbar"
+      },
+      "griffe": "griffmulde",
+      "material_farbe": "Zeile Edelstahl 5 mm (Moodboard); Insel Eiche; Herd Emaille grün mit Messing; Spritzschutz gerillte Fliese hell; Armatur Edelstahl",
+      "plan_widersprueche": [
+        "Moodboard: Zeilenfronten Edelstahl. Rendering: Zeilenfronten glänzend hellgrau-beige (nicht korrigiert)"
+      ]
+    },
+    {
+      "id": "T12-K3",
+      "belege": [
+        "T12 S.6",
+        "T12 S.7"
+      ],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Zeile an der Rückwand mit mittiger Herdnische; Insel frei im Raum",
+        "fenster_tuer": "Fenstertür an der Seitenwand (Rendering links)",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeilen-Unterschrank mit Spüle",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Edelstahl 5 mm gebürstet (Moodboard)",
+          "innen": "Spüle",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 2,
+          "kategorie": "sonstiges",
+          "typ": "NEU:Standherd in Wandnische (Edelstahl gebürstet, Messing-Details)",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Edelstahl gebürstet, Messing",
+          "innen": null,
+          "geraet": "herd"
+        },
+        {
+          "pos": 3,
+          "kategorie": "nischenregal",
+          "typ": "NEU:Offene Regalbretter Messing in der Nische",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": null,
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 4,
+          "kategorie": "insel",
+          "typ": "NEU:Insel mit umlaufender Messing-Griffmulde (komplexerer Inselaufbau laut Rendering-Notiz)",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Eiche",
+          "innen": "offene Fächer an der Seite (Rendering)",
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Rückwand (Zeile): Spüle links, Herd mittig in der Nische, Regal darüber",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "Wandboard mit Messing-Reling statt Oberschränke",
+        "sockel": "Insel-Sockel umlaufend Messing (Rendering-Notiz)",
+        "eckloesung": "Insel-Ecken mit umlaufender Messing-Griffmulde"
+      },
+      "griffe": "griffmulde",
+      "material_farbe": "Zeile Edelstahl gebürstet 5 mm; Insel Eiche mit Messing-Kante; Herd Edelstahl gebürstet mit Messing; Spritzschutz gerillte Fliese; Armatur Edelstahl mit Auszugsbrause",
+      "plan_widersprueche": [
+        "Moodboard: Zeilenfronten Edelstahl gebürstet. Rendering: Zeilenfronten glänzend hellgrau-beige (nicht korrigiert)"
+      ]
+    },
+    {
+      "id": "T12-K4",
+      "belege": [
+        "T12 S.8",
+        "T12 S.9"
+      ],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Zeile an der Rückwand mit mittiger Herdnische; Insel frei im Raum",
+        "fenster_tuer": "Fenstertür an der Seitenwand (Rendering links)",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeilen-Unterschrank mit Spüle",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Edelstahl gebürstet 5 mm (Moodboard)",
+          "innen": "Spüle",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 2,
+          "kategorie": "sonstiges",
+          "typ": "NEU:Standherd in Wandnische (Edelstahl gebürstet, Messing-Details)",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Edelstahl gebürstet, Messing",
+          "innen": null,
+          "geraet": "herd"
+        },
+        {
+          "pos": 3,
+          "kategorie": "nischenregal",
+          "typ": "NEU:Offene Regalbretter Messing in der Nische",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": null,
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 4,
+          "kategorie": "insel",
+          "typ": "NEU:Insel mit Messing-Griffmulde, Oberfläche hell",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Eiche",
+          "innen": null,
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Rückwand (Zeile): Spüle links, Herd mittig in der Nische, Regal darüber",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "Wandboard mit Messing-Reling statt Oberschränke",
+        "sockel": "Insel-Sockel Messing (Moodboard)",
+        "eckloesung": "nicht erkennbar"
+      },
+      "griffe": "griffmulde",
+      "material_farbe": "Zeile Edelstahl gebürstet 5 mm; Insel Eiche; Insel-Oberfläche hell (Moodboard: Edelstahl); Herd Edelstahl mit Messing; Spritzschutz Mosaik hell; Armatur Edelstahl",
+      "plan_widersprueche": [
+        "Moodboard: Zeilenfronten Edelstahl. Rendering: Zeilenfronten glänzend hellgrau-beige (nicht korrigiert)",
+        "Moodboard: Insel-Arbeitsplatte Edelstahl. Rendering: Insel-Oberseite hell, steinartig (nicht korrigiert)"
+      ]
+    },
+    {
+      "id": "T13-K1",
+      "belege": [
+        "T13 S.2",
+        "T13 S.3",
+        "T13 S.4",
+        "T13 S.5",
+        "T13 S.6",
+        "T13 S.7"
+      ],
+      "form": "halbinsel",
+      "raum": {
+        "wandbezug": "Zeile an der Rückwand unter der Fensterachse; Halbinsel vor der Zeile; Hochschrank-Säulen an beiden Enden",
+        "fenster_tuer": "Mittelfenster an der Rückwand, Fenstertür am rechten Rand",
+        "abstand_wand_decke": "Hochschränke enden unter der Decke, Lücke sichtbar",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank links, Eiche",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Eiche, horizontal geteilt (Oberteil, Unterteil)",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 2,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank rechts mit Backofen-Doppel",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder, Griffe schwarz",
+          "innen": "Backöfen übereinander (Einbau)",
+          "geraet": "backofen"
+        },
+        {
+          "pos": 3,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Halbinsel-Unterschränke mit Türen",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder, Türen",
+          "innen": "Kochfeld-Ausschnitt in Arbeitsplatte",
+          "geraet": "kochfeld"
+        },
+        {
+          "pos": 4,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeilen-Unterschränke Rückwand mit Auszügen",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder, Auszüge",
+          "innen": "Spüle unter Fenster",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 5,
+          "kategorie": "nischenregal",
+          "typ": "NEU:Schwebende Eiche-Regalbretter neben Hochschrank",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": null,
+          "innen": null,
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Rückwand: Spüle unter Fenster (Becken kupfer) rechts von der Mitte; Hochschrank mit Backofen-Doppel rechts; Halbinsel: Kochfeld",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "Blende in Frontmaterial (Moodboard)",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "Stellseite in Frontmaterial (Moodboard)",
+        "wand_decken_anschluss": "Hochschrank-Oberkante unter der Decke, Abschluss-Lücke",
+        "sockel": "Sockel in Frontmaterial, zurückgesetzt",
+        "eckloesung": "nicht erkennbar"
+      },
+      "griffe": "Stangengriff gerillt und Knopf gerillt, schwarz matt (Moodboard)",
+      "material_farbe": "Linoleum rosa-puder (Front, Sockel, Blende, Stellseite); Naturstein beige marmoriert 20 mm (Arbeitsplatte); Eiche (Hochschrank links, Regalbretter); Spüle Kupfer gebürstet; Armatur Kupfer",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T13-K2",
+      "belege": [
+        "T13 S.8",
+        "T13 S.9",
+        "T13 S.10",
+        "T13 S.11",
+        "T13 S.12",
+        "T13 S.13"
+      ],
+      "form": "halbinsel",
+      "raum": {
+        "wandbezug": "Zeile an der Rückwand unter der Fensterachse; Halbinsel vor der Zeile; Hochschrank-Säulen an beiden Enden",
+        "fenster_tuer": "Mittelfenster an der Rückwand, Fenstertür am rechten Rand",
+        "abstand_wand_decke": "Hochschränke enden unter der Decke, Lücke sichtbar",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank links, Eiche",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Eiche, horizontal geteilt (Oberteil, Unterteil)",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 2,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank rechts mit Backofen-Doppel",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder, Griffe Stangen satin nickel",
+          "innen": "Backöfen übereinander (Einbau)",
+          "geraet": "backofen"
+        },
+        {
+          "pos": 3,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Halbinsel-Unterschränke mit Türen",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder, Türen",
+          "innen": "Kochfeld-Ausschnitt in Arbeitsplatte",
+          "geraet": "kochfeld"
+        },
+        {
+          "pos": 4,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeilen-Unterschränke Rückwand mit Auszügen",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder, Auszüge",
+          "innen": "Spüle unter Fenster",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 5,
+          "kategorie": "nischenregal",
+          "typ": "NEU:Schwebende Eiche-Regalbretter neben Hochschrank",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": null,
+          "innen": null,
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Rückwand: Spüle unter Fenster (Edelstahl) rechts von der Mitte; Hochschrank mit Backofen-Doppel rechts; Halbinsel: Kochfeld",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "Blende in Frontmaterial (Moodboard)",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "Stellseite in Frontmaterial (Moodboard)",
+        "wand_decken_anschluss": "Hochschrank-Oberkante unter der Decke, Abschluss-Lücke",
+        "sockel": "Sockel in Frontmaterial, zurückgesetzt",
+        "eckloesung": "nicht erkennbar"
+      },
+      "griffe": "Stangengriff und Knopf, satin nickel, Kantenprofil (Moodboard)",
+      "material_farbe": "Linoleum rosa-puder (Front, Sockel, Blende, Stellseite); Naturstein beige marmoriert 20 mm (Arbeitsplatte); Eiche (Hochschrank links, Regalbretter); Spüle Edelstahl; Armatur Edelstahl mit Auszug",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T14-K1",
+      "belege": [
+        "T14 S.2",
+        "T14 S.3",
+        "T14 S.4"
+      ],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Schrankwand über die volle Wandlänge, raumhoch; gerundete Insel vorn",
+        "fenster_tuer": "nicht erkennbar",
+        "abstand_wand_decke": "raumhoch (Oberkante an Deckenlinie)",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "oberschrank",
+          "typ": "NEU:Rahmen-Oberschränke links, sieben Felder",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Rahmenfront mit Füllung",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 2,
+          "kategorie": "nischenregal",
+          "typ": "NEU:Mittiges offenes Regal mit Böden über Schubladenblock",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": null,
+          "innen": "Böden",
+          "geraet": null
+        },
+        {
+          "pos": 3,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Schubladenblock 3 x 2 unter der Regalmitte",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Rahmenfront, Auszüge",
+          "innen": "Schubkästen",
+          "geraet": null
+        },
+        {
+          "pos": 4,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Vorratsschrank mit Pocket-Schiebetür (Lage im Plan nicht gekennzeichnet)",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Pocket-Schiebetür, Front in Wand verschiebbar",
+          "innen": "Eichenböden, Schubkästen",
+          "geraet": null
+        },
+        {
+          "pos": 5,
+          "kategorie": "oberschrank",
+          "typ": "NEU:Rahmen-Oberschränke rechts, vier Felder",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Rahmenfront mit Füllung",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 6,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Backofen-Säule rechts",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Rahmenfront",
+          "innen": "Backofen",
+          "geraet": "backofen"
+        },
+        {
+          "pos": 7,
+          "kategorie": "insel",
+          "typ": "NEU:Gerundete Insel",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "glatte Front (Rundung)",
+          "innen": null,
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Schrankwand: Vorrats-Schiebesäule mittig, Backofen rechts; Insel ohne Geräte in der Ansicht",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "schmales Vollfeld zwischen Schrankabschnitten (Stützenverkleidung)",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "Schrankwand bis zur Deckenlinie",
+        "sockel": "Sockelzone unter Rahmen-Unterschränken, nicht gemaßt",
+        "eckloesung": "nicht erkennbar"
+      },
+      "griffe": "nicht dargestellt (Rahmenfronten)",
+      "material_farbe": "nicht angegeben (Linienzeichnung); Bildbeispiel Pocket-Schiebetür: helle Eiche und Greige",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T14-K2",
+      "belege": [
+        "T14 S.5",
+        "T14 S.6"
+      ],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Schrankwand links und rechts raumhoch, Regalwand offen in der Mitte; gerundete Insel vorn",
+        "fenster_tuer": "nicht erkennbar",
+        "abstand_wand_decke": "raumhoch (Oberkante an Deckenlinie)",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "oberschrank",
+          "typ": "NEU:Rahmen-Oberschränke links, drei Felder",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Rahmenfront mit Füllung",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 2,
+          "kategorie": "nischenregal",
+          "typ": "NEU:Offene Regalböden in der Mitte (zwei Böden)",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": null,
+          "innen": "Böden",
+          "geraet": null
+        },
+        {
+          "pos": 3,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Unterschrank-Zeile Mitte mit vier Türen",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Rahmenfront, Türen",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 4,
+          "kategorie": "oberschrank",
+          "typ": "NEU:Rahmen-Oberschränke rechts, vier Felder",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Rahmenfront mit Füllung",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 5,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Backofen-Säule rechts unten",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Rahmenfront",
+          "innen": "Backofen",
+          "geraet": "backofen"
+        },
+        {
+          "pos": 6,
+          "kategorie": "insel",
+          "typ": "NEU:Gerundete Insel",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": null,
+          "innen": null,
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Schrankwand: Regalmitte offen, Backofen rechts unten; Insel ohne Geräte in der Ansicht",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "schmales Vollfeld zwischen Schrankabschnitten (Stützenverkleidung)",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "Oberschränke bis zur Deckenlinie",
+        "sockel": "Sockelzone unter Unterschränken, nicht gemaßt",
+        "eckloesung": "nicht erkennbar"
+      },
+      "griffe": "nicht dargestellt (Rahmenfronten)",
+      "material_farbe": "nicht angegeben (Linienzeichnung)",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T15-K1",
+      "belege": [
+        "T15 S.4",
+        "T15 S.5"
+      ],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Zeile an der Fensterwand mit Sideboard auf Fensterbrett-Höhe; Hochschrank am Zeilenende; freistehende Insel",
+        "fenster_tuer": "Fenster an der Zeilenwand",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "sonstiges",
+          "typ": "NEU:Sideboard, Oberkante auf Fensterbrett-Höhe",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder, Griffmulde",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Spülenunterschrank der Zeile",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder, Griffmulde; Schubkästen Eiche",
+          "innen": "Spüle",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 3,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank am Zeilenende",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 4,
+          "kategorie": "insel",
+          "typ": "NEU:Freistehende Insel mit Kochfeld-Ausschnitt",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Edelstahl gebürstet (Front und Oberfläche)",
+          "innen": "Kochfeld-Ausschnitt (Symbol mit Rundung)",
+          "geraet": "kochfeld"
+        }
+      ],
+      "geraete_reihenfolge": "Zeile: Sideboard links, Spüle mit Hochdruck-Armatur, Hochschrank am Ende; Insel: Kochfeld-Ausschnitt",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "Sideboard unter Fenster, Oberkante auf Fensterbrett-Höhe",
+        "sockel": "nicht erkennbar",
+        "eckloesung": "Zeilen-Ecke mit Hochschrank, keine Eckschranklösung erkennbar"
+      },
+      "griffe": "griffmulde (Linoleum-Fronten)",
+      "material_farbe": "Zeile: Linoleum rosa-puder (Fronten), Naturstein hell weiß-grau geädert (Arbeitsplatte), Schubkästen Eiche; Insel: Edelstahl gebürstet; Armatur Edelstahl",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T15-K2",
+      "belege": [
+        "T15 S.6",
+        "T15 S.7"
+      ],
+      "form": "halbinsel",
+      "raum": {
+        "wandbezug": "Zeile an der Rückwand mit Sitzbank am Zeilenende; Halbinsel an die Zeile angebunden; Hochschrank am anderen Ende",
+        "fenster_tuer": "nicht erkennbar",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "sonstiges",
+          "typ": "NEU:Sitzbank niedrig am Zeilenende",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeilen-Unterschrank mit Spüle",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder, Griffmulde",
+          "innen": "Spüle",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 3,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank am Zeilenende",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 4,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Halbinsel-Unterschränke mit Kochfeld-Ausschnitt",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Edelstahl gebürstet",
+          "innen": "Kochfeld-Ausschnitt (Symbol mit Rundung)",
+          "geraet": "kochfeld"
+        }
+      ],
+      "geraete_reihenfolge": "Zeile: Sitzbank am Ende, Spüle in der Zeile, Hochschrank am anderen Ende; Halbinsel: Ausschnitt mit Rundsymbol",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "nicht erkennbar",
+        "sockel": "nicht erkennbar",
+        "eckloesung": "Zeile geht in Halbinsel über, Eckausbildung mit Bank"
+      },
+      "griffe": "griffmulde (Linoleum-Fronten)",
+      "material_farbe": "Zeile: Linoleum rosa-puder; Halbinsel: Edelstahl gebürstet; Arbeitsplatte hell (Moodboard: Naturstein)",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T15-K3",
+      "belege": [
+        "T15 S.8",
+        "T15 S.9"
+      ],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Zeile an der Rückwand mit Leiste oder Reling über der Arbeitsplatte; freistehende Halbinsel ohne Verbindung zur Zeile; Hochschrank am Zeilenende",
+        "fenster_tuer": "nicht erkennbar",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeilen-Unterschrank mit Spüle",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder, Griffmulde",
+          "innen": "Spüle",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 2,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank am Zeilenende",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Linoleum rosa-puder",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 3,
+          "kategorie": "insel",
+          "typ": "NEU:Freistehende Halbinsel ohne Verbindung mit Kochfeld-Ausschnitt",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Edelstahl gebürstet",
+          "innen": "Kochfeld-Ausschnitt (Symbol mit Rundung)",
+          "geraet": "kochfeld"
+        },
+        {
+          "pos": 4,
+          "kategorie": "nischenregal",
+          "typ": "NEU:Wandleiste oder Reling über der Zeile",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": null,
+          "innen": null,
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Zeile: Spüle mit Armatur, Hochschrank am Ende; freistehende Insel: Kochfeld-Ausschnitt",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "Leiste oder Reling an der Rückwand über der Arbeitsplatte",
+        "sockel": "nicht erkennbar",
+        "eckloesung": "Zeile endet am Hochschrank, Insel ohne Anschluss"
+      },
+      "griffe": "griffmulde (Linoleum-Fronten)",
+      "material_farbe": "Zeile: Linoleum rosa-puder; Insel: Edelstahl gebürstet; Arbeitsplatte Naturstein hell (Moodboard)",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T16-K1",
+      "belege": [
+        "T16 S.2",
+        "T16 S.6",
+        "T16 S.8"
+      ],
+      "form": "L",
+      "raum": {
+        "wandbezug": "L-Anordnung an zwei Wänden mit Insel mittig; Bogendurchgang zum Wohnraum",
+        "fenster_tuer": "Bogenöffnung zum Wohnzimmer",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeile Rückwand mit Spüle",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Eiche hell mit Griffleiste weiß",
+          "innen": "Spüle (Edelstahl-Becken)",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeile an der linken Wand (lang, Plan-Lesung unsicher)",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Eiche hell",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 3,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank-Säule am Zeilenende mit Backofen",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Eiche hell",
+          "innen": "Backofen",
+          "geraet": "backofen"
+        },
+        {
+          "pos": 4,
+          "kategorie": "insel",
+          "typ": "NEU:Insel mit Kochfeld-Abzug",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Eiche hell, Auszüge Eiche",
+          "innen": "Kochfeld mit integriertem Abzug",
+          "geraet": "kochfeld"
+        },
+        {
+          "pos": 5,
+          "kategorie": "nischenregal",
+          "typ": "NEU:Offene Fächer am Inselende zur Wohnzimmerseite",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": null,
+          "innen": "offene Fächer",
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Rückwand: Spüle, daneben Hochschrank mit Backofen rechts; Insel: Kochfeld mit Abzug",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "nicht erkennbar",
+        "sockel": "Freiraum unter der Zeile für Saugroboter",
+        "eckloesung": "nicht erkennbar"
+      },
+      "griffe": "griffleiste (weiß, in Frontkante eingelassen)",
+      "material_farbe": "Eiche hell (Fronten, Auszüge); Naturstein grau-grün marmoriert (Arbeitsplatte); Armatur Edelstahl; Doppelsteckdosen rund, weiß",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T16-K2",
+      "belege": [
+        "T16 S.3",
+        "T16 S.6",
+        "T16 S.8"
+      ],
+      "form": "L",
+      "raum": {
+        "wandbezug": "L-Anordnung an zwei Wänden mit Insel mittig; Bogendurchgang zum Wohnraum",
+        "fenster_tuer": "Bogenöffnung zum Wohnzimmer",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeile Rückwand mit Spüle",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "MDF lackiert blau, vertikal strukturiert",
+          "innen": "Spüle (Edelstahl-Becken)",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeile an der linken Wand (lang, Plan-Lesung unsicher)",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "MDF lackiert blau, vertikal strukturiert",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 3,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank-Säule am Zeilenende mit Backofen",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "MDF lackiert blau, vertikal strukturiert",
+          "innen": "Backofen",
+          "geraet": "backofen"
+        },
+        {
+          "pos": 4,
+          "kategorie": "insel",
+          "typ": "NEU:Insel mit Kochfeld-Abzug",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "MDF lackiert blau; Auszüge Eiche",
+          "innen": "Kochfeld mit integriertem Abzug",
+          "geraet": "kochfeld"
+        }
+      ],
+      "geraete_reihenfolge": "Rückwand: Spüle, daneben Hochschrank mit Backofen rechts; Insel: Kochfeld mit Abzug",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "nicht erkennbar",
+        "sockel": "Freiraum unter der Zeile für Saugroboter",
+        "eckloesung": "nicht erkennbar"
+      },
+      "griffe": "nicht dargestellt (strukturierte Front)",
+      "material_farbe": "MDF lackiert blau mit vertikaler Struktur; Eiche Auszüge; Naturstein hell, versiegelt (Arbeitsplatte); Armatur schwarz matt; Doppelsteckdosen rund, weiß",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T16-K3",
+      "belege": [
+        "T16 S.4",
+        "T16 S.6",
+        "T16 S.8"
+      ],
+      "form": "L",
+      "raum": {
+        "wandbezug": "L-Anordnung an zwei Wänden mit Insel mittig; Bogendurchgang zum Wohnraum",
+        "fenster_tuer": "Bogenöffnung zum Wohnzimmer",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeile Rückwand mit Spüle",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "MDF lackiert grün-grau, Rahmenprofil (Kassettenoptik)",
+          "innen": "Spüle (Edelstahl-Becken)",
+          "geraet": "spuele"
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Zeile an der linken Wand (lang, Plan-Lesung unsicher)",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "MDF lackiert grün-grau, Rahmenprofil",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 3,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank-Säule am Zeilenende mit Backofen",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "MDF lackiert grün-grau, Rahmenprofil",
+          "innen": "Backofen",
+          "geraet": "backofen"
+        },
+        {
+          "pos": 4,
+          "kategorie": "insel",
+          "typ": "NEU:Insel mit Kochfeld-Abzug",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "MDF lackiert grün-grau; Auszüge Eiche",
+          "innen": "Kochfeld mit integriertem Abzug",
+          "geraet": "kochfeld"
+        }
+      ],
+      "geraete_reihenfolge": "Rückwand: Spüle, daneben Hochschrank mit Backofen rechts; Insel: Kochfeld mit Abzug",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "nicht erkennbar",
+        "fuellstuecke": "nicht erkennbar",
+        "stellseiten": "nicht erkennbar",
+        "wand_decken_anschluss": "nicht erkennbar",
+        "sockel": "Freiraum unter der Zeile für Saugroboter",
+        "eckloesung": "nicht erkennbar"
+      },
+      "griffe": "nicht dargestellt (Rahmenprofil)",
+      "material_farbe": "MDF lackiert grün-grau mit Rahmenprofil; Eiche Auszüge; Naturstein dunkel marmoriert (Arbeitsplatte); Armatur Edelstahl; Doppelsteckdosen rund, grau",
+      "plan_widersprueche": []
+    }
+  ],
+  "wissen": {
+    "griffarten": [
+      {
+        "art": "Griffmulde (integriert, Messing roh oder Frontfarbe)",
+        "wo": "Insel-Sockel und Insel-Griffmulden umlaufend (T12); Linoleum-Fronten mit Griffmulde in der Zeile (T15)",
+        "haeufigkeit": 7,
+        "belege": [
+          "T12 S.2",
+          "T12 S.7",
+          "T15 S.3"
+        ]
+      },
+      {
+        "art": "Griffleiste weiß, in Holzfront eingelassen",
+        "wo": "Eiche-Fronten, Element-Set 1",
+        "haeufigkeit": 1,
+        "belege": [
+          "T16 S.2"
+        ]
+      },
+      {
+        "art": "Stangengriff gerillt und Knopf gerillt, schwarz matt",
+        "wo": "Linoleum-Fronten Hochschrank und Halbinsel (V1)",
+        "haeufigkeit": 1,
+        "belege": [
+          "T13 S.2",
+          "T13 S.6"
+        ]
+      },
+      {
+        "art": "Stangengriff und Knopf, satin nickel, Kantenprofil",
+        "wo": "Linoleum-Fronten (V2)",
+        "haeufigkeit": 1,
+        "belege": [
+          "T13 S.8",
+          "T13 S.12"
+        ]
+      },
+      {
+        "art": "Griff nicht dargestellt (Rahmenfronten oder strukturierte Front)",
+        "wo": "Schrankwand T14 V1 und V2; Element-Sets 2 und 3 in T16",
+        "haeufigkeit": 4,
+        "belege": [
+          "T14 S.3",
+          "T14 S.6",
+          "T16 S.3",
+          "T16 S.4"
+        ]
+      }
+    ],
+    "anschluesse_blenden_fuellstuecke": [
+      {
+        "detail": "Front, Sockel, Blende und Stellseite in einem Material durchgehend (Linoleum rosa-puder); Sockel zurückgesetzt",
+        "masse": [],
+        "belege": [
+          "T13 S.2",
+          "T13 S.8"
+        ]
+      },
+      {
+        "detail": "Griffmulde im Frontmaterial der Zeile (Linoleum), Griff als Mulde statt Beschlag",
+        "masse": [],
+        "belege": [
+          "T15 S.3"
+        ]
+      },
+      {
+        "detail": "Hochschrank-Oberkante endet unter der Decke, Lücke zur Decke sichtbar",
+        "masse": [],
+        "belege": [
+          "T13 S.3",
+          "T13 S.9"
+        ]
+      },
+      {
+        "detail": "Schrankwand raumhoch, Oberschrank-Oberkante an der Deckenlinie",
+        "masse": [],
+        "belege": [
+          "T14 S.3",
+          "T14 S.6"
+        ]
+      },
+      {
+        "detail": "Schmales Vollfeld zwischen Schrankabschnitten als Stützenverkleidung (Füllstück)",
+        "masse": [],
+        "belege": [
+          "T14 S.3",
+          "T14 S.6"
+        ]
+      },
+      {
+        "detail": "Sideboard-Oberkante auf Fensterbrett-Höhe als Abschluss unter dem Fenster",
+        "masse": [],
+        "belege": [
+          "T15 S.4",
+          "T15 S.5"
+        ]
+      },
+      {
+        "detail": "Wandboard mit Messing-Reling als Wandabschluss statt Oberschränke",
+        "masse": [],
+        "belege": [
+          "T12 S.2",
+          "T12 S.7"
+        ]
+      },
+      {
+        "detail": "Freiraum unter der Zeile groß genug für einen Saugroboter (Maß nicht angegeben)",
+        "masse": [],
+        "belege": [
+          "T16 S.2",
+          "T16 S.3",
+          "T16 S.4"
+        ]
+      },
+      {
+        "detail": "Pocket-Schiebetür als Front-Typ: Schiebefront verschwindet in der Wand, Vorratsfach mit Eichenböden",
+        "masse": [],
+        "belege": [
+          "T14 S.4"
+        ]
+      },
+      {
+        "detail": "Doppelsteckdose rund, Farbe passend zur Front (weiß oder grau)",
+        "masse": [],
+        "belege": [
+          "T16 S.2",
+          "T16 S.3",
+          "T16 S.4"
+        ]
+      }
+    ],
+    "stil": [
+      {
+        "merkmal": "Front Linoleum in gedämpftem Rosa-Beige, matt; Sockel und Blende in gleichem Material (wiederkehrend in T13 und T15)",
+        "belege": [
+          "T13 S.2",
+          "T13 S.8",
+          "T15 S.3"
+        ]
+      },
+      {
+        "merkmal": "Eiche hell als Holz-Front (Insel, Hochschrank, Auszüge) in T12, T13 und T16",
+        "belege": [
+          "T12 S.2",
+          "T13 S.2",
+          "T16 S.2",
+          "T16 S.3",
+          "T16 S.4"
+        ]
+      },
+      {
+        "merkmal": "Edelstahl gebürstet als Front, Insel-Fläche oder Becken",
+        "belege": [
+          "T12 S.6",
+          "T13 S.8",
+          "T15 S.3"
+        ]
+      },
+      {
+        "merkmal": "Messing roh als Akzent (Reling, Griffmulden, Herd-Details, Armatur) in T12",
+        "belege": [
+          "T12 S.2",
+          "T12 S.7"
+        ]
+      },
+      {
+        "merkmal": "Kupfer-Spüle und Kupfer-Armatur in T13 V1, Edelstahl als Gegenstück in V2",
+        "belege": [
+          "T13 S.2",
+          "T13 S.8"
+        ]
+      },
+      {
+        "merkmal": "Lackierte MDF in kräftigen Farben: blau mit vertikaler Struktur, grün-grau mit Rahmenprofil (T16)",
+        "belege": [
+          "T16 S.3",
+          "T16 S.4"
+        ]
+      },
+      {
+        "merkmal": "Naturstein als Arbeitsplatte: beige marmoriert, weiß-grau geädert, grau-grün; einzelne Platten versiegelt",
+        "belege": [
+          "T13 S.2",
+          "T15 S.2",
+          "T16 S.2",
+          "T16 S.3",
+          "T16 S.4"
+        ]
+      },
+      {
+        "merkmal": "Rahmenfronten mit Profil-Linie (Kassettenoptik) als Stilmittel der Schrankwand",
+        "belege": [
+          "T14 S.3",
+          "T14 S.6",
+          "T16 S.4"
+        ]
+      },
+      {
+        "merkmal": "Schwarz matt als Kontrast (Griffe, Armatur, Kochfeld-Knöpfe)",
+        "belege": [
+          "T13 S.2",
+          "T13 S.6",
+          "T16 S.3"
+        ]
+      },
+      {
+        "merkmal": "Hoher, runder Auslauf der Armatur, mit Auszugsbrause oder Hochauslauf; Farbe folgt dem Set (Edelstahl, schwarz, Kupfer)",
+        "belege": [
+          "T12 S.2",
+          "T13 S.2",
+          "T16 S.2",
+          "T16 S.3"
+        ]
+      },
+      {
+        "merkmal": "Vertikale Riffelung als Textur (gerillte Fronten, gerillte Fliesen in der Nische)",
+        "belege": [
+          "T12 S.5",
+          "T16 S.3"
+        ]
+      }
+    ],
+    "layouts_anordnungen": [
+      {
+        "muster": "Zeile an der Rückwand plus freistehende Insel (T12, T15 V1 und V3, T16 als L mit Insel)",
+        "belege": [
+          "T12 S.3",
+          "T15 S.4",
+          "T15 S.8",
+          "T16 S.8"
+        ]
+      },
+      {
+        "muster": "Zeile mit Halbinsel, an die Zeile angebunden (T13, T15 V2)",
+        "belege": [
+          "T13 S.3",
+          "T15 S.6"
+        ]
+      },
+      {
+        "muster": "Wandschrankwand über die ganze Wand plus gerundete Insel (T14)",
+        "belege": [
+          "T14 S.2",
+          "T14 S.5"
+        ]
+      },
+      {
+        "muster": "L-Anordnung mit Insel und Bogenöffnung zum Wohnraum (T16)",
+        "belege": [
+          "T16 S.6",
+          "T16 S.8"
+        ]
+      }
+    ],
+    "innenausstattung": [
+      {
+        "element": "Schubkästen aus Eiche mit Zinkung, Tellerablage im Auszug",
+        "kontext": "Unterschrank der Zeile",
+        "belege": [
+          "T15 S.3"
+        ]
+      },
+      {
+        "element": "Offene Regalbretter (Eiche oder Messing) in Wandnische oder neben Hochschrank",
+        "kontext": "Herdnische, Kaffee- oder Vorratsecke",
+        "belege": [
+          "T12 S.3",
+          "T13 S.7",
+          "T13 S.13"
+        ]
+      },
+      {
+        "element": "Vorratsschrank hinter Pocket-Schiebetür mit Eichenböden und Schubladen",
+        "kontext": "Schrankwand T14 V1",
+        "belege": [
+          "T14 S.4"
+        ]
+      },
+      {
+        "element": "Eiche-Auszüge in allen drei Element-Sets",
+        "kontext": "Zeile und Insel in T16",
+        "belege": [
+          "T16 S.2",
+          "T16 S.3",
+          "T16 S.4"
+        ]
+      },
+      {
+        "element": "Backofen-Doppel im Hochschrank, übereinander eingebaut",
+        "kontext": "Hochschrank am Zeilenende",
+        "belege": [
+          "T13 S.7",
+          "T14 S.3",
+          "T16 S.6"
+        ]
+      }
+    ],
+    "raumstellung": [
+      {
+        "regel_oder_muster": "Zeile an der Rückwand oder an der Fensterwand, Spüle in der Zeile; Insel frei im Raum oder an die Zeile angebunden",
+        "belege": [
+          "T12 S.3",
+          "T13 S.3",
+          "T15 S.4",
+          "T15 S.6"
+        ]
+      },
+      {
+        "regel_oder_muster": "Hochschrank-Säule am Ende der Zeile, mit Backofen oder Vorrat darin",
+        "belege": [
+          "T13 S.3",
+          "T15 S.4",
+          "T16 S.6"
+        ]
+      },
+      {
+        "regel_oder_muster": "Herd in Wandnische mit Regal darüber",
+        "belege": [
+          "T12 S.3",
+          "T12 S.5"
+        ]
+      },
+      {
+        "regel_oder_muster": "Gang zwischen Insel und Zeile; Gangbreite im Plan nicht sicher lesbar",
+        "belege": [
+          "T15 S.5",
+          "T15 S.7",
+          "T16 S.8"
+        ]
+      },
+      {
+        "regel_oder_muster": "Küche über einen Bogendurchgang vom Wohnraum einsehbar",
+        "belege": [
+          "T16 S.7",
+          "T16 S.8"
+        ]
+      }
+    ],
+    "raster_masse": [
+      {
+        "beobachtung": "Kein Rastermaß erkennbar; Schrankfelder in Ansichten ungleich breit",
+        "belege": [
+          "T14 S.3",
+          "T14 S.6"
+        ]
+      },
+      {
+        "beobachtung": "Draufsicht-Maße grob im Bereich Zeile ca. 3000 mm und Insel ca. 2500 mm (Lesung unsicher, nicht gesichert)",
+        "belege": [
+          "T15 S.5",
+          "T15 S.7",
+          "T15 S.9"
+        ]
+      }
+    ],
+    "hoehenbereiche": [
+      {
+        "groesse": "hochschrank (bis knapp unter die Decke, Lücke sichtbar in T13)",
+        "werte": [],
+        "belege": [
+          "T13 S.3",
+          "T13 S.9"
+        ]
+      },
+      {
+        "groesse": "hochschrank raumhoch (T14, Schrankwand bis zur Deckenlinie)",
+        "werte": [],
+        "belege": [
+          "T14 S.3",
+          "T14 S.6"
+        ]
+      },
+      {
+        "groesse": "sockel (zurückgesetzt, Freiraum für Saugroboter unter der Zeile)",
+        "werte": [],
+        "belege": [
+          "T13 S.3",
+          "T16 S.2"
+        ]
+      },
+      {
+        "groesse": "oberschrank_uk (keine Oberschränke über der Zeile, Wandboard mit Reling)",
+        "werte": [],
+        "belege": [
+          "T12 S.3"
+        ]
+      }
+    ],
+    "geraete_beziehungen": [
+      {
+        "beziehung": "Spüle und Kochfeld getrennt: Spüle an Zeile oder Fensterwand, Kochfeld in Insel oder Halbinsel",
+        "belege": [
+          "T13 S.3",
+          "T13 S.6",
+          "T15 S.5"
+        ]
+      },
+      {
+        "beziehung": "Herd mittig in Wandnische, Spüle links daneben",
+        "belege": [
+          "T12 S.3"
+        ]
+      },
+      {
+        "beziehung": "Backofen-Doppel im Hochschrank rechts, Kaffeemaschine auf Arbeitsplatte neben Regalen",
+        "belege": [
+          "T13 S.7",
+          "T13 S.13"
+        ]
+      },
+      {
+        "beziehung": "Kochfeld mit integriertem Abzug in der Insel (Gerätetafel T16)",
+        "belege": [
+          "T16 S.5",
+          "T16 S.8"
+        ]
+      },
+      {
+        "beziehung": "Geschirrspüler vollintegriert; Position im Plan nicht eindeutig",
+        "belege": [
+          "T15 S.10"
+        ]
+      }
+    ],
+    "laufwege_ergonomie": [
+      {
+        "beobachtung": "Hauptlaufweg zwischen Zeile und Insel, Insel mit Abstand im Grundriss",
+        "masse": [],
+        "belege": [
+          "T15 S.5",
+          "T16 S.8"
+        ]
+      },
+      {
+        "beobachtung": "Freiraum unter der Zeile groß genug für einen Saugroboter",
+        "masse": [],
+        "belege": [
+          "T16 S.2",
+          "T16 S.3",
+          "T16 S.4"
+        ]
+      },
+      {
+        "beobachtung": "Sideboard auf Fensterbrett-Höhe als niedrige Ablage",
+        "masse": [],
+        "belege": [
+          "T15 S.4"
+        ]
+      }
+    ],
+    "zeichenstil": [
+      {
+        "merkmal": "Linienzeichnung schwarz auf weiß: Perspektive axonometrisch (T15, T16) oder Ansicht mit Doppellinien für Fronten und Profile (T14)",
+        "belege": [
+          "T14 S.2",
+          "T14 S.3",
+          "T15 S.4",
+          "T16 S.6"
+        ]
+      },
+      {
+        "merkmal": "Doppelblatt Draufsicht und Perspektive mit Maßlinien an Schrankkanten; Zahlen klein und oft nicht lesbar (T15)",
+        "belege": [
+          "T15 S.5",
+          "T15 S.7",
+          "T15 S.9"
+        ]
+      },
+      {
+        "merkmal": "Kurze Beschriftung in Monospace unter dem Plan, beschreibt die Variante (z. B. Zeile mit Sitzbank und Halbinsel)",
+        "belege": [
+          "T15 S.4",
+          "T15 S.6",
+          "T15 S.8"
+        ]
+      },
+      {
+        "merkmal": "Draufsicht T16: Schrankumrisse gestrichelt, Wandlinien durchgezogen, Türen als Schwenkbogen",
+        "belege": [
+          "T16 S.8"
+        ]
+      },
+      {
+        "merkmal": "Ansichten mit Fronten als Rechtecke; Frontteilung als Raster, Griffe nicht eingezeichnet (T14)",
+        "belege": [
+          "T14 S.3",
+          "T14 S.6"
+        ]
+      },
+      {
+        "merkmal": "Varianten nummeriert im Titel (Variante 1, 2, 3) mit gleicher Blattfolge je Variante",
+        "belege": [
+          "T14 S.2",
+          "T15 S.4",
+          "T15 S.6",
+          "T15 S.8"
+        ]
+      }
+    ],
+    "moodboard_praesentation": [
+      {
+        "merkmal": "Titelseite, dann je Variante eine Moodboard-Seite (Materialtafel) und eine Visualisierung oder ein Plan; Wiederholung pro Variante",
+        "belege": [
+          "T12 S.2",
+          "T12 S.3",
+          "T13 S.2",
+          "T13 S.3"
+        ]
+      },
+      {
+        "merkmal": "Moodboard: frei angeordnete Material-Muster, freigestellte Armatur und Herd, Beschriftung mit Kategorie in Monospace",
+        "belege": [
+          "T12 S.2",
+          "T13 S.2",
+          "T15 S.2"
+        ]
+      },
+      {
+        "merkmal": "Visualisierungen als Raumansichten aus Kamerapositionen A bis E (T13) bzw. Varianten-Renderings (T12)",
+        "belege": [
+          "T13 S.3",
+          "T13 S.7",
+          "T12 S.3"
+        ]
+      },
+      {
+        "merkmal": "Elemente-Tafel: Detailfotos (Front, Griffmulde, Schubkasten, Steckdose) mit kurzer Bildunterschrift",
+        "belege": [
+          "T15 S.3",
+          "T16 S.2",
+          "T16 S.3",
+          "T16 S.4"
+        ]
+      },
+      {
+        "merkmal": "Produkt-Tafel: freigestellte Gerätefotos mit Kategorie (Kochfeld, Backofen, Kühlgerät, Spüle, Armatur, Geschirrspüler)",
+        "belege": [
+          "T15 S.10",
+          "T16 S.5"
+        ]
+      },
+      {
+        "merkmal": "Plan-Abfolge T16: Draufsicht, Perspektive und Blick aus dem Wohnzimmer zur Raumwirkung",
+        "belege": [
+          "T16 S.6",
+          "T16 S.7",
+          "T16 S.8"
+        ]
+      }
+    ],
+    "neue_katalogtypen": [
+      {
+        "vorschlag": "Vorratsschrank mit Pocket-Schiebetür und Eichenböden",
+        "belege": [
+          "T14 S.4"
+        ]
+      },
+      {
+        "vorschlag": "Sitzbank am Zeilenende (niedrige Bank in Sitzhöhe, an der Halbinsel-Kante)",
+        "belege": [
+          "T15 S.6",
+          "T15 S.7"
+        ]
+      },
+      {
+        "vorschlag": "Sideboard auf Fensterbrett-Höhe als Zeilenelement",
+        "belege": [
+          "T15 S.4"
+        ]
+      },
+      {
+        "vorschlag": "Kochfeld mit integriertem Abzug (Downdraft) in der Insel",
+        "belege": [
+          "T16 S.5",
+          "T16 S.8"
+        ]
+      },
+      {
+        "vorschlag": "Kochfeld-Kombination Gas und Induktion mit mittigem Abzug",
+        "belege": [
+          "T15 S.10"
+        ]
+      },
+      {
+        "vorschlag": "Kaffeevollautomat-Nische mit Regal neben dem Hochschrank",
+        "belege": [
+          "T13 S.13"
+        ]
+      },
+      {
+        "vorschlag": "Wandschrankwand mit Rahmenfronten, offenes Regalfach und Schubladenblock 3 x 2",
+        "belege": [
+          "T14 S.3"
+        ]
+      },
+      {
+        "vorschlag": "Kühlgerät 90 cm integrierbar, French-Door-Typ im Hochschrank",
+        "belege": [
+          "T15 S.10"
+        ]
+      },
+      {
+        "vorschlag": "Offene Regalfächer am Inselende zur Wohnseite",
+        "belege": [
+          "T16 S.6"
+        ]
+      },
+      {
+        "vorschlag": "Standherd in Wandnische mit Messing-Details",
+        "belege": [
+          "T12 S.3"
+        ]
+      }
+    ],
+    "offen": [
+      "Maßzahlen an den Bildern nur teilweise lesbar; Längen und Höhen in den Küchen-Einträgen daher leer oder nur ungefähr (T15 Draufsicht). Keine gesicherten Normwerte ableitbar.",
+      "T14 Variante 2 Ansicht: vertikales Maß am linken Rand nicht lesbar.",
+      "T16 Draufsicht: Zahl und Lage der Wandzeilen (L oder U) nicht eindeutig; Insel-Symbol mit Doppelkreis als Kochfeld gedeutet.",
+      "T13: Halbinsel oder U-Form nicht eindeutig (Visualisierung D zeigt eine Seitenwand mit Kochfeld); als halbinsel eingetragen.",
+      "T15 Variante 1: Symbol im Inselausschnitt (Kochfeld oder Spüle) nicht eindeutig.",
+      "Fronten und Griffe bei T14 und bei den Element-Sets 2 und 3 in T16 nicht dargestellt; keine Griffartwerte gesichert.",
+      "Sockel- und Oberschrankhöhen in keinem Dokument angegeben.",
+      "T12: Zeilenfronten sind im Moodboard Edelstahl, in den Renderings glänzend hell; als Plan-Widerspruch notiert, nicht korrigiert.",
+      "Herd (T12) und Kühlgerät 90 cm (T15) noch nicht als Katalogtyp angelegt; siehe neue_katalogtypen."
+    ]
+  }
+}

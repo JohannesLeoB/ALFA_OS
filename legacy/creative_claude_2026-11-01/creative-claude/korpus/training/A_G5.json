@@ -1,0 +1,344 @@
+{
+  "runde": "A",
+  "gruppe": "G5",
+  "gelesen": [
+    {"template": "T12", "seiten": "9/9", "art": "Präsentation", "inhalt": "Küchenvarianten 1.1/1.2/2.1/2.2 als Wechsel aus Material-Moodboard und Raum-Visualisierung: Altbau-Zeile mit Standherd in Wandnische plus Eichen-Insel; keine Maßzeichnung."},
+    {"template": "T13", "seiten": "13/13", "art": "Präsentation", "inhalt": "Moodboard Materialien V1 (warm: Kupfer/Schwarz) und V2 (kühl: Edelstahl/Nickel) mit je 5 Renderings A-E einer U-Küche mit Halbinsel und Hochschrank-Geräte-Wand; keine Maße."},
+    {"template": "T14", "seiten": "6/6", "art": "Präsentation", "inhalt": "Küchenentwurf Variante 1 (Schrankwand mit Pocketdoor-Nische) und Variante 2 (Sideboard-Nische mit Regalen) je als Perspektive und Frontansicht, dazu Foto-Referenzen Pocketdoors; eine Maßlinie (930)."},
+    {"template": "T15", "seiten": "10/10", "art": "Präsentation", "inhalt": "Moodboard, Material-/Elementfotos, drei Layout-Varianten (Zeile + Sideboard/Sitzbank + Insel/Halbinsel) je als Axonometrie und Draufsicht mit Hauptmaßen, Geräte-Seite."},
+    {"template": "T16", "seiten": "8/8", "art": "Präsentation", "inhalt": "Drei Material-Varianten (Elemente Küche 1-3), Produktseite, Perspektive, Blick aus dem Wohnzimmer und Draufsicht einer L-Zeile mit Hochschrank-Geräte-Block, Insel und Esstisch; keine Maße."}
+  ],
+
+  "kuechen": [
+    {
+      "id": "T12-K1",
+      "belege": ["T12 S.2", "T12 S.3", "T12 S.7", "T12 S.9"],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Zeile entlang der Rückwand; in der Wandmitte Nische mit Rahmung, darin Standherd, zwei Regalbretter und Pfannenreling; Insel frei davor, Stirnseite zur Tür-/Fensterseite.",
+        "fenster_tuer": "zweiflügelige Sprossen-Tür bodentief links; Wandvorsprung (Pfeiler) links neben Zeile; Pfeiler/Laibung am rechten Zeilenende.",
+        "abstand_wand_decke": "sehr hoher Altbauraum mit Deckenvoute und Stuckprofil; keine Oberschränke, Zeile endet mit Arbeitsplatte, Wand darüber frei.",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [
+        {"pos": 1, "kategorie": "unterschrank", "typ": "US-SP", "b": null, "h": null, "t": null, "fronten": "links der Herdnische, Fronten im Render nicht auflösbar (2-3 schmale Fronten)", "innen": null, "geraet": "Spüle mit Armatur am linken Ende der Zeile"},
+        {"pos": 2, "kategorie": "sonstiges", "typ": "NEU:Standherd-Nische", "b": null, "h": null, "t": null, "fronten": "Gerät mit 2 Backofentüren + 2 Schubladen, eigene Messing-Griffstangen/Knöpfe", "innen": null, "geraet": "Standherd mit Gaskochfeld, Breite nicht bemaßt (Schätzung 900-1000)"},
+        {"pos": 3, "kategorie": "unterschrank", "typ": "US-T2", "b": null, "h": null, "t": null, "fronten": "2 gleich breite Türen rechts vom Herd; Block ca. 1,7 x Herdbreite (nur Render)", "innen": null, "geraet": null},
+        {"pos": 4, "kategorie": "insel", "typ": "NEU:Insel mit Stirnregal", "b": null, "h": null, "t": null, "fronten": "Längsseite 3 hohe Fronten (S.3), Stirnseite offenes Regalfach mit Büchern, Sockel in Messing roh, Griffmulden in Messing", "innen": "offenes Fach an der Stirn (2 Ebenen)", "geraet": null}
+      ],
+      "geraete_reihenfolge": "Spüle – (kleiner Unterschrank) – Standherd in Nische – 2-türiger Unterschrank (links→rechts, Render S.3)",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": null, "fuellstuecke": null, "stellseiten": "Zeilenende rechts läuft an Pfeiler/Laibung", "wand_decken_anschluss": "Wandnische mit Stuckrahmung bis zur Voute, Regalbretter in Messing direkt auf Nischenwand", "sockel": "Zeile: niedriger, zurückgesetzter Sockel (Render); Insel: Sockel aus Messing roh", "eckloesung": null},
+      "griffe": "Insel: Griffmulden in Messing roh (V2.1: umlaufende Messing-Griffmulde); Zeile: keine Griffe sichtbar (grifflos/Kantenmulde vermutet)",
+      "material_farbe": "Zeile: Fronten und Arbeitsplatte Edelstahl 5 mm (V1.x matt-fein, V2.x gebürstet); Insel: Eiche (Fronten + AP), in V2.2 AP Edelstahl; Messing roh für Wandboard, Reling, Inselsockel, Griffmulden; Herd englischgrün (V1.x) oder Edelstahl gebürstet (V2.x) mit Messing; Spritzschutz Mosaik oder vertikale Stab-Fliese in Elfenbein; Boden Fischgrät-Parkett.",
+      "plan_widersprueche": [
+        "Moodboard nennt Zeilenfronten Edelstahl 5 mm, Render zeigt glänzende greige/hellgraue lackierte Fronten und helle AP (T12 S.2 vs S.3)",
+        "Mosaik-Spritzschutz (V1.1, V2.2) wird im Render als glatte graue Nischenwand gezeigt (T12 S.3, S.9)"
+      ]
+    },
+    {
+      "id": "T13-K1",
+      "belege": ["T13 S.3", "T13 S.4", "T13 S.5", "T13 S.6", "T13 S.7"],
+      "form": "U",
+      "raum": {
+        "wandbezug": "U-Küche: Zeile unter breitem Fensterband (Spüle), Zeile an Seitenwand mit Fenster (Auszugsblöcke), Halbinsel mit Kochfeld freistehend zum Raum, rechts Hochschrank-Geräte-Wand an der Außenwand; Zuordnung der Schenkel nur aus Renderings, kein Grundriss.",
+        "fenster_tuer": "vierflügeliges Sprossen-Fensterband in der Stirnwand (Spüle davor, Fenster bis auf AP-Höhe), schmales Fenster in der linken Seitenwand, bodentiefe Balkon-/Terrassentür rechts; Wandscheibe links, davor freistehender Eichen-Hochschrank-Block.",
+        "abstand_wand_decke": "Hochschrank-Wand reicht fast bis zur Decke (ca. 2750-2800, Schätzung); sichtbare Restfuge oben.",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": 20, "oberschrank_uk": null, "hochschrank_h": 2750, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [
+        {"pos": 1, "kategorie": "hochschrank", "typ": "NEU:Hochschrank zweiteilig (Tür unten, Aufsatz oben)", "b": null, "h": 2750, "t": null, "fronten": "Eichen-Block links: 2 Spalten, je unten Tür (ca. 2/3 Höhe) + Aufsatz-Tür (ca. 1/3); keine Griffe sichtbar", "innen": null, "geraet": null},
+        {"pos": 2, "kategorie": "insel", "typ": "NEU:Halbinsel mit Kochfeld", "b": null, "h": null, "t": null, "fronten": "Stirn zum Raum: 4 gleich breite Türen; innenseitig Kochfeld-UK mit 2 Auszügen (oben flach, unten höher) und Türen", "innen": null, "geraet": "Induktionskochfeld (2 Zonen / Flex) in AP der Halbinsel"},
+        {"pos": 3, "kategorie": "hochschrank", "typ": "NEU:Hochschrank Gerätenische 2 Backöfen + Auszüge", "b": 600, "h": 2750, "t": null, "fronten": "Wand aus 4 Spalten à ca. 600 (Schätzung aus Gerätenische): außen je 1 hohe Tür (unten ca. 1900) + Aufsatz (ca. 850-900); Mitte 2 Spalten: oben Aufsatz, darunter Tür über Gerät (ca. 420), 2 Geräte nebeneinander (ca. 725-1460 über Boden), darunter je 2 Auszüge (ca. 265 : 430)", "innen": null, "geraet": "2 Einbau-Backöfen/Kompaktgeräte nebeneinander"},
+        {"pos": 4, "kategorie": "unterschrank", "typ": "US-SP", "b": null, "h": null, "t": null, "fronten": "Spülzeile: links Auszugsblock mit 3 Auszügen, Spülenschrank mit Türen, Stangengriffe", "innen": null, "geraet": "Unterbau-Spüle, großes Einzelbecken, separate Handbrause"},
+        {"pos": 5, "kategorie": "unterschrank", "typ": "US-Sn", "b": null, "h": null, "t": null, "fronten": "Seitenwand-Zeile: 2 Spalten x 3 Auszüge (Spalte ca. 2 Türbreiten, Höhen etwa 1 : 1,3 : 2, perspektivisch verzerrt) + 1 Tür mit Knopf", "innen": null, "geraet": null},
+        {"pos": 6, "kategorie": "unterschrank", "typ": "US-EK", "b": 450, "h": null, "t": null, "fronten": "Eck-/Anschlussschrank zwischen Spülzeile und Hochschrank-Wand: 1 Tür mit Knopf (Breite Schätzung)", "innen": null, "geraet": "Kaffeemaschine auf AP darüber"},
+        {"pos": 7, "kategorie": "nischenregal", "typ": "NEU:Schwebende Regalböden beleuchtet", "b": null, "h": null, "t": null, "fronten": "2 Regalböden (Eiche) in der Ecke über der Kaffee-Station, kein Oberschrank", "innen": "LED-Beleuchtung in den Böden", "geraet": null}
+      ],
+      "geraete_reihenfolge": "Seitenwand: Kochfeld (Halbinsel) – Auszugsblöcke; Fensterwand: Spüle am Fenster – Eck-US mit Kaffee-Station – Hochschrank-Wand mit 2 Öfen (grob, aus Renderings)",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": null, "fuellstuecke": null, "stellseiten": "Stellseite der Hochschrank-Wand und Halbinsel in Frontmaterial (Linoleum), sichtbar tief", "wand_decken_anschluss": "Hochschrank-Wand bis knapp unter Decke, Fuge dünn", "sockel": "Sockel, Blende und Stellseite im selben Material wie die Fronten, niedrig und zurückgesetzt (ca. 60-100, Schätzung)", "eckloesung": "Spülzeile läuft in Eck-US mit Einzeltür aus"},
+      "griffe": "V1 schwarz matt: Stangengriff (geriffelt) an Auszügen/Hochschrank-Flanken (vertikal), Knopf an Türen, große runde Knöpfe an Halbinsel unter Kochfeld; V2 Satin-Nickel: Stangengriff und T-Knopf; Aufsatz-Türen und Eichen-Block ohne sichtbare Griffe (Push/grifflos); Türen über den Öfen mit 2 kleinen Knöpfen.",
+      "material_farbe": "Front, Sockel, Blende, Stellseite Linoleum in Pulverrosé (monolithisch); Hochschrank-Block links Eiche; AP Naturstein beige-geädert, 20 mm; Boden helles Eichen-Landhausdielenparkett; V1: Kupfer (Spüle, Armatur) + schwarze Griffe; V2: Edelstahl (Spüle, Spiralarmatur, Kochendwasser-Armatur) + Nickel-Griffe.",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T14-K1",
+      "belege": ["T14 S.2", "T14 S.3", "T14 S.4"],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Schrankwand über die ganze Wandbreite, zwei Blöcke links und rechts, dazwischen ein Wandvorsprung (Pfeiler, ca. 340 breit, Schätzung); davor freie Insel mit abgerundeter Stirnseite.",
+        "fenster_tuer": "nicht erkennbar; schmaler Wandstreifen/Laibung links außen.",
+        "abstand_wand_decke": "Aufsatz-Fronten bis ca. 2880, Raumhöhe ca. 2950 (Schätzung aus der einen Maßlinie 930 bei orthogonaler Ansicht); Fuge oben ca. 50-70.",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [4100, 2320],
+      "hoehen": {"sockel": 100, "ok_ap": 930, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": 2000, "decke": 2950},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [
+        {"pos": 1, "kategorie": "hochschrank", "typ": "NEU:Hochschrank zweiteilig (Tür unten, Aufsatz oben)", "b": 505, "h": 2000, "t": null, "fronten": "Linker Block: 4 Spalten, je unten Tür (ca. 2000) + Aufsatz-Tür (ca. 900); Breiten ca. 505 / 590 / 575 / 590 (Schätzung aus Maßlinie)", "innen": null, "geraet": null},
+        {"pos": 2, "kategorie": "nischenregal", "typ": "NEU:Pocketdoor-Nische", "b": 1190, "h": 2000, "t": null, "fronten": "2 Spalten breit (ca. 1190); Pocketdoors (Türen fahren in den Korpus), darüber 2 Aufsatz-Türen; offen: 2 Regalböden, Arbeitsfläche ca. 930 hoch, darunter 6 Auszüge (2 x 3, Höhen ca. 290 : 215 : 235)", "innen": "Regalböden, Auszüge, Gerätenische (Foto-Referenz: Toaster/Wasserkocher)", "geraet": "Kleingeräte-Station"},
+        {"pos": 3, "kategorie": "hochschrank", "typ": "NEU:Hochschrank zweiteilig (Tür unten, Aufsatz oben)", "b": 580, "h": 2000, "t": null, "fronten": "1 Tür unten + 1 Aufsatz-Tür, Abschluss des linken Blocks", "innen": null, "geraet": null},
+        {"pos": 4, "kategorie": "hochschrank", "typ": "NEU:Hochschrank Gerätenische mit Backofen", "b": 560, "h": 2880, "t": null, "fronten": "Rechter Block: 4 Spalten (ca. 420 / 560 / 560 / 555); Aufsatz ca. 1110 (ab ca. 1775); Mittelreihe Türen ca. 775 (930-1705); Backofen in Spalte 2: Fach/Klappe darüber (ca. 1230-1705), Ofenkopf bei ca. 1210, Unterteil durch Insel verdeckt", "innen": null, "geraet": "Einbau-Backofen"},
+        {"pos": 5, "kategorie": "insel", "typ": "NEU:Insel mit abgerundeter Stirn", "b": null, "h": 930, "t": null, "fronten": "in der Frontansicht geschlossene Fläche mit einer Fuge; Stirn halbrund", "innen": null, "geraet": null}
+      ],
+      "geraete_reihenfolge": "nur Backofen im rechten Hochschrankblock; Spüle/Kochfeld im Entwurf nicht dargestellt",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": null, "fuellstuecke": null, "stellseiten": "Wandvorsprünge zwischen und neben den Blöcken fassen die Schrankwand ein", "wand_decken_anschluss": "Aufsatz-Reihe läuft nahezu bis zur Decke", "sockel": "umlaufendes Sockelband ca. 100 (Strich in der Frontansicht)", "eckloesung": null},
+      "griffe": "in den Zeichnungen keine Griffe; Foto-Referenzen zeigen grifflose Fronten und schmale Griffleisten",
+      "material_farbe": "nur Strichzeichnung, keine Material-/Farbangabe; Foto-Referenzen: Eiche innen, helle matte Fronten.",
+      "plan_widersprueche": [
+        "Pocketdoor-Nische ist in der Frontansicht (S.3) mit Blenden/Klappen gezeichnet, in der Perspektive (S.2) offen mit Regalen und Auszügen; Türzustand nicht einheitlich dargestellt"
+      ]
+    },
+    {
+      "id": "T14-K2",
+      "belege": ["T14 S.5", "T14 S.6"],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Wie V1, aber links Hochschrank-Block nur 3 Spalten; Mitte offene Wandnische mit Sideboard und zwei Regalböden; rechts gleicher Geräteblock; Insel davor mit runder Stirn.",
+        "fenster_tuer": "nicht erkennbar.",
+        "abstand_wand_decke": "Raumhöhe ca. 2950 (Schätzung); Nischenwand zwischen Blöcken unverkleidet bis zur Decke.",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [1720, 2370, 2320],
+      "hoehen": {"sockel": 100, "ok_ap": 930, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": 2000, "decke": 2950},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [
+        {"pos": 1, "kategorie": "hochschrank", "typ": "NEU:Hochschrank zweiteilig (Tür unten, Aufsatz oben)", "b": 470, "h": 2000, "t": null, "fronten": "Linker Block 3 Spalten (ca. 470 / 555 / 560), unten Tür + Aufsatz-Tür", "innen": null, "geraet": null},
+        {"pos": 2, "kategorie": "unterschrank", "typ": "US-T2", "b": 2370, "h": 830, "t": null, "fronten": "Sideboard mit 4 Türen à ca. 575-600; Oberkante 930 (einzige bemaßte Höhe, Maßlinie vom Boden)", "innen": "Boden", "geraet": null},
+        {"pos": 3, "kategorie": "nischenregal", "typ": "NEU:Schwebende Wandregalböden", "b": 2370, "h": null, "t": null, "fronten": "2 durchgehende dünne Regalböden über dem Sideboard bei ca. 1590 und ca. 1910, ohne Oberschränke", "innen": null, "geraet": null},
+        {"pos": 4, "kategorie": "hochschrank", "typ": "NEU:Hochschrank Gerätenische mit Backofen", "b": 560, "h": 2880, "t": null, "fronten": "wie T14-K1 Pos 4", "innen": null, "geraet": "Einbau-Backofen"}
+      ],
+      "geraete_reihenfolge": "nur Backofen rechts",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": null, "fuellstuecke": null, "stellseiten": "Sideboard stößt links an Hochschrank-Block, rechts an Wandvorsprung (Fuge sichtbar)", "wand_decken_anschluss": null, "sockel": "ca. 100, durchlaufend", "eckloesung": null},
+      "griffe": "in der Zeichnung nicht dargestellt",
+      "material_farbe": "nicht angegeben.",
+      "plan_widersprueche": [
+        "Maßlinie 930 reicht in der Frontansicht bis zur Sideboard-Oberkante; im rechten Block liegt die Insel-Oberkante auf gleicher Höhe, Beschriftung nur einmal (T14 S.6)"
+      ]
+    },
+    {
+      "id": "T15-K1",
+      "belege": ["T15 S.4", "T15 S.5", "T15 S.10"],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Zeile mit Spüle an einer Wand, am rechten Zeilenende ein langer Hochschrank-Block quer zur Zeile an der Seitenwand; am linken Zeilenende Sideboard/Sitzbank auf Fensterbrett-Höhe; freistehende Insel gegenüber.",
+        "fenster_tuer": "Fenster hinter dem Sideboard (Fensterbrett-Höhe als Sideboard-Höhe); weitere Wandvorsprünge links und rechts.",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": 1900
+      },
+      "laengen_mm": [3050, 2163, 1572],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": 700, "hochschrank": 467, "oberschrank": null, "insel": 1200},
+      "schraenke": [
+        {"pos": 1, "kategorie": "unterschrank", "typ": "US-SP", "b": null, "h": null, "t": 700, "fronten": "Zeile 3050 lang mit 4 Fronten; Spüle ca. 1,8 m vom linken Zeilenende, Becken ca. 500 x 400 (Plan grob)", "innen": null, "geraet": "Unterbau-Spüle Edelstahl"},
+        {"pos": 2, "kategorie": "hochschrank", "typ": "NEU:Kühl-Gefrier-Hochschrankblock", "b": 1572, "h": null, "t": 467, "fronten": "Block 467 x 1572 quer zur Zeile; Front in 2 Zonen geteilt (Fuge ca. in halber Höhe)", "innen": null, "geraet": "Kühl-Gefrier-Kombi 90 cm, Backofen"},
+        {"pos": 3, "kategorie": "insel", "typ": "NEU:Insel mit Kochfeld", "b": 2163, "h": null, "t": 1200, "fronten": "Längsseite 4 Fronten, Kochfeld mittig-leicht versetzt (ca. 760 x 520, Plan grob), Muldenlüfter rund", "innen": null, "geraet": "Kochfeld Gas + Induktion mit integriertem Muldenabzug"},
+        {"pos": 4, "kategorie": "sonstiges", "typ": "NEU:Sideboard/Sitzbank niedrig", "b": null, "h": null, "t": 447, "fronten": "Bank/Sideboard auf Höhe Fensterbrett, Tiefe ca. 447 (Lesbarkeit gering)", "innen": null, "geraet": null}
+      ],
+      "geraete_reihenfolge": "Zeile: Sideboard – Spüle – Hochschrank mit Kühlgerät/Backofen; Kochfeld getrennt in der Insel; Geschirrspüler laut Geräte-Seite vorhanden, Position nicht erkennbar",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": null, "fuellstuecke": null, "stellseiten": "Hochschrank-Block sichtbar tief ohne Passblende zur Zeile", "wand_decken_anschluss": null, "sockel": "Zeile mit Sockel/Schattenfuge, Insel mit Schattenfuge unter der Front", "eckloesung": "Zeile und Hochschrank-Block bilden Winkel an der Seitenwand"},
+      "griffe": "Griffmulde in Frontmaterial (Linoleum); Edelstahl-Insel grifflos mit abgesetzter Kante; Auszüge innen Eiche",
+      "material_farbe": "Zeilen-Fronten Linoleum Pulverrosé; Zeilen-AP heller Naturstein creme mit feiner Äderung; Insel AP und Fronten Edelstahl matt-gebürstet; Schubkästen Eiche mit Fingerzinken.",
+      "plan_widersprueche": [
+        "Hochschrank-Block nur 467 tief, Geräte-Seite nennt Kühl-Gefrier-Kombi 90 cm (Gerätetiefe meist größer): Hauptmaß möglicherweise nicht passend oder Bezug der Maßlinie anders (T15 S.5 vs S.11)",
+        "Insel-Tiefe in der Perspektive scheint ein anderer Wert als 1200 in der Draufsicht (Zahl schwer lesbar, T15 S.5)"
+      ]
+    },
+    {
+      "id": "T15-K2",
+      "belege": ["T15 S.6", "T15 S.7"],
+      "form": "halbinsel",
+      "raum": {
+        "wandbezug": "Wie V1, aber Insel auf 2688 verlängert und an die Hochschrank-/Seitenwand-Seite herangeführt (Halbinsel); links Sitzbank als Winkel an der Zeile.",
+        "fenster_tuer": "wie V1.",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": 1600
+      },
+      "laengen_mm": [2688, 1590],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": 700, "hochschrank": 450, "oberschrank": null, "insel": 1200},
+      "schraenke": [
+        {"pos": 1, "kategorie": "insel", "typ": "NEU:Halbinsel mit Kochfeld", "b": 2688, "h": null, "t": 1200, "fronten": "5 Fronten auf der Längsseite, Kochfeld mit Muldenlüfter", "innen": null, "geraet": "Kochfeld"},
+        {"pos": 2, "kategorie": "unterschrank", "typ": "US-SP", "b": null, "h": null, "t": 700, "fronten": "Zeile mit 4 Fronten und Spüle", "innen": null, "geraet": "Spüle"},
+        {"pos": 3, "kategorie": "sonstiges", "typ": "NEU:Sitzbank niedrig", "b": null, "h": null, "t": null, "fronten": "Winkelbank am Zeilenende, Sitzfläche tiefer als AP", "innen": null, "geraet": null}
+      ],
+      "geraete_reihenfolge": "wie K1",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": null, "fuellstuecke": null, "stellseiten": null, "wand_decken_anschluss": null, "sockel": null, "eckloesung": null},
+      "griffe": "wie K1",
+      "material_farbe": "wie K1.",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T15-K3",
+      "belege": ["T15 S.8", "T15 S.9"],
+      "form": "halbinsel",
+      "raum": {
+        "wandbezug": "Zeile mit Sideboard-Kopf und Hochschrank-Block wie V2; Insel 2688 lang parallel zur Zeile, laut Titel ohne Verbindung zur Zeile; über der Zeile eine Wandleuchte/Leiste.",
+        "fenster_tuer": "wie V1.",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": 1650
+      },
+      "laengen_mm": [2688, 1580],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": 700, "hochschrank": null, "oberschrank": null, "insel": 1200},
+      "schraenke": [
+        {"pos": 1, "kategorie": "insel", "typ": "NEU:Insel mit Kochfeld", "b": 2688, "h": null, "t": 1200, "fronten": "5 Fronten Längsseite", "innen": null, "geraet": "Kochfeld"},
+        {"pos": 2, "kategorie": "unterschrank", "typ": "US-SP", "b": null, "h": null, "t": 700, "fronten": "Zeile 5 Fronten (rechte Front breiter)", "innen": null, "geraet": "Spüle"}
+      ],
+      "geraete_reihenfolge": "wie K1",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": null, "fuellstuecke": null, "stellseiten": null, "wand_decken_anschluss": "Lichtleiste/Wandboard über der Zeile", "sockel": null, "eckloesung": null},
+      "griffe": "wie K1",
+      "material_farbe": "wie K1.",
+      "plan_widersprueche": [
+        "Titel nennt Halbinsel ohne Verbindung, die Anlage ist faktisch eine freistehende Insel (T15 S.8)"
+      ]
+    },
+    {
+      "id": "T16-K1",
+      "belege": ["T16 S.2", "T16 S.3", "T16 S.4", "T16 S.6", "T16 S.7", "T16 S.8"],
+      "form": "L",
+      "raum": {
+        "wandbezug": "L-Zeile entlang zweier Wände (lange Schenkelzeile mit Spüle, kurze Rückwand-Zeile); darin freistehender Hochschrank-Geräte-Block (Backofen, Flügeltür, offenes Hochregal) und Insel mit Kochfeld; Esstisch mit 5 Stühlen am Raumende.",
+        "fenster_tuer": "Doppelflügeltür im unteren Bereich der Draufsicht; Rundbogen-Durchgänge zum Wohnzimmer und seitlich; Wandvorsprünge im Raum.",
+        "abstand_wand_decke": "Perspektive: wandhohe Fronten über der AP-Zeile an der Rückwand (5 hohe Felder), Details nicht bemaßt.",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {"sockel": 100, "ok_ap": null, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [
+        {"pos": 1, "kategorie": "unterschrank", "typ": "US-SP", "b": null, "h": null, "t": null, "fronten": "lange Zeile mit Spüle mittig-links; Türen und Auszüge im Wechsel (Auszüge nahe der Ecke)", "innen": null, "geraet": "Spüle"},
+        {"pos": 2, "kategorie": "hochschrank", "typ": "NEU:Hochschrank Gerätenische mit Backofen", "b": null, "h": null, "t": null, "fronten": "freistehender Block mit Backofen mittig, 2-flügelige Schwenktür, rechts offenes Hochregal mit 5 Fächern", "innen": "offene Fächer", "geraet": "Einbau-Backofen"},
+        {"pos": 3, "kategorie": "insel", "typ": "NEU:Insel mit Stirnregal", "b": null, "h": null, "t": null, "fronten": "Kochfeld mit Muldenabzug in der AP, Stirnseite offenes Regal mit 3 Fächern; Drauf-Symbol rund (vermutlich Auszug/Müllsystem)", "innen": "offenes Regal an der Stirn", "geraet": "Kochfeld mit Muldenlüfter"}
+      ],
+      "geraete_reihenfolge": "Spüle in langer Zeile; Backofen im Hochschrank-Block an der Rückwand; Kochfeld auf der Insel",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": null, "fuellstuecke": null, "stellseiten": null, "wand_decken_anschluss": null, "sockel": "Zeile steht mit Freiraum für Saugroboter (Sockel-/Fußhöhe mindestens ca. 90-100, Schätzung)", "eckloesung": "Winkel der L-Zeile ohne erkennbare Eckschrank-Lösung"},
+      "griffe": "K1: Bügelgriff flach, weiß, LUV-Typ waagrecht; K2/K3: nicht dargestellt (grifflos oder strukturierte Fronten)",
+      "material_farbe": "K1: Fronten Eiche hell, Auszüge Eiche, AP Naturstein grau-grün, Kochendwasser-Armatur Edelstahl, Steckdosen weiß; K2: MDF lackiert marineblau mit Längsstruktur, Armatur schwarz, AP heller Naturstein versiegelt; K3: MDF lackiert salbeigrün mit eingearbeiteter Kassettenkante, AP stark geäderter Naturstein, Steckdosen graublau; Auszüge in allen Varianten Eiche; Steckdosen als runde Porzellan-Optik.",
+      "plan_widersprueche": []
+    }
+  ],
+
+  "wissen": {
+    "griffarten": [
+      {"art": "Griffmulde / Kantenmulde (in Frontmaterial oder Messing)", "wo": "Insel, Zeilenfronten", "haeufigkeit": 2, "belege": ["T12 S.2", "T12 S.7", "T15 S.3", "T15 S.2"]},
+      {"art": "Stangengriff schwarz oder Nickel, horizontal an Auszügen, vertikal an Hochschrank-Flanken", "wo": "Auszüge, Hochschrank", "haeufigkeit": 1, "belege": ["T13 S.2", "T13 S.7", "T13 S.8", "T13 S.13"]},
+      {"art": "Knopf (schwarz geriffelt / Nickel T-Form), auch große runde Knöpfe unter Kochfeld", "wo": "Türen, Kochfeld-UK", "haeufigkeit": 1, "belege": ["T13 S.2", "T13 S.7", "T13 S.8"]},
+      {"art": "Bügelgriff flach weiß auf Holzfront", "wo": "Zeile", "haeufigkeit": 1, "belege": ["T16 S.2"]},
+      {"art": "grifflos / ohne sichtbaren Griff (Aufsatz-Türen, Hochschrank in Eiche, Zeichnungen)", "wo": "Aufsatz, Schrankwand", "haeufigkeit": 3, "belege": ["T13 S.3", "T14 S.3", "T15 S.5"]}
+    ],
+    "layouts_anordnungen": [
+      {"muster": "Zeile an der Wand plus freistehende Insel davor, Kochfeld oft auf der Insel, Spüle in der Zeile", "belege": ["T12 S.3", "T15 S.4", "T15 S.6", "T15 S.8", "T16 S.9"]},
+      {"muster": "Standherd in Wandnische mit Regalbrettern und Reling statt Oberschränken", "belege": ["T12 S.3"]},
+      {"muster": "U-Küche mit Halbinsel (Kochfeld in der Halbinsel), Spüle unter dem Fensterband, Geräte-Hochschrankwand an der Seitenwand", "belege": ["T13 S.3", "T13 S.5", "T13 S.6"]},
+      {"muster": "Schrankwand zwischen Wandvorsprüngen mit zentraler Pocketdoor-Nische (Kleingeräte-Station) und Insel davor", "belege": ["T14 S.2", "T14 S.4"]},
+      {"muster": "Alternative Wandmitte: Sideboard mit Türen und schwebenden Regalen statt Nische", "belege": ["T14 S.5", "T14 S.6"]},
+      {"muster": "Sideboard/Sitzbank auf Fensterbrett-Höhe als Verlängerung der Zeile", "belege": ["T15 S.4", "T15 S.6"]},
+      {"muster": "Backofen im Hochschrank-Block, Kühl-Gefrier-Kombi daneben als eigener Block", "belege": ["T13 S.7", "T14 S.3", "T15 S.11", "T16 S.6"]}
+    ],
+    "innenausstattung": [
+      {"element": "Schubkästen/Auszüge in Eiche innen, auch hinter Edelstahl- und Linoleum-Fronten", "kontext": "durchgehendes Detail in vielen Entwürfen", "belege": ["T15 S.3", "T16 S.2", "T16 S.3", "T16 S.4"]},
+      {"element": "Pocketdoor-Nische: Regalböden, Arbeitsfläche, 6 Auszüge darunter, Kleingeräte-Station", "kontext": "Schrankwand zwischen Pfeilern", "belege": ["T14 S.2", "T14 S.4"]},
+      {"element": "Breite Topf-Auszugsblöcke: 2 Spalten x 3 Auszüge", "kontext": "Seitenwand-Zeile", "belege": ["T13 S.6", "T13 S.12"]},
+      {"element": "Geräte-Hochschrank: je Gerät darunter 2 Auszüge (flach : hoch)", "kontext": "Öfen nebeneinander", "belege": ["T13 S.7", "T13 S.13"]},
+      {"element": "Offene Regale: Messing-Regalbretter und Reling in Wandnische, beleuchtete Regalböden in der Ecke, offene Stirnfächer an Insel (Bücher)", "kontext": "Wand/Insel", "belege": ["T12 S.3", "T13 S.7", "T16 S.6"]},
+      {"element": "Freiraum unter der Zeile für Saugroboter", "kontext": "Sockel/Fußbereich", "belege": ["T16 S.2", "T16 S.3", "T16 S.4"]}
+    ],
+    "raumstellung": [
+      {"regel_oder_muster": "Hochschrankblöcke füllen Wandabschnitte zwischen Wandvorsprüngen; Pfeiler werden nicht überbaut, sondern als Trenner genutzt", "belege": ["T14 S.3", "T14 S.6"]},
+      {"regel_oder_muster": "Spüle direkt vor dem Fenster, Fenster bis auf AP-Höhe heruntergezogen; Seitenfenster mit Wandleuchten daneben", "belege": ["T13 S.3", "T13 S.6", "T13 S.7"]},
+      {"regel_oder_muster": "Hohe Altbauräume: keine Oberschränke, Wandnische und Regalbretter statt Aufbauten", "belege": ["T12 S.3"]},
+      {"regel_oder_muster": "Freistehender Hochschrank-Block als Raumtrenner mit Rundbogen-Durchgängen", "belege": ["T16 S.6", "T16 S.7", "T16 S.8"]},
+      {"regel_oder_muster": "Insel ersetzt Halbinsel je nach Variante; Gang und Insellänge werden zwischen Varianten verändert", "belege": ["T15 S.5", "T15 S.7", "T15 S.9"]}
+    ],
+    "raster_masse": [
+      {"beobachtung": "Türbreiten in der Schrankwand streuen: ca. 420 / 470 / 505 / 560 / 575 / 590 (Schätzung aus Maßlinie 930, Annahme orthogonale Ansicht); Hauptmasse bei 560-590, kein einheitliches Raster", "belege": ["T14 S.3", "T14 S.6"]},
+      {"beobachtung": "Geräte-Hochschrank 4 Spalten à ca. 600 (aus Gerätenische) = ca. 2400 Wandbreite; Spaltenbreite folgt dem Gerät", "belege": ["T13 S.7", "T13 S.13"]},
+      {"beobachtung": "Zeilenlänge 3050, Insel 2163 bzw. 2688 lang, jeweils frei gewählt; Inselfronten 4 bis 5 gleich breite Felder", "belege": ["T15 S.5", "T15 S.7", "T15 S.9"]},
+      {"beobachtung": "Pocketdoor-Nische 2 Spalten (ca. 1190), Sideboard 4 Türen (ca. 2370)", "belege": ["T14 S.3", "T14 S.6"]},
+      {"beobachtung": "Maße im Plan treten nur als wenige Hauptmaße auf (Längen, Tiefen, eine Höhe); Details werden aus Renderings geschlossen", "belege": ["T14 S.6", "T15 S.5", "T15 S.7"]}
+    ],
+    "hoehenbereiche": [
+      {"groesse": "ok_ap", "werte": [930], "belege": ["T14 S.6"]},
+      {"groesse": "hochschrank", "werte": [2000, 2750, 2880], "belege": ["T14 S.3", "T13 S.7"]},
+      {"groesse": "hochschrank_teilung", "werte": [1740, 1900, 2000], "belege": ["T14 S.3", "T13 S.7"]},
+      {"groesse": "sockel", "werte": [100], "belege": ["T14 S.3", "T14 S.6"]},
+      {"groesse": "raumhoehe", "werte": [2950], "belege": ["T14 S.6"]},
+      {"groesse": "geraeteeinbau_ofen", "werte": [725, 1210, 1460], "belege": ["T13 S.7", "T14 S.3"]},
+      {"groesse": "sideboard_regalboeden", "werte": [1590, 1910], "belege": ["T14 S.6"]},
+      {"groesse": "ap_d", "werte": [20], "belege": ["T13 S.2"]}
+    ],
+    "geraete_beziehungen": [
+      {"beziehung": "Spüle ohne GSP-Nachbar erkennbar; Spüle sitzt am Fenster oder zeilenmittig, Kochfeld getrennt davon auf Insel/Halbinsel", "belege": ["T13 S.5", "T15 S.5", "T16 S.9"]},
+      {"beziehung": "2 Backöfen nebeneinander im Hochschrank, Fach/Tür darüber, 2 Auszüge darunter", "belege": ["T13 S.7"]},
+      {"beziehung": "Backofen im Hochschrank in der 2. Spalte eines Geräteblocks, Fach darüber", "belege": ["T14 S.3"]},
+      {"beziehung": "Kaffee-Station in der Ecke zwischen Zeile und Hochschrank-Wand, Regalböden darüber", "belege": ["T13 S.7"]},
+      {"beziehung": "Muldenlüfter-Kochfeld auf Insel statt Dunstabzugshaube", "belege": ["T15 S.11", "T16 S.5"]}
+    ],
+    "laufwege_ergonomie": [
+      {"beobachtung": "Gang Zeile-Insel aus Planmaßstab: V1 ca. 1900, V2 ca. 1600, V3 ca. 1650 (grob, ±100)", "masse": [1900, 1600, 1650], "belege": ["T15 S.5", "T15 S.7", "T15 S.9"]},
+      {"beobachtung": "Inseltiefe ca. 1200 in allen drei Varianten", "masse": [1200], "belege": ["T15 S.5", "T15 S.7"]},
+      {"beobachtung": "Hochschrank-Block an der Seitenwand 1572 lang, 450-470 tief", "masse": [1572, 467], "belege": ["T15 S.5", "T15 S.7", "T15 S.9"]}
+    ],
+    "anschluesse_blenden_fuellstuecke": [
+      {"detail": "Sockel, Blende und Stellseite im Frontmaterial, durchgehend monolithische Optik", "masse": [], "belege": ["T13 S.2"]},
+      {"detail": "Sockel als Messing-Profil an der Insel; Messing-Streifen zwischen Deckplatte und Korpus", "masse": [], "belege": ["T12 S.2", "T12 S.7"]},
+      {"detail": "Wandvorsprünge als Trenner zwischen Schrankblöcken, Fuge sichtbar zum Sideboard", "masse": [340], "belege": ["T14 S.3", "T14 S.6"]},
+      {"detail": "Zeilentiefe 700 im Plan (größer als üblicher Korpus, ggf. inkl. Wandvorsatz)", "masse": [700], "belege": ["T15 S.5", "T15 S.9"]}
+    ],
+    "stil": [
+      {"merkmal": "Reduziert, wenige Materialien je Entwurf (Frontmaterial monolithisch inkl. Sockel/Blende/Stellseite); Kontrast Metall/Holz/Stein", "belege": ["T12 S.2", "T13 S.2", "T15 S.2"]},
+      {"merkmal": "Edelstahl 5 mm für Fronten und AP (matt/gebürstet) in Verbindung mit Messing roh", "belege": ["T12 S.2", "T12 S.6", "T15 S.2"]},
+      {"merkmal": "Linoleum in Pulverrosé als Frontmaterial, kombiniert mit Naturstein und Eiche", "belege": ["T13 S.2", "T15 S.2"]},
+      {"merkmal": "Lackierte MDF-Fronten in kräftigen Farben mit Struktur oder Kassette, Naturstein als AP", "belege": ["T16 S.3", "T16 S.4"]},
+      {"merkmal": "Schwanenhals-Armatur plus separater Kochendwasser-Hahn; Armaturenfinish passend zu Griffen (Kupfer+Schwarz oder Edelstahl+Nickel)", "belege": ["T13 S.2", "T13 S.8", "T16 S.2"]},
+      {"merkmal": "Wiederkehrende Details: runde Porzellan-Optik-Steckdosen, Wandleuchten, Eichen-Auszüge, offene Regale mit Messing", "belege": ["T12 S.3", "T13 S.12", "T16 S.2"]}
+    ],
+    "zeichenstil": [
+      {"merkmal": "Reine Strichzeichnung ohne Farbe: Perspektive plus Frontansicht, Frontfläche mit Rahmenlinie in der Fuge gezeichnet", "belege": ["T14 S.2", "T14 S.3"]},
+      {"merkmal": "Axonometrie von oben mit Beschriftung im Monospace-Stil unter dem Bild ('Zeile mit ...'); Draufsicht und Perspektive nebeneinander mit wenigen Hauptmaßen", "belege": ["T15 S.4", "T15 S.5"]},
+      {"merkmal": "Raum als Volumen mit Wandvorsprüngen, Rundbögen und Türen mitgezeichnet; Möblierung (Esstisch, Stühle) in der Draufsicht", "belege": ["T16 S.6", "T16 S.8"]},
+      {"merkmal": "Bemaßung sparsam: Länge, Tiefe, einzelne Höhe; Zahlen sehr klein", "belege": ["T14 S.6", "T15 S.5"]},
+      {"merkmal": "Gestrichelte Linien für verdeckte Kanten in der Draufsicht", "belege": ["T16 S.8"]}
+    ],
+    "moodboard_praesentation": [
+      {"merkmal": "Seitentypen: Deckblatt (nur Titel, Projekt, Datum), Moodboard mit überlappenden Material-Freistellern und Mono-Beschriftung, Visualisierungen als Vollbild-Render, Varianten-Seiten, Geräte-/Produkt-Seiten", "belege": ["T12 S.1", "T12 S.2", "T12 S.3", "T15 S.11", "T16 S.5"]},
+      {"merkmal": "Variantenmatrix 1.1/1.2/2.1/2.2: Hauptvariante bestimmt Metallfarbe der Geräte/Fronten, Unteroption bestimmt Spritzschutz und Armatur", "belege": ["T12 S.2", "T12 S.4", "T12 S.6", "T12 S.8"]},
+      {"merkmal": "Materialien V1 (warm) und V2 (kühl) mit identischen 5 Kameraperspektiven A-E für direkten Vergleich", "belege": ["T13 S.3", "T13 S.9", "T13 S.7", "T13 S.13"]},
+      {"merkmal": "Layout-Varianten als Zeichnungsseiten mit Kurzbeschreibung; Elemente-Seiten pro Küchenvariante mit gleichem Aufbau (Steckdose, Front, Armatur, AP, Auszug)", "belege": ["T15 S.4", "T16 S.2", "T16 S.3", "T16 S.4"]},
+      {"merkmal": "Foto-Referenzseiten für Funktionsideen (Pocketdoors) und Detailfotos (Auszug, Griffmulde)", "belege": ["T14 S.4", "T15 S.3"]},
+      {"merkmal": "Seitenkopf mit Titel links, Fuß mit Projekt/Datum/Studio-Marke (kein Trainingsdatum)", "belege": ["T12 S.2", "T14 S.2"]}
+    ],
+    "neue_katalogtypen": [
+      {"vorschlag": "HS-2T: Hochschrank zweiteilig (Tür unten ca. 1900-2000, Aufsatz oben ca. 850-950) mit Quersplit", "belege": ["T13 S.7", "T14 S.3"]},
+      {"vorschlag": "HS-GN: Hochschrank Gerätenische (Ofen/2 Öfen, Fach darüber, 2 Auszüge darunter)", "belege": ["T13 S.7", "T14 S.3", "T16 S.6"]},
+      {"vorschlag": "NI-PD: Pocketdoor-Nische mit Regalböden, Arbeitsfläche bei ca. 930 und 6 Auszügen", "belege": ["T14 S.3", "T14 S.4"]},
+      {"vorschlag": "KS-HS: Kühl-Gefrier-Hochschrankblock 90 cm", "belege": ["T15 S.5", "T15 S.11"]},
+      {"vorschlag": "IN-ST: Insel mit offenem Stirnregal und runder Stirn (Variante)", "belege": ["T12 S.3", "T14 S.2", "T16 S.6"]},
+      {"vorschlag": "SB-NI: Sideboard/Sitzbank niedrig auf Fensterbrett-Höhe", "belege": ["T15 S.4", "T15 S.6"]},
+      {"vorschlag": "ST-NI: Standherd-Nische mit Regalbrettern und Reling", "belege": ["T12 S.3"]},
+      {"vorschlag": "US-TA3: Topfauszug-Block 2 Spalten x 3 Auszüge", "belege": ["T13 S.6"]}
+    ],
+    "offen": [
+      "Alle Renderings haben Perspektive; Maße aus Renderings und Zeichnungen sind Schätzungen (T13, T14) und nur aus relativen Proportionen abgeleitet.",
+      "T14 und T15: Maßzahlen sind klein und schwer lesbar (2163, 1200, 467, 1572, 700, 447, 2688); bitte am Original prüfen.",
+      "T13: Anordnung der U-Schenkel (welche Zeile an welcher Wand) ohne Grundriss nicht eindeutig.",
+      "T14: Ofen-Einbauhöhe unten ist durch die Insel verdeckt.",
+      "T16: kein Maß im Dokument; Eckausbildung der L-Zeile und rundes Symbol in der Insel unklar.",
+      "T12: Herdbreite und Zeilenlänge nicht bemaßt."
+    ]
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schema.kueche.local/v0/kuechenmodell.schema.json",
+  "title": "Kuechenmodell",
+  "description": "Neutrales Ergebnis der Planung (v0.2), eine Variante je Datei. Quelle fuer jede Ausgabe. Schreiben duerfen nur Planer (planen, element_aendern), Pruefer (pruefen), teile_ableiten und revision_freigeben; Adapter schreiben nie. Teile und Befunde sind abgeleitete Daten einer Revision (teile_revision, pruefung.revision) und erhoehen sie nicht. element_aendern setzt freigabe auf null.",
+  "type": "object",
+  "properties": {
+    "schema": {"const": "kuechenmodell/v0.2"},
+    "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+    "revision": {"type": "integer", "minimum": 1},
+    "variante": {"type": "integer", "minimum": 1},
+    "planungsbogen": {
+      "type": "object",
+      "properties": {"id": {"$ref": "gemeinsam.schema.json#/$defs/id"}, "revision": {"type": "integer", "minimum": 1}},
+      "required": ["id", "revision"], "additionalProperties": false
+    },
+    "setup": {
+      "type": "object",
+      "properties": {"id": {"$ref": "gemeinsam.schema.json#/$defs/id"}, "version": {"type": "integer"}},
+      "required": ["id", "version"], "additionalProperties": false
+    },
+    "kern_version": {"type": "string"},
+    "werte": {
+      "description": "Aufgeloeste Werte (projekt > setup > kern) mit Herkunft. Bausteine lesen nur von hier.",
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z][a-z0-9_]*$"},
+      "additionalProperties": {"$ref": "gemeinsam.schema.json#/$defs/wert"}
+    },
+    "solver": {
+      "description": "Wie die Variante entstand; das Ergebnis ist im Modell gespeichert, ein neuer Lauf ersetzt es nicht still.",
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"}, "version": {"type": "string"},
+        "seed": {"type": "integer"}, "zeitlimit_s": {"type": "number"}, "worker": {"type": "integer", "minimum": 1}
+      },
+      "required": ["name", "version"], "additionalProperties": false
+    },
+    "scores": {
+      "type": "object",
+      "propertyNames": {"enum": ["ergonomie", "zonenfolge", "stauraum", "fertigung", "kosten"]},
+      "additionalProperties": {
+        "type": "object",
+        "properties": {"wert": {"type": "number", "minimum": 0, "maximum": 1}, "begruendung": {"type": "string"}},
+        "required": ["wert", "begruendung"], "additionalProperties": false
+      }
+    },
+    "elemente": {"type": "array", "items": {"$ref": "#/$defs/element"}},
+    "teile": {"type": "array", "items": {"$ref": "teil.schema.json"}},
+    "teile_revision": {"type": "integer", "minimum": 1, "description": "Revision, aus der teile abgeleitet wurden; muss gleich revision sein"},
+    "anschluesse": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/anschluss"}},
+    "pruefung": {
+      "type": "object",
+      "properties": {
+        "revision": {"type": "integer", "minimum": 1},
+        "stand": {"type": "string", "format": "date-time"},
+        "ergebnis": {"type": "string", "enum": ["gruen", "gelb", "rot"]},
+        "befunde": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "regel": {"$ref": "gemeinsam.schema.json#/$defs/regel_id"},
+              "schwere": {"$ref": "gemeinsam.schema.json#/$defs/schwere"},
+              "elemente": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/id"}},
+              "text": {"type": "string"},
+              "gemessen": {"type": "number"},
+              "soll": {"type": "string"},
+              "beleg": {"$ref": "gemeinsam.schema.json#/$defs/beleg"}
+            },
+            "required": ["regel", "schwere", "text"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["revision", "stand", "ergebnis", "befunde"],
+      "additionalProperties": false
+    },
+    "annahmen": {
+      "description": "Schluessel aus werte mit herkunft annahme; genau diese Menge (Invariante 2).",
+      "type": "array", "items": {"type": "string"}, "uniqueItems": true
+    },
+    "freigabe": {
+      "description": "Fertigung nur aus freigegebener Revision; gueltig nur, wenn freigabe.revision = revision. null = nicht freigegeben. durch_rolle stammt aus der Identitaet der Sitzung, nie aus einer Werkzeugeingabe.",
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "properties": {
+            "revision": {"type": "integer", "minimum": 1},
+            "datum": {"type": "string", "format": "date-time"},
+            "durch_rolle": {"type": "string", "enum": ["admin", "team"]}
+          },
+          "required": ["revision", "datum", "durch_rolle"], "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "required": ["schema", "id", "revision", "variante", "planungsbogen", "setup", "kern_version", "werte", "elemente", "teile", "annahmen", "freigabe"],
+  "additionalProperties": false,
+  "$defs": {
+    "element": {
+      "type": "object",
+      "properties": {
+        "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+        "typ": {"type": "string", "enum": ["bereich", "unterschrank", "hochschrank", "oberschrank", "haengeschrank", "aufsatz", "regal", "arbeitsplatte", "sockel", "passleiste", "blende", "wange", "rueckwandpaneel", "geraet", "spuele", "armatur", "beleuchtung", "steckdose", "zukauf", "freiform"]},
+        "baustein": {"type": "string", "description": "Name der Bausteinfunktion im Kern"},
+        "name": {"type": "string"},
+        "lage": {"$ref": "gemeinsam.schema.json#/$defs/lage"},
+        "masse": {"$ref": "gemeinsam.schema.json#/$defs/masse3", "description": "Korpus ohne Front; der Kern bildet Fronten als eigene Quader (Dicke front_d, ab lokal y = t) fuer die Kollisionspruefung"},
+        "parameter": {"type": "object", "additionalProperties": {"$ref": "gemeinsam.schema.json#/$defs/wert"}},
+        "fest": {"type": "boolean", "default": false, "description": "vom Menschen fixiert; bleibt beim naechsten Planerlauf"},
+        "fronten": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "art": {"type": "string", "enum": ["tuer_links", "tuer_rechts", "doppeltuer", "schubkasten", "klappe", "blende_fest", "geraetefront", "hochschrankauszug", "offen"]},
+              "hoehe": {"type": "number"},
+              "griff": {"$ref": "gemeinsam.schema.json#/$defs/griff"},
+              "beschlag": {"$ref": "gemeinsam.schema.json#/$defs/bibref_fest"}
+            },
+            "required": ["art", "hoehe"], "additionalProperties": false
+          }
+        },
+        "innenausstattung": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "art": {"type": "string", "enum": ["innenschubkasten", "innenauszug", "auszugboden", "einlegeboden", "hochschrankauszug", "eckloesung", "abfallsystem", "handtuchhalter", "gewuerzauszug"]},
+              "beschlag": {"$ref": "gemeinsam.schema.json#/$defs/bibref_fest"},
+              "anzahl": {"type": "integer", "minimum": 1},
+              "hoehe": {"type": "number"}
+            },
+            "required": ["art"], "additionalProperties": false
+          }
+        },
+        "geraet": {"$ref": "gemeinsam.schema.json#/$defs/bibref_fest"},
+        "freiform": {
+          "description": "Sonderform aus Fusion: Huellquader im Modell, Geometrie als STEP-Verweis.",
+          "type": "object",
+          "properties": {"step": {"type": "string"}, "fusion_dokument": {"type": "string"}},
+          "required": ["step"], "additionalProperties": false
+        },
+        "kinder": {"type": "array", "items": {"$ref": "#/$defs/element"}},
+        "teile": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/id"}},
+        "freiraum": {
+          "description": "Raum, der frei bleiben muss (Tuerschwenk, Auszug, Geraetetuer, Bedienflaeche). Koordinaten im Raumsystem.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "zweck": {"type": "string", "enum": ["tuerschwenk", "auszug", "geraetetuer", "klappe", "bedienflaeche", "lueftung"]},
+              "min": {"$ref": "gemeinsam.schema.json#/$defs/punkt3"},
+              "max": {"$ref": "gemeinsam.schema.json#/$defs/punkt3"}
+            },
+            "required": ["zweck", "min", "max"], "additionalProperties": false
+          }
+        },
+        "montage": {
+          "type": "object",
+          "properties": {
+            "schritt": {"type": "integer", "minimum": 1},
+            "ort": {"type": "string", "enum": ["werkstatt", "baustelle"]},
+            "befestigung": {"type": "string", "description": "z. B. Wandschiene, Sockelfuesse, Verschraubung mit Nachbar"},
+            "nach": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/id"}},
+            "hinweis": {"type": "string"}
+          },
+          "required": ["schritt", "ort"], "additionalProperties": false
+        },
+        "herkunft": {"$ref": "gemeinsam.schema.json#/$defs/herkunft"}
+      },
+      "required": ["id", "typ", "lage", "masse"],
+      "additionalProperties": false
+    }
+  }
+}

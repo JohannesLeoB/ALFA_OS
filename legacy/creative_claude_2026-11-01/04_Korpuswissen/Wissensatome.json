@@ -1,0 +1,674 @@
+{
+  "version": 1,
+  "umfang": "40 PDFs / 261 Seiten; vollständiger OCR-Text gelesen, ausgewählte Geometrien visuell geprüft",
+  "fakten": [
+    {
+      "id": "K001",
+      "thema": "Raumtypologie",
+      "aussage": "Zeile mit Sideboard auf Fensterbretthöhe und freistehender Insel",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_15_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "K002",
+      "thema": "Raumtypologie",
+      "aussage": "Zeile mit Sitzbank und Halbinsel",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_15_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          6
+        ]
+      }
+    },
+    {
+      "id": "K003",
+      "thema": "Raumtypologie",
+      "aussage": "Zeile mit Halbinsel ohne Verbindung",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_15_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          8
+        ]
+      }
+    },
+    {
+      "id": "K004",
+      "thema": "Raumtypologie",
+      "aussage": "Wandzeile, Kochinsel, seitliche Hochschränke und angrenzende Sitzbank",
+      "evidenz": "Visuell geprüft",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_33_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          5
+        ]
+      }
+    },
+    {
+      "id": "K005",
+      "thema": "Raumtypologie",
+      "aussage": "Kühlschrank befindet sich im anderen Raum; kein vollständiges Arbeitsdreieck innerhalb der gezeichneten Küche",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_18_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "K006",
+      "thema": "Griffe",
+      "aussage": "Korpusseitige Griffmulde kombiniert mit Push-to-open an unteren Fronten",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_21_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "K007",
+      "thema": "Griffe",
+      "aussage": "Eingefräste Griffe in massiver Eiche",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_32_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "K008",
+      "thema": "Griffe",
+      "aussage": "Umlaufende Messinggriffmulde; Zeichnung weist auf aufwendige Inselkonstruktion hin",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_12_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          7
+        ]
+      }
+    },
+    {
+      "id": "K009",
+      "thema": "Griffe",
+      "aussage": "Furnipart Plato in Messing",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_11_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          2
+        ]
+      }
+    },
+    {
+      "id": "K010",
+      "thema": "Griffe",
+      "aussage": "Viefe LUV",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_16_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          2
+        ]
+      }
+    },
+    {
+      "id": "K011",
+      "thema": "Griffe",
+      "aussage": "Armac Martin Colmore und Barwick Ridged als Pilzgriffe sowie Arbar als Bügelgriff; Dark Aged Brass",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_08_Moodboards.pdf",
+        "kategorie": "Moodboards",
+        "seiten": [
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "K012",
+      "thema": "Griffe",
+      "aussage": "Kühlschrank mit Armac Martin Barwick Plain Satin Nickel, andere Fronten mit Push-to-open",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_34_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "K013",
+      "thema": "Griffe",
+      "aussage": "Griff bündig auf Front gesetzt",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_40_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "K014",
+      "thema": "Griffe",
+      "aussage": "Griffwahl zwischen eingefräst und aufgeschraubt ausdrücklich TBD",
+      "evidenz": "Beschriftung",
+      "grenze": "Offene Entscheidung; kein freigegebenes Griffbeispiel",
+      "quelle": {
+        "datei": "Template_18_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "K015",
+      "thema": "Raster",
+      "aussage": "Wiederkehrende nominale 600-mm-Gerätefelder und ergänzende Sonderbreiten; Front- und Korpusmaß getrennt behandeln",
+      "evidenz": "Visuell geprüft",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_33_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "id": "K016",
+      "thema": "Raster",
+      "aussage": "600er Felder, 960-mm-Funktionsbereich und Rest-/Passbereiche statt ausschließlich gleicher Module",
+      "evidenz": "Visuell geprüft",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_32_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          6
+        ]
+      }
+    },
+    {
+      "id": "K017",
+      "thema": "Höhen",
+      "aussage": "Arbeitsplattenoberkante 930 mm, Sockelhöhe 100 mm und Arbeitsplatte 20 mm",
+      "evidenz": "Visuell geprüft",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_33_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          6
+        ]
+      }
+    },
+    {
+      "id": "K018",
+      "thema": "Höhen",
+      "aussage": "Arbeitsplattenoberkante 935 mm, Sockel 100 mm und Stahlplatte 5 mm",
+      "evidenz": "Visuell geprüft",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_32_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          6
+        ]
+      }
+    },
+    {
+      "id": "K019",
+      "thema": "Höhen",
+      "aussage": "Höhenkette 100 mm Sockel + 790 mm Korpus + 35 mm Aufbau + 5 mm Stahl ergibt 930 mm",
+      "evidenz": "Aus beschrifteter Maßkette berechnet",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_41_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "K020",
+      "thema": "Höhen",
+      "aussage": "2700 mm Gesamthöhe des Hochschranks und 100 mm Sockel",
+      "evidenz": "Visuell geprüft",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_19_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "K021",
+      "thema": "Abstände",
+      "aussage": "1100 mm Abstand Zeile–Insel; 1528 mm beschrifteter Durchgang; 1200 mm Abstand zur Bank",
+      "evidenz": "Visuell geprüft",
+      "grenze": "Keine Normwerte; offene Türen und besetzte Bank sind damit nicht geprüft",
+      "quelle": {
+        "datei": "Template_33_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          5
+        ]
+      }
+    },
+    {
+      "id": "K022",
+      "thema": "Gerätebeziehungen",
+      "aussage": "Spüle in Wandzeile; Geschirrspüler unmittelbar rechts daneben; Kochfeld auf Insel; Kühlschrank links, Backöfen rechts in Hochschränken",
+      "evidenz": "Visuell geprüft",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_33_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          5
+        ]
+      }
+    },
+    {
+      "id": "K023",
+      "thema": "Gerätebeziehungen",
+      "aussage": "Geschirrspüler neben Spüle; Quooker-Technik unter Spüle und Müll in separatem Vorbereitungsschrank",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_32_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "id": "K024",
+      "thema": "Gerätebeziehungen",
+      "aussage": "Geschirrspüler links, Spüle mit Müll und Quooker-Technik mittig, Schubladen mit zwei Innenauszügen rechts",
+      "evidenz": "Visuell geprüft",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_41_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          3
+        ]
+      }
+    },
+    {
+      "id": "K025",
+      "thema": "Innenausstattung",
+      "aussage": "Fingergezinkte Eichenmassivholzschubladen mit Besteckeinsatz; PEKA Oeko Complet Aqua",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_11_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          2
+        ]
+      }
+    },
+    {
+      "id": "K026",
+      "thema": "Innenausstattung",
+      "aussage": "BLUM Legrabox in Oriongrau und Apotheker mit zwei festen Legrabox-Auszügen",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_03_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "K027",
+      "thema": "Innenausstattung",
+      "aussage": "Legrabox Carbon Steel, PEKA Pleno Maxi und Oeko Complet; schmaler Flaschenauszug",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_19_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "K028",
+      "thema": "Innenausstattung",
+      "aussage": "PEKA Magic Corner für Eckstauraum",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_18_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "K029",
+      "thema": "Innenausstattung",
+      "aussage": "Fünf Nussbaum-Innenauszüge im Vorratsschrank hinter ruhiger gemeinsamer Front",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_34_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "K030",
+      "thema": "Innenausstattung",
+      "aussage": "Innenauszüge hinter Frontauszügen, oberer Clip-on-Magnet-Auszug und Cooking Agent in Halbinsel",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_35_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "id": "K031",
+      "thema": "Innenausstattung",
+      "aussage": "Kesseböhmer Dispensa Tandem und Klappenbeschlag Grass Kinvaro; Schrank mit Dyson-Steckdose",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_38_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          7
+        ]
+      }
+    },
+    {
+      "id": "K032",
+      "thema": "Innenausstattung",
+      "aussage": "Waschmaschine und Trockner mit Schleppsockel",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_03_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "K033",
+      "thema": "Innenausstattung",
+      "aussage": "Roboterstaubsauger findet unter der Zeile Platz",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_16_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "K034",
+      "thema": "Fronten",
+      "aussage": "Zwei Gestaltungsfamilien: glatte flächige Fronten und gerahmte/Kassettenfronten",
+      "evidenz": "Korpusinterpretation",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_14_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "id": "K035",
+      "thema": "Fronten",
+      "aussage": "Pocketdoors und vertikale Holzlamellen",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_09_Moodboards.pdf",
+        "kategorie": "Moodboards",
+        "seiten": [
+          5
+        ]
+      }
+    },
+    {
+      "id": "K036",
+      "thema": "Material",
+      "aussage": "5 mm Stahl Silver Touch an Zeile, Stein Taj Mahal an Insel, gestreiftes Furnier an Hochschränken",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_17_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1,
+          2,
+          3,
+          7,
+          9
+        ]
+      }
+    },
+    {
+      "id": "K037",
+      "thema": "Material",
+      "aussage": "Conifer-Linoleum an Wandzeile, Eiche an Insel; Terrazzo und Pyrolave Moutarde als unterschiedliche Platten",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_11_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          2
+        ]
+      }
+    },
+    {
+      "id": "K038",
+      "thema": "Material",
+      "aussage": "Eiche mit durchlaufender horizontaler Maserung, offene Kanten und eingefräste Griffe",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_32_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "K039",
+      "thema": "Material",
+      "aussage": "Tonale Wandzeile und kontrastierende Insel: Gelb NCS S1070-Y10R und Blau S0520-B",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_07_Moodboards.pdf",
+        "kategorie": "Moodboards",
+        "seiten": [
+          2
+        ]
+      }
+    },
+    {
+      "id": "K040",
+      "thema": "Material",
+      "aussage": "Koordinierte Varianten aus Stein, Griffen, Armatur und Becken: mattes Schwarz/Kupfer gegenüber Satin Nickel/Edelstahl",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_13_Präsentationen.pdf",
+        "kategorie": "Präsentationen",
+        "seiten": [
+          2,
+          8
+        ]
+      }
+    },
+    {
+      "id": "K041",
+      "thema": "Details",
+      "aussage": "200 mm Inselüberstand zur Sitzseite",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_01_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "K042",
+      "thema": "Details",
+      "aussage": "Revisionsfähige Technikrückwand und bronzierte Glasböden im Barschrank",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_02_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "K043",
+      "thema": "Details",
+      "aussage": "Umluftkanal erfordert Prüfung der Halbinseltiefe",
+      "evidenz": "Beschriftung",
+      "grenze": "Projektbeispiel; kein allgemeiner Standard",
+      "quelle": {
+        "datei": "Template_38_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "K044",
+      "thema": "Qualität",
+      "aussage": "Fenstermaße ausdrücklich noch in Abstimmung",
+      "evidenz": "Beschriftung",
+      "grenze": "Nicht als endgültige Raumgeometrie verwenden",
+      "quelle": {
+        "datei": "Template_33_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          5
+        ]
+      }
+    },
+    {
+      "id": "K045",
+      "thema": "Qualität",
+      "aussage": "Griffmulde mit xx statt festgelegtem Detail",
+      "evidenz": "Beschriftung",
+      "grenze": "Unvollständiges Detail; nicht als fertige Spezifikation verwenden",
+      "quelle": {
+        "datei": "Template_19_Layouts.pdf",
+        "kategorie": "Layouts",
+        "seiten": [
+          1,
+          2,
+          3
+        ]
+      }
+    }
+  ]
+}

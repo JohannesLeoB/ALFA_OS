@@ -1,0 +1,46 @@
+{
+  "schema": "setup/v0.2",
+  "id": "studio-beispiel",
+  "version": 2,
+  "ebene": "firma",
+  "kern_version": "0.2",
+  "konstruktion": {
+    "raster": null,
+    "lochreihe_teilung": {"wert": 32, "einheit": "mm", "herkunft": "setup"},
+    "lochreihe_abstand_vk": {"wert": 37, "einheit": "mm", "herkunft": "setup"},
+    "lochreihe_durchmesser": {"wert": 5, "einheit": "mm", "herkunft": "setup"},
+    "lochreihe_tiefe": {"wert": 12, "einheit": "mm", "herkunft": "setup"},
+    "verbinder": {"wert": "duebel", "einheit": "-", "herkunft": "setup"},
+    "rueckwand_einbau": {"wert": "nut", "einheit": "-", "herkunft": "setup"},
+    "rueckwand_einstand": {"wert": 16, "einheit": "mm", "herkunft": "setup"},
+    "rueckwand_nut_tiefe": {"wert": 8, "einheit": "mm", "herkunft": "setup"},
+    "rueckwand_nut_breite": {"wert": 8.5, "einheit": "mm", "herkunft": "setup"},
+    "korpus_d": {"wert": 19, "einheit": "mm", "herkunft": "setup"},
+    "korpus_t": {"wert": 560, "einheit": "mm", "herkunft": "setup"},
+    "rueckwand_d": {"wert": 8, "einheit": "mm", "herkunft": "setup"},
+    "front_d": {"wert": 19, "einheit": "mm", "herkunft": "setup"},
+    "fuge_front": {"wert": 3, "einheit": "mm", "herkunft": "setup"},
+    "sockel_h": {"wert": 100, "einheit": "mm", "herkunft": "setup", "beleg": {"quelle": "regeln-runde-1", "ref": "Z.6"}},
+    "sockel_rueckversatz": {"wert": 60, "einheit": "mm", "herkunft": "annahme"}
+  },
+  "kataloge": [
+    {"bibliothek": "material", "quelle": "bib/material", "stand": "2026-10-31"},
+    {"bibliothek": "kante", "quelle": "bib/kante", "stand": "2026-10-31"}
+  ],
+  "platten": [
+    {"material": {"bibliothek": "material", "id": "spanplatte-mfc-weiss-19", "stand": "2026-10-31"}, "laenge": 2800, "breite": 2070, "dicke": 19, "faser": "keine", "sichtseiten": "beide", "bestand": null, "rest_min": {"l": 400, "b": 200}}
+  ],
+  "maschinen": [
+    {"id": "saege-1", "art": "plattensaege", "steuerung_format": "csv", "saege": {"schnittbreite": 4.4, "besaeumung": {"links": 10, "rechts": 10, "vorn": 10, "hinten": 10}, "stufen": 3}}
+  ],
+  "vorlagen": [
+    {"id": "a3-werkplan", "zweck": "werkplan", "format": "svg_mustache", "datei": "vorlagen/a3_werkplan.svg", "papier": "A3 quer", "seiten": "einseitig", "felder": ["projekt", "blatt", "blattzahl", "massstab", "datum", "revision", "inhalt"], "version": 1}
+  ],
+  "planstempel": {"aktiv": false, "text": null, "farbe": null},
+  "namensschema": {"teil_id": "{projekt}-{gruppe}-{rolle}", "gruppe_id": "{bereich}-{schrank:02d}", "teil_nr": "{auftrag}-{laufnr:04d}"},
+  "regeln": [
+    {"schluessel": "spuelenschrank_ohne_traverse_vorn", "wenn": "geraet.rolle == spuele", "dann": "traverse_vorn = false", "bestaetigt": "2026-10-30", "durch_rolle": "admin", "episoden": 3}
+  ],
+  "ausgaben": {"zuschnittliste": "csv_neutral", "werkplan": "pdf_a3"},
+  "weiche": {"zuschnittliste": "alt", "werkplan": "alt"}
+}

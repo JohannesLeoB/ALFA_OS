@@ -1,0 +1,1996 @@
+{
+  "runde": "C",
+  "gruppe": "G1",
+  "gelesen": [
+    {
+      "template": "T01",
+      "seiten": "6/6",
+      "art": "Layout",
+      "inhalt": "Musterprojekt mit Grundriss, Ansichten der Zeile und Sitzbank-Insel, Detailansichten Kaffeenische und Ecke"
+    },
+    {
+      "template": "T02",
+      "seiten": "6/6",
+      "art": "Layout",
+      "inhalt": "Barschrank-Zeile (Seitenzahlen 18-23 der Vorlage): Perspektive, Draufsicht, drei Frontansichten, Technikfach"
+    },
+    {
+      "template": "T03",
+      "seiten": "8/8",
+      "art": "Layout",
+      "inhalt": "Kueche Zeile mit Perspektive, Grundriss, Deckenspot-Position, Frontansichten mit Massen, Aufteilung und Details"
+    },
+    {
+      "template": "T04",
+      "seiten": "7/7",
+      "art": "Layout",
+      "inhalt": "Kueche Zeile mit Rolleninsel: Perspektive, Draufsicht, Zeilenansichten mit Massen, Insel-Ansichten"
+    },
+    {
+      "template": "T05",
+      "seiten": "2/2",
+      "art": "Layout",
+      "inhalt": "Schrankwand: Perspektive und Frontansicht mit Modulbreiten"
+    },
+    {
+      "template": "T17",
+      "seiten": "9/9",
+      "art": "Layout",
+      "inhalt": "Projekt mit L-Kueche und Kochinsel: Perspektive, Grundriss, Zeilen-, Hochschrank- und Inselansichten mit Massen und Aufteilung"
+    },
+    {
+      "template": "T18",
+      "seiten": "1/1",
+      "art": "Layout",
+      "inhalt": "Einzelblatt Vorderansicht Zeile mit Grundriss, Materialliste, Abstimmungs-Stempel"
+    },
+    {
+      "template": "T19",
+      "seiten": "4/4",
+      "art": "Layout",
+      "inhalt": "Kueche Whg mit Zeile, Insel innen und aussen, Hochschrank-Ansicht"
+    },
+    {
+      "template": "T20",
+      "seiten": "2/2",
+      "art": "Layout",
+      "inhalt": "Erweiterung Kueche: Zeile-Erweiterung und Sitznische mit Elektro-Plan"
+    },
+    {
+      "template": "T21",
+      "seiten": "1/1",
+      "art": "Layout",
+      "inhalt": "Uebersichtsblatt gebogene Kueche: Grundriss, Ansicht Zeile, Vertikalschnitt, Hochschraenke, Detail Griffleiste, Foto"
+    }
+  ],
+  "kuechen": [
+    {
+      "id": "T01-K1",
+      "belege": [
+        "T01 S.2",
+        "T01 S.3",
+        "T01 S.4",
+        "T01 S.5",
+        "T01 S.6"
+      ],
+      "form": "L",
+      "raum": {
+        "wandbezug": "Zeile an zwei Wänden (oben und rechts) plus Insel mit Sitzseite",
+        "fenster_tuer": "Tür im Gang links, Fenstertüren im Grundriss unten",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": 1111
+      },
+      "laengen_mm": [
+        3004,
+        2634,
+        1111,
+        1545,
+        450
+      ],
+      "hoehen": {
+        "sockel": 82,
+        "ok_ap": null,
+        "ap_d": 30,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": 600
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Spuelenunterschrank Unterbau",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Auszug",
+          "innen": "Muellsystem",
+          "geraet": "Spuele"
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Kochfeld-Unterschrank",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Auszuege",
+          "innen": "Technik",
+          "geraet": "Kochfeld mit Tischluefter"
+        },
+        {
+          "pos": 3,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Backofen-Hochschrank",
+          "b": null,
+          "h": null,
+          "t": null,
+          "fronten": "Backofen-Front plus Schubladen",
+          "innen": null,
+          "geraet": "Backofen"
+        },
+        {
+          "pos": 4,
+          "kategorie": "insel",
+          "typ": "NEU:Insel mit Sitzseite",
+          "b": 2634,
+          "h": 961,
+          "t": 600,
+          "fronten": "Tueren und Schubfaecher, Kassette zur Sitzseite",
+          "innen": null,
+          "geraet": "Kochendwasser-Armatur"
+        },
+        {
+          "pos": 5,
+          "kategorie": "nischenregal",
+          "typ": "NEU:Kaffeenische",
+          "b": 450,
+          "h": 684,
+          "t": null,
+          "fronten": "AP bu. mit Wangen, spaetere Tuer vorgesehen",
+          "innen": null,
+          "geraet": "Kaffeemaschine"
+        }
+      ],
+      "geraete_reihenfolge": "Zeile oben: Kochfeld - Spuele (Unterbau) - Backofen im Hochschrank; Insel mit Kochfeld/Tischluefter",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "Insel-AP 200 mm Ueberhang, zur Seite bu. mit Seitenwange",
+        "fuellstuecke": "Kaffeenische AP bu. mit Wangen",
+        "stellseiten": "Seitenwange der Insel bu. mit AP",
+        "wand_decken_anschluss": "Zeile bis Wand, Hochschrank bis Decke",
+        "sockel": "82 mm bei Kaffeenische",
+        "eckloesung": "Eckschrank mit Schrankueberlappung"
+      },
+      "griffe": "Knopf (runde Knoepfe auf Auszuegen)",
+      "material_farbe": "Korpus hell, Fronten hell matt, AP mineralisch 30 mm, Spritzschutz 20 mm (Kategorie Mineralwerkstoff hell)",
+      "plan_widersprueche": [
+        "S.3: Insel-Ueberhang 200 mm nach vorne ist mit Backofen-Kassette bu. angegeben; Lage zur Front nicht eindeutig zu lesen"
+      ]
+    },
+    {
+      "id": "T02-K1",
+      "belege": [
+        "T02 S.1",
+        "T02 S.2",
+        "T02 S.3",
+        "T02 S.4",
+        "T02 S.5",
+        "T02 S.6"
+      ],
+      "form": "sonstiges",
+      "raum": {
+        "wandbezug": "Barschrank-Zeile mit gerundeter Ecke (Radius R211) an Wand",
+        "fenster_tuer": null,
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [
+        990,
+        1470,
+        2723
+      ],
+      "hoehen": {
+        "sockel": 60,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": 2723,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": 540,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Barschrank Glastuer-Seite",
+          "b": 599,
+          "h": 2723,
+          "t": null,
+          "fronten": "Glastueren mit Riffelglas-Fuellung (2 Tueren) plus Blende",
+          "innen": "Einlegeboeden Glas bronze, Bodenplatte Naturstein",
+          "geraet": null
+        },
+        {
+          "pos": 2,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Barschrank Tuer-Seite",
+          "b": 600,
+          "h": 2723,
+          "t": null,
+          "fronten": "Tueren PTO mit Einlegeboeden, Fach fuer Technik",
+          "innen": "Installationsebene Technik, hochgesetzter Konstruktionsboden",
+          "geraet": "Fernseher und Verstaerker"
+        },
+        {
+          "pos": 3,
+          "kategorie": "sonstiges",
+          "typ": "NEU:Stirnseite gerundet",
+          "b": 241,
+          "h": 2723,
+          "t": 90,
+          "fronten": "feste Blende",
+          "innen": null,
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Fernseher (Fach) mit Verstaerkern im Technikfach, Glasfach darunter",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "feste Blende 90 mm ueber Ecke",
+        "fuellstuecke": null,
+        "stellseiten": "Seitenwange",
+        "wand_decken_anschluss": "Oberkante Schrank mit 277 mm Abstand zur Decke",
+        "sockel": "60 mm",
+        "eckloesung": "Radius R211 an Ecke"
+      },
+      "griffe": "PTO (Push-to-Open)",
+      "material_farbe": "Lackfronten in warmem Farbton (NCS-Code), Korpus Echtholzfurnier Nuss, Glasfronten Riffelglas",
+      "plan_widersprueche": [
+        "S.3/S.5: Summe Hoehen 277+1510+870+60 = 2717, Gesamtmass 2723 (6 mm Abweichung)"
+      ]
+    },
+    {
+      "id": "T03-K1",
+      "belege": [
+        "T03 S.2",
+        "T03 S.3",
+        "T03 S.4",
+        "T03 S.5",
+        "T03 S.6",
+        "T03 S.7",
+        "T03 S.8"
+      ],
+      "form": "zeile",
+      "raum": {
+        "wandbezug": "Zeile an einer Wand mit Hochschrank-Block am Wandende",
+        "fenster_tuer": "Tuer links der Zeile",
+        "abstand_wand_decke": "Hochschrank bis Decke",
+        "freiraum_gang_mm": 683
+      },
+      "laengen_mm": [
+        2826,
+        1577,
+        600,
+        619,
+        30
+      ],
+      "hoehen": {
+        "sockel": 100,
+        "ok_ap": 920,
+        "ap_d": 5,
+        "oberschrank_uk": null,
+        "hochschrank_h": 2723,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": 652,
+        "hochschrank": 600,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Apothekerauszug (2x Legrabox)",
+          "b": 600,
+          "h": 652,
+          "t": 550,
+          "fronten": "Auszug 2 Legrabox",
+          "innen": "Legrabox-Kaesten",
+          "geraet": null
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Waschmaschine Schleppsockel",
+          "b": 600,
+          "h": 652,
+          "t": 600,
+          "fronten": "Tuer mit Einlegeboeden",
+          "innen": null,
+          "geraet": "Waschmaschine"
+        },
+        {
+          "pos": 3,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Trockner Schleppsockel",
+          "b": 619,
+          "h": 652,
+          "t": 600,
+          "fronten": "Tuer mit Einlegeboeden",
+          "innen": null,
+          "geraet": "Trockner"
+        },
+        {
+          "pos": 4,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Kuehl-Gefrier-Kombination",
+          "b": 600,
+          "h": 2723,
+          "t": 600,
+          "fronten": "Tuer mit Einlegeboeden",
+          "innen": null,
+          "geraet": "Kuehl-Gefrier-Kombination"
+        },
+        {
+          "pos": 5,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Backofen-Hochschrank",
+          "b": 600,
+          "h": 2723,
+          "t": 600,
+          "fronten": "Tuer mit Einlegeboeden, Backofen, Schubkaesten",
+          "innen": "Schubkaesten, 2x innenliegender Schubkasten",
+          "geraet": "Backofen"
+        }
+      ],
+      "geraete_reihenfolge": "links->rechts: Apothekerauszug - Waschmaschine - Trockner - Kuehl-Gefrier-Kombination - Backofen-Hochschrank",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "Blende 30 mm zum Wandende",
+        "fuellstuecke": "Edelstahlregal 5 mm ueber Arbeitsplatte",
+        "stellseiten": "Seitenbleche MDF",
+        "wand_decken_anschluss": "Hochschrank bis Decke mit Fuge",
+        "sockel": "100 mm MDF Sockel in Frontfarbe",
+        "eckloesung": null
+      },
+      "griffe": "Griffmulde (126.00.536) in Frontfarbe, aufgesetzte Griffleiste mit Einsatzfraesung bei Hochschrank",
+      "material_farbe": "Korpus Dekor hell (Egger-Kategorie), Fronten MDF lackiert Stein-Grau, Sockel MDF gleich Front, AP 5 mm Edelstahl kaltgewalzt Wirbelfinish",
+      "plan_widersprueche": [
+        "S.3: Tiefenmasse 619 und 1577 ergeben 2826 (passt); S.5: Breiten 248+655+655+617+594+30 = 2799, nicht 2826 (27 mm Abweichung)"
+      ]
+    },
+    {
+      "id": "T04-K1",
+      "belege": [
+        "T04 S.2",
+        "T04 S.3",
+        "T04 S.4",
+        "T04 S.5",
+        "T04 S.6",
+        "T04 S.7"
+      ],
+      "form": "zeile",
+      "raum": {
+        "wandbezug": "Zeile an langer Wand, rollbare Insel frei im Raum",
+        "fenster_tuer": "Tuer links im Ansichtsbild",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": 2403
+      },
+      "laengen_mm": [
+        2403,
+        596,
+        596,
+        539,
+        596,
+        1800
+      ],
+      "hoehen": {
+        "sockel": 130,
+        "ok_ap": 930,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": 1931,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": 604,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": 908
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Geschirrspueler-Unterschrank",
+          "b": 596,
+          "h": 646,
+          "t": 604,
+          "fronten": "Tuer",
+          "innen": "Technik",
+          "geraet": "Geschirrspueler"
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Spuelenunterschrank Muellsystem",
+          "b": 596,
+          "h": 646,
+          "t": 604,
+          "fronten": "Tuer mit Einlegeboeden",
+          "innen": "Muellsystem",
+          "geraet": "Spuele"
+        },
+        {
+          "pos": 3,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Schubkasten-Unterschrank",
+          "b": 539,
+          "h": 646,
+          "t": 604,
+          "fronten": "3 Schubkaesten",
+          "innen": "Schubkasten",
+          "geraet": null
+        },
+        {
+          "pos": 4,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Kuehl-Gefrier-Kombination",
+          "b": 596,
+          "h": 1931,
+          "t": 604,
+          "fronten": "Tuer mit Einlegeboeden",
+          "innen": "Schubkasten (unten)",
+          "geraet": "Kuehl-Gefrier-Kombination"
+        },
+        {
+          "pos": 5,
+          "kategorie": "insel",
+          "typ": "NEU:Rolleninsel 1800 mm",
+          "b": 1800,
+          "h": 791,
+          "t": 908,
+          "fronten": "Tueren 4 x mit Einlegeboeden, Blende mit Steckdosen, Schubkaesten (2x)",
+          "innen": "Einlegeboeden",
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Zeile links->rechts: Geschirrspueler - Spuele (Muellsystem) - Schubkaesten - Kuehl-Gefrier-Kombination; Insel separat (Rollen)",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": 0,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": null,
+        "fuellstuecke": null,
+        "stellseiten": "Seitenwangen",
+        "wand_decken_anschluss": "Hochschrank bis Decke",
+        "sockel": "130 mm Sockel mit Schleppsockel-Anteilen",
+        "eckloesung": null
+      },
+      "griffe": "Griffmulde oval an Insel-Seite, Griff-Schlitz oben an Insel",
+      "material_farbe": "Dekorspan-Korpus und -Fronten Blau-Grau matt, Schubkaesten Carbon-Schwarz",
+      "plan_widersprueche": [
+        "S.3: Breitenmasse 30+596+596+539+596+30 = 2387, Gesamtmass 2403 (16 mm Abweichung)"
+      ]
+    },
+    {
+      "id": "T05-K1",
+      "belege": [
+        "T05 S.1",
+        "T05 S.2"
+      ],
+      "form": "sonstiges",
+      "raum": {
+        "wandbezug": "freistehende Schrankwand an einer Wand ohne Zeile",
+        "fenster_tuer": null,
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [
+        3159,
+        600,
+        600,
+        759,
+        1200
+      ],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": null,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": 2100,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": null,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Schrankwand Modul 600",
+          "b": 600,
+          "h": 2100,
+          "t": null,
+          "fronten": "Tueren, Oberfeld",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 2,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Schrankwand Modul 600 mit Schubaufteilung",
+          "b": 600,
+          "h": 2100,
+          "t": null,
+          "fronten": "Auszuege 3 Stueck",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 3,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Mittelmodul 759",
+          "b": 759,
+          "h": 2100,
+          "t": null,
+          "fronten": "eine Tuer hoch",
+          "innen": null,
+          "geraet": null
+        },
+        {
+          "pos": 4,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Modul 1200",
+          "b": 1200,
+          "h": 2100,
+          "t": null,
+          "fronten": "Tueren, Oberfeld",
+          "innen": null,
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": null,
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": null,
+        "fuellstuecke": null,
+        "stellseiten": null,
+        "wand_decken_anschluss": null,
+        "sockel": "Sockel dunkel durchlaufend",
+        "eckloesung": null
+      },
+      "griffe": "Griffmulde/Stangen (Griffe horizontal in Tuerdrittelhoehe, 2 Stueck)",
+      "material_farbe": "Front hell, Mittelteil dunkel",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T17-K1",
+      "belege": [
+        "T17 S.2",
+        "T17 S.3",
+        "T17 S.4",
+        "T17 S.5",
+        "T17 S.6",
+        "T17 S.7",
+        "T17 S.8",
+        "T17 S.9"
+      ],
+      "form": "L",
+      "raum": {
+        "wandbezug": "Zeile an langer Wand, Hochschrank-Block an Ecke zur zweiten Wand, Insel frei",
+        "fenster_tuer": null,
+        "abstand_wand_decke": "Hochschrank bis Decke (Laenge 100 mm Sockel)",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [
+        3975,
+        2940,
+        1581,
+        1325,
+        2936,
+        2659,
+        1416,
+        1085,
+        1243,
+        331
+      ],
+      "hoehen": {
+        "sockel": 100,
+        "ok_ap": 930,
+        "ap_d": null,
+        "oberschrank_uk": null,
+        "hochschrank_h": 1990,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": 642,
+        "hochschrank": 540,
+        "oberschrank": null,
+        "insel": 908
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Apotheker-Auszug",
+          "b": 300,
+          "h": 807,
+          "t": 642,
+          "fronten": "Schubkaesten 2",
+          "innen": "Schubkasten",
+          "geraet": null
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Spuelenunterschrank Muellzug + Quooker-Technik",
+          "b": 600,
+          "h": 807,
+          "t": 642,
+          "fronten": "PTO Tuer",
+          "innen": "Muellzug, Technik",
+          "geraet": "Spuele"
+        },
+        {
+          "pos": 3,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Geschirrspueler-Unterschrank",
+          "b": 600,
+          "h": 807,
+          "t": 642,
+          "fronten": "Griffmulde",
+          "innen": null,
+          "geraet": "Geschirrspueler"
+        },
+        {
+          "pos": 4,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Kochfeld-Unterschrank",
+          "b": 600,
+          "h": 807,
+          "t": 642,
+          "fronten": "3 Schubkaesten, Griffmulde",
+          "innen": null,
+          "geraet": "Kochfeld"
+        },
+        {
+          "pos": 5,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Kuehlschrank-Hochschrank",
+          "b": 600,
+          "h": 1990,
+          "t": 540,
+          "fronten": "Tuer mit Einlegeboeden",
+          "innen": null,
+          "geraet": "Kuehl-Gefrier-Kombination"
+        },
+        {
+          "pos": 6,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Backofen-Hochschrank",
+          "b": 600,
+          "h": 1990,
+          "t": 540,
+          "fronten": "2 Backoefen, Dampfgarer, Waermeschublade, Schubkaesten",
+          "innen": null,
+          "geraet": "Backofen, Dampfgarer, Waermeschublade"
+        },
+        {
+          "pos": 7,
+          "kategorie": "oberschrank",
+          "typ": "NEU:Regal-Stauraum",
+          "b": 430,
+          "h": 2000,
+          "t": 330,
+          "fronten": "offene Faecher",
+          "innen": "Faecher",
+          "geraet": null
+        },
+        {
+          "pos": 8,
+          "kategorie": "insel",
+          "typ": "NEU:Kochinsel mit Kochfeld",
+          "b": 2936,
+          "h": 827,
+          "t": 908,
+          "fronten": "Tueren PTO, Schubkaesten",
+          "innen": "Einlegeboeden",
+          "geraet": "Kochfeld in Insel, Muellsystem"
+        }
+      ],
+      "geraete_reihenfolge": "Zeile links->rechts: Apothekerauszug - Spuele mit Muell/Quooker - Geschirrspueler - Kochfeld - Backofen-Hochschrank mit Dampfgarer; Kuehlschrank im Hochschrank; Insel mit Kochfeld",
+      "abstaende": {
+        "spuele_kochfeld_mm": 1200,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": 0,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "Blende 30 mm links, Blende 20 mm am Insel-Ende",
+        "fuellstuecke": "Kochfeld-Blende (Ausschnitt)",
+        "stellseiten": "Seitenwange",
+        "wand_decken_anschluss": "Hochschrank bis Decke mit 277 mm Abstand",
+        "sockel": "100 mm, Blende 30 mm",
+        "eckloesung": "Ecke zum Hochschrank-Block"
+      },
+      "griffe": "PTO (Push-to-open) an Tueren und Schubkaesten, Griffmulde Edelstahl-Optik an Zeile",
+      "material_farbe": "Fronten Dekor Grau gestrukturt, Korpus Diamantgrau, AP Zeile Edelstahl, AP Insel Naturstein-Quarzit hell, Griffmulde Edelstahl-Optik",
+      "plan_widersprueche": [
+        "S.6: Insel Breiten 1581+1325 = 2906, Gesamt 2936 (30 mm Abweichung)",
+        "S.5: Hochschrank-Hoehen 687+1162+1990 nicht eindeutig gegliedert, Bezugspunkt offen"
+      ]
+    },
+    {
+      "id": "T18-K1",
+      "belege": [
+        "T18 S.1"
+      ],
+      "form": "zeile",
+      "raum": {
+        "wandbezug": "Zeile an langer Wand, Stauraum an beiden Enden",
+        "fenster_tuer": null,
+        "abstand_wand_decke": "Decke 2700 mm",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [
+        3050,
+        600,
+        600,
+        600,
+        600,
+        600,
+        30
+      ],
+      "hoehen": {
+        "sockel": 100,
+        "ok_ap": 941,
+        "ap_d": 20,
+        "oberschrank_uk": 1839,
+        "hochschrank_h": null,
+        "decke": 2700
+      },
+      "tiefen": {
+        "unterschrank": 630,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Stauraum (Eckmodul)",
+          "b": 600,
+          "h": 791,
+          "t": 630,
+          "fronten": "Tuer",
+          "innen": "Einlegeboeden",
+          "geraet": null
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Spuelen-Unterschrank mit Muellsystem",
+          "b": 600,
+          "h": 791,
+          "t": 630,
+          "fronten": "Tuer",
+          "innen": "Muellsystem",
+          "geraet": "Spuele"
+        },
+        {
+          "pos": 3,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Geschirrspueler (Bestand)",
+          "b": 600,
+          "h": 791,
+          "t": 630,
+          "fronten": "Geraetefront",
+          "innen": "Geraet",
+          "geraet": "Geschirrspueler"
+        },
+        {
+          "pos": 4,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Kochfeld-Backofen-Unterschrank",
+          "b": 600,
+          "h": 791,
+          "t": 630,
+          "fronten": "Kochfeld, Backofen oben",
+          "innen": null,
+          "geraet": "Kochfeld mit Abzug, Backofen"
+        },
+        {
+          "pos": 5,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Stauraum Schrank",
+          "b": 600,
+          "h": 791,
+          "t": 630,
+          "fronten": "Tuer",
+          "innen": null,
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "links->rechts: Stauraum - Spuele mit Muellsystem - Geschirrspueler - Kochfeld/Backofen - Stauraum",
+      "abstaende": {
+        "spuele_kochfeld_mm": 1800,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": 0,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "Blende 30 mm an beiden Enden",
+        "fuellstuecke": null,
+        "stellseiten": "Seitenwange",
+        "wand_decken_anschluss": "Oberschrank bis Decke",
+        "sockel": "100 mm",
+        "eckloesung": null
+      },
+      "griffe": "Griffmulde (in Front eingefraest oder Aufschraubgriff, Plan offen)",
+      "material_farbe": "Linoleum-Front Schwarz auf MDF, Korpus Dekor hell, Schubkaesten Eiche vollholz farblos, AP Naturstein 20 mm, Spritzschutz Glas bronze",
+      "plan_widersprueche": [
+        "S.1: Einzelmasse 30+600x5+30 = 3060, Gesamtmass 3050 (10 mm Abweichung)",
+        "Plan-Stempel: Abstimmung offen (nicht als Daten gewertet)"
+      ]
+    },
+    {
+      "id": "T19-K1",
+      "belege": [
+        "T19 S.1",
+        "T19 S.2",
+        "T19 S.3",
+        "T19 S.4"
+      ],
+      "form": "zeile",
+      "raum": {
+        "wandbezug": "Zeile an Wand, Hochschrank am Wandende, Insel mit Sitzniche",
+        "fenster_tuer": null,
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [
+        4800,
+        2146,
+        900,
+        600,
+        450,
+        150,
+        23
+      ],
+      "hoehen": {
+        "sockel": 100,
+        "ok_ap": 930,
+        "ap_d": 40,
+        "oberschrank_uk": null,
+        "hochschrank_h": 2100,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": 600,
+        "hochschrank": 600,
+        "oberschrank": null,
+        "insel": 1000
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Backofen-Unterschrank",
+          "b": 600,
+          "h": 800,
+          "t": 600,
+          "fronten": "Backofen oben, Schubkaesten",
+          "innen": null,
+          "geraet": "Backofen mit Dampf"
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Kuehlschrank-Unterschrank",
+          "b": 600,
+          "h": 800,
+          "t": 600,
+          "fronten": "Geraetefront",
+          "innen": null,
+          "geraet": "Kuehlschrank unterbaufaehig"
+        },
+        {
+          "pos": 3,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Spuelen-Unterschrank mit Abfall-Orga",
+          "b": 600,
+          "h": 800,
+          "t": 600,
+          "fronten": "Tuer",
+          "innen": "Abfall-Orga",
+          "geraet": "Spuele"
+        },
+        {
+          "pos": 4,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Geschirrspueler-Unterschrank",
+          "b": 600,
+          "h": 800,
+          "t": 600,
+          "fronten": "Geraetefront",
+          "innen": null,
+          "geraet": "Geschirrspueler"
+        },
+        {
+          "pos": 5,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Schubkasten-Unterschrank mit Innenschubkaesten",
+          "b": 600,
+          "h": 800,
+          "t": 600,
+          "fronten": "3 Schubkaesten",
+          "innen": "Innenschubkaesten",
+          "geraet": null
+        },
+        {
+          "pos": 6,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Schubkasten-Unterschrank",
+          "b": 600,
+          "h": 800,
+          "t": 600,
+          "fronten": "2 Schubkaesten",
+          "innen": "Schubkaesten",
+          "geraet": null
+        },
+        {
+          "pos": 7,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Schubkasten-Unterschrank",
+          "b": 600,
+          "h": 800,
+          "t": 600,
+          "fronten": "2 Schubkaesten",
+          "innen": "Schubkaesten",
+          "geraet": null
+        },
+        {
+          "pos": 8,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank Kuehl-Gefrier-Kombination + Vorrat",
+          "b": 600,
+          "h": 2100,
+          "t": 600,
+          "fronten": "Tueren",
+          "innen": "Fachboeden",
+          "geraet": "Kuehl-Gefrier-Kombination"
+        },
+        {
+          "pos": 9,
+          "kategorie": "insel",
+          "typ": "NEU:Insel mit Kochfeld, Innenschubkaesten, Flaschenregal",
+          "b": 2146,
+          "h": 950,
+          "t": 1000,
+          "fronten": "Innenschubkaesten, Kochfeld, Schubkaesten, Flaschenregal",
+          "innen": "Schubkaesten, Flaschenregal 150",
+          "geraet": "Kochfeld"
+        }
+      ],
+      "geraete_reihenfolge": "Zeile links->rechts: Backofen - Kuehlschrank - Spuele (Abfall) - Geschirrspueler - Schubkasten-Module; Hochschrank Kuehl-Gefrier am Ende; Insel mit Kochfeld",
+      "abstaende": {
+        "spuele_kochfeld_mm": 1800,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": 0,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "Blende 21-23 mm am Zeilenende",
+        "fuellstuecke": "Flaschenregal 150 mm in Insel",
+        "stellseiten": "Seitenwange",
+        "wand_decken_anschluss": "Hochschrank bis Decke",
+        "sockel": "100 mm",
+        "eckloesung": "Insel mit Sitznische und Bank"
+      },
+      "griffe": "Griffmulde (Platzhalter, Plan offen)",
+      "material_farbe": "Linoleum-Front Taupe auf MDF, Korpus Dekor hell, Schubkaesten Stahlzarge Carbonschwarz, AP Mineralwerkstoff beige, Fliesen-Spritzschutz",
+      "plan_widersprueche": [
+        "Plan-Stempel VORABZUG (nicht als Daten gewertet)"
+      ]
+    },
+    {
+      "id": "T20-K1",
+      "belege": [
+        "T20 S.1"
+      ],
+      "form": "zeile",
+      "raum": {
+        "wandbezug": "Erweiterung der bestehenden Zeile an Wand, nachtraeglich eingefuegt",
+        "fenster_tuer": null,
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [
+        1215,
+        584,
+        584,
+        47
+      ],
+      "hoehen": {
+        "sockel": 100,
+        "ok_ap": 915,
+        "ap_d": 20,
+        "oberschrank_uk": null,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": 413,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Erweiterungsmodul Thermomix-Boden",
+          "b": 584,
+          "h": 615,
+          "t": 413,
+          "fronten": "ausziehbarer Boden fuer Thermomix, Lueftungsgitter",
+          "innen": "Thermomix-Boden",
+          "geraet": "Thermomix"
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Unterschrank Erweiterung",
+          "b": 584,
+          "h": 615,
+          "t": 413,
+          "fronten": "Tuer",
+          "innen": null,
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Erweiterung rechts: Thermomix-Boden - Lueftungsgitter in Rueckwand",
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": "Blende 54 mm am Ende (Plan)",
+        "fuellstuecke": null,
+        "stellseiten": null,
+        "wand_decken_anschluss": null,
+        "sockel": "100 mm",
+        "eckloesung": null
+      },
+      "griffe": null,
+      "material_farbe": "Linoleum-Front Grau-Beige auf MDF, Korpus Dekor Grau, AP Naturstein weiss matt 20 mm",
+      "plan_widersprueche": [
+        "AP-Tiefe 468 mm laut Notiz, Korpus 413 mm (Ueberstand 55 mm, Zuordnung unklar)"
+      ]
+    },
+    {
+      "id": "T20-K2",
+      "belege": [
+        "T20 S.2"
+      ],
+      "form": "nische",
+      "raum": {
+        "wandbezug": "Sitznische an Wand mit Sitzbank und Bank",
+        "fenster_tuer": null,
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [
+        1207,
+        590,
+        590,
+        1210,
+        2660
+      ],
+      "hoehen": {
+        "sockel": null,
+        "ok_ap": 1028,
+        "ap_d": 20,
+        "oberschrank_uk": 1045,
+        "hochschrank_h": null,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": 435,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "oberschrank",
+          "typ": "NEU:Oberschrank Sitznische",
+          "b": 590,
+          "h": 1045,
+          "t": null,
+          "fronten": "2 Tueren (Linoleum)",
+          "innen": "doppelter Boden mit Blende, herausnehmbar",
+          "geraet": "LED-Beleuchtung"
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Sitzbank-Schrank",
+          "b": 1210,
+          "h": 435,
+          "t": 435,
+          "fronten": "Sitzbank 235 mm",
+          "innen": null,
+          "geraet": "Steckdose, Dimmer"
+        }
+      ],
+      "geraete_reihenfolge": null,
+      "abstaende": {
+        "spuele_kochfeld_mm": null,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": null,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": null,
+        "fuellstuecke": null,
+        "stellseiten": null,
+        "wand_decken_anschluss": null,
+        "sockel": null,
+        "eckloesung": "Rundung R100 an Sitzbank-Ecke"
+      },
+      "griffe": "Fronten ohne sichtbare Griffe (Plan)",
+      "material_farbe": "Linoleum-Front Taupe-Grau, Korpus Dekor dunkel, Tischplatte Linoleum oder Eiche weiss (Varianten)",
+      "plan_widersprueche": [
+        "Hoehenmasse 1028 und 1045 eng beieinander (Bezugskante unklar)"
+      ]
+    },
+    {
+      "id": "T21-K1",
+      "belege": [
+        "T21 S.1"
+      ],
+      "form": "sonstiges",
+      "raum": {
+        "wandbezug": "gerundete Raumform (Bogen) mit Zeile entlang gebogener Wand",
+        "fenster_tuer": "Bogenfenster in der Wand (Ansicht)",
+        "abstand_wand_decke": null,
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [
+        5815,
+        2000,
+        3200,
+        1615,
+        2000
+      ],
+      "hoehen": {
+        "sockel": 100,
+        "ok_ap": 930,
+        "ap_d": 30,
+        "oberschrank_uk": null,
+        "hochschrank_h": 2000,
+        "decke": null
+      },
+      "tiefen": {
+        "unterschrank": 600,
+        "hochschrank": null,
+        "oberschrank": null,
+        "insel": null
+      },
+      "schraenke": [
+        {
+          "pos": 1,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Geschirrspueler-Unterschrank",
+          "b": 600,
+          "h": 720,
+          "t": 600,
+          "fronten": "Geraetefront",
+          "innen": null,
+          "geraet": "Geschirrspueler"
+        },
+        {
+          "pos": 2,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Spuelen-Unterschrank mit Quooker",
+          "b": 600,
+          "h": 720,
+          "t": 600,
+          "fronten": "Tuer",
+          "innen": "Quooker-Technik",
+          "geraet": "Spuele"
+        },
+        {
+          "pos": 3,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Abfall-Orga-Unterschrank",
+          "b": 600,
+          "h": 720,
+          "t": 600,
+          "fronten": "Tuer",
+          "innen": "Abfall, Schmelzbeutelhalter",
+          "geraet": null
+        },
+        {
+          "pos": 4,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Innenschubkasten-Unterschrank",
+          "b": 600,
+          "h": 720,
+          "t": 600,
+          "fronten": "Innenschubkaesten",
+          "innen": "Innenschubkaesten",
+          "geraet": null
+        },
+        {
+          "pos": 5,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Kochfeld-Unterschrank",
+          "b": 600,
+          "h": 720,
+          "t": 600,
+          "fronten": "3 Schubkaesten",
+          "innen": null,
+          "geraet": "Kochfeld"
+        },
+        {
+          "pos": 6,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Schubkasten-Unterschrank",
+          "b": 600,
+          "h": 720,
+          "t": 600,
+          "fronten": "Schubkaesten",
+          "innen": "Schubkaesten",
+          "geraet": null
+        },
+        {
+          "pos": 7,
+          "kategorie": "unterschrank",
+          "typ": "NEU:Innenschubkasten-Unterschrank",
+          "b": 900,
+          "h": 720,
+          "t": 600,
+          "fronten": "Innenschubkaesten",
+          "innen": "Innenschubkaesten",
+          "geraet": null
+        },
+        {
+          "pos": 8,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Hochschrank Kaffee/Coffee-Corner + Kuehlschrank",
+          "b": 600,
+          "h": 2000,
+          "t": 600,
+          "fronten": "Tueren, Fachboeden",
+          "innen": "Fachboeden",
+          "geraet": "Kuehlschrank, Kaffee-Corner"
+        },
+        {
+          "pos": 9,
+          "kategorie": "hochschrank",
+          "typ": "NEU:Apothekerauszug-Hochschrank",
+          "b": 430,
+          "h": 2000,
+          "t": 600,
+          "fronten": "Apothekerauszug",
+          "innen": "Schubkaesten",
+          "geraet": null
+        }
+      ],
+      "geraete_reihenfolge": "Zeile links->rechts: Geschirrspueler - Spuele mit Quooker - Abfall-Orga - Innenschubkaesten - Kochfeld - Schubkaesten - Innenschubkaesten; Hochschraenke mit Kaffee-Corner, Kuehlschrank und Apotheker",
+      "abstaende": {
+        "spuele_kochfeld_mm": 1800,
+        "kochfeld_wand_mm": null,
+        "gsp_neben_spuele": 0,
+        "ks_spuele_mm": null
+      },
+      "anschluesse": {
+        "passblenden": null,
+        "fuellstuecke": null,
+        "stellseiten": "Seitenwange am Bogen",
+        "wand_decken_anschluss": "Hochschrank bis Decke, Bogenfenster-Abstand",
+        "sockel": "100 mm",
+        "eckloesung": "gerundete Wangen an Bogen (Radius)"
+      },
+      "griffe": "Griffleiste (Detail A) und Griffmulde, Aufschraubgriffe Hochschrank",
+      "material_farbe": "Fronten Dekor Beige-Grau matt, Korpus Dekor Grau, Schubkaesten Carbon, AP Naturstein-Kategorie Taj-Mahal-Ton",
+      "plan_widersprueche": [
+        "Massangaben des Bogens nicht vollstaendig, Radius nur grob ablesbar"
+      ]
+    }
+  ],
+  "wissen": {
+    "griffarten": [
+      {
+        "art": "Griffmulde (in Front oder Schubkasten eingefraest, Dekor oder Edelstahl-Optik)",
+        "wo": "Zeile Auszuege und Tueren oberer Bereich",
+        "haeufigkeit": 6,
+        "belege": [
+          "T03 S.7",
+          "T17 S.7",
+          "T17 S.8",
+          "T21 S.1",
+          "T19 S.1"
+        ]
+      },
+      {
+        "art": "PTO (Push-to-open, kein Griff)",
+        "wo": "Hochschrank und Zeile Tueren",
+        "haeufigkeit": 4,
+        "belege": [
+          "T17 S.7",
+          "T17 S.8",
+          "T17 S.9",
+          "T02 S.6"
+        ]
+      },
+      {
+        "art": "aufgesetzte Griffleiste mit Einsatzfraesung",
+        "wo": "Hochschrank Tuer oben",
+        "haeufigkeit": 2,
+        "belege": [
+          "T03 S.7",
+          "T21 S.1"
+        ]
+      },
+      {
+        "art": "Knopf (runder Knopf)",
+        "wo": "Auszuege Zeile",
+        "haeufigkeit": 1,
+        "belege": [
+          "T01 S.4"
+        ]
+      },
+      {
+        "art": "Aufschraubgriff",
+        "wo": "Platzhalter oder Hochschrank",
+        "haeufigkeit": 2,
+        "belege": [
+          "T18 S.1",
+          "T21 S.1"
+        ]
+      },
+      {
+        "art": "Griffmulde oval an Insel",
+        "wo": "Insel Seitenblende",
+        "haeufigkeit": 1,
+        "belege": [
+          "T04 S.6"
+        ]
+      }
+    ],
+    "layouts_anordnungen": [
+      {
+        "muster": "Zeile an einer Wand mit Hochschrank-Block am Wandende (rechts), Unterschrank-Zeile links",
+        "belege": [
+          "T03 S.5",
+          "T17 S.5",
+          "T18 S.1",
+          "T19 S.1"
+        ]
+      },
+      {
+        "muster": "L-Form: Zeile an zwei Waenden mit Kochinsel oder Sitzinsel davor",
+        "belege": [
+          "T01 S.2",
+          "T17 S.2",
+          "T19 S.2"
+        ]
+      },
+      {
+        "muster": "Zeile mit frei stehender Rolleninsel (1800 breit, 908 tief)",
+        "belege": [
+          "T04 S.2",
+          "T04 S.6"
+        ]
+      },
+      {
+        "muster": "Erweiterung einer bestehenden Zeile um 1 bis 2 Module (1215 Breite)",
+        "belege": [
+          "T20 S.1"
+        ]
+      },
+      {
+        "muster": "Sitznische mit Oberschrank ueber Sitzbank (1210 Breite Sitzplatz)",
+        "belege": [
+          "T20 S.2",
+          "T01 S.3",
+          "T19 S.3"
+        ]
+      },
+      {
+        "muster": "gerundete Raumform mit Zeile entlang Bogen",
+        "belege": [
+          "T21 S.1"
+        ]
+      }
+    ],
+    "innenausstattung": [
+      {
+        "element": "Apothekerauszug (schmal, 300 bis 430 breit)",
+        "kontext": "neben Zeile oder Hochschrank",
+        "belege": [
+          "T03 S.5",
+          "T17 S.7",
+          "T19 S.1",
+          "T21 S.1"
+        ]
+      },
+      {
+        "element": "Muellsystem als Auszug im Spuelenunterschrank",
+        "kontext": "Spuele",
+        "belege": [
+          "T04 S.3",
+          "T17 S.7",
+          "T18 S.1",
+          "T19 S.1"
+        ]
+      },
+      {
+        "element": "Innenschubkaesten 2x in Hochschrank oder Unterschrank",
+        "kontext": "Schubkasten-Module",
+        "belege": [
+          "T03 S.8",
+          "T19 S.1",
+          "T21 S.1"
+        ]
+      },
+      {
+        "element": "Schubkasten Carbon-Schwarz oder Stahlzarge",
+        "kontext": "Zeile Auszuege",
+        "belege": [
+          "T04 S.1",
+          "T19 S.1"
+        ]
+      },
+      {
+        "element": "Backofen im Hochschrank mit Dampfgarer oder Waermeschublade",
+        "kontext": "Hochschrank Ende der Zeile",
+        "belege": [
+          "T03 S.5",
+          "T17 S.8",
+          "T19 S.1"
+        ]
+      },
+      {
+        "element": "Kuehl-Gefrier-Kombination im Hochschrank",
+        "kontext": "Hochschrank Zeile",
+        "belege": [
+          "T03 S.5",
+          "T04 S.4",
+          "T17 S.8"
+        ]
+      },
+      {
+        "element": "Geschirrspueler vollintegriert mit Klappfront",
+        "kontext": "Zeile neben Spuele",
+        "belege": [
+          "T01 S.2",
+          "T04 S.4",
+          "T17 S.7",
+          "T21 S.1"
+        ]
+      },
+      {
+        "element": "Thermomix-Auszugsboden mit Lueftungsgitter",
+        "kontext": "Erweiterungsmodul",
+        "belege": [
+          "T20 S.1"
+        ]
+      },
+      {
+        "element": "Flaschenregal 150 in Insel",
+        "kontext": "Insel-Innenausstattung",
+        "belege": [
+          "T19 S.2"
+        ]
+      },
+      {
+        "element": "Steckdosen im Spritzschutz oder Blende",
+        "kontext": "Zeile und Insel",
+        "belege": [
+          "T03 S.5",
+          "T04 S.6",
+          "T17 S.5",
+          "T20 S.2"
+        ]
+      },
+      {
+        "element": "LED-Beleuchtung in Ablageboden oder seitlich",
+        "kontext": "Regale und Oberschraenke",
+        "belege": [
+          "T02 S.2",
+          "T18 S.1",
+          "T20 S.2"
+        ]
+      }
+    ],
+    "raumstellung": [
+      {
+        "regel_oder_muster": "Hochschrank-Block an Wandende oder Ecke, Ende der Zeile",
+        "belege": [
+          "T03 S.5",
+          "T17 S.5",
+          "T18 S.1"
+        ]
+      },
+      {
+        "regel_oder_muster": "Insel parallel zur Zeile, Gang zwischen Zeile und Insel ca. 1000 bis 1200 mm (Einzelwert 1111)",
+        "belege": [
+          "T01 S.3",
+          "T04 S.2"
+        ]
+      },
+      {
+        "regel_oder_muster": "Insel mit Sitzseite zum Raum, Sitzhoehe 435 bis 450 Sitzbank",
+        "belege": [
+          "T01 S.3",
+          "T20 S.2"
+        ]
+      },
+      {
+        "regel_oder_muster": "Oberschrank ueber Sitzbank in Nische, Abstand Oberkante ca. 1045",
+        "belege": [
+          "T20 S.2"
+        ]
+      }
+    ],
+    "raster_masse": [
+      {
+        "beobachtung": "Modulbreite 600 dominiert (mehrheitlich), danach 900 (Kochfeld-Modul), 450, 430, 300, 150 bis 250 als Restmodule",
+        "belege": [
+          "T18 S.1",
+          "T19 S.1",
+          "T17 S.4",
+          "T21 S.1"
+        ]
+      },
+      {
+        "beobachtung": "Restblenden 20 bis 30 mm als Standard am Zeilenende, Ausnahme 50 bis 55 mm",
+        "belege": [
+          "T17 S.4",
+          "T18 S.1",
+          "T20 S.1"
+        ]
+      },
+      {
+        "beobachtung": "Breiten 584 und 596 bis 539 als Abweichung vom 600er-Raster, also frei",
+        "belege": [
+          "T20 S.1",
+          "T04 S.3"
+        ]
+      },
+      {
+        "beobachtung": "Insel-Breite 1800 bis 2146, Tiefe 908 bis 1000",
+        "belege": [
+          "T04 S.2",
+          "T19 S.3"
+        ]
+      }
+    ],
+    "hoehenbereiche": [
+      {
+        "groesse": "sockel",
+        "werte": [
+          60,
+          82,
+          100,
+          130
+        ],
+        "belege": [
+          "T02 S.5",
+          "T01 S.6",
+          "T17 S.7",
+          "T04 S.4"
+        ]
+      },
+      {
+        "groesse": "ok_ap",
+        "werte": [
+          915,
+          920,
+          930,
+          941,
+          1028
+        ],
+        "belege": [
+          "T03 S.5",
+          "T04 S.4",
+          "T17 S.5",
+          "T18 S.1",
+          "T20 S.2"
+        ]
+      },
+      {
+        "groesse": "unterschrank_front",
+        "werte": [
+          646,
+          652,
+          720,
+          791,
+          800,
+          807,
+          822
+        ],
+        "belege": [
+          "T03 S.5",
+          "T04 S.4",
+          "T17 S.7",
+          "T18 S.1",
+          "T19 S.1"
+        ]
+      },
+      {
+        "groesse": "hochschrank_h",
+        "werte": [
+          1931,
+          1990,
+          2000,
+          2100,
+          2723
+        ],
+        "belege": [
+          "T04 S.4",
+          "T17 S.5",
+          "T19 S.4",
+          "T02 S.5"
+        ]
+      },
+      {
+        "groesse": "oberschrank_uk",
+        "werte": [
+          1045,
+          1839
+        ],
+        "belege": [
+          "T20 S.2",
+          "T18 S.1"
+        ]
+      },
+      {
+        "groesse": "decke",
+        "werte": [
+          2700
+        ],
+        "belege": [
+          "T18 S.1"
+        ]
+      }
+    ],
+    "geraete_beziehungen": [
+      {
+        "beziehung": "Geschirrspueler direkt neben Spuele (Abstand 0)",
+        "belege": [
+          "T04 S.2",
+          "T17 S.7",
+          "T18 S.1",
+          "T19 S.1"
+        ]
+      },
+      {
+        "beziehung": "Backofen oben im Hochschrank, Dampfgarer darunter",
+        "belege": [
+          "T17 S.8",
+          "T19 S.1"
+        ]
+      },
+      {
+        "beziehung": "Kochfeld im Unterschrank oder Insel, Dunstabzug in Zeile oder Insel",
+        "belege": [
+          "T01 S.2",
+          "T17 S.6",
+          "T18 S.1"
+        ]
+      },
+      {
+        "beziehung": "Kuehlschrank im Hochschrank oder unterbaufaehig neben Backofen",
+        "belege": [
+          "T03 S.5",
+          "T19 S.1"
+        ]
+      }
+    ],
+    "laufwege_ergonomie": [
+      {
+        "beobachtung": "Gangbreite zwischen Zeile und Insel",
+        "masse": [
+          1111,
+          1200
+        ],
+        "belege": [
+          "T01 S.3"
+        ]
+      },
+      {
+        "beobachtung": "Arbeitsplatte Zeile in 900 bis 941 OK, Insel etwas niedriger",
+        "masse": [
+          827,
+          930
+        ],
+        "belege": [
+          "T17 S.6",
+          "T04 S.4"
+        ]
+      },
+      {
+        "beobachtung": "Abstand Spuele zu Kochfeld in Zeile",
+        "masse": [
+          1200,
+          1800
+        ],
+        "belege": [
+          "T17 S.5",
+          "T18 S.1",
+          "T21 S.1"
+        ]
+      },
+      {
+        "beobachtung": "Sitzbank-Ergonomie Sitzbreite je Platz",
+        "masse": [
+          600,
+          1210
+        ],
+        "belege": [
+          "T20 S.2"
+        ]
+      }
+    ],
+    "anschluesse_blenden_fuellstuecke": [
+      {
+        "detail": "Sockelblende 100 mm, Ruecksprung und Sockel in Frontfarbe",
+        "masse": [
+          100
+        ],
+        "belege": [
+          "T17 S.5",
+          "T18 S.1"
+        ]
+      },
+      {
+        "detail": "Passblende zum Wandende 20 bis 30 mm",
+        "masse": [
+          20,
+          30
+        ],
+        "belege": [
+          "T17 S.4",
+          "T19 S.1"
+        ]
+      },
+      {
+        "detail": "Arbeitsplatte Ueberstand Insel 200 mm nach vorne mit Backofen-Kassette bu.",
+        "masse": [
+          200
+        ],
+        "belege": [
+          "T01 S.3"
+        ]
+      },
+      {
+        "detail": "Hochschrank Abstand Oberkante zu Decke 277 mm (Lueftung, Fuge)",
+        "masse": [
+          277
+        ],
+        "belege": [
+          "T02 S.3",
+          "T03 S.5",
+          "T17 S.5"
+        ]
+      },
+      {
+        "detail": "Festblende ueber Eck oder an Stirnseite 30 bis 90 mm",
+        "masse": [
+          30,
+          90
+        ],
+        "belege": [
+          "T02 S.2",
+          "T17 S.8"
+        ]
+      },
+      {
+        "detail": "Fuge Front zu Korpus 2 mm, Fuge Front zu Front 2 mal 2 mm",
+        "masse": [
+          2,
+          4
+        ],
+        "belege": [
+          "T01 S.4"
+        ]
+      }
+    ],
+    "stil": [
+      {
+        "merkmal": "Matte Dekorfronten in Grau, Beige oder Blau-Grau (Laminat-Kategorie)",
+        "belege": [
+          "T04 S.1",
+          "T17 S.1",
+          "T19 S.1",
+          "T21 S.1"
+        ]
+      },
+      {
+        "merkmal": "Linoleum-Fronten auf MDF (matte Oberflaeche) in Grau, Beige, Schwarz",
+        "belege": [
+          "T18 S.1",
+          "T19 S.1",
+          "T20 S.1"
+        ]
+      },
+      {
+        "merkmal": "Echtholzfurnier Nuss mit Lackfront fuer Glastueren",
+        "belege": [
+          "T02 S.2"
+        ]
+      },
+      {
+        "merkmal": "Naturstein-Arbeitsplatte oder Spritzschutz (gruener Marmor, Taj Mahal, Quarzit)",
+        "belege": [
+          "T02 S.6",
+          "T17 S.5",
+          "T18 S.1",
+          "T21 S.1"
+        ]
+      },
+      {
+        "merkmal": "Edelstahl-Arbeitsplatte kaltgewalzt mit Wirbelfinish",
+        "belege": [
+          "T03 S.3",
+          "T17 S.4"
+        ]
+      },
+      {
+        "merkmal": "Wiederkehrende Details: Griffmulde in Frontfarbe, PTO, Stahl-Einsatzfraesung, runde Knoepfe",
+        "belege": [
+          "T03 S.7",
+          "T17 S.7",
+          "T01 S.4"
+        ]
+      },
+      {
+        "merkmal": "Glas (Riffelglas, bronze) fuer Vitrinen-Faecher",
+        "belege": [
+          "T02 S.4",
+          "T02 S.5"
+        ]
+      }
+    ],
+    "zeichenstil": [
+      {
+        "merkmal": "Grundrisse mit roten Massketten, Ansichten mit Schrankaufteilung (Auszug, Tuer, Schub) und Geraetelegende rechts",
+        "belege": [
+          "T01 S.2",
+          "T03 S.3",
+          "T17 S.5"
+        ]
+      },
+      {
+        "merkmal": "Frontansichten mit diagonalen Kreuzen fuer Tuer- oder Auszugsfront, PTO-Symbol",
+        "belege": [
+          "T17 S.8",
+          "T20 S.1"
+        ]
+      },
+      {
+        "merkmal": "Massstaebe 1:15, 1:20, 1:25, 1:30, 1:50 und 1:100 gemischt",
+        "belege": [
+          "T01 S.3",
+          "T17 S.4",
+          "T18 S.1",
+          "T19 S.1"
+        ]
+      },
+      {
+        "merkmal": "Perspektive als Umriss-Zeichnung oder Renderbild (Vorplanung)",
+        "belege": [
+          "T02 S.1",
+          "T05 S.1",
+          "T17 S.2"
+        ]
+      }
+    ],
+    "moodboard_praesentation": [
+      {
+        "merkmal": "Titelblatt mit Projektname und Datum, dann Blattreihe Perspektive, Grundriss, Ansichten",
+        "belege": [
+          "T01 S.1",
+          "T03 S.1",
+          "T04 S.1"
+        ]
+      },
+      {
+        "merkmal": "Einzelblatt mit Ansicht, Schnitt und Foto (Uebersicht)",
+        "belege": [
+          "T21 S.1"
+        ]
+      }
+    ],
+    "neue_katalogtypen": [
+      {
+        "vorschlag": "Rolleninsel-Unterschrank mit Schubkasten-Blende und Steckdosenblende (1800 mm)",
+        "belege": [
+          "T04 S.6"
+        ]
+      },
+      {
+        "vorschlag": "Erweiterungsmodul mit ausziehbarem Boden fuer Kuechenmaschine und Lueftungsschlitz",
+        "belege": [
+          "T20 S.1"
+        ]
+      },
+      {
+        "vorschlag": "Hochschrank-Block mit Technikfach fuer Verstaerker oder Geraet",
+        "belege": [
+          "T02 S.6"
+        ]
+      },
+      {
+        "vorschlag": "Sitzbank-Schrank mit Truhenfach (1615 bis 1210)",
+        "belege": [
+          "T21 S.1",
+          "T20 S.2"
+        ]
+      },
+      {
+        "vorschlag": "Apothekerauszug (2 Legrabox) fuer schmale Module",
+        "belege": [
+          "T03 S.7",
+          "T17 S.7"
+        ]
+      }
+    ],
+    "offen": [
+      "Hoehen und Tiefen ohne eindeutige Bezugskante lesbar (z. B. T03 Maß 230/650, T17 Tiefe 330 Regal)",
+      "Griffart bei T18 und T19 nicht festgelegt (Platzhalter)",
+      "Plan-Stempel VORPLANUNG oder VORABZUG nicht als Daten gewertet",
+      "Mehrere Plaene enthalten Bemassungsabweichungen von 6 bis 30 mm (siehe plan_widersprueche)"
+    ]
+  }
+}

@@ -1,0 +1,82 @@
+{
+ "kuechenmodell.neg-koordinaten.json": [
+  "I7 Freiraum auszug von z1-02 ausserhalb"
+ ],
+ "kuechenmodell.neg-freiraum-verdreht.json": [
+  "min nicht kleiner als max"
+ ],
+ "kuechenmodell.neg-drehung.json": [
+  "I7 Element z1 ausserhalb",
+  "I7 Element z1-02 ausserhalb"
+ ],
+ "kuechenmodell.neg-annahmen.json": [
+  "I2 annahmen"
+ ],
+ "kuechenmodell.neg-ableitung.json": [
+  "I1 korpus_h: abgeleitet aus Annahme"
+ ],
+ "kuechenmodell.neg-rechnung.json": [
+  "I1 korpus_h: Ableitung ergibt 805"
+ ],
+ "kuechenmodell.neg-hochstufen-projekt.json": [
+  "I1 arbeitshoehe: herkunft projekt",
+  "I1 arbeitshoehe: Quelle ist annahme"
+ ],
+ "kuechenmodell.neg-hochstufen-setup.json": [
+  "I1 sockel_rueckversatz: herkunft setup",
+  "I1 sockel_rueckversatz: Quelle ist annahme"
+ ],
+ "kuechenmodell.neg-projektwert.json": [
+  "I1 ap_d"
+ ],
+ "kuechenmodell.neg-mindestsatz.json": [
+  "I1 Mindestsatz: lochreihe_abstand_vk"
+ ],
+ "kuechenmodell.neg-bearbeitung.json": [
+  "Bearbeitung 1: ausserhalb",
+  "Bearbeitung 2: Tiefe >= Dicke",
+  "Bearbeitung 3: Tiefe >= Teilbreite"
+ ],
+ "kuechenmodell.neg-anschluss.json": [
+  "I3 Anschluss wk-1"
+ ],
+ "kuechenmodell.neg-freigabe.json": [
+  "I8 freigabe gilt fuer Revision 1"
+ ],
+ "kuechenmodell.neg-teile-veraltet.json": [
+  "I8 teile stammen aus Revision 1"
+ ],
+ "kuechenmodell.neg-freigabe-ungeprueft.json": [
+  "I5 nische-2460-z1-02-seite_links: abs-weiss-1 ist ungeprueft"
+ ],
+ "kuechenmodell.neg-schema.json": [
+  "werte/korpus_d/herkunft",
+  "teile/0/kanten/l1",
+  "elemente/0/kinder/0/lage/pos",
+  "elemente/0/id",
+  "teile/1: 'material' is a required",
+  "teile/1: Additional properties",
+  "pruefung/stand"
+ ],
+ "kuechenmodell.neg-faser.json": [
+  "teile/0: 'drehbar' is a required"
+ ],
+ "planungsbogen.neg-wand-a.json": [
+  "I7 Wand A"
+ ],
+ "planungsbogen.neg-uhrzeigersinn.json": [
+  "I7 Grundriss nicht gegen den Uhrzeigersinn"
+ ],
+ "werkzeug.ausgeben_ein.neg-ziel.json": [
+  "ziel"
+ ],
+ "werkzeug.ausgeben_ein.neg-tippfehler.json": [
+  "'vorlag' was unexpected"
+ ],
+ "werkzeug.revision_freigeben_ein.neg-rolle.json": [
+  "'rolle' was unexpected"
+ ],
+ "unbekannt.neg-praefix.json": [
+  "unbekanntes Dateipraefix"
+ ]
+}

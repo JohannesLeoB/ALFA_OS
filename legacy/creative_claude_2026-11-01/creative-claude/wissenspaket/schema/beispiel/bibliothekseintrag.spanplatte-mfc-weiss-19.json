@@ -1,0 +1,11 @@
+{
+  "schema": "bibliothekseintrag/v0.2",
+  "bibliothek": "material",
+  "id": "spanplatte-mfc-weiss-19",
+  "bezeichnung": "Spanplatte melaminharzbeschichtet weiss 19 mm",
+  "material": {"traeger": "Spanplatte", "dekor": "weiss", "dicken": [19], "formate": [{"l": 2800, "b": 2070}], "faser": "keine", "sichtseiten": "beide"},
+  "bestellung": {"mengeneinheit": "platte"},
+  "quelle": {"art": "eigen", "stand": "2026-10-31"},
+  "status": "geprueft",
+  "weitergabe": "frei"
+}

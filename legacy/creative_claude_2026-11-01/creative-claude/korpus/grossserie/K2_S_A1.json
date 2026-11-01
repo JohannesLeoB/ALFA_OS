@@ -1,0 +1,449 @@
+{
+ "durchgang": "K2-S-A1",
+ "seiten_gelesen": "61/61",
+ "atome": [
+  {
+   "bereich": "RASTER",
+   "aussage": "Seitenwangen (Rundwangen) gibt es in zwei Stärken, wahlweise ein- oder zweiseitig gerundet; Radien sollen über Arbeitsplatte, Abdeckboden und Tischplatte einheitlich geplant werden.",
+   "werte": [
+    50,
+    150
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.22"
+   ],
+   "id": "GS-RASTER-01"
+  },
+  {
+   "bereich": "RASTER",
+   "aussage": "Rahmenfront mit schmalem umlaufendem Rahmen von 10 mm Breite, in Echtholz oder Lack.",
+   "werte": [
+    10
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.44"
+   ],
+   "id": "GS-RASTER-02"
+  },
+  {
+   "bereich": "RASTER",
+   "aussage": "In diesem Abschnitt sind keine Korpusbreiten, -höhen, -tiefen, Sockel- oder Arbeitshöhen bemaßt; der Teil besteht aus Stimmungsbildern. Maßraster steht vermutlich im Typen-und-Maße-Teil am Katalogende.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.1",
+    "S.61"
+   ],
+   "id": "GS-RASTER-03"
+  },
+  {
+   "bereich": "RASTER",
+   "aussage": "Sichtbare Fugen zwischen Fronten sind durchgehend sehr fein und gleichmäßig; ein Fugenmaß wird nicht genannt.",
+   "werte": [],
+   "einheit": "mm",
+   "belege": [
+    "S.14",
+    "S.26",
+    "S.59"
+   ],
+   "id": "GS-RASTER-04"
+  },
+  {
+   "bereich": "FRONT",
+   "aussage": "Inselfront mit je drei Fronten nebeneinander in zwei Reihen: obere Reihe niedriger als untere (etwa 1:2 geschätzt, nicht bemaßt).",
+   "werte": [
+    "3 Spalten",
+    "2 Reihen"
+   ],
+   "einheit": "",
+   "belege": [
+    "S.14",
+    "S.18"
+   ],
+   "id": "GS-FRONT-01"
+  },
+  {
+   "bereich": "FRONT",
+   "aussage": "Zeile mit Schubkastenpaaren: oberer flacher Auszug über großem unterem Auszug; Breiten wechseln (schmal, breit, schmal); Fugenlinien der Reihen laufen über mehrere Korpusse durch.",
+   "werte": [
+    "2 Reihen"
+   ],
+   "einheit": "",
+   "belege": [
+    "S.45",
+    "S.47",
+    "S.59"
+   ],
+   "id": "GS-FRONT-02"
+  },
+  {
+   "bereich": "FRONT",
+   "aussage": "Hochschrankwand bis nahe Decke: je Hochschrank kurze Klappe/Tür oben, große Tür darunter, bei Geräteschränken zusätzlich Tür unter dem Gerät; Gerätenische liegt etwa auf Griffhöhe bis Brusthöhe.",
+   "werte": [
+    "oben kurz",
+    "Mitte Gerät",
+    "unten Tür"
+   ],
+   "einheit": "",
+   "belege": [
+    "S.26",
+    "S.29",
+    "S.33",
+    "S.41"
+   ],
+   "id": "GS-FRONT-03"
+  },
+  {
+   "bereich": "FRONT",
+   "aussage": "Inselfront mit vier hohen Türen nebeneinander (Aluminium-Front, ohne Teilung in der Höhe).",
+   "werte": [
+    "4 Türen"
+   ],
+   "einheit": "",
+   "belege": [
+    "S.52",
+    "S.54"
+   ],
+   "id": "GS-FRONT-04"
+  },
+  {
+   "bereich": "FRONT",
+   "aussage": "Fronttypen im Bild: Lack matt hell, Furnier/Holzdekor, Rahmenfront, Glasacryl (matt, kratzfest), Aluminium, Glastür mit Metallrahmen.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.18",
+    "S.30",
+    "S.44",
+    "S.60"
+   ],
+   "id": "GS-FRONT-05"
+  },
+  {
+   "bereich": "FRONT",
+   "aussage": "Farbprogramme: eine Linie mit 11 Holzdekoren, eine zweite mit 18 Standardfarben plus Normfarbtönen und Designer-Kollektion.",
+   "werte": [
+    11,
+    18
+   ],
+   "einheit": "",
+   "belege": [
+    "S.48"
+   ],
+   "id": "GS-FRONT-06"
+  },
+  {
+   "bereich": "KORPUS",
+   "aussage": "Hochschrankwand läuft über mehrere nebeneinanderliegende Hochschränke; seitlich/oben schließt ein umlaufender Rahmen oder Blendenkranz in Holzdekor ab, unten Sockel in Holzdekor.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.26",
+    "S.33"
+   ],
+   "id": "GS-KORPUS-01"
+  },
+  {
+   "bereich": "KORPUS",
+   "aussage": "Offene Regalnische mit schwarzem Metallrahmen und Holzböden zwischen Hochschränken, mit Beleuchtung hinterlegt.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.14",
+    "S.15"
+   ],
+   "id": "GS-KORPUS-02"
+  },
+  {
+   "bereich": "KORPUS",
+   "aussage": "Glastür-Hochschrank mit dunklem Metallrahmen, zweiflügelig, Glasböden, Innenbeleuchtung.",
+   "werte": [
+    "2 Flügel"
+   ],
+   "einheit": "",
+   "belege": [
+    "S.16",
+    "S.17",
+    "S.28",
+    "S.36"
+   ],
+   "id": "GS-KORPUS-03"
+  },
+  {
+   "bereich": "KORPUS",
+   "aussage": "Wandschränke mit Glasfront und Metallrahmen, vier nebeneinander, zwei übereinander; darunter Wandleiste mit Haken und Ablage über Steinoptik-Spiegel.",
+   "werte": [
+    "4 Spalten",
+    "2 Reihen"
+   ],
+   "einheit": "",
+   "belege": [
+    "S.53",
+    "S.59"
+   ],
+   "id": "GS-KORPUS-04"
+  },
+  {
+   "bereich": "KORPUS",
+   "aussage": "Insel mit Rundwange am Ende, Wange in gleicher Oberfläche wie Front (Lack matt hell) oder Wasserfall-Kante in Steinoptik.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.14",
+    "S.54"
+   ],
+   "id": "GS-KORPUS-05"
+  },
+  {
+   "bereich": "KORPUS",
+   "aussage": "Insel/Zeile steht auf zurückgesetztem dunklem oder holzfarbenem Sockel (Schattenfuge, Insel wirkt schwebend); Tiefe des Rücksprungs nicht bemaßt.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.14",
+    "S.52",
+    "S.54",
+    "S.55"
+   ],
+   "id": "GS-KORPUS-06"
+  },
+  {
+   "bereich": "INNEN",
+   "aussage": "Hochschrank/Anrichte innen mit offenen Auszügen ohne Front (drei Schalen übereinander), Holzdekor innen.",
+   "werte": [
+    "3 Auszüge"
+   ],
+   "einheit": "",
+   "belege": [
+    "S.28",
+    "S.33"
+   ],
+   "id": "GS-INNEN-01"
+  },
+  {
+   "bereich": "INNEN",
+   "aussage": "Gerätenische (Kaffeemaschine) mit Zwischenboden und ausziehbarer Arbeitsfläche im Hochschrank, darüber Bodenfächer, darunter Schubkästen.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.32",
+    "S.56"
+   ],
+   "id": "GS-INNEN-02"
+  },
+  {
+   "bereich": "INNEN",
+   "aussage": "Tiefe Auszüge mit dunklen, hohen Seiten und innerem Auszug (Innenschubkasten) hinter dem Frontauszug.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.40",
+    "S.44",
+    "S.48"
+   ],
+   "id": "GS-INNEN-03"
+  },
+  {
+   "bereich": "INNEN",
+   "aussage": "Glasböden mit Randbeleuchtung in der Rahmenkante; LED-Leisten oben im Wandschrank.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.58",
+    "S.59"
+   ],
+   "id": "GS-INNEN-04"
+  },
+  {
+   "bereich": "LAYOUT",
+   "aussage": "Insel mit Hochschrankwand an der Rückwand, Insel trägt Kochfeld und Spüle (Küche in offenem Wohnraum).",
+   "werte": [
+    "Insel",
+    "Hochschrankwand"
+   ],
+   "einheit": "",
+   "belege": [
+    "S.14",
+    "S.15",
+    "S.31"
+   ],
+   "id": "GS-LAYOUT-01"
+  },
+  {
+   "bereich": "LAYOUT",
+   "aussage": "Insel mit versetzten Arbeitsebenen: erhöhter Block in Steinoptik mit Kochfeld/Spüle, tiefere Ebene in anderem Material als Ablage oder Bar.",
+   "werte": [
+    "2 Ebenen"
+   ],
+   "einheit": "",
+   "belege": [
+    "S.26",
+    "S.35",
+    "S.37"
+   ],
+   "id": "GS-LAYOUT-02"
+  },
+  {
+   "bereich": "LAYOUT",
+   "aussage": "Insel mit Tischverlängerung und Stahlrahmen-Beinen als Sitzplatz; Barhocker.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.40",
+    "S.42",
+    "S.49"
+   ],
+   "id": "GS-LAYOUT-03"
+  },
+  {
+   "bereich": "LAYOUT",
+   "aussage": "Zeile an der Wand mit Kochfeld im Unterschrank, Wandschränken Glas und Leuchtboden darüber; gegenüber Insel.",
+   "werte": [
+    "Zeile",
+    "Insel"
+   ],
+   "einheit": "",
+   "belege": [
+    "S.45",
+    "S.47",
+    "S.49"
+   ],
+   "id": "GS-LAYOUT-04"
+  },
+  {
+   "bereich": "LAYOUT",
+   "aussage": "Zeile mit durchgehender Wandschrank-Reihe ohne Oberbodenkante zu Hochschränken; Nische zwischen Arbeitsplatte und Wandschränken mit Steinoptik-Spiegel.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.53",
+    "S.59"
+   ],
+   "id": "GS-LAYOUT-05"
+  },
+  {
+   "bereich": "GRIFF",
+   "aussage": "Grifflos: durchlaufende Griffleiste/Griffmulde an der Oberkante der Fronten unter der Arbeitsplatte.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.19",
+    "S.20",
+    "S.52"
+   ],
+   "id": "GS-GRIFF-01"
+  },
+  {
+   "bereich": "GRIFF",
+   "aussage": "Metallene Griffleiste, oben an Frontkante aufgesetzt, bei Rahmenfronten.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.43",
+    "S.45",
+    "S.47"
+   ],
+   "id": "GS-GRIFF-02"
+  },
+  {
+   "bereich": "GRIFF",
+   "aussage": "In die Frontgestaltung integrierter Griff bei Rahmenfront.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.44"
+   ],
+   "id": "GS-GRIFF-03"
+  },
+  {
+   "bereich": "GRIFF",
+   "aussage": "Glastür: senkrechter Metallgriff am Türrahmen; Schiebetür mit Griffmulde.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.36",
+    "S.53"
+   ],
+   "id": "GS-GRIFF-04"
+  },
+  {
+   "bereich": "GRIFF",
+   "aussage": "Hochschrankfronten ohne sichtbare Griffe (Push-open oder Griffmulde, nicht erkennbar).",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.26",
+    "S.29"
+   ],
+   "id": "GS-GRIFF-05"
+  },
+  {
+   "bereich": "ANSCHLUSS",
+   "aussage": "Backofen/Kompaktgeräte sitzen als Einbaugerät in Hochschrank mit Front darüber und darunter; zwei Geräte nebeneinander möglich.",
+   "werte": [
+    "1 oder 2 Geräte"
+   ],
+   "einheit": "",
+   "belege": [
+    "S.26",
+    "S.41"
+   ],
+   "id": "GS-ANSCHLUSS-01"
+  },
+  {
+   "bereich": "ANSCHLUSS",
+   "aussage": "Kochfeld und Spüle in die Arbeitsplatte eingelassen (flächenbündig/unterbaut); Armatur seitlich der Spüle; Glasspritzschutz zur Sitzseite.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.31",
+    "S.46"
+   ],
+   "id": "GS-ANSCHLUSS-02"
+  },
+  {
+   "bereich": "ANSCHLUSS",
+   "aussage": "Bedienknöpfe des Kochfelds an der Stirnseite des erhöhten Blocks.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.31"
+   ],
+   "id": "GS-ANSCHLUSS-03"
+  },
+  {
+   "bereich": "REGEL",
+   "aussage": "Radien an Wangen, Arbeitsplatten, Abdeckböden und Tischplatten gemeinsam planen, damit das Bild einheitlich bleibt.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.22"
+   ],
+   "id": "GS-REGEL-01"
+  },
+  {
+   "bereich": "REGEL",
+   "aussage": "Rundwangen fassen einzelne Schrankelemente zur Zeile zusammen und bilden einen Abschluss.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.18"
+   ],
+   "id": "GS-REGEL-02"
+  }
+ ],
+ "vergleich_studio": [
+  "Katalog: Fronten in einheitlichen, sichtbar rastergebundenen Reihen (Hochschrank: kurze Klappe oben, Tür, Gerätenische, Tür); Studio: freie Teilung ohne Raster.",
+  "Katalog: Sockel zurückgesetzt als Schattenfuge, Insel wirkt schwebend; Studio: Sockel ca. 100 mm als feste Größe.",
+  "Katalog: Wandschränke mit Glasrahmen und Leuchtboden gehören zum Standardbild; Studio plant meist ohne Oberschränke.",
+  "Katalog: Rest zwischen Elementen wird durch Wangen, Blenden und Rahmen geschlossen; Studio nutzt Restfeld als Funktionsfeld.",
+  "Katalog: Fugen fein und gleichmäßig, aber nicht bemaßt; Studio gibt 1,5 bis 2 mm je Kante."
+ ],
+ "offen": [
+  "Abschnitt enthält nur Stimmungsbilder; Maße, Raster, Tiefen und Planungsregeln stehen vermutlich im Typen-und-Maße-Teil.",
+  "Seitenbelege sind PDF-Seiten; gedruckte Seitenzahl = PDF-Seite minus 1.",
+  "Höhenverhältnisse (1:2) und Geräteposition sind aus Bildern geschätzt."
+ ]
+}

@@ -1,0 +1,3707 @@
+{
+ "meta": {
+  "titel": "Schubkasten-Regeln aus interiorcad-Stammdaten (Stand 22.07.2026, Bibliotheksversion 2026.3.0)",
+  "status": "[aus Stammdaten] - nur aus den CSV abgeleitet, nicht gegen Herstellerunterlagen geprueft; Feldbedeutungen sind [Deutung]",
+  "einheit": "mm, kg",
+  "quelle_werte": {
+   "xg": "vom Hersteller/Lieferant mitgelieferter Bestand",
+   "user": "vom Studio angelegt",
+   "custom": "Vorlage/Beispiel des Programms",
+   "custom xg": "herstellerseitig parametrische Eintraege (als Bestand gewertet)"
+  },
+  "hinweis_kopien": "Studio-Bibliotheken liegen 4-fach vor (Eigene / Original / Original-Original / Original-1); zeilen zaehlt hier die Datei-Zeilen, eindeutige Artikel stehen im Feld studio_eindeutig",
+  "keine_preise": true
+ },
+ "feldbedeutung": {
+  "zargendicke_max": "drawersidemaxthickness - groesste zulaessige Seitendicke des Holzschubkastens [Deutung]",
+  "innenbreite_abzug": "Holzschubkasten: drawerinnerwidthreduction; Metallzarge: backwidthreduction. Abzug von der lichten Korpusbreite bis zur Breite von Hinterwand/Zargenseiten-Innenmass [Deutung; Einzelwerte decken sich mit bekannten Herstellerwerten Legrabox 38, Tandembox 87, Merivobox 51]",
+  "laengen_abzug": "Holzschubkasten: drawerlengthreduction (Kastenlaenge = Nennlaenge - X). Metallzarge: Profillaenge minus Bodenlaenge (Boden = Nennlaenge - X) [Deutung]",
+  "weitere.bodenversatz_seite": "baseboardoffset - Abstand Unterkante Seite zur Bodenoberflaeche bzw. Bodenlage an der Seite [Deutung]",
+  "weitere.bodenversatz_boden": "bottomboardoffset = baseboardoffset + 9,5 (Grass Dynapro/Dynamoov +10) [Deutung]",
+  "weitere.nutabstand_unterkante_min_max": "dadodistancefrombottommin/max - zulaessiger Abstand der Bodennut von der Seitenunterkante [Deutung]",
+  "weitere.auszugslaenge_zuschlag": "drawersliderlengthaddition - Tiefe, die der Korpus ueber die Nennlaenge hinaus braucht [Deutung]",
+  "weitere.mindest_abstand_oben": "mintopoffset - Mindestluft ueber der Zarge [Deutung]",
+  "weitere.bodenbreite_abzug": "drawerprofilebottomboardwidthoffset - Bodenbreite = lichte Breite - X [Deutung]",
+  "weitere.mindestabstand_boden": "minimumbottomoffset - Mindestabstand Bodenunterkante zur Zargenunterkante [Deutung]",
+  "weitere.durchgehender_boden": "drawerprofilecontinuousbase - 1 = Boden laeuft durchgehend unter der Zarge [Deutung]"
+ },
+ "regeln_holzschubkasten_unterflurauszug": [
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Blum",
+   "serie": "Blum Movento - BLUMOTION S",
+   "artikel_muster": {
+    "muster": [
+     "###H####S"
+    ],
+    "beispiele": [
+     "760H2500S",
+     "760H2700S",
+     "766H7500S"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    580,
+    600,
+    650,
+    700,
+    750
+   ],
+   "tragkraft_kg": [
+    40,
+    60
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 15,
+    "bodenversatz_seite": 28.5,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 23,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Blum",
+   "serie": "Blum Movento - TIP-ON",
+   "artikel_muster": {
+    "muster": [
+     "###H####T"
+    ],
+    "beispiele": [
+     "760H2500T",
+     "760H2700T",
+     "766H7500T"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    580,
+    600,
+    650,
+    700,
+    750
+   ],
+   "tragkraft_kg": [
+    40,
+    60
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 15,
+    "bodenversatz_seite": 28.5,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 23,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Blum",
+   "serie": "Blum Tandem - 550F - B",
+   "artikel_muster": {
+    "muster": [
+     "###F####B"
+    ],
+    "beispiele": [
+     "550F2700B",
+     "550F3000B",
+     "550F6500B"
+    ]
+   },
+   "zargendicke_max": 19,
+   "innenbreite_abzug": 49,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 3,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 24.5,
+    "bodenversatz_boden": 34,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 9,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Blum",
+   "serie": "Blum Tandem - 550H - B",
+   "artikel_muster": {
+    "muster": [
+     "###H####B"
+    ],
+    "beispiele": [
+     "550H2700B",
+     "550H3000B",
+     "550H6500B"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 3,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 24.5,
+    "bodenversatz_boden": 34,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 9,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Blum",
+   "serie": "Blum Tandem - 560F - B",
+   "artikel_muster": {
+    "muster": [
+     "###F####B"
+    ],
+    "beispiele": [
+     "560F2500B",
+     "560F2700B",
+     "560F6000B"
+    ]
+   },
+   "zargendicke_max": 19,
+   "innenbreite_abzug": 49,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 11,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 27.5,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 9,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Blum",
+   "serie": "Blum Tandem - 560H - B",
+   "artikel_muster": {
+    "muster": [
+     "###H####B"
+    ],
+    "beispiele": [
+     "560H2500B",
+     "560H2700B",
+     "560H6000B"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 15,
+    "bodenversatz_seite": 27.5,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 14,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Grass",
+   "serie": "Grass Dynamoov Self-close",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F130101161",
+     "F130101162",
+     "F130101172"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 27,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 7,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Grass",
+   "serie": "Grass Dynamoov Soft-close",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F130107760",
+     "F130107761",
+     "F130107787"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 28,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 14,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Grass",
+   "serie": "Grass Dynamoov Tipmatic",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F130101114",
+     "F130101115",
+     "F130101125"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 28,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 7,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Grass",
+   "serie": "Grass Dynaneo Soft-Close EB 21",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F137140887",
+     "F137140890",
+     "F137140926"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 27.5,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 5,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 14,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Grass",
+   "serie": "Grass Dynaneo Soft-Close EB 21 single",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F137141093",
+     "F137141096",
+     "F137141129"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 27.5,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 5,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 8,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Grass",
+   "serie": "Grass Dynaneo Soft-Close EB 24",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F137140929",
+     "F137140932",
+     "F137140953"
+    ]
+   },
+   "zargendicke_max": 19,
+   "innenbreite_abzug": 48,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 27.5,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 5,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 9,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Grass",
+   "serie": "Grass Dynaneo Tipmatic EB 21",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F137140983",
+     "F137140986",
+     "F137141022"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 27.5,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 5,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 14,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Grass",
+   "serie": "Grass Dynaneo Tipmatic EB 21 single",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F137141132",
+     "F137141135",
+     "F137141168"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 27.5,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 5,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 8,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Grass",
+   "serie": "Grass Dynaneo Tipmatic EB 24",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F137141025",
+     "F137141028",
+     "F137141049"
+    ]
+   },
+   "zargendicke_max": 19,
+   "innenbreite_abzug": 48,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 27.5,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 5,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 9,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Grass",
+   "serie": "Grass Dynapro Soft-close",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F130107790",
+     "F130107793",
+     "F130107859"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    580,
+    600,
+    650,
+    700,
+    750
+   ],
+   "tragkraft_kg": [
+    40,
+    50,
+    70
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 28,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 23,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Grass",
+   "serie": "Grass Dynapro Tipmatic",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F130117458",
+     "F130117459",
+     "F130117957"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    580,
+    600,
+    650,
+    700,
+    750
+   ],
+   "tragkraft_kg": [
+    40,
+    50,
+    60
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 28,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 22,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Hettich",
+   "serie": "Hettich Actro5D",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9318230",
+     "9318231",
+     "9318318"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    580,
+    600,
+    650,
+    700,
+    750
+   ],
+   "tragkraft_kg": [
+    10,
+    40,
+    70
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 15,
+    "bodenversatz_seite": 28.5,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 3
+   },
+   "zeilen": 28,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Hettich",
+   "serie": "Hettich Actro5D push to open",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9320612",
+     "9320613",
+     "9320634"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    580,
+    600,
+    650,
+    700,
+    750
+   ],
+   "tragkraft_kg": [
+    40,
+    70
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 15,
+    "bodenversatz_seite": 28.5,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 3
+   },
+   "zeilen": 23,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Hettich",
+   "serie": "Hettich Quadro 25",
+   "artikel_muster": {
+    "muster": [
+     "#######",
+     "#####"
+    ],
+    "beispiele": [
+     "33687",
+     "72905",
+     "9135968"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 40,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    300,
+    500,
+    550
+   ],
+   "tragkraft_kg": [
+    25
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 24.5,
+    "bodenversatz_boden": 34,
+    "auszugslaenge_zuschlag": 13,
+    "mindest_abstand_oben": 5
+   },
+   "zeilen": 9,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Hettich",
+   "serie": "Hettich Quadro 25",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9135844",
+     "9135850",
+     "9135905"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 40,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    250,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550
+   ],
+   "tragkraft_kg": [
+    25
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 10,
+    "bodenversatz_seite": 24.5,
+    "bodenversatz_boden": 34,
+    "auszugslaenge_zuschlag": 13,
+    "mindest_abstand_oben": 5
+   },
+   "zeilen": 18,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Hettich",
+   "serie": "Hettich Quadro V6 - Push to open",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9135984",
+     "9135985",
+     "9135995"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 40,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    250,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 27.5,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 13,
+    "mindest_abstand_oben": 5
+   },
+   "zeilen": 12,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Hettich",
+   "serie": "Hettich Quadro V6 - Silent System",
+   "artikel_muster": {
+    "muster": [
+     "#####",
+     "#######"
+    ],
+    "beispiele": [
+     "45284",
+     "45285",
+     "9135983"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 40,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    250,
+    280,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    580,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 27.5,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 13,
+    "mindest_abstand_oben": 5
+   },
+   "zeilen": 15,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Hettich",
+   "serie": "Hettich Quadro V6+ Push to open",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9136009",
+     "9136010",
+     "9136019"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 40,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    580,
+    600
+   ],
+   "tragkraft_kg": [
+    50
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 32.5,
+    "bodenversatz_boden": 42,
+    "auszugslaenge_zuschlag": 13,
+    "mindest_abstand_oben": 5
+   },
+   "zeilen": 11,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Hettich",
+   "serie": "Hettich Quadro V6+ Silent System",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9135998",
+     "9135999",
+     "9136008"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 40,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    580,
+    600
+   ],
+   "tragkraft_kg": [
+    50
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 32.5,
+    "bodenversatz_boden": 42,
+    "auszugslaenge_zuschlag": 13,
+    "mindest_abstand_oben": 5
+   },
+   "zeilen": 11,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Haefele TAF 25",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "421.14.725",
+     "421.14.730",
+     "421.14.955"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 40,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    250,
+    300,
+    320,
+    350,
+    400,
+    450,
+    500,
+    550
+   ],
+   "tragkraft_kg": [
+    25
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 9,
+    "nutabstand_unterkante_max": 9,
+    "bodenversatz_seite": 22.5,
+    "bodenversatz_boden": 32,
+    "auszugslaenge_zuschlag": 2,
+    "mindest_abstand_oben": 5
+   },
+   "zeilen": 14,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Haefele VAP 30",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "423.57.431",
+     "423.57.451",
+     "423.57.956"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 40,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    250,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650,
+    700
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 10,
+    "bodenversatz_seite": 28,
+    "bodenversatz_boden": 37.5,
+    "auszugslaenge_zuschlag": 10,
+    "mindest_abstand_oben": 5
+   },
+   "zeilen": 16,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Häfele - Matrix Runner UM A - Lock",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "433.03.650",
+     "433.03.651",
+     "433.04.527"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550
+   ],
+   "tragkraft_kg": [
+    30,
+    50
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 9,
+    "nutabstand_unterkante_max": 11,
+    "bodenversatz_seite": 38,
+    "bodenversatz_boden": 47.5,
+    "auszugslaenge_zuschlag": 18,
+    "mindest_abstand_oben": 6
+   },
+   "zeilen": 10,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Häfele - Matrix Runner UM A - Lock pto",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "433.03.670",
+     "433.03.671",
+     "433.03.676"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 9,
+    "nutabstand_unterkante_max": 11,
+    "bodenversatz_seite": 38,
+    "bodenversatz_boden": 47.5,
+    "auszugslaenge_zuschlag": 18,
+    "mindest_abstand_oben": 6
+   },
+   "zeilen": 7,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Häfele - Matrix Runner UM A - Pin",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "433.03.640",
+     "433.03.641",
+     "433.03.646"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 9,
+    "nutabstand_unterkante_max": 11,
+    "bodenversatz_seite": 38,
+    "bodenversatz_boden": 47.5,
+    "auszugslaenge_zuschlag": 18,
+    "mindest_abstand_oben": 6
+   },
+   "zeilen": 7,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Häfele - Matrix Runner UM A - Pin pto",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "433.03.660",
+     "433.03.661",
+     "433.03.666"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 0,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 9,
+    "nutabstand_unterkante_max": 11,
+    "bodenversatz_seite": 38,
+    "bodenversatz_boden": 47.5,
+    "auszugslaenge_zuschlag": 18,
+    "mindest_abstand_oben": 6
+   },
+   "zeilen": 7,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Häfele Dynapro Soft-close 2D",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "433.19.160",
+     "433.19.161",
+     "433.20.194"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    600,
+    650,
+    700,
+    750
+   ],
+   "tragkraft_kg": [
+    40,
+    50,
+    70
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 28,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 21,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Häfele Dynapro Soft-close 3D",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "433.19.660",
+     "433.19.661",
+     "433.20.695"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    600,
+    650,
+    700,
+    750
+   ],
+   "tragkraft_kg": [
+    40,
+    50,
+    70
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 10,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 28,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 21,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Häfele Movento - BLUMOTION S",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "433.33.170",
+     "433.33.171",
+     "433.33.395"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    580,
+    600,
+    650,
+    700,
+    750
+   ],
+   "tragkraft_kg": [
+    40,
+    60,
+    70
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 15,
+    "bodenversatz_seite": 28.5,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 23,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Häfele Movento - TIP-ON",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "433.24.170",
+     "433.24.171",
+     "433.24.395"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    580,
+    600,
+    650,
+    700,
+    750
+   ],
+   "tragkraft_kg": [
+    40,
+    60,
+    70
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 15,
+    "bodenversatz_seite": 28.5,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 23,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Häfele Tandem - 550H - B",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "423.53.827",
+     "423.53.830",
+     "423.53.855"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 3,
+    "nutabstand_unterkante_max": 13,
+    "bodenversatz_seite": 24.5,
+    "bodenversatz_boden": 34,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 7,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Häfele Tandem - 560H - B",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "423.54.810",
+     "423.54.811",
+     "423.54.823"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 15,
+    "bodenversatz_seite": 27.5,
+    "bodenversatz_boden": 37,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 14,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "holzschubkasten_unterflurauszug",
+   "hersteller": "Häfele",
+   "serie": "Häfele Tandem - 560H - C",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "423.54.680",
+     "423.54.681",
+     "423.54.693"
+    ]
+   },
+   "zargendicke_max": 16,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    250,
+    270,
+    300,
+    320,
+    350,
+    380,
+    400,
+    420,
+    450,
+    480,
+    500,
+    520,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    30
+   ],
+   "weitere": {
+    "nutabstand_unterkante_min": 12,
+    "nutabstand_unterkante_max": 15,
+    "bodenversatz_seite": 28.5,
+    "bodenversatz_boden": 38,
+    "auszugslaenge_zuschlag": 3,
+    "mindest_abstand_oben": 7
+   },
+   "zeilen": 14,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  }
+ ],
+ "regeln_metallzargen": [
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Blum",
+   "serie": "Legrabox",
+   "artikel_muster": {
+    "muster": [
+     "###C####I (INGL)",
+     "###C####S (CSM)",
+     "###C####S (OGM)"
+    ],
+    "beispiele": [
+     "780C3502I (INGL)",
+     "780C4002I (INGL)",
+     "780C6502S (SWM)"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 38,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 35,
+    "mindestabstand_boden": 24.4,
+    "durchgehender_boden": 1,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     42,
+     68,
+     106,
+     155,
+     219
+    ],
+    "rueckwandhoehen": [
+     39,
+     63,
+     101,
+     148,
+     212
+    ]
+   },
+   "zeilen": 164,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Blum",
+   "serie": "Merivobox",
+   "artikel_muster": {
+    "muster": [
+     "###M####S (IGM)",
+     "###M####S (OGM)",
+     "###M####S (SWM)"
+    ],
+    "beispiele": [
+     "470M2702S (IGM)",
+     "470M2702S (IGM)",
+     "470K6002S (SWM)"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 51,
+   "laengen_abzug": 26,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 51,
+    "mindestabstand_boden": 20,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     31.5,
+     54,
+     92,
+     155
+    ],
+    "rueckwandhoehen": [
+     60.5,
+     83,
+     121,
+     184
+    ]
+   },
+   "zeilen": 105,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Blum",
+   "serie": "Tandembox",
+   "artikel_muster": {
+    "muster": [
+     "###M####SA",
+     "###K####SA",
+     "###N####SA"
+    ],
+    "beispiele": [
+     "378K2702SA",
+     "378K2702SA",
+     "378N5502SA"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 87,
+   "laengen_abzug": 24,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 75,
+    "mindestabstand_boden": 9,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     49.5,
+     65.5,
+     97.5,
+     127,
+     159,
+     191
+    ],
+    "rueckwandhoehen": [
+     69,
+     84,
+     116,
+     135,
+     167,
+     199
+    ]
+   },
+   "zeilen": 58,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Blum",
+   "serie": "Tandembox",
+   "artikel_muster": {
+    "muster": [
+     "###M####SA",
+     "###K####SA",
+     "###N####SA"
+    ],
+    "beispiele": [
+     "378K2702SA",
+     "378K2702SA",
+     "378N5502SA"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 87,
+   "laengen_abzug": 24,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 75,
+    "mindestabstand_boden": 12,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     49.5,
+     65.5,
+     97.5,
+     127,
+     159,
+     191
+    ],
+    "rueckwandhoehen": [
+     69,
+     84,
+     116,
+     135,
+     167,
+     199
+    ]
+   },
+   "zeilen": 58,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Grass",
+   "serie": "Nova Pro One",
+   "artikel_muster": {
+    "muster": [
+     "F#########",
+     "F######### & F#########"
+    ],
+    "beispiele": [
+     "F100133533 & F100133534",
+     "F100133536 & F100133537",
+     "F100134092"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 58,
+   "laengen_abzug": 19,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": [
+    40,
+    70
+   ],
+   "weitere": {
+    "bodenbreite_abzug": 58,
+    "mindestabstand_boden": 9.5,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     50
+    ],
+    "rueckwandhoehen": [
+     84
+    ]
+   },
+   "zeilen": 39,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Grass",
+   "serie": "Nova Pro Scala",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F100103108",
+     "F100103111",
+     "F100133376"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 58,
+   "laengen_abzug": 19,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 58,
+    "mindestabstand_boden": 9.5,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     23,
+     50,
+     85,
+     154,
+     218
+    ],
+    "rueckwandhoehen": [
+     57,
+     84,
+     116,
+     185,
+     248
+    ]
+   },
+   "zeilen": 232,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Grass",
+   "serie": "Vionaro",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F138137124",
+     "F138137127",
+     "F138137088"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 32,
+   "laengen_abzug": 27,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 22,
+    "mindestabstand_boden": 29.5,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     56,
+     73,
+     105,
+     184,
+     234
+    ],
+    "rueckwandhoehen": [
+     59,
+     76,
+     108,
+     187,
+     237
+    ]
+   },
+   "zeilen": 137,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Grass",
+   "serie": "Vionaro",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F135106018",
+     "F135106024",
+     "F135124886"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 11,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 21,
+    "mindestabstand_boden": 28.5,
+    "durchgehender_boden": 1,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     47,
+     73,
+     105,
+     169,
+     233
+    ],
+    "rueckwandhoehen": [
+     33,
+     59,
+     91,
+     155,
+     219
+    ]
+   },
+   "zeilen": 93,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Hettich",
+   "serie": "ArciTech",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9149270",
+     "9149272",
+     "9150629"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 88,
+   "laengen_abzug": 24.5,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 76.5,
+    "mindestabstand_boden": 8,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     27.5,
+     43.5,
+     75.5,
+     135.5,
+     167.5,
+     199.5,
+     231.5
+    ],
+    "rueckwandhoehen": [
+     68.5,
+     84.5,
+     116.5
+    ]
+   },
+   "zeilen": 243,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Hettich",
+   "serie": "AvanTech",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9210720",
+     "9210721",
+     "9210756"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 20.5,
+   "laengen_abzug": 26,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 24,
+    "mindestabstand_boden": 28.5,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     47.5,
+     85.5,
+     133.5,
+     198
+    ],
+    "rueckwandhoehen": [
+     69,
+     107,
+     155.5,
+     219.5
+    ]
+   },
+   "zeilen": 36,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Hettich",
+   "serie": "AvanTech YOU",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9353335",
+     "9353336",
+     "9255350"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 24,
+   "laengen_abzug": 21,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 24,
+    "mindestabstand_boden": 28.5,
+    "durchgehender_boden": 1,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     64,
+     102,
+     150,
+     214
+    ],
+    "rueckwandhoehen": [
+     54,
+     92,
+     140.5,
+     204.5
+    ]
+   },
+   "zeilen": 240,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Hettich",
+   "serie": "AvanTech YOU",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9255240",
+     "9255241",
+     "9353420"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 24,
+   "laengen_abzug": 26,
+   "nennlaengen": [
+    400,
+    450,
+    500,
+    550
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 24,
+    "mindestabstand_boden": 28.5,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 8,
+    "profilhoehen": [
+     40
+    ],
+    "rueckwandhoehen": [
+     46
+    ]
+   },
+   "zeilen": 24,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Hettich",
+   "serie": "InnoTech Atira",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9195080",
+     "9195081",
+     "9195087"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 82,
+   "laengen_abzug": -10,
+   "nennlaengen": [
+    260,
+    300,
+    350,
+    420,
+    470,
+    520,
+    620
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 70.5,
+    "mindestabstand_boden": 8.5,
+    "durchgehender_boden": 1,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     45,
+     61
+    ],
+    "rueckwandhoehen": [
+     53,
+     65.5
+    ]
+   },
+   "zeilen": 8,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Hettich",
+   "serie": "InnoTech Atira",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9195080",
+     "9195081",
+     "9195087"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 82,
+   "laengen_abzug": -10,
+   "nennlaengen": [
+    260,
+    300,
+    350,
+    420,
+    470,
+    520,
+    620
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 70.5,
+    "mindestabstand_boden": 11.5,
+    "durchgehender_boden": 1,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     45,
+     61
+    ],
+    "rueckwandhoehen": [
+     53,
+     65.5
+    ]
+   },
+   "zeilen": 8,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Hettich",
+   "serie": "InnoTech Atira",
+   "artikel_muster": {
+    "muster": [
+     "#######"
+    ],
+    "beispiele": [
+     "9195080",
+     "9195081",
+     "9195087"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 82,
+   "laengen_abzug": -10,
+   "nennlaengen": [
+    260,
+    300,
+    350,
+    420,
+    470,
+    520,
+    620
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 70.5,
+    "mindestabstand_boden": 16.5,
+    "durchgehender_boden": 1,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     45,
+     61
+    ],
+    "rueckwandhoehen": [
+     53,
+     65.5
+    ]
+   },
+   "zeilen": 8,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Hettich",
+   "serie": "Vorlage Zarge",
+   "artikel_muster": {
+    "muster": [
+     "Bestellnummer"
+    ],
+    "beispiele": [
+     "Bestellnummer",
+     "Bestellnummer"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 88,
+   "laengen_abzug": 24.5,
+   "nennlaengen": [
+    270
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 76.5,
+    "mindestabstand_boden": 8,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     41.5
+    ],
+    "rueckwandhoehen": [
+     84.5
+    ]
+   },
+   "zeilen": 1,
+   "quelle": "user",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Häfele",
+   "serie": "Legrabox",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "550.73.034",
+     "550.73.035",
+     "551.27.818"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 38,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": [
+    40,
+    70
+   ],
+   "weitere": {
+    "bodenbreite_abzug": 35,
+    "mindestabstand_boden": 23.4,
+    "durchgehender_boden": 1,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     42,
+     68,
+     106,
+     154,
+     154.5,
+     218.5
+    ],
+    "rueckwandhoehen": [
+     39,
+     63,
+     101,
+     148,
+     212
+    ]
+   },
+   "zeilen": 398,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Häfele",
+   "serie": "Legrabox",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "550.68.022",
+     "550.68.023",
+     "550.68.828"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 38,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 35,
+    "mindestabstand_boden": 24.4,
+    "durchgehender_boden": 1,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     155
+    ],
+    "rueckwandhoehen": [
+     148
+    ]
+   },
+   "zeilen": 28,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Häfele",
+   "serie": "Matrix Box P Plus",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "513.25.303",
+     "513.25.304",
+     "513.27.928"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 62,
+   "laengen_abzug": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": [
+    40,
+    70
+   ],
+   "weitere": {
+    "bodenbreite_abzug": 62,
+    "mindestabstand_boden": 10,
+    "durchgehender_boden": 1,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     32,
+     52,
+     75,
+     137,
+     160
+    ],
+    "rueckwandhoehen": [
+     53,
+     69,
+     92,
+     157,
+     180
+    ]
+   },
+   "zeilen": 312,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Häfele",
+   "serie": "Matrix Box Slim A",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "552.23.470",
+     "552.23.471",
+     "552.23.786"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 10,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550
+   ],
+   "tragkraft_kg": [
+    30,
+    50
+   ],
+   "weitere": {
+    "bodenbreite_abzug": 21,
+    "mindestabstand_boden": 38,
+    "durchgehender_boden": 1,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     75.5,
+     113.5,
+     160.5
+    ],
+    "rueckwandhoehen": [
+     63,
+     101,
+     148
+    ]
+   },
+   "zeilen": 153,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Häfele",
+   "serie": "Merivobox",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "515.10.510",
+     "515.10.511",
+     "515.10.767"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 51,
+   "laengen_abzug": 26,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600
+   ],
+   "tragkraft_kg": [
+    40,
+    70
+   ],
+   "weitere": {
+    "bodenbreite_abzug": 51,
+    "mindestabstand_boden": 20,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     31.5,
+     54,
+     92,
+     155
+    ],
+    "rueckwandhoehen": [
+     60.5,
+     83,
+     121,
+     184
+    ]
+   },
+   "zeilen": 189,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Häfele",
+   "serie": "Nova Pro Scala",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "551.94.500",
+     "551.94.501",
+     "551.96.918"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 58,
+   "laengen_abzug": 19,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": [
+    40,
+    70
+   ],
+   "weitere": {
+    "bodenbreite_abzug": 58,
+    "mindestabstand_boden": 9.5,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     26,
+     53,
+     88,
+     154,
+     157,
+     218
+    ],
+    "rueckwandhoehen": [
+     57,
+     84,
+     116,
+     185,
+     249
+    ]
+   },
+   "zeilen": 222,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Häfele",
+   "serie": "Tandembox",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "553.80.403",
+     "553.80.404",
+     "553.80.868"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 87,
+   "laengen_abzug": 24,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 75,
+    "mindestabstand_boden": 9,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     49.5,
+     65.5,
+     97.5
+    ],
+    "rueckwandhoehen": [
+     0
+    ]
+   },
+   "zeilen": 66,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Häfele",
+   "serie": "Tandembox",
+   "artikel_muster": {
+    "muster": [
+     "###.##.###"
+    ],
+    "beispiele": [
+     "553.80.403",
+     "553.80.404",
+     "553.80.868"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 87,
+   "laengen_abzug": 24,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 75,
+    "mindestabstand_boden": 12,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     49.5,
+     65.5,
+     97.5
+    ],
+    "rueckwandhoehen": [
+     0
+    ]
+   },
+   "zeilen": 66,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Würth",
+   "serie": "Nova Pro Scala",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F900901429",
+     "F900901430",
+     "F900901821"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 58,
+   "laengen_abzug": 19,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 58,
+    "mindestabstand_boden": 9.5,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     23,
+     50,
+     85,
+     154,
+     218
+    ],
+    "rueckwandhoehen": [
+     57,
+     84,
+     116,
+     185,
+     248
+    ]
+   },
+   "zeilen": 276,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Würth",
+   "serie": "Vionaro",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F900901697",
+     "F900901698",
+     "F900902784"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 42,
+   "laengen_abzug": 11,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 21,
+    "mindestabstand_boden": 28.5,
+    "durchgehender_boden": 1,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     47,
+     73,
+     105,
+     169,
+     233
+    ],
+    "rueckwandhoehen": [
+     33,
+     59,
+     91,
+     155,
+     219
+    ]
+   },
+   "zeilen": 174,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  },
+  {
+   "typ": "metall_zarge",
+   "hersteller": "Würth",
+   "serie": "Vionaro",
+   "artikel_muster": {
+    "muster": [
+     "F#########"
+    ],
+    "beispiele": [
+     "F900903223",
+     "F900903224",
+     "F900903327"
+    ]
+   },
+   "zargendicke_max": null,
+   "innenbreite_abzug": 32,
+   "laengen_abzug": 27,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "tragkraft_kg": null,
+   "weitere": {
+    "bodenbreite_abzug": 22,
+    "mindestabstand_boden": 29.5,
+    "durchgehender_boden": 0,
+    "rueckwand_dicke_std": 16,
+    "boden_dicke_std": 16,
+    "profilhoehen": [
+     56,
+     73,
+     105,
+     184,
+     234
+    ],
+    "rueckwandhoehen": [
+     59,
+     76,
+     108,
+     187,
+     237
+    ]
+   },
+   "zeilen": 130,
+   "quelle": "xg",
+   "herleitung": "[aus Stammdaten]; Feldbedeutung [Deutung]"
+  }
+ ],
+ "schienen_einbau": [
+  {
+   "hersteller": "Beispiel Lieferant",
+   "serie": "Beispiel",
+   "hoehe_schiene_ab_zargenunterkante": 52.5,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    350
+   ],
+   "zeilen": 4,
+   "quelle": "user"
+  },
+  {
+   "hersteller": "Blum",
+   "serie": "Legrabox",
+   "hoehe_schiene_ab_zargenunterkante": 39,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 26,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Blum",
+   "serie": "Merivobox",
+   "hoehe_schiene_ab_zargenunterkante": 54,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600
+   ],
+   "zeilen": 12,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Blum",
+   "serie": "Tandembox",
+   "hoehe_schiene_ab_zargenunterkante": 33,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 13,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Blum",
+   "serie": "Tandembox",
+   "hoehe_schiene_ab_zargenunterkante": 36,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 13,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Grass",
+   "serie": "Nova Pro One",
+   "hoehe_schiene_ab_zargenunterkante": 52,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 18,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Grass",
+   "serie": "Nova Pro Scala",
+   "hoehe_schiene_ab_zargenunterkante": 52,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 26,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Grass",
+   "serie": "Vionaro",
+   "hoehe_schiene_ab_zargenunterkante": 37,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 13,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Hettich",
+   "serie": "ArciTech",
+   "hoehe_schiene_ab_zargenunterkante": 52.5,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    650
+   ],
+   "zeilen": 16,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Hettich",
+   "serie": "ArciTech",
+   "hoehe_schiene_ab_zargenunterkante": 52.5,
+   "laengenzuschlag": 26,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    650
+   ],
+   "zeilen": 8,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Hettich",
+   "serie": "AvanTech",
+   "hoehe_schiene_ab_zargenunterkante": 54.5,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 17,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Hettich",
+   "serie": "AvanTech YOU",
+   "hoehe_schiene_ab_zargenunterkante": 38,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 16,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Hettich",
+   "serie": "InnoTech Atira Quadro",
+   "hoehe_schiene_ab_zargenunterkante": 42,
+   "laengenzuschlag": 15,
+   "nennlaengen": [
+    300,
+    350,
+    420,
+    470,
+    520,
+    620
+   ],
+   "zeilen": 12,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Hettich",
+   "serie": "InnoTech Atira Quadro",
+   "hoehe_schiene_ab_zargenunterkante": 37,
+   "laengenzuschlag": 15,
+   "nennlaengen": [
+    260,
+    300,
+    350,
+    420,
+    470,
+    520
+   ],
+   "zeilen": 12,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Hettich",
+   "serie": "InnoTech Atira Quadro",
+   "hoehe_schiene_ab_zargenunterkante": 34,
+   "laengenzuschlag": 15,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    420,
+    470,
+    520
+   ],
+   "zeilen": 6,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Häfele",
+   "serie": "Legrabox",
+   "hoehe_schiene_ab_zargenunterkante": 38,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 33,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Häfele",
+   "serie": "Legrabox",
+   "hoehe_schiene_ab_zargenunterkante": 39,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300
+   ],
+   "zeilen": 2,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Häfele",
+   "serie": "Matrix Box P Plus",
+   "hoehe_schiene_ab_zargenunterkante": 53,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 9,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Häfele",
+   "serie": "Matrix Box Slim A",
+   "hoehe_schiene_ab_zargenunterkante": 47.5,
+   "laengenzuschlag": 20,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550
+   ],
+   "zeilen": 17,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Häfele",
+   "serie": "Merivobox",
+   "hoehe_schiene_ab_zargenunterkante": 54,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600
+   ],
+   "zeilen": 63,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Häfele",
+   "serie": "Nova Pro Scala",
+   "hoehe_schiene_ab_zargenunterkante": 52,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 74,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Häfele",
+   "serie": "Tandembox",
+   "hoehe_schiene_ab_zargenunterkante": 33,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 12,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Häfele",
+   "serie": "Tandembox",
+   "hoehe_schiene_ab_zargenunterkante": 36,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 13,
+   "quelle": "xg"
+  },
+  {
+   "hersteller": "Würth",
+   "serie": "Nova Pro Scala",
+   "hoehe_schiene_ab_zargenunterkante": 52,
+   "laengenzuschlag": 3,
+   "nennlaengen": [
+    270,
+    300,
+    350,
+    400,
+    450,
+    500,
+    550,
+    600,
+    650
+   ],
+   "zeilen": 13,
+   "quelle": "xg"
+  }
+ ],
+ "holzschubkasten_vorlagen_hersteller": {
+  "zeilen": 75,
+  "quelle": "custom xg",
+  "familien": [
+   {
+    "material": "Weiss beschichtet 19 und 16",
+    "boden": "KF-weiss-08 (8 mm, ohne Maserung)",
+    "nutabstand": 13,
+    "nuttiefe": 5.5,
+    "nutbreite": 8.5,
+    "spiel": 1
+   },
+   {
+    "material": "Eiche Leimholz 13",
+    "boden": "Furniersperrholz Eiche 8 mm",
+    "nutabstand": "13 und 11",
+    "nuttiefe": 5.5,
+    "nutbreite": 8.5,
+    "spiel": 1
+   },
+   {
+    "material": "Buche Leimholz 13",
+    "boden": "Furniersperrholz Buche 8 mm",
+    "nutabstand": 13,
+    "nuttiefe": 5.5,
+    "nutbreite": 8.5,
+    "spiel": 1
+   }
+  ],
+  "gemeinsam": {
+   "tiefe": 500,
+   "seitenhoehen": "75 bis 355 in Schritten von 20 (15 Stufen)",
+   "hinterwandhoehe": "Seitenhoehe - 23",
+   "frontkonstruktion": "Hoehe = Hinterwandhoehe",
+   "nut_nur_in_seiten": true,
+   "ecken": "durchgehend"
+  }
+ },
+ "studio_holzschubkasten": {
+  "A_zugekauft_4seitig_gezinkt": {
+   "zeilen_dateien": "31 + 28",
+   "seite": 13,
+   "boden": 8,
+   "nut": "6 tief / Abstand 13 / Spiel 0 / Breite 8",
+   "hinterwandhoehe": "Seitenhoehe - 23",
+   "tiefe": 516,
+   "hoehen": [
+    55,
+    70,
+    85,
+    100,
+    115,
+    130,
+    160,
+    190,
+    220,
+    250,
+    280,
+    310,
+    340,
+    370,
+    400
+   ],
+   "varianten": "aussen (Front = Hinterwandhoehe) und innen/Einlage (Front = Seitenhoehe)",
+   "material": "Massiv Eiche 13, Boden Spanplatte 8",
+   "quelle": "user"
+  },
+  "B_eigenbau_Multiplex_Eiche": {
+   "zeilen": 20,
+   "serien": "5 Hoehen: 80/115/160/220/280, je aussen und innen",
+   "seite": 15,
+   "boden": 9,
+   "nut": "6 tief / Abstand 14,5 oder 15 / Spiel 0,5 / Breite 9,25 oder 9,5",
+   "hinterwandhoehe": "Seitenhoehe - 26",
+   "tiefe": 516,
+   "material": "Multiplex Eiche 15, Boden Spanplatte furniert 9",
+   "quelle": "user"
+  },
+  "unterflurauszuege_eigen": {
+   "eindeutige_artikel": 23,
+   "kopien": 4,
+   "inhalt": "Blum Movento (ueber Haendler-Artikelnummern); Werte identisch zum Bestand",
+   "quelle": "user"
+  }
+ },
+ "rechenregeln": {
+  "holzschubkasten_aussenbreite": "lichte Korpusbreite - innenbreite_abzug (je Serie, Tabelle) [aus Stammdaten; Deutung ob aussen/innen]",
+  "holzschubkasten_laenge": "Nennlaenge - laengen_abzug",
+  "hinterwandhoehe_holz": "Seitenhoehe - (Nutabstand + Bodendicke + 2) - passt auf 3 von 4 Familien, nicht auf Bestand mit Nutabstand 11 (21 statt 23)",
+  "nutbreite": "Bodendicke + 0,25 bis 0,5 (Bestand +0,5; Studio +0,25/+0,5; zugekauft +0)",
+  "metall_boden_laenge": "Nennlaenge - laengen_abzug (Tabelle)",
+  "metall_boden_breite": "lichte Breite - bodenbreite_abzug"
+ }
+}

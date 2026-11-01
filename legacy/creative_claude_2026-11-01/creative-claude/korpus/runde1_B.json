@@ -1,0 +1,259 @@
+{
+  "runde": 1,
+  "durchgang": "B",
+  "seiten_gelesen": "4/4",
+  "plan_meta": {
+    "seiten": {"S.1": "Perspektive, keine Maße", "S.2": "Ansicht Frontal, Maßketten", "S.3": "Ansicht Frontal Innen, Innenmaße", "S.4": "Ansicht Rechts (Seiten-/Tiefenansicht)"},
+    "massstab": "1:10 (DIN A3)",
+    "hoehenbezug": "OKFF (Oberkante Fertigfußboden), laut Planhinweis",
+    "lesereihenfolge": "S.3 und S.4 zuerst, S.2 als Gegenprobe",
+    "reihenfolge_links_nach_rechts": "S.2 Frontansicht und S.3 Beschriftung unter den Feldern: Pos 1 Geschirrspüler, Pos 2 Spüle, Pos 3 Schubladenschrank",
+    "abgriff_hinweis": "Werte mit Status N und dem Vermerk 'abgegriffen' sind am Zeichnungsmaßstab (ca. 0,394 px/mm in den PDF-Bildern, Kontrolle: 600 mm = ca. 236 px) geschätzt, Genauigkeit grob (ca. +/- 5 mm)."
+  },
+  "zeile": {
+    "nische_b": 1875,
+    "nische_h": 2200,
+    "arbeitsplatte_d": 574,
+    "ok_ap": 925,
+    "belege": {
+      "nische_b": "S.2 untere Maßkette, Gesamtmaß 1875 (Lichtmaß zwischen den beiden Wandschraffuren)",
+      "nische_h": "S.2 rechte Maßkette, Gesamtmaß 2200 (Boden bis Decke)",
+      "arbeitsplatte_d": "S.4: AP-Streifen reicht von der Frontebene (Maß 574 beginnt dort) bis zur Wand; AP-Tiefe nicht separat bemaßt, alternativ 600 (wenn AP wie Stellseite bis Vorderkante Rahmen reicht)",
+      "ok_ap": "Rechnung: Sockel 100 + Korpus/Front 790 + AP 35 = 925; Gegenprobe S.2 Kette: 100 + 825 = 925 (825 = 790 + 35)"
+    },
+    "status": {"nische_b": "B", "nische_h": "B", "arbeitsplatte_d": "N", "ok_ap": "A"},
+    "tiefen": {
+      "gesamttiefe_frontebene_bis_wand": 574,
+      "tiefe_rahmenvorderkante_bis_wand": 600,
+      "rahmen_vorstand_vor_front": 26,
+      "belege": {
+        "gesamttiefe_frontebene_bis_wand": "S.4 obere Maßkette, Maß 574 (von Frontebene bis Wand)",
+        "tiefe_rahmenvorderkante_bis_wand": "S.4 obere Maßkette, Maß 600 (von Vorderkante Stellseite/Deckplatte bis Wand)",
+        "rahmen_vorstand_vor_front": "Rechnung: 600 - 574 = 26 (Stellseiten und Deckplatte stehen laut S.4 und S.1 vor den Fronten vor)"
+      },
+      "status": {"gesamttiefe_frontebene_bis_wand": "B", "tiefe_rahmenvorderkante_bis_wand": "B", "rahmen_vorstand_vor_front": "A"}
+    },
+    "elemente": [
+      {
+        "art": "stellseite",
+        "seite": "links",
+        "t": 600,
+        "h": 2170,
+        "d": 32.5,
+        "geraete": [{"geraet": "steckdose", "anzahl": 2}],
+        "belege": {
+          "t": "S.4 Maß 600; Stellseite läuft bis zur Wand",
+          "h": "Rechnung: Nische 2200 - Deckplatte 30 (Rechnung unten) = 2170; S.2 Streifen läuft vom Boden bis unter die Deckplatte",
+          "d": "Rechnung: (1875 - 3x600 - 2x5) / 2 = 65 / 2 = 32,5; Annahme: die beiden Maße 5 in der unteren Maßkette sind Fugen zwischen Stellseite und Front. Gezeichnete Streifenbreite in S.2 ca. 37 mm abgegriffen, passt grob",
+          "geraete": "S.4 Beschriftung 'Je Stellseite 2x Steckdose'; S.1 zeigt 2 Steckdosen an der linken Stellseite"
+        },
+        "status": {"t": "B", "h": "N", "d": "N", "geraete": "B"}
+      },
+      {
+        "art": "stellseite",
+        "seite": "rechts",
+        "t": 600,
+        "h": 2170,
+        "d": 32.5,
+        "geraete": [{"geraet": "steckdose", "anzahl": 2}],
+        "belege": {
+          "t": "S.4 Maß 600 (gilt für beide Stellseiten angenommen)",
+          "h": "wie links, S.2 symmetrisch gezeichnet",
+          "d": "wie links, Rechnung (1875 - 1800 - 10) / 2 = 32,5",
+          "geraete": "S.4 Beschriftung 'Je Stellseite 2x ...': die rechte Stellseite ist in keiner Ansicht selbst sichtbar"
+        },
+        "status": {"t": "N", "h": "N", "d": "N", "geraete": "B"}
+      },
+      {
+        "art": "deckplatte",
+        "b": 1875,
+        "t": 600,
+        "d": 30,
+        "belege": {
+          "b": "S.2: oberer Abschluss läuft über die ganze Nischenbreite, 1875 aus der unteren Maßkette",
+          "t": "S.4: oberer Abschluss beginnt bei Vorderkante 600 (Maß 600)",
+          "d": "Rechnung: 2200 - (5 + 1235 + 5 + 825 + 100) = 2200 - 2170 = 30; Annahme: die 5er sind Fugen. Gezeichnet in S.2 ca. 30 mm, passt"
+        },
+        "status": {"b": "N", "t": "N", "d": "N"}
+      },
+      {
+        "art": "arbeitsplatte",
+        "d_stark": 35,
+        "t": 574,
+        "laenge": 1810,
+        "ok_ffb": 925,
+        "ausschnitt": [{"geraet": "spuele", "lage": "Pos 2, mittig zur Front"}],
+        "belege": {
+          "d_stark": "S.2 Maß 35 über den Fronten; S.4 Maß 35",
+          "t": "siehe zeile.arbeitsplatte_d",
+          "laenge": "Rechnung: 5 + 600 + 600 + 600 + 5 = 1810 (Lichtmaß zwischen Stellseiten laut Maßkette); in S.2 läuft die AP zwischen den Stellseiten",
+          "ok_ffb": "Rechnung 100 + 790 + 35 = 925",
+          "ausschnitt": "S.1 und S.3: Becken in AP über Pos 2"
+        },
+        "status": {"d_stark": "B", "t": "N", "laenge": "A", "ok_ffb": "A", "ausschnitt": "B"}
+      },
+      {
+        "art": "sockelblende",
+        "h": 100,
+        "segmente": [{"pos": 1, "b": 600}, {"pos": 2, "b": 600}, {"pos": 3, "b": 600}],
+        "ruecksprung_von_front": 90,
+        "belege": {
+          "h": "S.2 linke Maßkette 100 und S.4 Maß 100",
+          "segmente": "S.2 und S.1: Sockelfeld unter den Fronten bei den Frontstößen geteilt, Breiten wie Fronten (nicht separat bemaßt)",
+          "ruecksprung_von_front": "S.4: Sockel-Fuß steht ca. 90 mm hinter der Frontebene, abgegriffen"
+        },
+        "status": {"h": "B", "segmente": "N", "ruecksprung_von_front": "N"}
+      },
+      {
+        "art": "nische_oben",
+        "h": 1235,
+        "b": 1810,
+        "fuge_unten": 5,
+        "fuge_oben": 5,
+        "belege": {
+          "h": "S.2 linke Maßkette 1235 (zwischen den beiden Fugen 5, über der AP)",
+          "b": "Rechnung 1875 - 2 x 32,5 = 1810 (Breite zwischen den Stellseiten)",
+          "fuge_unten": "S.2 linke Maßkette, Maß 5 direkt über der AP",
+          "fuge_oben": "S.2 linke Maßkette, Maß 5 unter der Deckplatte"
+        },
+        "status": {"h": "B", "b": "N", "fuge_unten": "B", "fuge_oben": "B"}
+      },
+      {
+        "art": "fugen_stellseite_front",
+        "links": 5,
+        "rechts": 5,
+        "belege": {"links": "S.2 untere Maßkette, erstes Maß 5", "rechts": "S.2 untere Maßkette, letztes Maß 5"},
+        "status": {"links": "B", "rechts": "B"}
+      },
+      {
+        "art": "passblende",
+        "vorhanden": false,
+        "belege": {"vorhanden": "keine Passblende in S.1 bis S.4 zu sehen"},
+        "status": {"vorhanden": "N"}
+      },
+      {
+        "art": "geraete_zeile",
+        "liste": [
+          {"geraet": "armatur", "pos": 2, "lage": "mittig über Pos 2 (S.2: Achse in Mitte der mittleren Front), ca. 60 mm von der Wand (S.4, abgegriffen)"},
+          {"geraet": "steckdose", "anzahl": 4, "lage": "je Stellseite 2, ca. 90 mm über AP-Oberkante (S.4, abgegriffen)"}
+        ],
+        "belege": {"liste": "S.1, S.2, S.4 Zeichnung; Geräteliste im Schriftfeld; S.4 Beschriftung der Steckdosen"},
+        "status": {"liste": "B"}
+      }
+    ]
+  },
+  "schraenke": [
+    {
+      "pos": 1,
+      "typ": "US-GSP",
+      "b": 600,
+      "h": 790,
+      "t": null,
+      "sockel_h": 100,
+      "fronten": [{"art": "geraetefront", "h": 790}],
+      "innen": [{"art": "geraet", "zarge_h": null}],
+      "traverse_vorn": null,
+      "geraet": "gsp",
+      "abweichungen": [
+        {"param": "fuge", "typwert": 3, "ist": 0},
+        {"param": "griffmulde_ueberstand", "typwert": null, "ist": 15}
+      ],
+      "notiz": "Kein eigener Korpus gezeichnet (S.3 zeigt nur die Gerätefront). Frontsymbol in S.2/S.3 ist ein Dreieck mit Spitze oben, die Fronten der Pos 2 und 3 haben stattdessen ein Kreuz. Fuge: in S.2 sind die Fronten mit nur einer Linie gezeichnet, ein Fugenmaß fehlt.",
+      "belege": {
+        "b": "S.2 untere Maßkette, erstes 600 (Frontbreite, zugleich Achsmaß); Geräte-/Korpusbreite nicht separat bemaßt",
+        "h": "S.2 Maß 790 direkt neben der linken Front (von Sockel-Oberkante bis AP-Unterkante)",
+        "t": "keine Tiefe für das Gerät bemaßt",
+        "sockel_h": "S.2 linke Maßkette 100",
+        "fronten_h": "wie h, S.2 Maß 790",
+        "geraet": "S.3 Beschriftung 'Geschirrspülmaschine' unter dem linken Feld; Geräteliste im Schriftfeld",
+        "fuge": "S.2: kein Fugenmaß, Fronten stoßen mit einer Linie; Summe der drei 600 ohne Fuge",
+        "griffmulde_ueberstand": "S.2 Maß 15 mit Beschriftung 'Überstand der Griffmulde' am oberen Frontrand neben dem Stoß Pos 1 / Pos 2; Zuordnung zu Pos 1 oder Pos 2 unklar"
+      },
+      "status": {"b": "B", "h": "B", "t": "N", "sockel_h": "B", "fronten_h": "B", "geraet": "B", "fuge": "N", "griffmulde_ueberstand": "B"}
+    },
+    {
+      "pos": 2,
+      "typ": "US-SP",
+      "b": 600,
+      "h": 790,
+      "t": 555,
+      "sockel_h": 100,
+      "fronten": [{"art": "auszug", "h": 790}],
+      "innen": [{"art": "muellsystem", "zarge_h": null}, {"art": "technik", "zarge_h": null}],
+      "traverse_vorn": false,
+      "geraet": "spuele",
+      "abweichungen": [
+        {"param": "fuge", "typwert": 3, "ist": 0},
+        {"param": "griffmulde_ueberstand", "typwert": null, "ist": 15}
+      ],
+      "notiz": "Technik = Gerät für kochendes Wasser (laut S.3 Beschriftung 'Technik') plus Müllauszug; Müllauszug-Kasten ca. 384 breit x 261 hoch und Becken ca. 560 breit x 400 tief x 195 hoch sind nur grob am Maßstab abgegriffen (N). Becken sitzt in der AP (S.1, S.4). Vordere Traverse in S.3 nicht erkennbar (N). S.4 zeigt an der Front im Bereich des Beckens nur ein kurzes Frontstück, S.2 eine durchgehende Front von 790; Auszugsaufteilung deshalb unsicher.",
+      "belege": {
+        "b": "S.2 untere Maßkette, zweites 600",
+        "h": "S.4 Maß 790 (Schnitt/Seitenansicht durch den Spülenschrank, von Sockel-Oberkante bis AP-Unterkante); S.2 gleiche Höhe",
+        "t": "Rechnung: 574 (S.4, Frontebene bis Wand) - 19 (Typwert front_d, im Plan nicht bemaßt) = 555",
+        "sockel_h": "S.4 Maß 100; S.2 linke Maßkette 100",
+        "fronten_h": "S.2 und S.4 Maß 790",
+        "traverse_vorn": "S.3 ohne Traverse gezeichnet, aus Typ US-SP übernommen",
+        "innen": "S.3 Beschriftung 'Spülbecken, Technik, Müllsystem' und Zeichnung des Müllauszugs",
+        "geraet": "S.3, S.4 Beckenumriss; Geräteliste",
+        "fuge": "S.2: kein Fugenmaß",
+        "griffmulde_ueberstand": "S.2 Maß 15 'Überstand der Griffmulde' und S.4 Maß 15 an der Oberkante der Spülenfront"
+      },
+      "status": {"b": "B", "h": "B", "t": "N", "sockel_h": "B", "fronten_h": "B", "traverse_vorn": "N", "innen": "B", "geraet": "B", "fuge": "N", "griffmulde_ueberstand": "B"}
+    },
+    {
+      "pos": 3,
+      "typ": "US-S1I",
+      "b": 600,
+      "h": 790,
+      "t": 555,
+      "sockel_h": 100,
+      "fronten": [{"art": "auszug", "h": 790, "zarge_h": 235}],
+      "innen": [{"art": "innenschub", "zarge_h": 115}, {"art": "innenschub", "zarge_h": 115}],
+      "traverse_vorn": true,
+      "geraet": null,
+      "abweichungen": [
+        {"param": "fuge", "typwert": 3, "ist": 0},
+        {"param": "fronten[0].zarge_h", "typwert": null, "ist": 235}
+      ],
+      "notiz": "Eine durchgehende Front mit Kreuzsymbol (S.2); S.3 zeigt drei Schübe: 115, 115 und 235, Beschriftung 'Schublade, 2x innenliegender Schub'. Die zwei Innenschübe sitzen in S.3 oberhalb des großen Auszugs (235). Zwischenräume sind nicht bemaßt: 115 + 115 + 235 = 465, der Rest bis 790 ist nicht aufgeteilt. Traverse vorn aus S.3 abgeleitet (oben ein Rahmenteil gezeichnet, N).",
+      "belege": {
+        "b": "S.2 untere Maßkette, drittes 600",
+        "h": "Rechnung: Front von Sockel-Oberkante (100) bis AP-Unterkante (100 + 825 - 35 = 890): 890 - 100 = 790; gleiche Ober- und Unterkante wie Pos 1 in S.2",
+        "t": "wie Pos 2: 574 - 19 = 555",
+        "sockel_h": "S.2 linke Maßkette 100",
+        "fronten_h": "wie h",
+        "fronten_zarge_h": "S.3 Maß 235 am untersten Schub",
+        "innen": "S.3 Maße 115 und 115 an den oberen zwei Schüben; Beschriftung '2x innenliegender Schub'",
+        "traverse_vorn": "S.3, oberer Rahmen des Korpus",
+        "fuge": "S.2: kein Fugenmaß"
+      },
+      "status": {"b": "B", "h": "A", "t": "N", "sockel_h": "B", "fronten_h": "A", "fronten_zarge_h": "B", "innen": "B", "traverse_vorn": "N", "fuge": "N"}
+    }
+  ],
+  "plan_widersprueche": [
+    {
+      "was": "Breitenkette summiert nicht auf das Gesamtmaß",
+      "rechnung": "5 + 600 + 600 + 600 + 5 = 1810, Gesamtmaß 1875, Differenz 65. Die in S.2 gezeichneten Streifen links und rechts sind mit ca. 37 mm deutlich breiter als die beschrifteten 5; die fehlenden 65 sind vermutlich die nicht bemaßten Stellseitendicken (je 32,5), nicht korrigiert",
+      "seite": "S.2 untere Maßketten"
+    },
+    {
+      "was": "Höhenkette summiert nicht auf das Gesamtmaß",
+      "rechnung": "5 + 1235 + 5 + 825 + 100 = 2170, Gesamtmaß 2200, Differenz 30. Der obere Abschluss ist in S.2 mit ca. 30 mm gezeichnet, vermutlich die nicht bemaßte Deckplattendicke, nicht korrigiert",
+      "seite": "S.2 linke und rechte Maßkette"
+    },
+    {
+      "was": "Geräteliste nennt einen Kühlschrank, der in keiner der vier Ansichten vorkommt",
+      "rechnung": "Geräteliste: 6 Funktionen (Armatur, Spülbecken, Kühlschrank, Geschirrspüler, Müllsystem, Steckdosen); dargestellt sind 3 Schränke ohne Kühlgerät",
+      "seite": "Schriftfeld Geräte auf S.1 bis S.4 gegen S.2/S.3"
+    }
+  ],
+  "unsicher": [
+    "Katalog kennt keinen Parameter für den 'Überstand der Griffmulde' (15 mm, S.2 und S.4). Bedeutung nicht eindeutig (vermutlich überragt die Front die Korpus-Oberkante um 15 oder die AP-Vorderkante bildet die Mulde). Vorschlag: Parameter 'griffmulde_ueberstand' (mm) je Front oder je Schrank, Zuordnung zu Pos 1 oder Pos 2 im Plan offen.",
+    "Rahmen aus Stellseiten und Deckplatte: 600 tief gegen 574 Frontebene bis Wand (Vorstand 26), Dicken nicht bemaßt, 5er-Maße als Fugen interpretiert (N). Katalog 'elemente' nennt stellseite und deckplatte, aber ohne Parameter. Vorschlag: Elementparameter d, t, h, vorstand_vor_front sowie fuge_zur_front.",
+    "US-S1I passt nur grob: Plan zeigt eine 790-hohe Front vor einem Auszug mit Zarge 235 und zwei Innenschüben (je 115), die oberhalb liegen. Vorschlag: zarge_h auch an fronten erlauben und für innenschub eine Lage (oben/unten) ergänzen.",
+    "US-SP: Spülenschrank hat Becken in der AP und eine Technik-Einheit (Kochendwassergerät) plus Müllauszug; Frontaufteilung zwischen S.2 (eine Front) und S.4 (kurzes Frontstück im Beckenbereich) nicht sicher. Vorschlag: Unterparameter 'becken' {b, t, h} und technik als Liste.",
+    "US-GSP: Gerätetiefe und Korpus fehlen im Plan, Frontsymbol (Dreieck, Spitze oben) unterscheidet sich vom Kreuz der Auszüge. Vorschlag: Symbol als Frontattribut 'oeffnung' (klappe/auszug/tuer) im Katalog führen.",
+    "Arbeitsplattentiefe nicht bemaßt: 574 (bündig mit Frontebene) oder 600 (bis Rahmenvorderkante) möglich, hier 574 angesetzt (N)."
+  ]
+}

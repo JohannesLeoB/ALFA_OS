@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schema.kueche.local/v0/werkzeuge.schema.json",
+  "title": "Werkzeuge",
+  "description": "Ein- und Ausgaben der Werkzeuge des Servers kueche (v0.2), je Werkzeug <name>_ein und <name>_aus; daraus entstehen die MCP-inputSchema. Jede Antwort hat die Huelle antwort: entweder {ergebnis: <name>_aus, bericht} oder {fehler}. Eingaben sind geschlossen (unevaluatedProperties false). Rollen kommen aus der Identitaet der Sitzung, nie aus einer Eingabe. Revisionsregel: bogen_speichern und aufmass_importieren erhoehen die Bogen-Revision; planen erzeugt Modelle mit Revision 1; element_aendern erhoeht die Modell-Revision und setzt freigabe auf null; teile_ableiten und pruefen erzeugen abgeleitete Daten derselben Revision; revision_freigeben setzt freigabe; ausgeben, fusion_abgleich und alle Lesewerkzeuge aendern nichts.",
+  "$defs": {
+    "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+    "ref_bogen": {"type": "object", "properties": {"bogen_id": {"$ref": "#/$defs/id"}, "bogen_revision": {"type": "integer", "minimum": 1}}, "required": ["bogen_id", "bogen_revision"]},
+    "ref_modell": {"type": "object", "properties": {"modell_id": {"$ref": "#/$defs/id"}, "revision": {"type": "integer", "minimum": 1}}, "required": ["modell_id", "revision"]},
+    "fehler": {
+      "type": "object",
+      "properties": {
+        "code": {"type": "string", "enum": ["revision_veraltet", "nicht_freigegeben", "fehlend", "unbekannt", "ungueltig", "blockiert", "zeitlimit", "keine_berechtigung"]},
+        "text": {"type": "string"},
+        "fehlend": {"type": "array", "items": {"type": "string"}},
+        "details": {"type": "object"}
+      },
+      "required": ["code", "text"], "additionalProperties": false
+    },
+    "bericht": {
+      "type": "object",
+      "properties": {
+        "annahmen": {"type": "array", "items": {"type": "string"}},
+        "warnungen": {"type": "array", "items": {"type": "string"}},
+        "fehlend": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["annahmen"], "additionalProperties": false
+    },
+    "antwort": {
+      "oneOf": [
+        {"type": "object", "properties": {"ergebnis": {"type": "object"}, "bericht": {"$ref": "#/$defs/bericht"}}, "required": ["ergebnis", "bericht"], "additionalProperties": false},
+        {"type": "object", "properties": {"fehler": {"$ref": "#/$defs/fehler"}}, "required": ["fehler"], "additionalProperties": false}
+      ]
+    },
+    "datei": {
+      "type": "object",
+      "properties": {"pfad": {"type": "string"}, "format": {"type": "string"}, "hash": {"type": "string", "description": "sha256 der kanonischen Form (JSON, Zeichenliste), nicht der PDF-Bytes"}},
+      "required": ["pfad", "format", "hash"], "additionalProperties": false
+    },
+
+    "bogen_speichern_ein": {"type": "object", "properties": {"planungsbogen": {"$ref": "planungsbogen.schema.json"}}, "required": ["planungsbogen"], "additionalProperties": false},
+    "bogen_speichern_aus": {"$ref": "#/$defs/ref_bogen", "unevaluatedProperties": false},
+
+    "aufmass_importieren_ein": {
+      "type": "object",
+      "properties": {"bogen_id": {"$ref": "#/$defs/id"}, "datei": {"type": "string"}, "art": {"type": "string", "enum": ["roomplan_json", "disto_dxf", "messliste_csv"]}},
+      "required": ["bogen_id", "datei", "art"], "additionalProperties": false
+    },
+    "aufmass_importieren_aus": {
+      "type": "object",
+      "properties": {"bogen_revision": {"type": "integer"}, "messungen_neu": {"type": "integer"}, "unbestaetigt_kritisch": {"type": "array", "items": {"type": "string"}}},
+      "required": ["bogen_revision", "messungen_neu", "unbestaetigt_kritisch"], "additionalProperties": false
+    },
+
+    "bogen_pruefen_ein": {"$ref": "#/$defs/ref_bogen", "unevaluatedProperties": false},
+    "bogen_pruefen_aus": {
+      "type": "object",
+      "properties": {
+        "fehlend": {"type": "array", "items": {"type": "string"}},
+        "konflikte": {"type": "array", "items": {"type": "object", "properties": {"schluessel": {"type": "string"}, "text": {"type": "string"}}, "required": ["schluessel", "text"], "additionalProperties": false}},
+        "offene_fragen": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["fehlend", "konflikte", "offene_fragen"], "additionalProperties": false
+    },
+
+    "werte_aufloesen_ein": {"$ref": "#/$defs/ref_bogen", "properties": {"setup_id": {"$ref": "#/$defs/id"}}, "required": ["setup_id"], "unevaluatedProperties": false},
+    "werte_aufloesen_aus": {
+      "type": "object",
+      "properties": {"werte": {"type": "object", "additionalProperties": {"$ref": "gemeinsam.schema.json#/$defs/wert"}}},
+      "required": ["werte"], "additionalProperties": false
+    },
+
+    "planen_ein": {"$ref": "#/$defs/ref_bogen", "properties": {"varianten": {"type": "integer", "minimum": 1, "maximum": 3}, "seed": {"type": "integer"}}, "required": ["varianten"], "unevaluatedProperties": false},
+    "planen_aus": {
+      "type": "object",
+      "properties": {
+        "modelle": {"type": "array", "items": {"type": "object", "properties": {"modell_id": {"$ref": "#/$defs/id"}, "revision": {"const": 1}, "variante": {"type": "integer"}, "scores": {"$ref": "kuechenmodell.schema.json#/properties/scores"}}, "required": ["modell_id", "revision", "variante"], "additionalProperties": false}},
+        "verletzt": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/regel_id"}, "description": "nur wenn keine Variante alle harten Regeln erfuellt"}
+      },
+      "required": ["modelle"], "additionalProperties": false
+    },
+
+    "element_aendern_ein": {"$ref": "#/$defs/ref_modell", "properties": {"element_id": {"$ref": "#/$defs/id"}, "patch": {"type": "object", "description": "RFC-7386-Merge-Patch auf das Element"}}, "required": ["element_id", "patch"], "unevaluatedProperties": false},
+    "element_aendern_aus": {
+      "type": "object",
+      "properties": {"revision": {"type": "integer"}, "folgen": {"type": "array", "items": {"type": "string"}, "description": "betroffene Teile und neue Befunde"}},
+      "required": ["revision", "folgen"], "additionalProperties": false
+    },
+
+    "teile_ableiten_ein": {"$ref": "#/$defs/ref_modell", "unevaluatedProperties": false},
+    "teile_ableiten_aus": {"type": "object", "properties": {"teile": {"type": "integer"}, "teile_revision": {"type": "integer"}, "hash": {"type": "string"}}, "required": ["teile", "teile_revision", "hash"], "additionalProperties": false},
+
+    "pruefen_ein": {"$ref": "#/$defs/ref_modell", "properties": {"regeln": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/regel_id"}}}, "unevaluatedProperties": false},
+    "pruefen_aus": {"$ref": "kuechenmodell.schema.json#/properties/pruefung"},
+
+    "revision_freigeben_ein": {"$ref": "#/$defs/ref_modell", "properties": {"bestaetigt": {"const": true}}, "required": ["bestaetigt"], "unevaluatedProperties": false},
+    "revision_freigeben_aus": {"type": "object", "properties": {"freigabe": {"$ref": "kuechenmodell.schema.json#/properties/freigabe"}}, "required": ["freigabe"], "additionalProperties": false},
+
+    "ausgeben_ein": {
+      "description": "Ziele aus gemeinsam#/$defs/ausgabe_fertigung verlangen freigabe.revision = revision, sonst fehler nicht_freigegeben. Ausnahme: werkplan ohne Freigabe nur mit Stempel nicht freigegeben.",
+      "$ref": "#/$defs/ref_modell",
+      "properties": {"ziel": {"$ref": "gemeinsam.schema.json#/$defs/ausgabe"}, "preset": {"type": "string"}, "vorlage": {"$ref": "#/$defs/id"}},
+      "required": ["ziel"], "unevaluatedProperties": false
+    },
+    "ausgeben_aus": {"type": "object", "properties": {"dateien": {"type": "array", "items": {"$ref": "#/$defs/datei"}}, "weg": {"type": "string", "enum": ["alt", "neu"]}}, "required": ["dateien", "weg"], "additionalProperties": false},
+
+    "fusion_abgleich_ein": {"$ref": "#/$defs/ref_modell", "properties": {"dokument": {"type": "string"}}, "required": ["dokument"], "unevaluatedProperties": false},
+    "fusion_abgleich_aus": {
+      "type": "object",
+      "properties": {
+        "abweichungen": {"type": "array", "items": {"type": "object", "properties": {"element_id": {"$ref": "#/$defs/id"}, "feld": {"type": "string"}, "modell": {}, "fusion": {}}, "required": ["element_id", "feld"], "additionalProperties": false}},
+        "unbekannt_in_fusion": {"type": "array", "items": {"type": "string"}, "description": "Koerper ohne Element: Kandidaten fuer freiform"}
+      },
+      "required": ["abweichungen", "unbekannt_in_fusion"], "additionalProperties": false
+    },
+
+    "bib_suchen_ein": {"type": "object", "properties": {"bibliothek": {"type": "string"}, "frage": {"type": "string"}, "filter": {"type": "object"}}, "required": ["bibliothek", "frage"], "additionalProperties": false},
+    "bib_suchen_aus": {"type": "object", "properties": {"eintraege": {"type": "array", "items": {"type": "object", "properties": {"bibliothek": {"type": "string"}, "id": {"$ref": "#/$defs/id"}, "bezeichnung": {"type": "string"}, "status": {"type": "string"}}, "required": ["bibliothek", "id", "bezeichnung", "status"], "additionalProperties": false}}}, "required": ["eintraege"], "additionalProperties": false},
+    "bib_eintrag_ein": {"type": "object", "properties": {"bibliothek": {"type": "string"}, "id": {"$ref": "#/$defs/id"}}, "required": ["bibliothek", "id"], "additionalProperties": false},
+    "bib_eintrag_aus": {"type": "object", "properties": {"eintrag": {"$ref": "bibliothekseintrag.schema.json"}}, "required": ["eintrag"], "additionalProperties": false},
+    "bib_importieren_ein": {"type": "object", "properties": {"datei": {"type": "string"}, "url": {"type": "string"}, "art": {"type": "string"}}, "required": ["art"], "additionalProperties": false},
+    "bib_importieren_aus": {"type": "object", "properties": {"vorschlaege": {"type": "array", "items": {"type": "object", "properties": {"bibliothek": {"type": "string"}, "id": {"$ref": "#/$defs/id"}, "status": {"const": "ungeprueft"}}, "required": ["bibliothek", "id", "status"], "additionalProperties": false}}}, "required": ["vorschlaege"], "additionalProperties": false},
+
+    "vorlage_bemustern_ein": {"type": "object", "properties": {"datei": {"type": "string"}, "zweck": {"type": "string"}}, "required": ["datei", "zweck"], "additionalProperties": false},
+    "vorlage_bemustern_aus": {
+      "type": "object",
+      "properties": {
+        "entwurf": {"type": "string"}, "felder": {"type": "array", "items": {"type": "string"}},
+        "vergleich": {"type": "object", "properties": {"max_abweichung_mm": {"type": "number"}, "bild": {"type": "string"}}, "required": ["max_abweichung_mm", "bild"], "additionalProperties": false}
+      },
+      "required": ["entwurf", "felder", "vergleich"], "additionalProperties": false
+    },
+    "vorlage_rendern_ein": {"type": "object", "properties": {"vorlage": {"$ref": "#/$defs/id"}, "daten": {"type": "object"}}, "required": ["vorlage", "daten"], "additionalProperties": false},
+    "vorlage_rendern_aus": {"type": "object", "properties": {"datei": {"$ref": "#/$defs/datei"}}, "required": ["datei"], "additionalProperties": false},
+
+    "korrektur_melden_ein": {"$ref": "#/$defs/ref_modell", "properties": {"schluessel": {"type": "string"}, "alt": {}, "neu": {}, "grund": {"type": "string"}}, "required": ["schluessel", "alt", "neu"], "unevaluatedProperties": false},
+    "korrektur_melden_aus": {"type": "object", "properties": {"episode_id": {"$ref": "#/$defs/id"}}, "required": ["episode_id"], "additionalProperties": false},
+    "regelvorschlaege_ein": {"type": "object", "properties": {"setup_id": {"$ref": "#/$defs/id"}}, "required": ["setup_id"], "additionalProperties": false},
+    "regelvorschlaege_aus": {"type": "object", "properties": {"vorschlaege": {"type": "array", "items": {"type": "object", "properties": {"vorschlag_id": {"$ref": "#/$defs/id"}, "schluessel": {"type": "string"}, "episoden": {"type": "integer"}, "belege": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/beleg"}}}, "required": ["vorschlag_id", "schluessel", "episoden", "belege"], "additionalProperties": false}}}, "required": ["vorschlaege"], "additionalProperties": false},
+    "regel_entscheiden_ein": {"type": "object", "properties": {"vorschlag_id": {"$ref": "#/$defs/id"}, "entscheidung": {"type": "string", "enum": ["bestaetigen", "aendern", "ablehnen"]}, "wert": {"$ref": "gemeinsam.schema.json#/$defs/wert"}}, "required": ["vorschlag_id", "entscheidung"], "additionalProperties": false},
+    "regel_entscheiden_aus": {"type": "object", "properties": {"setup_version": {"type": ["integer", "null"]}, "regel": {"type": ["string", "null"]}}, "required": ["setup_version", "regel"], "additionalProperties": false}
+  }
+}

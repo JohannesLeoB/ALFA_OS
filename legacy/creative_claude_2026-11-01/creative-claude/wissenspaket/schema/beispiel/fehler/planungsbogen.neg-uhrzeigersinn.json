@@ -1,0 +1,234 @@
+{
+ "schema": "planungsbogen/v0.2",
+ "id": "nische-2460",
+ "auftrag": "N2460",
+ "revision": 2,
+ "setup": "studio-beispiel",
+ "stand": "2026-10-31",
+ "raum": {
+  "aufmass": {
+   "quelle": "laser",
+   "datum": "2026-10-30",
+   "genauigkeit_mm": 2
+  },
+  "grundriss": [
+   [
+    0,
+    3000
+   ],
+   [
+    2460,
+    3000
+   ],
+   [
+    2460,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "raumhoehe": {
+   "wert": 2500,
+   "einheit": "mm",
+   "herkunft": "gemessen",
+   "beleg": {
+    "quelle": "m-raumhoehe"
+   }
+  },
+  "messungen": [
+   {
+    "id": "m-wand-a-h900",
+    "was": "Wand A, Laenge auf 900 mm Hoehe",
+    "quelle": "laser",
+    "kritisch": true,
+    "wert": {
+     "wert": 2460,
+     "einheit": "mm",
+     "herkunft": "gemessen",
+     "toleranz": 2
+    }
+   },
+   {
+    "id": "m-wand-a-h100",
+    "was": "Wand A, Laenge auf Sockelhoehe",
+    "quelle": "laser",
+    "kritisch": true,
+    "wert": {
+     "wert": 2458,
+     "einheit": "mm",
+     "herkunft": "gemessen",
+     "toleranz": 2
+    }
+   },
+   {
+    "id": "m-raumhoehe",
+    "was": "Raumhoehe",
+    "quelle": "laser",
+    "kritisch": false,
+    "wert": {
+     "wert": 2500,
+     "einheit": "mm",
+     "herkunft": "gemessen",
+     "toleranz": 3
+    }
+   }
+  ],
+  "waende": [
+   {
+    "id": "wand-a",
+    "von": 0,
+    "nach": 1
+   },
+   {
+    "id": "wand-b",
+    "von": 1,
+    "nach": 2
+   },
+   {
+    "id": "wand-d",
+    "von": 3,
+    "nach": 0
+   }
+  ],
+  "anschluesse": [
+   {
+    "id": "wk-1",
+    "art": "wasser_kalt",
+    "status": "bestand",
+    "pos": [
+     900,
+     0,
+     500
+    ],
+    "wand": "wand-a",
+    "toleranz": 50,
+    "herkunft": "gemessen"
+   },
+   {
+    "id": "aw-1",
+    "art": "abwasser",
+    "status": "bestand",
+    "pos": [
+     950,
+     0,
+     420
+    ],
+    "wand": "wand-a",
+    "toleranz": 50,
+    "dimension": "DN50",
+    "herkunft": "gemessen"
+   },
+   {
+    "id": "st-1",
+    "art": "strom_230",
+    "status": "bestand",
+    "pos": [
+     600,
+     0,
+     300
+    ],
+    "wand": "wand-a",
+    "herkunft": "annahme"
+   }
+  ]
+ },
+ "vorgaben": {
+  "form": "zeile",
+  "werte": {
+   "arbeitshoehe": {
+    "wert": 910,
+    "einheit": "mm",
+    "herkunft": "annahme",
+    "beleg": {
+     "quelle": "frage-ok-ap"
+    }
+   },
+   "ap_d": {
+    "wert": 5,
+    "einheit": "mm",
+    "herkunft": "projekt"
+   }
+  },
+  "bereiche": [
+   {
+    "id": "z1",
+    "art": "nische",
+    "wand": "wand-a",
+    "max": {
+     "b": 2460,
+     "t": 600,
+     "h": 910
+    }
+   }
+  ],
+  "elemente_fest": [
+   {
+    "bereich": "z1",
+    "typ": "unterschrank",
+    "funktion": "spuele",
+    "x_von": 600,
+    "breite": 600
+   }
+  ],
+  "materialien": {
+   "front": {
+    "bibliothek": "material",
+    "id": "edelstahl-gebuerstet-1"
+   },
+   "arbeitsplatte": {
+    "bibliothek": "material",
+    "id": "edelstahl-massiv-5"
+   },
+   "korpus": {
+    "bibliothek": "material",
+    "id": "spanplatte-mfc-weiss-19"
+   }
+  },
+  "griff": "grifflos_pto",
+  "geraete": [
+   {
+    "rolle": "geschirrspueler",
+    "einbau": "vollintegriert",
+    "bereich": "z1"
+   },
+   {
+    "rolle": "spuele",
+    "einbau": "unterbau",
+    "bereich": "z1"
+   },
+   {
+    "rolle": "armatur"
+   }
+  ],
+  "oberschraenke": false,
+  "nutzer": {
+   "haendigkeit": "rechts",
+   "mehrere_nutzer": true
+  }
+ },
+ "wuensche": [
+  {
+   "text": "Schubkaesten statt Tueren",
+   "schluessel": "auszug_vor_tuer",
+   "gewicht": 0.8
+  }
+ ],
+ "ausgaben": [
+  "zuschnittliste",
+  "zuschnittplan",
+  "etiketten",
+  "werkplan",
+  "bestellliste"
+ ],
+ "offene_fragen": [
+  {
+   "id": "frage-ok-ap",
+   "frage": "OK Arbeitsplatte 885 oder 910?",
+   "betrifft": "arbeitshoehe",
+   "vorschlag": "910",
+   "antwort": null
+  }
+ ]
+}

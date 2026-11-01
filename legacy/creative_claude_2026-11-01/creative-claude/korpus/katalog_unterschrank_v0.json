@@ -1,0 +1,35 @@
+{
+  "katalog": "unterschrank",
+  "version": 0,
+  "regel": "Kein Raster. Typwerte sind Startwerte; jedes Maß ist mm-genau frei. Realer Schrank = Typ + Abweichungen.",
+  "parameter": {
+    "b": "Korpusbreite außen, mm",
+    "h": "Korpushöhe ohne Sockel und Arbeitsplatte, mm",
+    "t": "Korpustiefe ohne Front, mm",
+    "sockel_h": "mm",
+    "front_d": "Frontstärke, mm",
+    "korpus_d": "Plattenstärke Korpus, mm",
+    "rueckwand_d": "mm",
+    "fuge": "Fuge zwischen Fronten, mm",
+    "fronten": "Liste von oben nach unten: {art: tuer|auszug|klappe|blende|geraetefront, h, anschlag?: links|rechts}",
+    "innen": "Liste: {art: innenschub|boden|muellsystem|geraet|technik, h?, zarge_h?}",
+    "traverse_vorn": "bool",
+    "traverse_hinten": "bool",
+    "geraet": "Platzhaltertyp oder null"
+  },
+  "typwerte": {"h": 790, "t": 555, "sockel_h": 100, "front_d": 19, "korpus_d": 19, "rueckwand_d": 8, "fuge": 3, "_hinweis": "Startwerte aus Runde 1 [B/N], kein Standard der Branche; werden je Profil überschrieben"},
+  "typen": [
+    {"id": "US-T1", "name": "Unterschrank 1 Tür", "fronten": [{"art": "tuer"}], "innen": [{"art": "boden"}], "traverse_vorn": true},
+    {"id": "US-T2", "name": "Unterschrank 2 Türen", "fronten": [{"art": "tuer", "anschlag": "links"}, {"art": "tuer", "anschlag": "rechts"}], "innen": [{"art": "boden"}], "traverse_vorn": true},
+    {"id": "US-S1I", "name": "Unterschrank 1 Auszug + Innenschübe", "fronten": [{"art": "auszug"}], "innen": [{"art": "innenschub"}, {"art": "innenschub"}], "traverse_vorn": true},
+    {"id": "US-Sn", "name": "Unterschrank n Auszüge", "fronten": [{"art": "auszug", "anzahl": "n"}], "innen": [], "traverse_vorn": true},
+    {"id": "US-SP", "name": "Spülenunterschrank", "fronten": [{"art": "auszug"}], "innen": [{"art": "muellsystem"}, {"art": "technik"}], "traverse_vorn": false, "geraet": "spuele"},
+    {"id": "US-GSP", "name": "Geschirrspüler vollintegriert", "fronten": [{"art": "geraetefront"}], "innen": [{"art": "geraet"}], "korpus": false, "geraet": "gsp"},
+    {"id": "US-KF", "name": "Kochfeld-Unterschrank", "fronten": [{"art": "auszug", "anzahl": "n"}], "innen": [], "traverse_vorn": false, "geraet": "kochfeld"},
+    {"id": "US-BO", "name": "Backofen-Unterschrank", "fronten": [{"art": "geraetefront"}, {"art": "auszug"}], "innen": [{"art": "geraet"}], "geraet": "backofen"},
+    {"id": "US-AP", "name": "Apotheker-Auszug schmal", "fronten": [{"art": "auszug"}], "innen": [{"art": "boden"}]},
+    {"id": "US-EK", "name": "Eckunterschrank", "fronten": [{"art": "tuer"}, {"art": "blende"}], "innen": [{"art": "boden"}], "_offen": "Blindecke/Karussell/LeMans als Varianten"},
+    {"id": "US-OF", "name": "Offener Unterschrank", "fronten": [], "innen": [{"art": "boden"}]}
+  ],
+  "elemente": ["stellseite", "passblende", "sockelblende", "arbeitsplatte", "deckplatte"]
+}

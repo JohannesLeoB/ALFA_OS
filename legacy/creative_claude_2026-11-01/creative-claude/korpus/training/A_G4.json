@@ -1,0 +1,337 @@
+{
+  "runde": "A",
+  "gruppe": "G4",
+  "gelesen": [
+    {"template": "T22", "seiten": "8/8", "art": "Moodboard", "inhalt": "Moodboard einer Zeilenküche mit drei Varianten (A/C/D): Materialpalette, je Variante Visualisierung mit Preisrahmen und Geräteseite; Varianten unterscheiden sich im Dunstabzug (Muldenabzug, Regal-Haube, Deckeneinbau im Trockenbaukasten)."},
+    {"template": "T23", "seiten": "3/3", "art": "Moodboard", "inhalt": "Moodboard Materialien (Eichenfurnier-Front, Naturstein-AP, Großbecken, Kochendwasser-Armatur) und Geräte (Backofen plus Dampfgarer, Geschirrspüler XXL, Tischlüftung, Flex-Induktion)."},
+    {"template": "T24", "seiten": "2/2", "art": "Moodboard", "inhalt": "Moodboard Materialien: Linoleum-Front/Sockel/Stellseiten in Blau, dunkle Naturstein-AP 20 mm, Gunmetal-Becken und -Armatur, Messing-Stangengriff für Kühlschrank."},
+    {"template": "T25", "seiten": "2/2", "art": "Moodboard", "inhalt": "Moodboard Materialien ohne Layout: Quarzkomposit mit goldener Maserung, Sinterstein-Muster in Terrakotta, Wandleuchte aus gebürstetem Edelstahl, Backofen-Heizelement als Farb-/Detailinspiration."},
+    {"template": "T26", "seiten": "4/4", "art": "Moodboard", "inhalt": "Moodboard mit Inspirationsfotos (Naturstein, Fronten in Zartrosa, lange Stangengriffe, Vollholz-Schubladen, Edelstahl-Griffmulde, Eiche geölt) und Geräteseite (Einbau-Kühlschrank, Müllsystem, Kochendwasser-Armatur, Großbecken, Muldenabzug-Kochfeld)."},
+    {"template": "T27", "seiten": "6/6", "art": "Moodboard", "inhalt": "Vier Moodboard-Versionen einer Küche (Greige-Fronten mit Keramik/Naturstein/Terrazzo/Sinterstein, schwarze oder Edelstahl-Becken, Muldenabzug-Kochfelder 720-880 mm, in V4 Insel mit Inselhaube und AP-Überhang)."},
+    {"template": "T10", "seiten": "12/12", "art": "Präsentation", "inhalt": "Präsentation einer L-Küche unter Dachschräge: fünf Farb-/Materialvarianten (Akzent Blau/Gelb/Rosa, Eiche furniert) je mit Materialseite und Rendering; ohne Bemaßung."},
+    {"template": "T11", "seiten": "11/11", "art": "Präsentation", "inhalt": "Präsentation einer Küche aus Zeile mit Oberschränken plus wandanschließender Insel: 3 Visualisierungen, Materialien/Geräte/Ausstattung und 4 bemaßte Planblätter (Grundriss, Ansicht Zeile, Ansicht Insel innen und außen)."}
+  ],
+
+  "kuechen": [
+    {
+      "id": "T11-K1",
+      "belege": ["T11 S.8", "T11 S.9", "T11 S.10", "T11 S.11", "T11 S.2", "T11 S.3"],
+      "form": "halbinsel",
+      "raum": {
+        "wandbezug": "Zeile (2995 lang) in einer Wandnische zwischen Wandvorsprung und Fensterwand; parallel dazu eine Insel (975 x 2120), die mit einem Ende an die Fensterwand anschließt (Halbinsel-artig, im Plan 'Insel' genannt). Raum grob 4,0 x 3,2 m (aus Planmaßstab geschätzt).",
+        "fenster_tuer": "Fenster in der Stirnwand, an das Zeile und Insel-Ende anschließen; Insel-AP trifft auf die Fensterwand (T11 S.2, S.3)",
+        "abstand_wand_decke": "Oberschrank-Oberkante ca. 2450, Decke ca. 2,5 m (aus Bildmaßstab, Luft ca. 40-60 mm); Oberschränke reichen fast bis zur Decke",
+        "freiraum_gang_mm": 1100
+      },
+      "laengen_mm": [2995, 2900, 2120, 2100, 2050],
+      "hoehen": {"sockel": 120, "ok_ap": 930, "ap_d": 20, "oberschrank_uk": 1530, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": 370, "insel": 975},
+      "schraenke": [
+        {"pos": 1, "kategorie": "unterschrank", "typ": "US-AP", "b": 250, "h": null, "t": null, "fronten": "1 Auszug über volle Höhe, Knopf oben mittig (Zeile, Endmodul links)", "innen": "Auszug schmal", "geraet": null},
+        {"pos": 2, "kategorie": "unterschrank", "typ": "US-GSP", "b": 600, "h": null, "t": null, "fronten": "1 Frontblende über volle Höhe, Knopf oben mittig", "innen": "Geschirrspüler vollintegriert", "geraet": "gsp"},
+        {"pos": 3, "kategorie": "unterschrank", "typ": "US-SP", "b": 600, "h": null, "t": null, "fronten": "1 Front über volle Höhe, Knopf oben mittig (Beschriftung: Spüle + Abfall-Orga)", "innen": "Müllsystem 2 x 17 l mit Tank-Integration der Kochendwasser-Armatur; Becken ca. 500 breit", "geraet": "spuele"},
+        {"pos": 4, "kategorie": "unterschrank", "typ": "US-Sn", "b": 600, "h": null, "t": null, "fronten": "2 Schubkästen 1:1 (je ca. 390-400 hoch, geschätzt)", "innen": "Schubkästen Eiche massiv, Besteckeinsatz (Legende/Ausstattung)", "geraet": null},
+        {"pos": 5, "kategorie": "unterschrank", "typ": "US-Sn", "b": 600, "h": null, "t": null, "fronten": "2 Schubkästen 1:1", "innen": "wie Pos 4", "geraet": null},
+        {"pos": 6, "kategorie": "unterschrank", "typ": "US-AP", "b": 250, "h": null, "t": null, "fronten": "1 Auszug über volle Höhe, Knopf oben mittig (Endmodul rechts, symmetrisch zu Pos 1)", "innen": "Auszug schmal", "geraet": null},
+        {"pos": 7, "kategorie": "oberschrank", "typ": "NEU:Oberschrank 1 Tür gleichbreit", "b": 580, "h": 920, "t": 370, "fronten": "1 Tür, ohne Griff, schmale Fugen", "innen": "Fachböden (Beschriftung 'Tür und Fachböden')", "geraet": null},
+        {"pos": 8, "kategorie": "oberschrank", "typ": "NEU:Oberschrank 1 Tür gleichbreit", "b": 580, "h": 920, "t": 370, "fronten": "1 Tür", "innen": "Fachböden", "geraet": null},
+        {"pos": 9, "kategorie": "oberschrank", "typ": "NEU:Oberschrank 1 Tür gleichbreit", "b": 580, "h": 920, "t": 370, "fronten": "1 Tür", "innen": "Fachböden", "geraet": null},
+        {"pos": 10, "kategorie": "oberschrank", "typ": "NEU:Oberschrank 1 Tür gleichbreit", "b": 580, "h": 920, "t": 370, "fronten": "1 Tür", "innen": "Fachböden", "geraet": null},
+        {"pos": 11, "kategorie": "oberschrank", "typ": "NEU:Oberschrank 1 Tür gleichbreit", "b": 580, "h": 920, "t": 370, "fronten": "1 Tür", "innen": "Fachböden; LED-Profil in den Unterboden aller Hängeschränke eingefräst", "geraet": null},
+        {"pos": 12, "kategorie": "insel", "typ": "US-AP", "b": 300, "h": null, "t": null, "fronten": "1 Auszug über volle Höhe, Knopf oben (Inselseite zur Zeile, Anschlussende an die Wand)", "innen": "Auszug", "geraet": null},
+        {"pos": 13, "kategorie": "insel", "typ": "US-KF", "b": 900, "h": null, "t": null, "fronten": "2 Schubkästen 1:1 (je ca. 390-400), Knopf nur oben dargestellt", "innen": "Schubkästen; Kochfeld (Flex-Induktion, im Plan ca. 765 x 500) liegt darüber", "geraet": "kochfeld"},
+        {"pos": 14, "kategorie": "insel", "typ": "US-BO", "b": 600, "h": null, "t": null, "fronten": "Backofen oben bündig unter der AP (ca. 600 hoch), darunter 1 niedriger Schubkasten (ca. 200)", "innen": "Backofen (60 cm) mit Schubkasten", "geraet": "backofen"},
+        {"pos": 15, "kategorie": "nischenregal", "typ": "NEU:Regalende rund offen", "b": 250, "h": null, "t": null, "fronten": "offen, 3 Fächer à 241 Höhe, Viertelkreis-Rundung am Inselende", "innen": "Fachböden rund, Eiche furniert", "geraet": null},
+        {"pos": 16, "kategorie": "insel", "typ": "NEU:Insel Außenschrank flach", "b": 600, "h": null, "t": 375, "fronten": "1 Tür, Knopf oben mittig (Außenseite zum Raum, 3 gleiche Türen)", "innen": "Fachböden (Beschriftung 'Tür und Fachböden'); Tiefe ca. 375 = 975 minus ca. 600 Innenseite (geschätzt)", "geraet": null},
+        {"pos": 17, "kategorie": "insel", "typ": "NEU:Insel Außenschrank flach", "b": 600, "h": null, "t": 375, "fronten": "1 Tür", "innen": "Fachböden", "geraet": null},
+        {"pos": 18, "kategorie": "insel", "typ": "NEU:Insel Außenschrank flach", "b": 600, "h": null, "t": 375, "fronten": "1 Tür", "innen": "Fachböden", "geraet": null}
+      ],
+      "geraete_reihenfolge": "Zeile (Ansicht, Blick auf die Wand): Auszug 250 – GSP 600 – Spüle+Abfall 600 – 2x Schubkästen 600 – Auszug 250. Insel Innenseite: Auszug 300 – Kochfeld über Schubkästen 900 – Backofen 600 – Regal 250. Inselhaube (zylindrisch, weiß) über der Insel.",
+      "abstaende": {"spuele_kochfeld_mm": 1900, "kochfeld_wand_mm": null, "gsp_neben_spuele": "GSP direkt links neben Spüle, beide 600 (T11 S.9)", "ks_spuele_mm": null},
+      "anschluesse": {
+        "passblenden": "Keine Passblende bemaßt; schmale 250er-Auszüge an beiden Zeilenenden übernehmen die Endmodul-Rolle; an Oberschrank-Enden sichtbare dunkle Streifen ca. 50 je Seite (Bild geschätzt)",
+        "fuellstuecke": "Zeile 2995 laut Grundriss vs. 2900 Modulsumme: Differenz 95 verteilt sich als Luft/Blende links und rechts (ca. 45-50 je Seite, geschätzt)",
+        "stellseiten": "Nicht ausgewiesen; Insel-Ende mit Regal bildet die Sichtseite",
+        "wand_decken_anschluss": "Oberschränke mit ca. 40-60 mm Luft unter der Decke; Rückwand zwischen AP und OS ohne Fliesen, Wandfläche 600 hoch",
+        "sockel": "Zeile Sockel ca. 120 (Differenz 930 - 20 AP - 790 Fronten), analog Front (Linoleum); Insel Sockel ca. 100 mit dickerer AP; unter dem Regalende kleinerer, zurückgesetzter Sockelfuß",
+        "eckloesung": "keine Ecke; Zeile und Insel sind parallel"
+      },
+      "griffe": "knopf (runder flacher Messing-Knopf, oben mittig auf Tür/Auszug, ca. 45-50 unter Frontoberkante geschätzt); Oberschränke grifflos",
+      "material_farbe": "Zeile und Hängeschränke: Linoleum dunkelgrün beidseitig auf MDF; Korpus Dekorspan hellgrau; Insel: Eichenfurnier klar matt, Insel-AP Lavastein glasiert in Senfgelb; Zeile-AP Terrazzo 20; Becken Keramik dunkelgrün; Kochendwasser-Armatur Messing patiniert; Schubkästen Eiche massiv fingergezinkt",
+      "plan_widersprueche": [
+        "Insel-Länge: Modulsumme 300+900+600+250 = 2050 (Innen) und 250+3x600 = 2050 (Außen), Gesamtmaß Außenansicht 2100, Grundriss 2120 (T11 S.8, S.10, S.11)",
+        "Zeile: Modulsumme 2900 (unten 250+4x600+250; oben 5x580) vs. Grundrissmaß 2995 (T11 S.8, S.9)",
+        "Legende nennt 'Korpus HS' (Hochschrank), im Plan ist kein Hochschrank gezeichnet (T11 S.8-S.11)",
+        "Kein Kühlschrank in Legende oder Plan (T11 S.8-S.11)"
+      ]
+    },
+    {
+      "id": "T22-K1",
+      "belege": ["T22 S.3", "T22 S.5", "T22 S.7", "T22 S.4", "T22 S.6", "T22 S.8"],
+      "form": "zeile",
+      "raum": {
+        "wandbezug": "Zeile in einer Nische zwischen Türwand (links) und Wandvorsprung/Pfeiler (rechts); Länge grob 3,0 m, 5 gleich breite Module (aus Gerätemaßstab 60 cm geschätzt)",
+        "fenster_tuer": "Tür links neben der Zeile, bodentiefes Fenster rechts hinter dem Pfeiler; Preisangabe 'inkl. Zeile links' deutet auf weitere Zeile im Raum, die nicht gezeigt ist",
+        "abstand_wand_decke": "Keine Oberschränke; Spiegelfläche (bronziert) als Wandverkleidung über Spritzschutz bis zur abgehängten Decke",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [3000],
+      "hoehen": {"sockel": 100, "ok_ap": null, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [
+        {"pos": 1, "kategorie": "unterschrank", "typ": "US-Sn", "b": 600, "h": null, "t": null, "fronten": "2 Auszüge 1:1 (je ca. 380), grifflos", "innen": "Breite geschätzt aus Rendering", "geraet": null},
+        {"pos": 2, "kategorie": "unterschrank", "typ": "US-SP", "b": 600, "h": null, "t": null, "fronten": "2 Auszüge 1:1, grifflos (Spüle liegt in der Ansicht über Modul 1-2)", "innen": "Becken 50 x 40 laut Materialseite", "geraet": "spuele"},
+        {"pos": 3, "kategorie": "unterschrank", "typ": "US-Sn", "b": 600, "h": null, "t": null, "fronten": "2 Auszüge 1:1, grifflos", "innen": "", "geraet": null},
+        {"pos": 4, "kategorie": "unterschrank", "typ": "US-BO", "b": 600, "h": null, "t": null, "fronten": "Var. A: kleine Front (ca. 160) oben, Backofen unten bis zum Sockel; Var. C/D: Backofen oben bündig unter AP (ca. 600), darunter niedriger Schubkasten (ca. 150)", "innen": "Backofen 60 cm, schwarz; Kochfeld darüber (A: 60 cm mit Muldenabzug; C/D: 90 cm, breiter als das Modul)", "geraet": "backofen"},
+        {"pos": 5, "kategorie": "unterschrank", "typ": "US-Sn", "b": 600, "h": null, "t": null, "fronten": "2 Auszüge 1:1, grifflos", "innen": "", "geraet": null}
+      ],
+      "geraete_reihenfolge": "Spüle – (Mitte) – Kochfeld über Backofen – Auszugsmodul (links→rechts, aus Rendering)",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {
+        "passblenden": "keine sichtbar; Fronten laufen bis zu Tür- bzw. Pfeilerseite",
+        "fuellstuecke": "",
+        "stellseiten": "",
+        "wand_decken_anschluss": "Spiegel mit Rücksprung/Abhängung der Decke (Trockenbau), Spritzschutz in AP-Material bis ca. Spiegelunterkante, 3 Steckdosengruppen in der Spritzschutzfläche",
+        "sockel": "ca. 100, zurückgesetzt, in Frontfarbe",
+        "eckloesung": ""
+      },
+      "griffe": "grifflos (Griffmulde/Push nicht erkennbar)",
+      "material_farbe": "Fronten und Sockel Schichtstoff in Greige/Sand, AP und Spritzschutz Quarzkomposit weiß mit Maserung, Wandverkleidung Spiegel bronziert, Becken Edelstahl, Armatur Chrom gebürstet",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T23-K1",
+      "belege": ["T23 S.2", "T23 S.3"],
+      "form": "sonstiges",
+      "raum": {"wandbezug": "nicht gezeigt, nur Material- und Geräteseiten", "fenster_tuer": "", "abstand_wand_decke": "", "freiraum_gang_mm": null},
+      "laengen_mm": [],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [],
+      "geraete_reihenfolge": "",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": "", "fuellstuecke": "", "stellseiten": "", "wand_decken_anschluss": "", "sockel": "", "eckloesung": ""},
+      "griffe": "nicht erkennbar",
+      "material_farbe": "Fronten Eichenfurnier klar matt lackiert, AP Naturstein satiniert in hellem Grünlich-Weiß mit Maserung, Becken Edelstahl gebürstet ca. 71 breit (Unterbau), Kochendwasser-Armatur Vollstahl; Geräte Edelstahl: Backofen 60x60 und Dampfgarer 60x45 (beide Linksanschlag), Tischlüftung 90, Flex-Induktion, GSP XXL",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T24-K1",
+      "belege": ["T24 S.2"],
+      "form": "sonstiges",
+      "raum": {"wandbezug": "nicht gezeigt", "fenster_tuer": "", "abstand_wand_decke": "", "freiraum_gang_mm": null},
+      "laengen_mm": [],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": 20, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [],
+      "geraete_reihenfolge": "",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": "", "fuellstuecke": "", "stellseiten": "Stellseiten im Front-Material (Linoleum) wie Front und Sockel", "wand_decken_anschluss": "", "sockel": "Sockel im Front-Material", "eckloesung": ""},
+      "griffe": "stangengriff (lang, Messing, nur für Kühlschrank genannt; übrige Fronten ohne Griffangabe)",
+      "material_farbe": "Front, Sockel und Stellseiten Linoleum in dunklem Blaugrau; AP Naturstein dunkel mit weißer Äderung, 20 mm; Becken Unterbau 50 breit und Kochendwasser-Armatur in Gunmetal; Griff Messing",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T25-K1",
+      "belege": ["T25 S.2"],
+      "form": "sonstiges",
+      "raum": {"wandbezug": "nicht gezeigt", "fenster_tuer": "", "abstand_wand_decke": "", "freiraum_gang_mm": null},
+      "laengen_mm": [],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [],
+      "geraete_reihenfolge": "",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": "", "fuellstuecke": "", "stellseiten": "", "wand_decken_anschluss": "", "sockel": "", "eckloesung": ""},
+      "griffe": "nicht erkennbar",
+      "material_farbe": "Quarzkomposit hell mit goldener Maserung, Sinterstein-Muster Terrakotta (Einsatz unklar), Wandleuchte Edelstahl gebürstet, kupferfarbenes Backofen-Heizelement als Detailreferenz",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T26-K1",
+      "belege": ["T26 S.2", "T26 S.3"],
+      "form": "sonstiges",
+      "raum": {"wandbezug": "nicht gezeigt; Inspirationsfotos zeigen Hochschrank-Wand und Insel/Theke", "fenster_tuer": "", "abstand_wand_decke": "", "freiraum_gang_mm": null},
+      "laengen_mm": [],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [
+        {"pos": 1, "kategorie": "hochschrank", "typ": "NEU:Hochschrank Einbau-Kühlschrank", "b": null, "h": null, "t": null, "fronten": "Einbau-Kühlschrank in Nische (Gerätetür rechts angeschlagen, Höhe nicht angegeben)", "innen": "Vollraum, Frischefach unten", "geraet": "ks"},
+        {"pos": 2, "kategorie": "unterschrank", "typ": "US-Sn", "b": null, "h": null, "t": null, "fronten": "Auszug mit flachem Müllsystem (3 Behälter, Mittelfach für Gläser)", "innen": "Müllsystem Low", "geraet": null}
+      ],
+      "geraete_reihenfolge": "",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": "", "fuellstuecke": "", "stellseiten": "", "wand_decken_anschluss": "", "sockel": "", "eckloesung": ""},
+      "griffe": "stangengriff (lange Stangen in Aluminium/Messing/Schwarz, im Foto vertikal an raumhoher Schrankwand); griffmulde Edelstahl (Foto Insel)",
+      "material_farbe": "Fronten Zartrosa/Lotus, Naturstein weiß mit grauer Äderung, Eiche geölt (grau), Vollholz-Schubladen, Edelstahl-Griffmulde, farbige Steckdosen; Becken 72 x 40 Edelstahl; Muldenabzug-Kochfeld",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T27-K1",
+      "belege": ["T27 S.2", "T27 S.3", "T27 S.4", "T27 S.5"],
+      "form": "insel",
+      "raum": {"wandbezug": "nur in V4 angedeutet: Insel mit quadratischer AP und Überhang auf einer Seite; Foto zeigt Zeile unter Treppe/Schräge", "fenster_tuer": "V3-Foto: durchgehendes Bandfenster über AP", "abstand_wand_decke": "", "freiraum_gang_mm": null},
+      "laengen_mm": [],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": 20, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [],
+      "geraete_reihenfolge": "",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": "", "fuellstuecke": "", "stellseiten": "", "wand_decken_anschluss": "Spiegel als Spritzschutz (V3); Spritzschutz-Optionen Mosaik oder Fischgrät-Fliese (V2)", "sockel": "", "eckloesung": ""},
+      "griffe": "nicht erkennbar (Fotos überwiegend grifflos)",
+      "material_farbe": "Fronten einheitlich Greige in allen vier Versionen; AP wechselnd je Version (Keramik, Naturstein weiß, Terrazzo, Sinterstein, Naturstein schwarz, in V4 Naturstein rosé); Becken Gerätebreiten 725-753 (schwarz) bzw. Edelstahl flächenbündig; Kochfelder 720 / 760 / 880 mit Hinweis, dass 720er nur mit AP >= 20 funktioniert",
+      "plan_widersprueche": []
+    },
+    {
+      "id": "T10-K1",
+      "belege": ["T10 S.3", "T10 S.5", "T10 S.7", "T10 S.9", "T10 S.11"],
+      "form": "L",
+      "raum": {
+        "wandbezug": "L-Küche in einem Dachgeschoss-Raum; Schenkel an Giebelwand (mit Kochfeld, Backofen, Spüle) und an der Seitenwand; links neben der Tür ein raumhoher Hochschrank",
+        "fenster_tuer": "Tür links, zwei Dachfenster/Gauben direkt über der AP, Schenkel unter den Fenstern",
+        "abstand_wand_decke": "Keine Oberschränke wegen Dachschräge; stattdessen 2 Wandborde (Farbvarianten) über dem Kochbereich",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [
+        {"pos": 1, "kategorie": "hochschrank", "typ": "NEU:Hochschrank mit offener Regalseite", "b": null, "h": null, "t": null, "fronten": "geschlossene Front, grifflos; Stellseite zur Tür als offenes Regal mit mehreren Fächern", "innen": "Regalseite Eiche furniert (Variante)", "geraet": null},
+        {"pos": 2, "kategorie": "unterschrank", "typ": "US-BO", "b": null, "h": null, "t": null, "fronten": "Backofen oben unter AP/Kochfeld, darunter niedriger Auszug", "innen": "Backofen schwarz", "geraet": "backofen"},
+        {"pos": 3, "kategorie": "unterschrank", "typ": "US-Sn", "b": null, "h": null, "t": null, "fronten": "mehrere Türen/Auszüge grifflos im Schenkel rechts", "innen": "", "geraet": null}
+      ],
+      "geraete_reihenfolge": "Hochschrank – Kochfeld über Backofen – Spüle (unter Dachfenster) – Eck – Schenkel rechts mit weiterem Becken (zwei Becken im Rendering sichtbar)",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": "", "fuellstuecke": "", "stellseiten": "Seitenwange am Schenkelende sichtbar in Frontfarbe", "wand_decken_anschluss": "Wandschräge ohne Verkleidung; Spiegel als Spritzschutz in Materialpalette", "sockel": "weißer Sockel, zurückgesetzt", "eckloesung": "Eckschrank im L-Eck, Ausführung nicht erkennbar"},
+      "griffe": "grifflos",
+      "material_farbe": "Fronten matt in hellem Kaschmir-/Kieselgrau, AP Mineralwerkstoff in Betongrau, Wandfarbe Grüngrau, Spiegel, Akzentfarbe an den Wandborden (Blau, Gelb, Rosa oder Eiche furniert)",
+      "plan_widersprueche": [
+        "Rendering zeigt zwei Spülbecken mit zwei Armaturen (T10 S.3); unklar, ob zwei Becken geplant oder Grobmodell-Artefakt"
+      ]
+    }
+  ],
+
+  "wissen": {
+    "griffarten": [
+      {"art": "grifflos (Griffmulde/Push nicht erkennbar)", "wo": "Zeile mit durchgängigen Doppelauszügen (T22), L-Küche unter Dachschräge (T10), Oberschränke (T11)", "haeufigkeit": 3, "belege": ["T22 S.3", "T10 S.3", "T11 S.9"]},
+      {"art": "Knopf, rund, flach, Messing", "wo": "Zeile und Insel, oben mittig auf Tür und Auszug; ca. 45-50 unter Frontoberkante; untere Fronten von Doppelauszügen im Plan ohne Knopf dargestellt", "haeufigkeit": 1, "belege": ["T11 S.4", "T11 S.7", "T11 S.9", "T11 S.10"]},
+      {"art": "Stangengriff lang (Messing, Aluminium, Schwarz)", "wo": "Kühlschrank (Messing, T24); Foto einer raumhohen Schrankwand mit vertikalen Stangengriffen (T26)", "haeufigkeit": 2, "belege": ["T24 S.2", "T26 S.2"]},
+      {"art": "Edelstahl-Griffmulde", "wo": "Inspirationsfoto Insel-/Schrankkante", "haeufigkeit": 1, "belege": ["T26 S.2"]}
+    ],
+    "layouts_anordnungen": [
+      {"muster": "Zeile an der Wand plus parallele wandanschließende Insel; Kochfeld und Backofen auf der Insel (Seite zur Zeile), Spüle und GSP in der Zeile gegenüber, Stauraum-Türen auf der Außenseite der Insel", "belege": ["T11 S.8", "T11 S.10", "T11 S.11"]},
+      {"muster": "Inselende als offenes Rundregal (250 breit, drei Fächer à 241) statt Passstück oder Blende", "belege": ["T11 S.2", "T11 S.10", "T11 S.11"]},
+      {"muster": "Zeile mit durchgehend zwei gleich hohen Auszügen je Modul und Backofen im vierten von fünf Modulen, Kochfeld darüber", "belege": ["T22 S.3", "T22 S.5", "T22 S.7"]},
+      {"muster": "L-Küche unter Dachschräge: Hochschrank neben der Tür, Kochen unter dem Dachfenster, Wandborde statt Oberschränke", "belege": ["T10 S.3"]},
+      {"muster": "Variante mit freistehender Insel, Inselhaube und AP-Überhang auf einer Seite; Zeile unter Schräge", "belege": ["T27 S.5"]},
+      {"muster": "Oberschränke in der Zeile als gleichbreite Reihe (5 x 580), unabhängig von der Unterschrank-Aufteilung", "belege": ["T11 S.9"]}
+    ],
+    "innenausstattung": [
+      {"element": "Schubkästen Eiche massiv, fingergezinkt, farblos lackiert, mit Besteckeinsatz", "kontext": "Küche mit Linoleum- und Furnierfronten; auch in Moodboard als Vollholz-Schubladen", "belege": ["T11 S.7", "T11 S.9", "T26 S.2"]},
+      {"element": "Müllsystem 2 x 17 l im Spülenschrank mit Integration des Kochendwasser-Tanks", "kontext": "Spülenschrank 600 mit einem Auszug", "belege": ["T11 S.7", "T11 S.9"]},
+      {"element": "Flaches Müllsystem (3 Behälter) im Auszug", "kontext": "Moodboard Geräte", "belege": ["T26 S.3"]},
+      {"element": "LED-Profil in den Unterboden der Hängeschränke eingefräst", "kontext": "Beleuchtung der Wandfläche zwischen AP und Oberschrank", "belege": ["T11 S.5", "T11 S.8"]},
+      {"element": "Fachböden in Oberschränken und in den Außenschränken der Insel", "kontext": "Beschriftung 'Tür und Fachböden'", "belege": ["T11 S.9", "T11 S.11"]},
+      {"element": "Steckdosengruppen im Spritzschutz (drei Gruppen über der Zeile) und farbige Steckdosen als Gestaltungselement", "kontext": "Zeilenküche; Naturstein-Spritzschutz", "belege": ["T22 S.3", "T26 S.2", "T27 S.2", "T27 S.3"]},
+      {"element": "Einbau-Kühlschrank in Hochschrank-Nische", "kontext": "Geräteseite Moodboard", "belege": ["T26 S.3"]}
+    ],
+    "raumstellung": [
+      {"regel_oder_muster": "Zeile und Insel enden beide an derselben Stirnwand (Fensterwand); Insel-AP stößt am Fenster an", "belege": ["T11 S.8", "T11 S.2"]},
+      {"regel_oder_muster": "Gang zwischen Insel und Zeile ca. 1100, Gang auf der Raumseite der Insel ca. 1300 (aus Planmaßstab geschätzt, nicht bemaßt)", "belege": ["T11 S.8"]},
+      {"regel_oder_muster": "Zeile in Nische zwischen Wandvorsprung und Stirnwand, Länge 2995", "belege": ["T11 S.8"]},
+      {"regel_oder_muster": "Zeilenküche zwischen Türwand und Pfeiler, Fenster daneben; Spiegel statt Oberschränke", "belege": ["T22 S.3"]},
+      {"regel_oder_muster": "Dachschräge: Spüle und Kochfeld direkt unter den Dachfenstern, Hochschrank an der Tür, keine Oberschränke", "belege": ["T10 S.3"]}
+    ],
+    "raster_masse": [
+      {"beobachtung": "Unterschrank-Breiten in T11 nur 250, 300, 600 und 900; 8 von 13 Modulen sind 600 breit, schmale Auszüge 250/300 an Enden, 900 für das Kochfeld-Modul", "belege": ["T11 S.9", "T11 S.10", "T11 S.11"]},
+      {"beobachtung": "Zeile symmetrisch aufgebaut: 250 – 600 – 600 – 600 – 600 – 250", "belege": ["T11 S.9"]},
+      {"beobachtung": "Oberschränke frei geteilt: 5 x 580 (= 2900 / 5), Fugen laufen nicht über denen der Unterschränke", "belege": ["T11 S.9"]},
+      {"beobachtung": "Zeilenmaß 2995 weicht von Modulsumme 2900 um 95 ab; Insel 2050 Modulsumme vs 2100 und 2120 Gesamtmaß: Reste werden als Luft/Blende abgefangen, nicht durch Anpassung der Module", "belege": ["T11 S.8", "T11 S.9", "T11 S.10", "T11 S.11"]},
+      {"beobachtung": "Zeile T22 aus fünf optisch gleich breiten Modulen (ca. 600, aus Gerätebreite geschätzt)", "belege": ["T22 S.3", "T22 S.5"]},
+      {"beobachtung": "Becken-Breiten zwei Gruppen: ca. 50 (T11, T22, T24) und 71-75 (T23, T26, T27)", "belege": ["T11 S.5", "T22 S.2", "T24 S.2", "T23 S.2", "T26 S.3", "T27 S.2", "T27 S.4"]},
+      {"beobachtung": "Kochfeld-Breiten 600, 720, 760, 880, 900 je nach Gerät; Muldenabzug-Kochfelder 720-760", "belege": ["T22 S.4", "T22 S.6", "T27 S.2", "T27 S.3", "T27 S.5"]}
+    ],
+    "hoehenbereiche": [
+      {"groesse": "ok_ap", "werte": [930], "belege": ["T11 S.9", "T11 S.10", "T11 S.11"]},
+      {"groesse": "ap_d", "werte": [20, 20], "belege": ["T11 S.9", "T24 S.2"]},
+      {"groesse": "oberschrank_h", "werte": [920], "belege": ["T11 S.9"]},
+      {"groesse": "nische_zwischen_ap_und_oberschrank", "werte": [600], "belege": ["T11 S.9"]},
+      {"groesse": "oberschrank_uk", "werte": [1530], "belege": ["T11 S.9"]},
+      {"groesse": "sockel", "werte": [100, 120], "belege": ["T11 S.9", "T11 S.11", "T22 S.5"]},
+      {"groesse": "frontenblock_unterschrank", "werte": [790], "belege": ["T11 S.9"]},
+      {"groesse": "front_doppelauszug_je", "werte": [380, 400], "belege": ["T11 S.9", "T11 S.10", "T22 S.3"]},
+      {"groesse": "backofen_unterschrank", "werte": [600, 150, 200], "belege": ["T11 S.10", "T22 S.5", "T22 S.7"]},
+      {"groesse": "regalfach", "werte": [241], "belege": ["T11 S.10"]},
+      {"groesse": "decke", "werte": [2500], "belege": ["T11 S.9"]}
+    ],
+    "geraete_beziehungen": [
+      {"beziehung": "GSP direkt neben der Spüle (links, beide 600)", "belege": ["T11 S.9"]},
+      {"beziehung": "Spüle und Kochfeld auf verschiedenen Zeilen (Spüle Wand, Kochfeld Insel) mit ca. 1,9 m Luftlinie", "belege": ["T11 S.8"]},
+      {"beziehung": "Backofen unmittelbar unter dem Kochfeld im selben Modul, in der Insel mit eigenem 600er Modul neben dem Kochfeld-Schubkasten-Modul 900", "belege": ["T11 S.10", "T22 S.5"]},
+      {"beziehung": "Kochfeld breiter als sein Modul (90 über 60er Backofen-Modul) bei Rendering C/D; Kochfeld 60 mit Muldenabzug bei A", "belege": ["T22 S.5", "T22 S.7", "T22 S.3"]},
+      {"beziehung": "Dunstabzug-Lösungen: Muldenabzug, Regal-Haube 120 mit zwei Regalen 60, Deckeneinbau 120 in Trockenbaukasten, Tischlüftung 90, zylindrische Inselhaube", "belege": ["T22 S.4", "T22 S.6", "T22 S.8", "T23 S.3", "T11 S.6"]},
+      {"beziehung": "Backofen plus Dampfgarer 60x60 / 60x45 als Paar (Linksanschlag)", "belege": ["T23 S.3"]}
+    ],
+    "laufwege_ergonomie": [
+      {"beobachtung": "Gang zwischen Insel und Zeile geschätzt", "masse": [1100], "belege": ["T11 S.8"]},
+      {"beobachtung": "Gang auf Raumseite der Insel geschätzt", "masse": [1300], "belege": ["T11 S.8"]},
+      {"beobachtung": "Kochfeld sitzt nahe der Zeile-Seitenkante der Insel (Rand ca. 90, geschätzt), Restfläche ca. 385 zur Außenkante", "masse": [90, 385], "belege": ["T11 S.8"]},
+      {"beobachtung": "Insel 975 breit: Innenseite mit tiefen Kochmodulen ca. 600, Außenseite mit flachen Türen ca. 375 (Rücken an Rücken, geschätzt)", "masse": [975, 600, 375], "belege": ["T11 S.8", "T11 S.11"]},
+      {"beobachtung": "Hinweis: Zeile Tiefe 629 gemessen von Wand bis AP-Vorderkante", "masse": [629], "belege": ["T11 S.8"]}
+    ],
+    "anschluesse_blenden_fuellstuecke": [
+      {"detail": "Restmaß Nische-Modulsumme (95) wird als schmale Luft/Blende links und rechts abgefangen, schmale Endauszüge 250 statt Passblende", "masse": [95, 250], "belege": ["T11 S.8", "T11 S.9"]},
+      {"detail": "Oberschrank-Enden mit dunklen Streifen ca. 50 je Seite sichtbar", "masse": [50], "belege": ["T11 S.9"]},
+      {"detail": "Sockel in Frontmaterial, zurückgesetzt; Regalende der Insel mit kleinerem Sockelfuß", "masse": [100, 120], "belege": ["T11 S.9", "T11 S.10", "T11 S.11"]},
+      {"detail": "Spiegel-Wandverkleidung mit abgehängter Decke; Spritzschutz in AP-Material", "masse": [], "belege": ["T22 S.3", "T22 S.5"]}
+    ],
+    "stil": [
+      {"merkmal": "Gedeckte Fronten in Erdtönen (Greige, Kaschmirgrau, Sand, Taupe) mit einem einzelnen Akzent (Blau, Gelb, Rosa, Terrakotta, Senfgelb)", "belege": ["T22 S.2", "T10 S.2", "T10 S.4", "T10 S.6", "T27 S.2", "T11 S.5", "T25 S.2"]},
+      {"merkmal": "Linoleum-Fronten in dunklen Tönen (Grün, Blaugrau), auch für Sockel und Stellseiten", "belege": ["T11 S.5", "T24 S.2"]},
+      {"merkmal": "Naturstein/Quarzkomposit in Weiß mit Maserung, teils goldene Adern; Terrazzo als Zeilen-AP", "belege": ["T22 S.2", "T23 S.2", "T25 S.2", "T26 S.2", "T11 S.5", "T27 S.4"]},
+      {"merkmal": "Spiegel (bronziert) als Spritzschutz oder Wandverkleidung", "belege": ["T22 S.2", "T10 S.2", "T27 S.4"]},
+      {"merkmal": "Eichenfurnier klar matt oder Eiche massiv als Wärme-Element (Insel, Regale, Schubkästen, Fronten)", "belege": ["T23 S.2", "T11 S.5", "T10 S.8", "T26 S.2"]},
+      {"merkmal": "Messing als Detail (Knopf, Armatur, Stangengriff)", "belege": ["T11 S.7", "T24 S.2", "T26 S.2"]},
+      {"merkmal": "Kochendwasser-Armatur in fast allen Küchen; Edelstahl, Gunmetal, Schwarz oder Messing je Konzept", "belege": ["T23 S.2", "T24 S.2", "T26 S.3", "T27 S.2", "T11 S.5"]},
+      {"merkmal": "Schwarze Backöfen und Kochfelder, Muldenabzug-Kochfeld in der Mehrzahl der Moodboards", "belege": ["T22 S.4", "T26 S.3", "T27 S.2", "T27 S.3", "T11 S.6"]}
+    ],
+    "zeichenstil": [
+      {"merkmal": "Planblatt A3 quer, M 1:100, vier Blätter: Grundriss, Ansicht Zeile, Ansicht Insel innen, Ansicht Insel außen; rechts durchgehende Spalte mit Legenden (Geräte, Zubehör, Materialien), Hinweisblock und Schriftfeld", "belege": ["T11 S.8", "T11 S.9", "T11 S.10", "T11 S.11"]},
+      {"merkmal": "Bemaßung: Modulbreiten als Maßkette unten, Funktionsbeschriftung darunter (z. B. Auszug, Geschirrspüler, Spüle/Abfall-Orga, Schubkasten); Oberschrankbreiten als Maßkette oben; Höhenkette links (920/600/930); Gesamtmaße im Grundriss in weißen Beschriftungsfeldern", "belege": ["T11 S.9", "T11 S.8"]},
+      {"merkmal": "Höhenangaben im Hinweisblock auf OKFF bezogen; Maße vor Ort zu prüfen", "belege": ["T11 S.8"]},
+      {"merkmal": "Wände im Schnitt schraffiert, Wandflächen in Ansicht grau, Fronten flächig in Materialfarbe, AP als dünner gemusterter Streifen, Geräte als Bild eingefügt (Backofen, Hauben als Verlaufsflächen)", "belege": ["T11 S.9", "T11 S.10", "T11 S.11"]},
+      {"merkmal": "Fugen und Frontaufteilung als Linien; Türen und Auszüge mit Knopf-Symbol; Öffnungsrichtung nicht eingezeichnet", "belege": ["T11 S.9", "T11 S.10"]},
+      {"merkmal": "Texte in Monospace-Schrift für Beschriftungen und Legenden", "belege": ["T11 S.5", "T11 S.8"]}
+    ],
+    "moodboard_praesentation": [
+      {"merkmal": "Seitentypen Moodboard: Cover, Materialseite (freigestellte Muster mit Bildunterschrift Material/Farbe), Geräteseite (freigestellte Geräte mit Typ- und Breitenangabe), optional Ausstattungsseite (Müll, Schubkasten, Griff)", "belege": ["T22 S.2", "T23 S.2", "T23 S.3", "T11 S.5", "T11 S.6", "T11 S.7"]},
+      {"merkmal": "Varianten-Dramaturgie: je Variante Visualisierung mit Preisrahmen und Ausschlussliste (ohne Elektro/Sanitär, ohne Geräte), Geräteseite folgt auf die Visualisierung", "belege": ["T22 S.3", "T22 S.4", "T22 S.5", "T22 S.7"]},
+      {"merkmal": "Farbvarianten-Reihe: Materialseite und Rendering wechseln sich ab, nur ein Akzent wird getauscht; Hinweis auf Mehrpreis bei Furnier", "belege": ["T10 S.2", "T10 S.3", "T10 S.4", "T10 S.5", "T10 S.11"]},
+      {"merkmal": "Moodboard-Versionen 1-4 mit Inspirationsfotos plus Muster; Hinweise zu Gerätemaßen und Einbauvoraussetzungen (AP-Dicke, Maßprüfung vor Ort)", "belege": ["T27 S.2", "T27 S.3", "T27 S.4", "T27 S.5"]},
+      {"merkmal": "Perspektiven I-III als Visualisierungsfolge von Übersicht bis Detail (Becken, Armatur, LED)", "belege": ["T11 S.2", "T11 S.3", "T11 S.4"]},
+      {"merkmal": "Zwei Layout-Familien: Seiten mit Titel oben links und Seitenzahl (Ansichts-/Planstil) und zentrierte Cover-/Rückseite mit 'Projects'-Wortmarke", "belege": ["T22 S.1", "T26 S.1", "T26 S.4", "T10 S.12"]}
+    ],
+    "neue_katalogtypen": [
+      {"vorschlag": "Oberschrank 1 Tür gleichbreit (z. B. 580 x 920, Fachböden, grifflos) für Wandreihen, Teilung unabhängig vom Unterschrank-Raster", "belege": ["T11 S.9"]},
+      {"vorschlag": "Regalende rund offen, 250 breit, 3 Fächer à 241, Viertelkreis-Fachböden", "belege": ["T11 S.10", "T11 S.11"]},
+      {"vorschlag": "Insel-Außenschrank flach (ca. 375 tief, Tür + Fachböden, 600 breit), Rücken an Rücken zu tiefen Kochmodulen", "belege": ["T11 S.11", "T11 S.8"]},
+      {"vorschlag": "US-BO Variante A: Backofen oben bündig unter AP plus niedriger Schubkasten darunter (ca. 150-200)", "belege": ["T11 S.10", "T22 S.5"]},
+      {"vorschlag": "US-BO Variante B: Backofen unten, kleine Front/Blende oben (ca. 160)", "belege": ["T22 S.3"]},
+      {"vorschlag": "Hochschrank mit offener Regalseite als Stellseite (Dachschräge, an Tür)", "belege": ["T10 S.3"]},
+      {"vorschlag": "Parameter 'verhaeltnis' für US-Sn (Frontaufteilung 1:1 üblich bei 2 Auszügen)", "belege": ["T11 S.9", "T22 S.3"]},
+      {"vorschlag": "Wandbord statt Oberschrank (Einlegeboden mit Akzentfarbe) für Schrägen", "belege": ["T10 S.3"]}
+    ],
+    "offen": [
+      "T11: Insel-Tiefenaufteilung (975 gesamt) und ob Innen-/Außenmodule getrennte Korpusse sind (Rücken an Rücken) ist nicht bemaßt",
+      "T11: Unterschrank- und Oberschrank-Tiefen sind nicht bemaßt; 629 ist Wand bis AP-Vorderkante, Oberschrank ca. 370 nur geschätzt",
+      "T11: Anschlag der Oberschrank-Türen und der Zeile-Türen nicht erkennbar",
+      "T11: Untere Fronten von Doppelauszügen haben im Plan keinen Knopf; unklar ob Planlücke oder Push",
+      "T11: Insel-AP vermutlich dicker (ca. 40-45) bei niedrigerem Sockel, OK-AP bleibt 930; nur aus Bildmaßstab",
+      "T11: Kein Kühlschrank und kein Hochschrank gezeichnet, obwohl Legende einen Hochschrank-Korpus führt",
+      "T22: Schrankbreiten und Zeilenlänge nur relativ aus Rendering geschätzt (5 x ca. 600); 'Zeile links' im Preistext nicht im Bild",
+      "T10: Maße fehlen vollständig; zwei Becken im Rendering unklar",
+      "T25: Backofen-Heizelement und Wandleuchte als Referenz, Einsatzort unklar",
+      "T26 und T27 enthalten nur Inspirationsmaterial ohne Layout; Maße aus Gerätebreiten (72/75 Becken, 720-880 Kochfelder) sind Gerätedaten, keine Schrankmaße"
+    ]
+  }
+}

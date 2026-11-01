@@ -1,0 +1,58 @@
+{
+  "runde": 1,
+  "durchgang": "C",
+  "seiten_gelesen": "4/4",
+  "zeile": {
+    "nische_b": 1875, "nische_h": 2200, "arbeitsplatte_d": 35, "ok_ap": 925,
+    "elemente": [
+      {"art": "stellseite", "seite": "links", "d": 32.5, "t": 600, "h": 2200, "status": "A", "beleg": "S.2: (1875 - 5 - 600*3 - 5)/2 = 32.5"},
+      {"art": "stellseite", "seite": "rechts", "d": 32.5, "t": 600, "h": 2200, "status": "A", "beleg": "wie links"},
+      {"art": "deckplatte", "d": 30, "status": "A", "beleg": "S.2: 2200 - 100 - 825 - 5 - 1235 - 5 = 30"},
+      {"art": "arbeitsplatte", "d": 35, "t": 600, "status": "B", "beleg": "S.2 Maß 35, S.4 Maß 600"},
+      {"art": "sockelblende", "h": 100, "status": "B", "beleg": "S.2, S.4 Maß 100"},
+      {"art": "steckdose", "anzahl_je_stellseite": 2, "status": "B", "beleg": "S.4 Hinweistext"},
+      {"art": "griffmulde", "ueberstand": 15, "status": "B", "beleg": "S.2/S.4 Text '15 - Überstand der Griffmulde'"}
+    ]
+  },
+  "schraenke": [
+    {
+      "pos": 1, "typ": "US-GSP",
+      "b": 600, "h": 790, "t": null, "sockel_h": 100,
+      "fronten": [{"art": "geraetefront", "h": 790}],
+      "innen": [{"art": "geraet"}],
+      "traverse_vorn": null, "geraet": "gsp",
+      "abweichungen": [],
+      "belege": {"b": "S.2 Maßkette 5|600|600|600|5", "h": "S.2 Maß 790", "art": "S.3 Beschriftung Geschirrspülmaschine; S.2 Öffnungssymbol Klappe"},
+      "status": {"b": "B", "h": "B"}
+    },
+    {
+      "pos": 2, "typ": "US-SP",
+      "b": 600, "h": 790, "t": 574, "sockel_h": 100,
+      "fronten": [{"art": "auszug", "h": 790}],
+      "innen": [{"art": "muellsystem"}, {"art": "technik"}],
+      "traverse_vorn": false, "geraet": "spuele",
+      "abweichungen": [{"param": "t", "typwert": 555, "ist": 574, "hinweis": "574 = Korpus+Front laut S.4"}],
+      "belege": {"b": "S.2", "h": "S.2", "t": "S.4 Maß 574", "innen": "S.3 Beschriftung Spülbecken/Technik/Müllsystem", "traverse_vorn": "Kollision Spüle in Runde-1-Modell"},
+      "status": {"b": "B", "h": "B", "t": "B", "traverse_vorn": "A"}
+    },
+    {
+      "pos": 3, "typ": "US-S1I",
+      "b": 600, "h": 790, "t": 574, "sockel_h": 100,
+      "fronten": [{"art": "auszug", "h": 790}],
+      "innen": [{"art": "innenschub", "zarge_h": 115}, {"art": "innenschub", "zarge_h": 115}, {"art": "auszug_korpus", "zarge_h": 235}],
+      "traverse_vorn": true, "geraet": null,
+      "abweichungen": [],
+      "belege": {"b": "S.2", "h": "S.2", "innen": "S.3 Maße 115/115/235, Text '2x innenliegender Schub'"},
+      "status": {"b": "B", "h": "B", "innen": "B"}
+    }
+  ],
+  "plan_widersprueche": [
+    {"was": "S.4 Gesamttiefe 600 vs. Korpus+Front 574", "rechnung": "600 - 574 = 26 nicht bemaßt (Rücksprung oder Überstand AP?)", "seite": "S.4"},
+    {"was": "Frontbreite 600 = Achsmaß inkl. Fugen oder Frontmaß?", "rechnung": "5+600+600+600+5 = 1810; Stellseiten nicht bemaßt", "seite": "S.2"}
+  ],
+  "unsicher": [
+    "Typwert t=555 stammt aus meiner Annahme (Front 19), nicht aus dem Plan",
+    "Öffnungssymbole S.2: Dreieck = Klappe (GSP), Kreuz = Auszug – Konvention nicht im Plan erklärt",
+    "Lage Müllsystem und Technik im Spülenschrank nur aus Ansicht geschätzt"
+  ]
+}

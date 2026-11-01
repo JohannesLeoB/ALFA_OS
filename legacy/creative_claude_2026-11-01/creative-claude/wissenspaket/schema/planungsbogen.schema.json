@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schema.kueche.local/v0/planungsbogen.schema.json",
+  "title": "Planungsbogen",
+  "description": "Projekteingabe des Menschen (v0.2). vorgaben ist bindend, ausser Werten mit herkunft annahme (zu ihnen gehoert eine offene Frage). wuensche sind weich und gewichtet, offene_fragen gehen an den Menschen. Keine Kundennamen: Projekt-ID statt Name.",
+  "type": "object",
+  "properties": {
+    "schema": {"const": "planungsbogen/v0.2"},
+    "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+    "auftrag": {"type": "string", "pattern": "^[A-Z0-9]{5}$", "description": "Auftragskuerzel fester Laenge fuer Teilnummern (setup.namensschema.teil_nr)"},
+    "revision": {"type": "integer", "minimum": 1},
+    "setup": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+    "stand": {"type": "string", "format": "date"},
+    "raum": {
+      "type": "object",
+      "properties": {
+        "aufmass": {
+          "type": "object",
+          "properties": {
+            "quelle": {"$ref": "gemeinsam.schema.json#/$defs/messquelle"},
+            "datum": {"type": "string", "format": "date"},
+            "genauigkeit_mm": {"type": "number"}
+          },
+          "required": ["quelle"],
+          "additionalProperties": false
+        },
+        "grundriss": {
+          "description": "Innenkontur auf OKFF im Raumsystem, gegen den Uhrzeigersinn (Flaeche positiv), mm.",
+          "type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/punkt2"}, "minItems": 3
+        },
+        "raumhoehe": {"$ref": "gemeinsam.schema.json#/$defs/wert"},
+        "boden_abweichung_mm": {"type": "number", "description": "groesste Hoehenabweichung des Bodens im Kuechenbereich"},
+        "messungen": {
+          "description": "Einzelmasse mit Quelle und Unsicherheit. Kritische Masse (Wandlaengen auf Arbeits- und Sockelhoehe, Diagonalen, Lot, Bruestungen, Lage von Rohren und Dosen) muessen per Laser bestaetigt sein.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+              "was": {"type": "string"},
+              "quelle": {"$ref": "gemeinsam.schema.json#/$defs/messquelle"},
+              "kritisch": {"type": "boolean"},
+              "wert": {"$ref": "gemeinsam.schema.json#/$defs/wert"}
+            },
+            "required": ["id", "was", "quelle", "kritisch", "wert"],
+            "additionalProperties": false
+          }
+        },
+        "waende": {
+          "description": "waende[0] ist Wand A: grundriss[von] = [0,0], grundriss[nach] = [L,0] mit L > 0.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+              "von": {"type": "integer", "minimum": 0, "description": "Index Grundrisspunkt"},
+              "nach": {"type": "integer", "minimum": 0},
+              "abweichung_lot_mm": {"type": "number"},
+              "abweichung_flucht_mm": {"type": "number"},
+              "oeffnungen": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "art": {"type": "string", "enum": ["fenster", "tuer", "durchgang", "nische"]},
+                    "x": {"type": "number", "description": "Abstand vom Wandanfang grundriss[von] entlang der Wand bis zur Oeffnungskante"}, "breite": {"type": "number"},
+                    "bruestung": {"type": "number"}, "hoehe": {"type": "number"},
+                    "aufschlag": {"type": "string", "enum": ["innen_links", "innen_rechts", "aussen", "schiebe", "keiner"]}
+                  },
+                  "required": ["art", "x", "breite", "hoehe"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["id", "von", "nach"],
+            "additionalProperties": false
+          }
+        },
+        "anschluesse": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/anschluss"}},
+        "hindernisse": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "art": {"type": "string", "enum": ["stuetze", "heizkoerper", "schraege", "rohr", "schacht", "fensterbank", "sonstiges"]},
+              "kontur": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/punkt3"}},
+              "notiz": {"type": "string"}
+            },
+            "required": ["art", "kontur"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["grundriss", "raumhoehe", "waende"],
+      "additionalProperties": false
+    },
+    "vorgaben": {
+      "description": "Bindend. Der Planer weicht nur mit Rueckfrage ab.",
+      "type": "object",
+      "properties": {
+        "form": {"type": "string", "enum": ["zeile", "zweizeilig", "l", "u", "g", "insel", "zeile_insel", "l_insel", "frei"]},
+        "werte": {
+          "description": "Projektwerte, die Setup und Kern ueberschreiben (Schluessel wie in kuechenmodell.werte), z. B. arbeitshoehe, ap_d, sockel_h. herkunft projekt = bestaetigt, annahme = Vorschlag mit offener Frage.",
+          "type": "object",
+          "propertyNames": {"pattern": "^[a-z][a-z0-9_]*$"},
+          "additionalProperties": {"$ref": "gemeinsam.schema.json#/$defs/wert"}
+        },
+        "bereiche": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+              "art": {"type": "string", "enum": ["zeile", "insel", "halbinsel", "hochschrankwand", "nische"]},
+              "wand": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+              "max": {"$ref": "gemeinsam.schema.json#/$defs/masse3"},
+              "min": {"$ref": "gemeinsam.schema.json#/$defs/masse3"}
+            },
+            "required": ["id", "art"],
+            "additionalProperties": false
+          }
+        },
+        "elemente_fest": {
+          "description": "Vom Menschen festgelegte Elemente: Lage oder Breite bleiben im Solver fix.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "bereich": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+              "typ": {"type": "string"},
+              "funktion": {"type": "string", "description": "z. B. spuele, kochfeld, geschirrspueler"},
+              "x_von": {"type": "number"},
+              "breite": {"type": "number"},
+              "notiz": {"type": "string"}
+            },
+            "required": ["bereich", "typ"],
+            "additionalProperties": false
+          }
+        },
+        "materialien": {
+          "type": "object",
+          "description": "Rolle -> Bibliothekseintrag. Rollen: front, korpus, rueckwand, arbeitsplatte, sockel, kante_front, kante_korpus, schubkasten, regal, wange.",
+          "propertyNames": {"enum": ["front", "korpus", "rueckwand", "arbeitsplatte", "sockel", "kante_front", "kante_korpus", "schubkasten", "regal", "wange"]},
+          "additionalProperties": {"$ref": "gemeinsam.schema.json#/$defs/bibref"}
+        },
+        "griff": {"$ref": "gemeinsam.schema.json#/$defs/griff"},
+        "geraete": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "rolle": {"type": "string", "enum": ["kochfeld", "kochfeldabzug", "dunstabzug", "backofen", "dampfgarer", "mikrowelle", "waermeschublade", "kuehlen", "gefrieren", "kuehl_gefrier", "weinklima", "geschirrspueler", "spuele", "armatur", "heisswasser", "muell", "kaffee", "sonstiges"]},
+              "modell": {"$ref": "gemeinsam.schema.json#/$defs/bibref"},
+              "einbau": {"type": "string", "enum": ["vollintegriert", "teilintegriert", "unterbau", "hochbau", "flaechenbuendig", "aufgesetzt", "unterbau_spuele", "frei"]},
+              "bereich": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+              "pflicht": {"type": "boolean", "default": true}
+            },
+            "required": ["rolle"],
+            "additionalProperties": false
+          }
+        },
+        "oberschraenke": {"type": "boolean"},
+        "barrierefrei": {"type": "string", "enum": ["nein", "din18040_2", "din18040_2_r"], "default": "nein"},
+        "nutzer": {
+          "type": "object",
+          "properties": {
+            "haendigkeit": {"type": "string", "enum": ["rechts", "links", "egal"]},
+            "ellenbogenhoehe_mm": {"type": "number"},
+            "mehrere_nutzer": {"type": "boolean"}
+          },
+          "additionalProperties": false
+        },
+        "stil": {"$ref": "gemeinsam.schema.json#/$defs/bibref"},
+        "budget_eur": {"type": "number"}
+      },
+      "additionalProperties": false
+    },
+    "wuensche": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {"type": "string"},
+          "schluessel": {"type": "string"},
+          "gewicht": {"type": "number", "minimum": 0, "maximum": 1}
+        },
+        "required": ["text"],
+        "additionalProperties": false
+      }
+    },
+    "ausgaben": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/ausgabe"}, "uniqueItems": true},
+    "offene_fragen": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+          "frage": {"type": "string"},
+          "betrifft": {"type": "string", "description": "Schluessel in vorgaben.werte oder Element"},
+          "vorschlag": {"type": "string"},
+          "antwort": {"type": ["string", "null"]}
+        },
+        "required": ["id", "frage"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["schema", "id", "revision", "setup", "raum", "vorgaben"],
+  "additionalProperties": false
+}

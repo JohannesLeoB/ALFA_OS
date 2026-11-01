@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schema.kueche.local/v0/setup.schema.json",
+  "title": "Setup",
+  "description": "Werte, Kataloge, Vorlagen und Maschinen einer Firma, Gruppe oder eines Nutzers (v0.2). Entspricht dem Profil aus ARCHITECTURE.md §0/§3. Der Kern kennt Verfahren, das Setup kennt Werte. Vererbung ueber erbt_von: das naehere Setup gewinnt (nutzer > gruppe > firma).",
+  "type": "object",
+  "properties": {
+    "schema": {"const": "setup/v0.2"},
+    "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+    "version": {"type": "integer", "minimum": 1},
+    "ebene": {"type": "string", "enum": ["firma", "gruppe", "nutzer"]},
+    "kern_version": {"type": "string"},
+    "erbt_von": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+    "konstruktion": {
+      "description": "Konstruktionswerte, alle als flache wert-Schluessel mit Herkunft (so landen sie unveraendert in kuechenmodell.werte). Mindestsatz = required. raster: null = mm-genau ohne Raster. rueckwand_einbau: nut, falz, aufgesetzt, eingelegt. verbinder: duebel, exzenter, konfirmat, clamex, klebung, gemischt. rueckwand_einstand = Abstand Hinterkante Korpusteil bis Nut.",
+      "type": "object",
+      "properties": {
+        "raster": {"oneOf": [{"type": "null"}, {"$ref": "gemeinsam.schema.json#/$defs/wert"}]}
+      },
+      "required": ["korpus_d", "korpus_t", "rueckwand_d", "rueckwand_einbau", "rueckwand_einstand", "front_d", "fuge_front", "sockel_h", "lochreihe_abstand_vk", "lochreihe_teilung", "verbinder"],
+      "propertyNames": {"pattern": "^[a-z][a-z0-9_]*$"},
+      "additionalProperties": {"$ref": "gemeinsam.schema.json#/$defs/wert"}
+    },
+    "kataloge": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "bibliothek": {"type": "string"},
+          "quelle": {"type": "string"},
+          "stand": {"type": "string", "format": "date"}
+        },
+        "required": ["bibliothek", "quelle", "stand"],
+        "additionalProperties": false
+      }
+    },
+    "beschlagsysteme": {
+      "type": "object",
+      "propertyNames": {"enum": ["scharnier", "auszug", "schubkasten", "klappe", "pto", "innenausstattung", "sockelfuss", "verbinder"]},
+      "additionalProperties": {"$ref": "gemeinsam.schema.json#/$defs/bibref"}
+    },
+    "platten": {
+      "description": "Lagerformate je Material. faser laengs = Maserung parallel zur Laenge der Rohplatte.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "material": {"$ref": "gemeinsam.schema.json#/$defs/bibref"},
+          "laenge": {"type": "number"}, "breite": {"type": "number"}, "dicke": {"type": "number"},
+          "faser": {"type": "string", "enum": ["laengs", "quer", "keine"]},
+          "sichtseiten": {"type": "string", "enum": ["eine", "beide", "keine"]},
+          "bestand": {"type": ["integer", "null"]},
+          "rest_min": {"type": "object", "properties": {"l": {"type": "number"}, "b": {"type": "number"}}, "required": ["l", "b"], "additionalProperties": false}
+        },
+        "required": ["material", "laenge", "breite", "dicke", "faser"],
+        "additionalProperties": false
+      }
+    },
+    "maschinen": {
+      "description": "Maschinen der Werkstatt. Werkzeugnummern sind maschinenspezifisch und leben nur hier.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+          "art": {"type": "string", "enum": ["plattensaege", "nesting_cnc", "bearbeitungszentrum", "bohrautomat", "kantenanleimer", "durchlaufbohr", "etikettendrucker", "presse"]},
+          "steuerung_format": {"type": "string", "description": "z. B. csv, ptx, mpr, dxf, zpl"},
+          "saege": {
+            "type": "object",
+            "properties": {
+              "schnittbreite": {"type": "number"},
+              "besaeumung": {"type": "object", "properties": {"links": {"type": "number"}, "rechts": {"type": "number"}, "vorn": {"type": "number"}, "hinten": {"type": "number"}}, "required": ["links", "rechts", "vorn", "hinten"], "additionalProperties": false},
+              "stufen": {"type": "integer", "minimum": 2, "maximum": 4},
+              "stapelhoehe_mm": {"type": "number"},
+              "vorschub_m_min": {"type": "number"},
+              "max_l": {"type": "number"}, "max_b": {"type": "number"}
+            },
+            "required": ["schnittbreite", "besaeumung"],
+            "additionalProperties": false
+          },
+          "werkzeuge": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "nr": {"type": "integer"},
+                "art": {"type": "string", "enum": ["bohrer_durchgang", "bohrer_sackloch", "bohrer_topf", "fraeser", "nutsaege", "saegeblatt"]},
+                "durchmesser": {"type": "number"}, "nutzlaenge": {"type": "number"},
+                "drehzahl_u_min": {"type": "number"}, "vorschub_m_min": {"type": "number"}
+              },
+              "required": ["nr", "art", "durchmesser"],
+              "additionalProperties": false
+            }
+          },
+          "parameter": {"type": "object", "additionalProperties": {"$ref": "gemeinsam.schema.json#/$defs/wert"}}
+        },
+        "required": ["id", "art"],
+        "additionalProperties": false
+      }
+    },
+    "vorlagen": {
+      "description": "Planvorlagen, Etiketten, Praesentationen. Eine Datei hat genau einen Zweck. Felder aus dem Feldkatalog (Kapitel 5.8.1). Escaping folgt dem Format.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"$ref": "gemeinsam.schema.json#/$defs/id"},
+          "zweck": {"description": "Ausgabe, fuer die die Vorlage gilt, oder ein Bestandteil", "anyOf": [{"$ref": "gemeinsam.schema.json#/$defs/ausgabe"}, {"enum": ["plankopf", "schrift", "marke"]}]},
+          "format": {"type": "string", "enum": ["html_mustache", "svg_mustache", "typst_json", "dxf_block", "zpl", "pdf", "otf", "ttf", "woff2"]},
+          "datei": {"type": "string"},
+          "papier": {"type": "string"},
+          "seiten": {"type": "string", "enum": ["einseitig", "mehrseitig"]},
+          "felder": {"type": "array", "items": {"type": "string"}},
+          "version": {"type": "integer", "minimum": 1},
+          "lizenz": {"type": "string"}
+        },
+        "required": ["id", "zweck", "format", "datei"],
+        "additionalProperties": false
+      }
+    },
+    "planstempel": {
+      "description": "Optionaler Stempel auf Planblaettern (z. B. Status). Ob, Text und Farbe setzt der Nutzer; Standard aus. Kein Stilmerkmal.",
+      "type": "object",
+      "properties": {
+        "aktiv": {"type": "boolean", "default": false},
+        "text": {"type": ["string", "null"], "default": null},
+        "farbe": {"type": ["string", "null"], "pattern": "^#[0-9a-fA-F]{6}$", "default": null}
+      },
+      "additionalProperties": false
+    },
+    "namensschema": {
+      "description": "Eigene Mini-Syntax (kein Mustache): {feld} oder {feld:0Nd} fuer Nullauffuellung. teil_id ist sprechend (klein, ASCII); teil_nr ist kurz und fest lang fuer Code 128.",
+      "type": "object",
+      "properties": {
+        "teil_id": {"type": "string", "default": "{projekt}-{gruppe}-{rolle}"},
+        "gruppe_id": {"type": "string", "default": "{bereich}-{schrank:02d}"},
+        "teil_nr": {"type": "string", "default": "{auftrag}-{laufnr:04d}"}
+      },
+      "required": ["teil_id", "gruppe_id", "teil_nr"],
+      "additionalProperties": false
+    },
+    "stile": {"type": "array", "items": {"$ref": "gemeinsam.schema.json#/$defs/bibref"}},
+    "regeln": {
+      "description": "Bestaetigte Setup-Regeln. Unbestaetigte Vorschlaege liegen nicht hier.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schluessel": {"type": "string"},
+          "wenn": {"type": "string"},
+          "dann": {"type": "string"},
+          "wert": {"$ref": "gemeinsam.schema.json#/$defs/wert"},
+          "bestaetigt": {"type": "string", "format": "date"},
+          "durch_rolle": {"type": "string", "enum": ["admin", "team"]},
+          "episoden": {"type": "integer", "minimum": 0}
+        },
+        "required": ["schluessel", "bestaetigt"],
+        "additionalProperties": false
+      }
+    },
+    "preise": {
+      "description": "Vertraulich, nur in diesem Setup. Schluessel: <bibliothek>/<id>. Nie in Kern, Bibliothek oder Lernkorpus.",
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z]+/[a-z0-9][a-z0-9_.-]*$"},
+      "additionalProperties": {
+        "type": "object",
+        "properties": {"eur": {"type": "number"}, "einheit": {"$ref": "gemeinsam.schema.json#/$defs/einheit"}, "stand": {"type": "string", "format": "date"}},
+        "required": ["eur", "einheit", "stand"],
+        "additionalProperties": false
+      }
+    },
+    "ausgaben": {
+      "description": "Preset je Ausgabe (z. B. zuschnittliste: csv_cutrite).",
+      "type": "object",
+      "propertyNames": {"$ref": "gemeinsam.schema.json#/$defs/ausgabe"},
+      "additionalProperties": {"type": "string"}
+    },
+    "weiche": {
+      "description": "Uebergangsweiche (Wuergefeige): welcher Weg je Ausgabe ausliefert. alt = bisheriger Weg (Fusion/Python), neu = Kern. Schattenbetrieb laeuft unabhaengig davon mit.",
+      "type": "object",
+      "propertyNames": {"$ref": "gemeinsam.schema.json#/$defs/ausgabe"},
+      "additionalProperties": {"type": "string", "enum": ["alt", "neu"]}
+    }
+  },
+  "required": ["schema", "id", "version", "ebene", "kern_version", "konstruktion", "namensschema"],
+  "additionalProperties": false
+}

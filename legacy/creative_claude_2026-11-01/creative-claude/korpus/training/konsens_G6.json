@@ -1,0 +1,198 @@
+{
+"gruppe": "G6",
+"templates": ["T28", "T29", "T30", "T34", "T37"],
+"hinweis": "Stimmen: A,B = Sonnet, C = Haiku. Maße nur aus Plänen (T29, T34, T37); T28 und T30 sind reine Visualisierungen ohne Maße. 'abgegriffen' = aus Zeichnung gemessen, nicht bemaßt.",
+"kuechen": [
+{"id": "T28-K1", "form": "insel", "kurz": "Raumhohe Schrankwand an einer Wand (Geräte-Hochschrank mit Backofen und Kaffeevollautomat nebeneinander, offene Nische mit Regalböden und LED über der Spüle), davor freistehende Insel mit Kochfeld und Muldenlüftung, Theke mit Überstand bzw. offenes Regal am Kopfende. Nur Renderbilder.", "hauptmasse": {}, "geraete_reihenfolge": "Wand: Hochschrank (Backofen + Kaffeevollautomat) – Nische/Spüle – Hochschrank; Insel: Kochfeld", "stimmen": "3/3 A,B,C", "belege": ["T28 S.2", "T28 S.3", "T28 S.4"]},
+{"id": "T28-K2", "form": "zeile", "kurz": "Pantry I: Wandzeile über volle Wandbreite, 2 Hochschränke links mit Aufsatztüren, darüber offene Regalfelder (je 2 Böden) über hellem Fliesenspiegel, Unterbau offen mit flachen Schubkästen unter der Platte und je 1 Boden. Keine Geräte.", "hauptmasse": {}, "geraete_reihenfolge": "keine Geräte (Vorrat/Arbeitsbereich)", "stimmen": "3/3 A,B,C (Deckenabstand: A,C bis Decke, B mit Luft)", "belege": ["T28 S.5"]},
+{"id": "T28-K3", "form": "zeile", "kurz": "Pantry II: wie Pantry I, aber Spülenschrank mit 2 Türen im Mittelfeld, links und rechts offene Fächer mit Steinboden.", "hauptmasse": {}, "geraete_reihenfolge": "Hochschränke – offenes Feld – Spülenschrank (2 Türen) – offenes Feld", "stimmen": "3/3 A,B,C", "belege": ["T28 S.6"]},
+{"id": "T29-K1", "form": "zweizeilig", "kurz": "Lange Zeile an runder Wand unter Bogenfenstern (GSP, Spüle, Abfall/Orga, 3 Auszugsschränke, Kochfeld im 900er), gegenüber Hochschrankgruppe (Coffee-Corner/Kühl, Hochkühlschrank, Backofen mit 3 Auszügen, hohe Tür), offene 250er Regale als Abschluss, Sitzbank in der Rundung. Taupe-Fronten, Zeile grifflos.", "hauptmasse": {"zeile_ansicht_summe": 4750, "zeile_grundriss": 5015, "hochschrankgruppe": 2650, "bank": 1615, "sockel": 100, "ok_ap": 940, "ap_d": 20, "unterschrank_korpus_h": 820, "hochschrank_h": 2800, "tiefe_unterschrank": 605, "tiefe_hochschrank": 590, "gang_mm": "1070-1100 (abgegriffen)", "spuele_kochfeld_mm": "1550-1590 (abgegriffen)"}, "geraete_reihenfolge": "Zeile links→rechts: Regal 250 – GSP 600 – Spüle 600 (Kochendwasser-Armatur) – Abfall/Orga 600 – Auszüge 900 – Kochfeld 900 – Auszüge 900; Gegenüber: Coffee-Corner/Unterbau-Kühl – Hochkühlschrank – Backofen mit 3 Auszügen – hohe Tür (laut Beschriftung Apotheker, unklar)", "stimmen": "Form zweizeilig 2/3 A,B (C: L); Maße 4750/5015/2650/2800/100/20/820 3/3; 940, 605, 590, 1615 2/3 A,B", "belege": ["T29 S.1", "T29 S.2", "T29 S.3", "T29 S.4"]},
+{"id": "T30-K1", "form": "insel", "kurz": "Zeile mit Spüle und Spiegelrückwand, Hochschrank mit Backofen in der Ecke, zweite Wand mit Oberschrankband (6 Türen, LED), Insel mit Kochfeld und Muldenlüftung (3 Spalten x 2 Reihen Auszüge); alle Fronten grifflos. Zwei Front-Varianten (Dekor taupe/braun vs. gebürstete Metalloberfläche bronze), Fischgrät-Parkett. Keine Maße.", "hauptmasse": {}, "geraete_reihenfolge": "Wand: Hochschrank mit Backofen – Zeile mit Spüle; Insel: Kochfeld", "stimmen": "3/3 A,B,C (Inselfronten 3 Spalten: A,B; C 2x2)", "belege": ["T30 S.4", "T30 S.5", "T30 S.6", "T30 S.7"]},
+{"id": "T34-K1", "form": "zweizeilig", "kurz": "Zeile an der Stirnwand (Unterschränke 3350 + Hochschrankblock 1100 in der Ecke: Kühl-Gefrierkombi 779, Apothekerauszug 280) und freistehende Insel parallel davor (Kochfeld + Backofen 90 im 900er, Außenseite 4 Türen à 600). Nussbaum-Furnier, Edelstahl-Platte 5 mm, push-to-open. Layout entspricht T28/T30 (Zeile + freistehende Insel).", "hauptmasse": {"zeile_unterschraenke_grundriss": 3350, "hochschrankblock": 1100, "zeile_gesamt_grundriss": 4450, "zeile_ansicht_summe": 4359, "insel_laenge": "2440/2441", "insel_tiefe": 1153, "sockel": 81, "unterschrank_fronthoehe": 847, "ok_ap_insel": 935, "ok_ap_zeile": 928, "ap_d": 5, "hochschrank_h": "3570-3575", "decke": "3600-3625 (abgegriffen)", "tiefe_unterschrank_hochschrank": 640, "gang_mm": "1150-1160 (abgegriffen)"}, "geraete_reihenfolge": "Zeile links→rechts: Schrank 600 – Schrank 600 – Spüle/Müll 900 – GSP 600 – Schrank 600 – Kühl-Gefrier-Hochschrank 779 – Apothekerauszug 280; Insel Küchenseite: Auszug 600 – Auszug 600 – Kochfeld/Backofen 900 – schmaler Auszug 300", "stimmen": "Form zweizeilig 2/3 B,C (A: insel); Maße 3350/1100/2441/81/847/935 3/3; 1153 2/3 A,C; 640, 928, 5, 3570, Gang 2/3 A,B", "belege": ["T34 S.10", "T34 S.11", "T34 S.12", "T34 S.13"]},
+{"id": "T37-K1", "form": "halbinsel", "kurz": "Zeile an der Fensterwand (Flügeltürschrank, GSP, Spüle 800 mit Müll), Halbinsel quer mit Rundende zum Essplatz (Kochfeld 900, Apotheker 250, Rückseite offenes Regal + 3 Türen à 535), 4000 breite Hochschrankwand gegenüber (Putz, Steamer, Backofen, Barnische, Gefrier, Kühl), Bank mit Lehne am Tisch. Nur Strichzeichnung.", "hauptmasse": {"zeile_gesamt": "3216-3266 (A 3216, B 3266)", "halbinsel_kuechenseite": 2750, "halbinsel_rueckseite": 2693, "hochschrankwand": 4000, "bank": 1723, "sockel": 100, "ok_ap": 930, "ap_d": 20, "unterschrank_korpus_h": 810, "hochschrank_h": 2376}, "geraete_reihenfolge": "Zeile: Flügeltürschrank (Mittelwand) – Tür 656 – GSP 600 – Spüle 800 – Innenauszug 600 – Tür 470; Halbinsel: Rundende 500 – Auszug 600 – Kochfeld 900 – Apotheker 250 – Tür 400; Hochschrankwand: Putz 540 – Steamer 600 – Backofen 600 – Barnische 1000 – Gefrier 600 – Kühl 600", "stimmen": "Form halbinsel 2/3 A,C (B: U); Maße 2750/4000/1723/100/20/810 3/3 bzw. A,B; 930 und 2376 A,B", "belege": ["T37 S.7", "T37 S.8", "T37 S.9", "T37 S.10", "T37 S.11", "T37 S.12"]}
+],
+"wissen": {
+"griffarten": [
+{"aussage": "Grifflos mit schmalen Fugen (push-to-open, Fräsung oder integriert, nicht immer unterscheidbar) an Zeile, Insel, Pantry und Oberschränken von T28 und T30; auch T29-Zeile", "werte": [], "stimmen": "3/3 A,B,C (T29-Zeile grifflos: A,B)", "belege": ["T28 S.2", "T28 S.5", "T28 S.6", "T29 S.1", "T30 S.4", "T30 S.5"]},
+{"aussage": "T34: push-to-open als Standard für Zeile und Insel (Legende)", "werte": [], "stimmen": "2/3 A,B", "belege": ["T34 S.10", "T34 S.11"]},
+{"aussage": "Stangengriff vertikal (lang, Edelstahl satiniert) an Kühl-/Gefrier-Hochschrank (T34), T37 an Kühl-/Gefrierschrank und Halbinsel-Rundende", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T34 S.11", "T37 S.8", "T37 S.9", "T37 S.10", "T37 S.12"]},
+{"aussage": "T37: horizontale Stangengriffe/Griffleisten an Unterschrank-Fronten (Zeile, Halbinsel) in den Perspektiven; Hochschrank-Türen zugleich als PTO beschriftet", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T37 S.2", "T37 S.3", "T37 S.8", "T37 S.9", "T37 S.12"]},
+{"aussage": "T29: Hochschrankgruppe mit kurzen schwarzen Stangengriffen (an Unterbau-Fronten, Kühlschranktür, Auszügen), Zeile dagegen grifflos; Richtung horizontal laut A,B (C: vertikal)", "werte": [], "stimmen": "Stangengriff 3/3 A,B,C; horizontal 2/3 A,B", "belege": ["T29 S.2", "T29 S.3"]},
+{"aussage": "GSP-Front ohne Griff (push/Klappe)", "werte": [], "stimmen": "1/3 C", "belege": ["T29 S.4", "T34 S.11", "T37 S.10"]},
+{"aussage": "Backofen-Gerätegriff integriert (T34 Insel)", "werte": [], "stimmen": "1/3 A", "belege": ["T34 S.12"]}
+],
+"layouts_anordnungen": [
+{"aussage": "Wandzeile (Spüle, Hochschränke) mit freistehender Insel parallel davor; Kochfeld in der Insel, Spüle in der Wandzeile (T28, T30, T34)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.2", "T28 S.3", "T28 S.4", "T30 S.4", "T34 S.10", "T34 S.11", "T34 S.12"]},
+{"aussage": "T29: Zeile unter Bogenfenstern in runder Wand, gegenüber Hochschrankgruppe, Bank in der Rundung; Kochfeld und Spüle beide in der Zeile", "werte": [], "stimmen": "2/3 A,B", "belege": ["T29 S.1", "T29 S.4"]},
+{"aussage": "T37: Zeile an Fensterwand, Halbinsel mit Rundende zum Essplatz, Hochschrankwand gegenüber, Bank mit Tisch am Raumende", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T37 S.3", "T37 S.4", "T37 S.6", "T37 S.7", "T37 S.9", "T37 S.10"]},
+{"aussage": "Halbinsel-Rückseite: offenes Regal plus Türen (3 x 535); Variante 4 Türen statt Regal nur laut A", "werte": [535], "stimmen": "Regal + Türen 2/3 A,B; Variante 1/3 A", "belege": ["T37 S.6", "T37 S.11"]},
+{"aussage": "Pantry als raumhohe Wandzeile ohne Herd: 2 Hochschränke, offene Regalfelder über dünner Platte, offener Unterbau mit flachen Schubkästen, Spüle optional im Mittelfeld (2 Türen)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.5", "T28 S.6"]},
+{"aussage": "Mittelnische mit offenen Regalböden und LED in der Schrankwand über der Spüle (T28)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.2", "T28 S.3"]},
+{"aussage": "Zwei Front-Varianten (Dekor vs. Metalloberfläche) bei identischem Layout als Präsentationsvarianten (T30)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T30 S.4", "T30 S.6", "T30 S.7"]}
+],
+"innenausstattung": [
+{"aussage": "Innenschubkästen hinter einer Front als häufigster Unterschranktyp (T34 innen 2 Innenschubkästen + 1 Schubkasten; T29 und T37 Auszüge mit innenliegenden Auszügen)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T34 S.11", "T34 S.12", "T37 S.8"]},
+{"aussage": "Müllsystem im Spülenschrank (900 in T34, 800 in T37) oder separater 600er Abfall/Orga-Auszug direkt neben der Spüle (T29)", "werte": [800, 900, 600], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T34 S.10", "T34 S.11", "T37 S.8", "T37 S.10"]},
+{"aussage": "Schneidebrett-/Orga-Einsatz im Auszug neben der Spüle (T29)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T29 S.2"]},
+{"aussage": "Apothekerauszug schmal 250–280 am Ende von Hochschrankblock bzw. Halbinsel; T34 Sonderanfertigung mit 5 Massivholz-Schubkästen und seitlichem Eingriff hinter einer Front", "werte": [250, 280], "stimmen": "3/3 A,B,C", "belege": ["T34 S.10", "T34 S.11", "T37 S.9", "T37 S.10", "T37 S.12", "T29 S.3"]},
+{"aussage": "Einlegeböden als Standard hinter Türen (T37 alle Türschränke, T34 Insel-Außenseite)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T37 S.8", "T37 S.10", "T37 S.12", "T37 S.13", "T34 S.13"]},
+{"aussage": "Weinschublade, Steamer-Nische und Schrank mit Klappe im Geräte-Hochschrank (T37)", "werte": [142, 450, 300], "stimmen": "3/3 A,B,C", "belege": ["T37 S.10", "T37 S.12", "T37 S.13"]},
+{"aussage": "Offene Regalfächer mit Fachböden (teils Stein): Pantry-Felder, Insel-Stirnseite, Seitenregal an Zeilen- und Hochschrankenden", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.2", "T28 S.5", "T28 S.6", "T29 S.1", "T37 S.9", "T37 S.11"]},
+{"aussage": "Coffee-Corner-Nische offen im Hochschrank zwischen Unterbau-Kühlschrank (Tür 940) und Aufsatztür 800; Nischenhöhe 1000 (B) bzw. 1080 (A) strittig", "werte": [1000, 1080], "stimmen": "Nische 3/3 A,B,C; Höhe je 1/3", "belege": ["T29 S.2"]},
+{"aussage": "Massivholz-Schubkästen und Besteckeinsätze gezinkt bei Furnierfronten (T34)", "werte": [], "stimmen": "2/3 A,B", "belege": ["T34 S.7", "T34 S.10"]},
+{"aussage": "Offene Barnische 2 x 500 (ca. 930 hoch) mit 3 Steckdosen über Flügeltür im Hochschrank (T37)", "werte": [500, 930], "stimmen": "2/3 A,B", "belege": ["T37 S.10", "T37 S.12"]},
+{"aussage": "Flügeltür-Unterschrank mit Mittelwand am Zeilenanfang (T37, Breite nicht bemaßt, ca. 900–1000)", "werte": [900, 1000], "stimmen": "2/3 A,B", "belege": ["T37 S.8"]}
+],
+"raumstellung": [
+{"aussage": "Hochschränke zu einem geschlossenen Block am Zeilen- bzw. Raumende oder in der Ecke gebündelt (Kühlen, Backofen, Vorrat); bei T29 und T37 als Wand gegenüber der Zeile", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T29 S.2", "T29 S.3", "T34 S.10", "T34 S.11", "T37 S.10", "T37 S.13", "T30 S.4"]},
+{"aussage": "Schrankwände und Hochschränke laufen bis zur Decke oder knapp darunter (T34 ca. 50 Abstand, T30 Oberschrankband kleiner Abstand); B sieht bei Pantry I Luft zur Decke", "werte": [50], "stimmen": "3/3 A,B,C", "belege": ["T28 S.3", "T28 S.5", "T30 S.5", "T34 S.11"]},
+{"aussage": "Zeile liegt unter dem Fenster bzw. Platte etwa in Fensterbankhöhe; Spüle nahe Fensterwand; Hochschrank als Abschluss neben Fenster/Tür", "werte": [], "stimmen": "2/3 A,B (C teilweise)", "belege": ["T29 S.1", "T34 S.3", "T37 S.7", "T37 S.13"]},
+{"aussage": "Über Spüle/Rückwand keine Oberschränke: offene Nische (T28) bzw. Spiegel-/Stein-Rückwand mit Ablagebrett/Bord (T30, T34); Oberschrankbänder nur an Nebenwand oder raumhoch", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.2", "T30 S.4", "T30 S.5", "T34 S.3", "T34 S.11"]},
+{"aussage": "Insel/Halbinsel: Geräteseite mit Auszügen zur Küche, Raumseite mit Türen/Fachböden, offenem Regal oder Theke mit Überstand und Hockern", "werte": [], "stimmen": "2/3 A,B (C: Essplatz gegenüber)", "belege": ["T28 S.3", "T28 S.4", "T34 S.12", "T34 S.13", "T37 S.11"]},
+{"aussage": "Essplatz bzw. Sitzbank in die Küche integriert (Bank mit Lehne und Schrank am Bankende, Insel/Halbinsel trennt Küche und Essen)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T29 S.3", "T29 S.4", "T37 S.3", "T37 S.9", "T34 S.4"]},
+{"aussage": "Rundende bzw. gerundete Ecke an Regal, Halbinsel, Bank und Arbeitsplatte statt Passblende; Bogen/Rund als Wiederholungsmotiv", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T29 S.4", "T30 S.4", "T37 S.2", "T37 S.4", "T37 S.7", "T37 S.10"]},
+{"aussage": "Sonderraumform (runde Wand, Pfeiler, Wandvorsprünge) bestimmt die Zeile; Zeilenenden an Pfeilern, Stellseiten oder offenen Regalen", "werte": [], "stimmen": "2/3 A,B", "belege": ["T28 S.4", "T29 S.1", "T37 S.7"]},
+{"aussage": "Hochschrank-Fugen fluchten mit Unterschrank-Front (T34 847 = Unterschrankhöhe)", "werte": [847], "stimmen": "2/3 A,B", "belege": ["T34 S.11"]},
+{"aussage": "Wandabstand 30 an Halbinsel und Hochschrankwand beidseitig (T37)", "werte": [30], "stimmen": "2/3 A,B", "belege": ["T37 S.10", "T37 S.11", "T37 S.12"]},
+{"aussage": "Ober- und Unterschrank-Fugen liegen annähernd übereinander (T30)", "werte": [], "stimmen": "1/3 A", "belege": ["T30 S.5", "T30 S.7"]}
+],
+"raster_masse": [
+{"aussage": "Breite 600 dominiert (Unterschränke, Gerätenischen, Hochschränke), 900 zweite Standardbreite (Kochfeld, Spüle, Schubkasten)", "werte": [600, 900], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T29 S.2", "T34 S.11", "T34 S.12", "T37 S.8", "T37 S.10", "T37 S.12"]},
+{"aussage": "Freie Breiten als Füll- oder Geräteanpassung neben dem Standard; kein Raster", "werte": [250, 280, 300, 400, 420, 470, 500, 520, 535, 540, 656, 779, 800], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T34 S.11", "T37 S.8", "T37 S.10", "T37 S.11", "T37 S.12"]},
+{"aussage": "Schmale Breite 250–280 als Regal-/Apothekerabschluss an Zeile, Hochschrank oder Halbinsel", "werte": [250, 280], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T29 S.2", "T34 S.11", "T37 S.10"]},
+{"aussage": "Halbinsel-Rückseite: 3 Türen à 535 teilen das Restmaß gleichmäßig auf", "werte": [535], "stimmen": "3/3 A,B,C (Deutung Gleichteilung: A)", "belege": ["T37 S.11"]},
+{"aussage": "Hochschrankwand T37 in 540/600/600/1000 (2x500)/600/600 = 4000 inkl. 2 x 30 Wandabstand", "werte": [540, 600, 500, 4000], "stimmen": "2/3 A,B", "belege": ["T37 S.12"]},
+{"aussage": "Frontraster Halbinsel Kochseite: Blende 150 + Auszüge 331 und 320; T29 900er Schränke 2 Auszüge 1:1 (je 393,5); T30 Insel 2 Reihen ca. 1:1", "werte": [150, 331, 320, 393.5], "stimmen": "3/3 A,B,C (T29 393,5: A,B)", "belege": ["T29 S.1", "T37 S.10", "T30 S.4"]},
+{"aussage": "Hochschrank-Teilung frei je Projekt: T29 940/1000–1080/800, T34 847/1261/1386, T37 807+40+142+450+300+537", "werte": [940, 800, 847, 1261, 1386, 807, 537], "stimmen": "2/3 A,B", "belege": ["T29 S.2", "T34 S.11", "T37 S.12"]},
+{"aussage": "Tiefen: Unterschrank 605 (T29) bzw. 640 (T34), Hochschrank 590 (T29) bzw. 640 (T34); Insel T34 1153", "werte": [605, 640, 590, 1153], "stimmen": "605/590/640 2/3 A,B; 1153 2/3 A,C", "belege": ["T29 S.4", "T34 S.10", "T34 S.12"]},
+{"aussage": "Pantry (nur Bildverhältnis): Hochschrankbreite = Oberschranktürbreite, offenes Feld ca. 2x", "werte": [], "stimmen": "1/3 A", "belege": ["T28 S.5", "T28 S.6"]}
+],
+"hoehenbereiche": [
+{"aussage": "Sockel", "werte": [81, 100], "stimmen": "3/3 A,B,C (81 T34, 100 T29/T37)", "belege": ["T34 S.11", "T29 S.1", "T29 S.2", "T37 S.8", "T37 S.12"]},
+{"aussage": "Unterschrank-Korpus-/Fronthöhe", "werte": [810, 820, 847], "stimmen": "3/3 A,B,C (810 T37, 820 T29, 847 T34)", "belege": ["T37 S.8", "T29 S.1", "T34 S.11"]},
+{"aussage": "Oberkante Arbeitsplatte inkl. Platte", "werte": [928, 930, 935, 940], "stimmen": "935 Insel T34 3/3; 928 Zeile T34, 930 T37, 940 T29 2/3 A,B", "belege": ["T34 S.11", "T34 S.12", "T29 S.1", "T37 S.8"]},
+{"aussage": "Arbeitsplattendicke", "werte": [5, 20], "stimmen": "3/3 A,B,C (5 Edelstahl T34, 20 T29/T37)", "belege": ["T34 S.10", "T29 S.1", "T37 S.8"]},
+{"aussage": "Hochschrank gesamt", "werte": [2376, 2800, 3570, 3575], "stimmen": "2800 T29 3/3; 2376 T37 und 3570–3575 T34 2/3 A,B", "belege": ["T29 S.2", "T37 S.12", "T34 S.11"]},
+{"aussage": "Raumhöhe/Decke (abgegriffen)", "werte": [3600, 3625, 2400], "stimmen": "T34 3600–3625 2/3 A,B; T37 2400 1/3 B", "belege": ["T34 S.11", "T37 S.12"]},
+{"aussage": "Aufsatz über Gerätenische", "werte": [537, 800, 1386], "stimmen": "2/3 A,B (537 T37, 800 T29, 1386 T34)", "belege": ["T37 S.12", "T29 S.2", "T34 S.11"]},
+{"aussage": "Kühlnische-Türhöhe", "werte": [1752, 2020, 2108], "stimmen": "1752 T37 3/3; 2020 und 2108 1/3 A", "belege": ["T37 S.12", "T29 S.2", "T34 S.11"]},
+{"aussage": "Backofen: Nischenhöhe 450 (T37) bzw. 600 (T29), Unterkante etwa auf Arbeitsplattenhöhe 940 (T29)", "werte": [450, 600, 940], "stimmen": "Unterkante 2/3 A,B; Nischenhöhen 1/3 A", "belege": ["T29 S.2", "T37 S.12"]},
+{"aussage": "Offene Nische Hochschrank 1000–1080 (T29) bzw. ca. 930 (T37 Barnische); Regalfächer Halbinsel 190/280/280", "werte": [1000, 1080, 930, 190, 280], "stimmen": "2/3 A,B", "belege": ["T29 S.2", "T37 S.11", "T37 S.12"]},
+{"aussage": "Sitzbank: Sitzhöhe 440 (T37) bzw. 550 + 70 Polster = 620 (T29), Tiefe 445, Lehne bis 910", "werte": [440, 550, 620, 445, 910], "stimmen": "2/3 A,B", "belege": ["T37 S.9", "T29 S.3", "T29 S.4"]}
+],
+"geraete_beziehungen": [
+{"aussage": "GSP (600) direkt neben dem Spülenschrank: links in T29 und T37, rechts in T34", "werte": [600], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T34 S.11", "T37 S.8", "T37 S.10"]},
+{"aussage": "Müll/Abfall im Spülenschrank oder im direkt angrenzenden Auszug", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T34 S.11", "T37 S.8"]},
+{"aussage": "Kochfeld in Insel/Halbinsel, Spüle in der Wandzeile (T28, T30, T34, T37); Ausnahme T29: beides in einer Zeile, Kochfeld im 900er Schrank", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.2", "T30 S.4", "T34 S.10", "T37 S.7", "T29 S.4"]},
+{"aussage": "Spüle–Kochfeld in T29 ca. 1550–1590 in einer Zeile (abgegriffen)", "werte": [1550, 1590], "stimmen": "2/3 A,B", "belege": ["T29 S.4"]},
+{"aussage": "Backofen im Hochschrank (T28, T29, T30, T37) oder unter dem Kochfeld in der Insel (T34, 90 cm)", "werte": [90], "stimmen": "3/3 A,B,C", "belege": ["T28 S.4", "T29 S.2", "T30 S.4", "T34 S.12", "T37 S.12"]},
+{"aussage": "Kühl-/Gefriergeräte im Hochschrank am Rand der Zeile bzw. des Blocks, nicht an der Spüle (T34 Kombi 779; T37 Gefrier + Kühl je 600)", "werte": [779, 600], "stimmen": "3/3 A,B,C", "belege": ["T34 S.11", "T37 S.12", "T37 S.13", "T29 S.2"]},
+{"aussage": "Kaffeevollautomat neben Backofen auf Augenhöhe (T28); Coffee-Corner als offene Nische mit Kühlschrank darunter (T29)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.3", "T28 S.4", "T29 S.2"]},
+{"aussage": "Kochfeld mit Muldenlüftung/Tischabzug statt Haube bei Insel/Halbinsel", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.2", "T28 S.3", "T30 S.4", "T34 S.8", "T37 S.7"]},
+{"aussage": "Kochendwasser-Armatur an der Spüle, Technik im Spülenschrank (T29, T34)", "werte": [], "stimmen": "2/3 A,B", "belege": ["T29 S.1", "T34 S.11"]}
+],
+"laufwege_ergonomie": [
+{"aussage": "Gang Zeile ↔ Insel bzw. Hochschrankblock ca. 1,07–1,16 m (aus Plan abgegriffen, nicht bemaßt)", "werte": [1070, 1100, 1150, 1160], "stimmen": "2/3 A,B", "belege": ["T29 S.4", "T34 S.10"]},
+{"aussage": "Arbeitshöhe annähernd einheitlich 930–940 über Zeile, Insel und Halbinsel", "werte": [928, 930, 935, 940], "stimmen": "3/3 A,B,C (C nur 935)", "belege": ["T29 S.1", "T34 S.11", "T34 S.12", "T37 S.8"]},
+{"aussage": "Backofen/Gerätenische im Hochschrank etwa auf Griff-/Arbeitsplattenhöhe (900–1000)", "werte": [940, 1000], "stimmen": "2/3 A,B", "belege": ["T29 S.2", "T37 S.10"]},
+{"aussage": "Sitzbank niedrig und tief (Sitz 440, Tiefe 445)", "werte": [440, 445], "stimmen": "2/3 A,B", "belege": ["T29 S.3", "T37 S.9"]},
+{"aussage": "Insel-Raumseite als Theke mit Überstand und Hockern (T28) bzw. als Stauraum mit 4 Türen (T34)", "werte": [], "stimmen": "2/3 A,B", "belege": ["T28 S.3", "T34 S.13"]},
+{"aussage": "Kühl-Gefrierkombi–Spüle ca. 1200 (T34, abgegriffen)", "werte": [1200], "stimmen": "1/3 B", "belege": ["T34 S.11"]}
+],
+"anschluesse_blenden_fuellstuecke": [
+{"aussage": "Passblende 70 an Zeilenanfang, Halbinselende und Bankschrank (T37); Blende 20 am Zeilenende nur laut A", "werte": [70, 20], "stimmen": "70: 3/3 A,B,C; 20: 1/3 A", "belege": ["T37 S.8", "T37 S.9", "T37 S.10", "T37 S.11"]},
+{"aussage": "Kochfeld-Blende 150 über den Auszügen im Kochfeldschrank (T37)", "werte": [150], "stimmen": "3/3 A,B,C", "belege": ["T37 S.10"]},
+{"aussage": "Sockel durchlaufend: 100 (T29, T37), 81 in Frontfurnier (T34); in T28/T30/T34-Insel zurückversetzt/dunkel als Schattenfuge", "werte": [81, 100], "stimmen": "3/3 A,B,C", "belege": ["T29 S.2", "T37 S.10", "T34 S.11", "T28 S.3", "T30 S.4"]},
+{"aussage": "Stellseiten sichtbar in Frontmaterial (T28 Hochschrank/Insel, T30 Insel, T34 Furnier 19)", "werte": [19], "stimmen": "3/3 A,B,C", "belege": ["T28 S.4", "T30 S.4", "T34 S.10", "T34 S.12"]},
+{"aussage": "Wandabstand/Fuge 30 an Halbinsel und Hochschrankwand; sichtbare Seitenwand 19 zwischen Regal und Türen (T37)", "werte": [30, 19], "stimmen": "2/3 A,B", "belege": ["T37 S.9", "T37 S.10", "T37 S.11", "T37 S.12"]},
+{"aussage": "Blende 40 zwischen Geräteebenen im Hochschrank (T37)", "werte": [40], "stimmen": "2/3 A,B", "belege": ["T37 S.12"]},
+{"aussage": "T34: Randluft/Passstück ca. 40–50 (Plan 3350/1100 gegen Ansicht 3300/1059), keine eigene Passblende", "werte": [40, 50], "stimmen": "2/3 A,B", "belege": ["T34 S.10", "T34 S.11"]},
+{"aussage": "Offenes Seitenregal 250 mit gerundeter Außenecke als Zeilenabschluss statt Stellseite/Passblende (T29)", "werte": [250], "stimmen": "2/3 A,B", "belege": ["T29 S.1", "T29 S.4"]},
+{"aussage": "Edelstahl-Aufkantung ca. 150–160 unter Spiegelglas-Spritzschutz (bis ca. 1000 mit Bord), abgegriffen (T34)", "werte": [160, 1000], "stimmen": "1/3 A", "belege": ["T34 S.3", "T34 S.11"]}
+],
+"stil": [
+{"aussage": "Warme Holzfurniere (Eiche hell, Nussbaum klar matt) mit Naturstein oder Edelstahl-Platte; Korpus Dekor lichtgrau (T34)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.2", "T34 S.6", "T34 S.11"]},
+{"aussage": "T29: matte Taupe-/Beige-Fronten mit schwarzen Fugen, schwarze Einbaugeräte, Messing-Wandleuchten", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T29 S.2", "T29 S.4"]},
+{"aussage": "Bronze-/Kupfer-Töne: bronziertes Spiegelglas als Spritzschutz, Kupfer bei Spüle und Armatur, Platte in Naturstein-Optik", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T30 S.2", "T30 S.4", "T30 S.7", "T34 S.7"]},
+{"aussage": "Dünne Arbeitsplatte (5–20) mit schmaler Kante", "werte": [5, 20], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T34 S.10", "T37 S.8"]},
+{"aussage": "Gerundete Formen und Bögen als Wiederholungsmotiv (Rundraum, Rundende, Bogennische)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T29 S.4", "T30 S.4", "T37 S.2", "T37 S.3"]},
+{"aussage": "LED-Linien in Nischen/unter Oberschränken, lineare Pendel- und Wandleuchten", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.2", "T30 S.5", "T34 S.9"]},
+{"aussage": "Offene Regalfelder/Nischen als Gestaltungselement neben geschlossenen Fronten", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.2", "T28 S.5", "T37 S.4"]},
+{"aussage": "Edelstahl-Stangengriffe satiniert (T34)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T34 S.6", "T34 S.11"]},
+{"aussage": "Helle Fliesen im liegenden Format als Rückwand (Pantry); Stein-/Marmorplatte", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.5", "T28 S.6"]},
+{"aussage": "Sichtbeton-/Putzwand-Optik und dunkle Decke (T28); Holzboden/Parkett durchgängig (Eiche, in T30 Fischgrät dunkel)", "werte": [], "stimmen": "2/3 A,B", "belege": ["T28 S.2", "T28 S.3", "T30 S.4"]}
+],
+"zeichenstil": [
+{"aussage": "Planblätter A3 quer, Maßstab 1:100", "werte": [100], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T34 S.10", "T37 S.7"]},
+{"aussage": "Ein Blatt je Ansicht: Zeile, Hochschränke, Bank, Insel innen/außen, Halbinsel vorn/Rückseite, Hochschrankwand, dazu Grundriss", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T29 S.4", "T34 S.10", "T34 S.12", "T34 S.13", "T37 S.8", "T37 S.12"]},
+{"aussage": "Maßkette in mm unter der Ansicht, Höhenmaße seitlich/rechts; Spaltenbeschriftung unter der Maßkette (Gerät, Frontart, Innenleben)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T29 S.2", "T34 S.11", "T37 S.8", "T37 S.12"]},
+{"aussage": "T34: feste Legendenspalte rechts (Geräte, Zubehör, Materialien), schwarz-weiße Linienzeichnung", "werte": [], "stimmen": "2/3 A,B", "belege": ["T34 S.10", "T34 S.11", "T34 S.12", "T34 S.13"]},
+{"aussage": "T37: Strichzeichnung mit roter Bemaßung, schraffierten Bestandswänden, Diagonalen in Fronten (Tür/Klappe)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T37 S.7", "T37 S.9", "T37 S.10", "T37 S.12"]},
+{"aussage": "PTO-Kürzel für push-to-open an Hochschrank-Türen (T37)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T37 S.12"]},
+{"aussage": "Perspektiven als reine Strichzeichnungen mit Varianten-Titeln (T37)", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T37 S.2", "T37 S.3", "T37 S.4", "T37 S.5", "T37 S.6"]},
+{"aussage": "T29: Raum farbig gerendert hinter den Fronten", "werte": [], "stimmen": "1/3 A", "belege": ["T29 S.1", "T29 S.4"]}
+],
+"moodboard_praesentation": [
+{"aussage": "T34-Aufbau: Titelblatt, Visualisierungen (Front, 2 Perspektiven, Detail), Moodboard Material/Ausstattung, Moodboard Geräte (Freisteller), Beleuchtungsvorschläge, dann Pläne mit Legende", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T34 S.1", "T34 S.2", "T34 S.6", "T34 S.8", "T34 S.9", "T34 S.10"]},
+{"aussage": "T30: Material-Moodboard als Collage mit Beschriftung je Material, je eine Seite pro Front-Variante, danach Visualisierungen je Variante", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T30 S.2", "T30 S.3", "T30 S.4", "T30 S.6"]},
+{"aussage": "T28: Titelblatt + großformatige Visualisierungen (Insel-Küche 3 Seiten) + 2 Pantry-Seiten, ohne Maße", "werte": [], "stimmen": "3/3 A,B,C", "belege": ["T28 S.1", "T28 S.2", "T28 S.5", "T28 S.6"]},
+{"aussage": "T37: Titel, Strichperspektiven (Halbinsel-Varianten), Grundriss, Ansichten, Rückseite, Schlussblatt", "werte": [], "stimmen": "3/3 A,B,C (Schlussblatt A)", "belege": ["T37 S.1", "T37 S.2", "T37 S.7", "T37 S.13"]},
+{"aussage": "Beschriftung der Moodboards in Großbuchstaben, Kurzform", "werte": [], "stimmen": "1/3 C", "belege": ["T30 S.2", "T34 S.6"]}
+],
+"neue_katalogtypen": [],
+"offen": []
+},
+"neue_katalogtypen": [
+{"typ": "Hochschrank-Familie (Geräte-Hochschrank)", "beschreibung": "Kühl-/Gefrier-Hochschrank mit Aufsatz; Backofen/Steamer mit Klappe, Weinschublade; Coffee-Corner-Nische mit Unterbau-Kühlschrank; Breiten 600/1200 (zusammengefasst), Höhen 2376/2800/ca. 3570", "stimmen": "3/3 A,B,C", "belege": ["T29 S.2", "T29 S.3", "T34 S.11", "T37 S.10", "T37 S.12", "T37 S.13"]},
+{"typ": "Pantry-Vorratswand", "beschreibung": "2 Hochschränke, raumhohe Aufsatz-Oberschrankreihe, offene Regalfelder (je 2 Böden), offener Unterbau mit flachem Schubkasten in der Plattenzarge, optional Spülenschrank im Mittelfeld", "stimmen": "3/3 A,B,C", "belege": ["T28 S.3", "T28 S.5", "T28 S.6"]},
+{"typ": "Offenes Regalfeld / Seitenregal als Abschluss", "beschreibung": "250 bis 520 breit, 3 Fächer (z. B. 190/280/280), Zeilenabschluss, Insel-Kopf oder Nische, optional gerundete Ecke", "stimmen": "3/3 A,B,C", "belege": ["T28 S.2", "T29 S.1", "T37 S.9", "T37 S.11"]},
+{"typ": "Abfall-/Orga-Auszug 600 neben Spüle", "beschreibung": "Auszüge mit Müllsystem und Schneidebrett-Einsatz, direkt an der Spüle", "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T29 S.2"]},
+{"typ": "Apothekerauszug schmal 250–280", "beschreibung": "5 Massivholz-Schubkästen mit seitlichem Eingriff hinter einer Front; A,B nutzen vorhandenes US-AP, nur C schlägt es als neu vor", "stimmen": "3/3 Vorkommen; Neuvorschlag 1/3 C", "belege": ["T34 S.11", "T37 S.10", "T29 S.3"]},
+{"typ": "Halbinsel-Rundendschrank 500", "beschreibung": "Gerundetes Kopfende mit Tür und vertikalem Stangengriff, Halbinsel-Unterbau mit Auszügen", "stimmen": "3/3 A,B,C", "belege": ["T37 S.4", "T37 S.8", "T37 S.9", "T37 S.10"]},
+{"typ": "Kochfeld-Backofen-Kombi-Unterschrank 900", "beschreibung": "Kochfeldblende, Backofen 90 cm, 1 Schubkasten darunter (Insel T34)", "stimmen": "3/3 Vorkommen; als neuer Typ 1/3 A", "belege": ["T34 S.12"]},
+{"typ": "Sitzbank mit Lehne oder gerundet", "beschreibung": "Länge 1615–1723, Sitz 440–620, Tiefe 445, mit Schrank am Bankende", "stimmen": "2/3 A,B", "belege": ["T29 S.3", "T37 S.9"]},
+{"typ": "Flügeltür-Unterschrank mit Mittelwand", "beschreibung": "ca. 900–1000 breit, Zeilenanfang/Eckbereich (T37)", "stimmen": "2/3 A,B", "belege": ["T37 S.8"]},
+{"typ": "Offene Barnische im Hochschrank", "beschreibung": "2 x 500, ca. 930 hoch, mit 3 Steckdosen, über Flügeltür", "stimmen": "2/3 A,B", "belege": ["T37 S.12"]}
+],
+"plan_widersprueche": [
+{"aussage": "T29: Zeilen-Ansicht summiert 4750, Grundriss nennt 5015 (Diff. 265, Bezugskante/Überstand unklar)", "stimmen": "3/3 A,B,C", "belege": ["T29 S.1", "T29 S.4"]},
+{"aussage": "T29: Hochschrankgruppe, Beschriftung 'Apotheker' an hoher Tür, Bild zeigt Geräte-Nische mit 3 Auszügen über 1200; Kühlschrank doppelt geführt", "stimmen": "2/3 A,B", "belege": ["T29 S.2"]},
+{"aussage": "T29: Höhenkette im Coffee-Corner-Hochschrank 940 + Nische + 800 ergibt nicht 2800 (A: 1080 → 2820; B: 1000)", "stimmen": "2/3 A,B", "belege": ["T29 S.2"]},
+{"aussage": "T29: Fronten 2 x 393,5 = 787 gegen Korpus 820", "stimmen": "1/3 A", "belege": ["T29 S.1"]},
+{"aussage": "T30: S.7 trägt Titel Variante I, zeigt aber Metalloberfläche Variante II; zeigt Naturstein-Spritzschutz statt Spiegelglas und Gas- statt Induktionskochfeld", "stimmen": "2/3 A,B", "belege": ["T30 S.7", "T30 S.2", "T30 S.4", "T30 S.6"]},
+{"aussage": "T30: S.6 zeigt Tür statt Fenster neben dem Hochschrank", "stimmen": "1/3 B", "belege": ["T30 S.4", "T30 S.6"]},
+{"aussage": "T34: Inselfelder 600+600+900+300 = 2400 gegen Maß 2440/2441", "stimmen": "3/3 A,B,C", "belege": ["T34 S.10", "T34 S.12", "T34 S.13"]},
+{"aussage": "T34: Zeilenfelder summieren 4359 gegen Grundriss 3350 + 1100 = 4450 (Diff. 91, durch Randluft erklärbar)", "stimmen": "2/3 A,B", "belege": ["T34 S.10", "T34 S.11"]},
+{"aussage": "T34: OK Zeile 81 + 847 = 928 gegen Insel 935", "stimmen": "2/3 A,B", "belege": ["T34 S.11", "T34 S.12"]},
+{"aussage": "T37: Halbinsel Frontkette 150 + 331 + 320 = 801 gegen Korpushöhe 810", "stimmen": "3/3 A,B,C", "belege": ["T37 S.10"]},
+{"aussage": "T37: Hochschrank-Teilmaße 300+450+142+40+807 = 1739 gegen 1752", "stimmen": "2/3 A,B", "belege": ["T37 S.12"]},
+{"aussage": "T37: Halbinsel Küchenseite 2750 gegen Rückseite 2693 (Diff. 57); 1752 + 537 + 100 = 2389 gegen 2376", "stimmen": "1/3 A", "belege": ["T37 S.10", "T37 S.11", "T37 S.12"]},
+{"aussage": "T37: Hochschrank-Türen als PTO beschriftet, in den Zeichnungen aber mit Stangengriffen", "stimmen": "2/3 A,C", "belege": ["T37 S.12", "T37 S.2"]},
+{"aussage": "T37: Grundriss-Maßzahlen sehr klein, teils unlesbar", "stimmen": "3/3 A,B,C", "belege": ["T37 S.7"]}
+],
+"verworfen": [
+{"aussage": "C: T29 form L", "grund": "A und B lesen Zeile + gegenüberliegende Hochschrankgruppe (zweizeilig)"},
+{"aussage": "C: T29 keine Fenster im Plan", "grund": "A und B: drei Bogenfenster über der Zeile plus rechteckige Fenster"},
+{"aussage": "C: T34 ok_ap 847, oberschrank_uk 1281, hochschrank_h 1386", "grund": "847 ist Fronthöhe, 1261/1386 sind Frontteilungen im Hochschrank; A und B: Hochschrank 3570–3575, keine Oberschrankreihe"},
+{"aussage": "C: T34 Oberschränke bis Decke", "grund": "A und B: Hochschrank mit Aufsatz, keine Oberschränke"},
+{"aussage": "C: T37 hochschrank_h 1752, ok_ap 810", "grund": "1752 ist Türhöhe, 810 Korpushöhe; A und B: Hochschrank 2376, OK 930"},
+{"aussage": "C: Griffleiste horizontal an T29-Zeile und T34-Unterschränken", "grund": "A und B: T29-Zeile grifflos mit schwarzen Fugen, T34 push-to-open laut Legende"},
+{"aussage": "C: T29 900er Schränke mit 3 Schubkästen als Front", "grund": "A und B: 2 Auszüge 1:1 (je 393,5); 3 Schubkästen vermutlich Innenleben"},
+{"aussage": "C: T29 Füllstück beidseitig an der Zeile; T34 Apothekerauszug 280 als Passstück", "grund": "A und B: offenes 250er Regal bzw. eigener Apothekerschrank, kein Füllstück"},
+{"aussage": "C: T29 Bank mit Kupfer-Platte", "grund": "A: Sitzpolster, B: Stoffbezug"},
+{"aussage": "C: T30 Oberschränke bis Decke, Insel 2 x 2 Auszüge", "grund": "A und B: kleiner Abstand zur Decke, Insel 3 Spalten x 2 Reihen"},
+{"aussage": "B: T34 Insel-Tiefe 1163", "grund": "A und C: 1153 (Planmaß)"},
+{"aussage": "C: Dokumentart Präsentation für T29, T30, T37", "grund": "A und B: T29 und T37 Layout, T30 Moodboard"}
+],
+"offen": [
+"T28 und T30 enthalten keine Maße; nur Anordnung und Stil (3/3).",
+"T37 Grundriss unleserlich: Raummaße, Gänge, Zeilen- und Halbinseltiefe nicht ableitbar (3/3). Zeilenlänge 3216 (A) gegen 3266 (B).",
+"T37 Form: halbinsel (A,C) gegen U (B); T34 Form: zweizeilig (B,C) gegen insel (A); Layout selbst ist in allen Runden gleich beschrieben.",
+"T34 Frontaufteilung Unterschränke 600: A 1 Front volle Höhe, B 3 Auszüge, C 2 Auszüge 1:1; Innenleben 2 Innenschubkästen + 1 Schubkasten (A,B).",
+"T34 Sockel 81 statt 100: bewusst oder Planwert unklar (A); Gänge und Tiefen abgegriffen, nur 640 und 1153 bemaßt (A,C).",
+"T29 Hochschrankblock: Zuordnung Apotheker/Backofen/Auszüge unklar; Nischenhöhe 1000 (B) gegen 1080 (A).",
+"T37 Flügeltürschrank Breite nicht bemaßt (ca. 900–1000); Zuordnung der Hochschrank-Teilhöhen zu Steamer/Backofen-Spalte nur teilweise beschriftet (A).",
+"T30 Insel freistehend oder angeschlossen nicht erkennbar (A).",
+"Abstand GSP–Spüle, Kochfeld–Wand und freier Gang in keinem Plan ausdrücklich bemaßt (C); Gänge nur abgegriffen (A,B)."
+]
+}

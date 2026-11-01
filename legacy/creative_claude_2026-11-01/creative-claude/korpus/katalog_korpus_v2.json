@@ -1,0 +1,99 @@
+{
+  "katalog": "korpus",
+  "version": 2,
+  "quelle": "wissen_kueche_v1.md (40 PDFs, 3 Runden, Konsens G1–G6)",
+  "regel": "Kein Raster. Typwerte sind Startwerte; jedes Maß mm-genau frei, Nutzer tunen. Realer Schrank = Typ + Abweichungen. Plan-Fehler notieren, nicht korrigieren. Namen DE · EN.",
+  "typwerte": {
+    "sockel_h": 100, "sockel_bereich": [60, 130], "sockel_ruecksprung": 60,
+    "korpus_h_unterschrank": 810, "korpus_h_bereich": [790, 847],
+    "ap_d": 20, "ap_d_bereich": [5, 40], "ok_ap": 930, "ok_ap_bereich": [915, 950],
+    "korpus_t": 560, "t_frontebene": 620, "t_frontebene_bereich": [600, 700],
+    "hochschrank_t": 600, "hochschrank_aufsatz": 540,
+    "oberschrank_h": 920, "oberschrank_uk": 1530, "oberschrank_t": 370,
+    "insel_t": 1100, "insel_t_bereich": [908, 1204],
+    "front_d": 19, "korpus_d": 19, "rueckwand_d": 8,
+    "fuge_rand": 2, "fuge_rand_bereich": [1.5, 2],
+    "wandluft": 30, "passblende": 70, "fuellstueck": 30, "stellseite_d": 19,
+    "kochfeldblende_h": 170, "kochfeldblende_bereich": [150, 185],
+    "auszug3_verhaeltnis": [185, 310, 310],
+    "griff": "push|griffmulde|griffleiste_oben|stange|knopf"
+  },
+  "unterschraenke": [
+    {"id": "US-T1", "de": "Unterschrank 1 Tür", "en": "Base 1 door", "b": 600, "fronten": [["tuer", 1]], "innen": "1 Boden", "stärke": "fest"},
+    {"id": "US-T2", "de": "Unterschrank Flügeltür mit Mittelwand", "en": "Base double door with divider", "b": 950, "fronten": [["tuer", 1], ["tuer", 1]], "innen": "Mittelwand, Böden, PTO", "stärke": "häufig"},
+    {"id": "US-S1I", "de": "Auszug + Innenschübe", "en": "Drawer + inner drawers", "b": 600, "fronten": [["auszug", 1]], "innen": "2–4 Innenschübe (z. B. 115/115/235), Magnet-Clip", "stärke": "fest – häufigster Typ"},
+    {"id": "US-S2", "de": "2 Auszüge 1:1", "en": "2 drawers 1:1", "b": 600, "fronten": [["auszug", 1], ["auszug", 1]], "stärke": "häufig"},
+    {"id": "US-S3", "de": "3 Auszüge (oben klein)", "en": "3 drawers (small top)", "b": 900, "fronten": [["auszug", 185], ["auszug", 310], ["auszug", 310]], "stärke": "fest"},
+    {"id": "US-TA3", "de": "Auszugsblock 2 × 3", "en": "Drawer block 2 × 3", "b": 1200, "fronten": "2 Spalten × 3 Auszüge", "stärke": "häufig"},
+    {"id": "US-SP", "de": "Spülenschrank mit Müll + Kochendwasser-Technik", "en": "Sink cabinet with waste + boiling-water unit", "b": 800, "b_bereich": [600, 900], "fronten": [["auszug", 1]], "traverse_vorn": false, "stärke": "fest"},
+    {"id": "US-MA", "de": "Abfall-/Orga-Auszug", "en": "Waste/organiser pull-out", "b": 600, "stärke": "häufig"},
+    {"id": "US-GSP", "de": "Geschirrspüler vollintegriert", "en": "Integrated dishwasher", "b": 600, "korpus": false, "regel": "immer direkt neben US-SP", "stärke": "fest"},
+    {"id": "US-KF", "de": "Kochfeldschrank mit Blende", "en": "Hob cabinet with fascia", "b": 900, "b_bereich": [897, 973], "fronten": [["blende", 170], ["auszug", 310], ["auszug", 330]], "hinweis": "Muldenlüfter: Umluftkanal, Tiefe prüfen", "stärke": "fest"},
+    {"id": "US-KB", "de": "Kochfeld-Backofen-Kombi", "en": "Hob + oven combination", "b": 900, "fronten": [["blende", 150], ["geraet", 480], ["auszug", 180]], "stärke": "selten"},
+    {"id": "US-BO", "de": "Backofen unter AP + niedriger Auszug", "en": "Oven under worktop + low drawer", "b": 600, "fronten": [["geraet", 597], ["auszug", 213]], "variante": "Muldenlüfter: Blende oben, Ofen unten", "stärke": "häufig"},
+    {"id": "US-AP", "de": "Apothekerauszug", "en": "Pull-out larder", "b": 300, "b_bereich": [250, 330], "stärke": "fest"},
+    {"id": "US-ZA", "de": "Zutatenauszug neben Kochfeld", "en": "Spice pull-out next to hob", "b": 270, "stärke": "häufig"},
+    {"id": "US-OF", "de": "Offenes Regal", "en": "Open shelf", "b": 250, "b_bereich": [150, 520], "innen": "3 Fächer (z. B. 190/280/280)", "stärke": "fest"},
+    {"id": "US-RD", "de": "Rundregal / Rundende", "en": "Round end shelf", "b": 250, "stärke": "fest"},
+    {"id": "US-RE", "de": "Halbinsel-Rundendschrank", "en": "Peninsula round end cabinet", "b": 500, "stärke": "häufig"},
+    {"id": "US-FL", "de": "Flaschenregal", "en": "Bottle rack", "b": 150, "stärke": "selten"},
+    {"id": "US-WK", "de": "Wein-/Kühlschrank unterbau", "en": "Under-counter wine/fridge", "b": 600, "korpus": false, "stärke": "häufig"},
+    {"id": "US-WM", "de": "Waschmaschine/Trockner mit Schleppsockel", "en": "Washer/dryer with drag plinth", "b": 655, "korpus": false, "stärke": "selten"},
+    {"id": "US-KM", "de": "Flachtiefe mit Küchenmaschinen-Auszugboden", "en": "Shallow cabinet with appliance lift shelf", "b": 584, "t": 430, "stärke": "selten"},
+    {"id": "US-EK", "de": "Eckschrank Blindecke", "en": "Blind corner", "b": 1000, "hinweis": "selten – Ecken meist über Regal/Rundung/US-T2", "stärke": "selten"}
+  ],
+  "hochschraenke": [
+    {"id": "HS-KS", "de": "Kühl-Gefrier", "en": "Fridge-freezer", "b": 600, "b_bereich": [600, 900], "zonen": "Aufsatz · Gerätefront", "stärke": "fest"},
+    {"id": "HS-K+G", "de": "Kühl + Gefrier getrennt (2 Spalten)", "en": "Fridge + freezer separate", "b": 1200, "stärke": "häufig"},
+    {"id": "HS-BD", "de": "Backofen + Dampfgarer übereinander", "en": "Oven + steam oven stacked", "b": 600, "zonen": "Aufsatz · Dampfgarer 455 · Backofen 595 · 2 Auszüge", "stärke": "fest"},
+    {"id": "HS-GN", "de": "Gerätenische (Mikro/Lifttür, Weinschublade, Kaffee)", "en": "Appliance niche (microwave, wine drawer, coffee)", "b": 600, "stärke": "häufig"},
+    {"id": "HS-VR", "de": "Vorrat mit Innenschüben / Ordnungssystem", "en": "Larder with inner drawers", "b": 600, "stärke": "fest"},
+    {"id": "HS-AP", "de": "Apotheker-Hochschrank", "en": "Tall pull-out larder", "b": 450, "b_bereich": [280, 450], "stärke": "häufig"},
+    {"id": "HS-PU", "de": "Putzschrank mit Steckdose", "en": "Broom cupboard with socket", "b": 350, "b_bereich": [350, 600], "stärke": "häufig"},
+    {"id": "HS-PT", "de": "Pocketdoor-Nische mit AP + 2 × 3 Auszügen", "en": "Pocket-door niche", "b": 1200, "stärke": "häufig"},
+    {"id": "HS-BN", "de": "Offene Barnische mit Steckdosen", "en": "Open bar niche with sockets", "b": 1000, "stärke": "häufig"},
+    {"id": "HS-CC", "de": "Coffee-Corner (Nische über Unterbau-Kühl)", "en": "Coffee corner", "b": 600, "stärke": "selten"},
+    {"id": "HS-OF", "de": "Offenes Hochregal", "en": "Open tall shelf", "b": 600, "b_bereich": [430, 600], "stärke": "häufig"},
+    {"id": "HS-KA", "de": "Kammer-/Durchgangstür", "en": "Walk-in pantry door", "b": 510, "stärke": "selten"}
+  ],
+  "oberschraenke_wand": [
+    {"id": "OS-T1", "de": "Oberschrank 1 Tür", "en": "Wall 1 door", "b": 580, "hinweis": "Oberschränke selten; Teilung darf vom Unterschrank abweichen", "stärke": "selten"},
+    {"id": "OS-FL", "de": "Flacher Oberschrank mit Technikboden", "en": "Shallow wall unit", "b": 1200, "t": 235, "stärke": "selten"},
+    {"id": "WB", "de": "Ablageboard mit LED (≈ 600 über AP)", "en": "Wall board with LED", "b": 1200, "stärke": "häufig"},
+    {"id": "WR", "de": "Schwebende Regalböden", "en": "Floating shelves", "stärke": "häufig"}
+  ],
+  "insel_halbinsel": [
+    {"id": "IN-SY", "de": "Insel symmetrisch Apotheker–Schübe–Kochfeld–Schübe–Apotheker", "en": "Symmetric island", "b": 2798, "t": 1200, "stärke": "häufig"},
+    {"id": "IN-RS", "de": "Insel-Raumseite flach (Türen + Fachböden)", "en": "Island back cabinets (shallow)", "t": 375, "stärke": "häufig"},
+    {"id": "IN-TH", "de": "Theke/Bar mit Überstand", "en": "Bar overhang", "ueberstand": 300, "stärke": "häufig"},
+    {"id": "IN-RO", "de": "Fahrbare Insel auf Rollen", "en": "Mobile island on castors", "b": 1800, "t": 908, "stärke": "selten"},
+    {"id": "HI-RE", "de": "Halbinsel mit Rundende", "en": "Peninsula with round end", "stärke": "fest"}
+  ],
+  "moebel": [
+    {"id": "SB-LE", "de": "Sitzbank mit Lehne / Truhe", "en": "Bench with backrest / chest", "b": 1650, "sitz_h": 440, "lehne_h": 910, "stärke": "fest"},
+    {"id": "SB-NI", "de": "Sideboard auf Fensterbrett-Höhe", "en": "Low sideboard at sill height", "stärke": "häufig"},
+    {"id": "PA-WA", "de": "Pantry-/Vorratswand", "en": "Pantry wall", "stärke": "selten"},
+    {"id": "ST-NI", "de": "Standherd-Nische mit Regal/Reling", "en": "Range cooker niche", "stärke": "selten"}
+  ],
+  "elemente": [
+    {"id": "E-PB", "de": "Passblende", "en": "Filler panel", "b": 70},
+    {"id": "E-FS", "de": "Füllstück", "en": "Scribe strip", "b": 30},
+    {"id": "E-SS", "de": "Stellseite", "en": "End panel", "d": 19},
+    {"id": "E-ZW", "de": "Zwischenwange", "en": "Divider panel", "d": 19},
+    {"id": "E-SB", "de": "Sockelblende (Frontmaterial, zurückgesetzt)", "en": "Plinth panel", "h": 100},
+    {"id": "E-AP", "de": "Arbeitsplatte", "en": "Worktop", "d": 20},
+    {"id": "E-DP", "de": "Deckplatte (Nische)", "en": "Top panel", "d": 30},
+    {"id": "E-BL", "de": "Blende zwischen Geräten", "en": "Panel between appliances", "h": 40}
+  ],
+  "kernregeln": [
+    "GSP direkt neben Spüle",
+    "Müll im Spülenschrank oder direkt daneben",
+    "Spüle in Wandzeile; Kochfeld auf Insel/Halbinsel, sonst ≥ 1 Modul Abstand",
+    "Kühl-/Backgeräte im Hochschrankblock am Zeilenende/Ecke/Gegenwand, nie Zeilenmitte",
+    "Hochschrank-Querfugen fluchten mit Unterschrank-Front",
+    "Restfeld als Funktionsfeld statt Blende",
+    "Sockel/Blende/Stellseite in Frontmaterial",
+    "Arbeitshöhe in Zeile und Insel gleich",
+    "Muldenlüfter: Umluftkanal-Tiefe prüfen"
+  ]
+}

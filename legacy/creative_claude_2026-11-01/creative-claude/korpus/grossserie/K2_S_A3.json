@@ -1,0 +1,618 @@
+{
+ "durchgang": "K2-S-A3",
+ "seiten_gelesen": "60/60",
+ "atome": [
+  {
+   "id": "GS-RASTER-01",
+   "bereich": "RASTER",
+   "aussage": "Unterschrank-Korpushöhe gibt es in drei Linien: 730, 800 und 860 mm; der Sockel ist je Linie als Standard 140, 100 bzw. 70 mm festgelegt und frei einstellbar von 70 bis 200 mm.",
+   "werte": [
+    730,
+    800,
+    860,
+    140,
+    100,
+    70,
+    200
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.178"
+   ]
+  },
+  {
+   "id": "GS-RASTER-02",
+   "bereich": "RASTER",
+   "aussage": "Arbeitsplatte standardmäßig 39 mm stark (wählbar 10 bis 60 mm); daraus ergibt sich bei Standardsockel eine Arbeitshöhe von 909, 939 bzw. 969 mm (abgeleitet: Korpus + Sockel + Platte).",
+   "werte": [
+    39,
+    10,
+    60,
+    909,
+    939,
+    969
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.178"
+   ]
+  },
+  {
+   "id": "GS-RASTER-03",
+   "bereich": "RASTER",
+   "aussage": "Frontreihen bauen auf einem Grundmodul von 132,5 mm Höhe auf; Korpushöhen sind Vielfache davon (2 bis 10 Reihen bei Oberschränken, 5 bis 6 Reihen bei Unterschränken), bei den Linien 730 und 860 kommt eine halbe Reihe von 67,5 mm im unteren Bereich hinzu.",
+   "werte": [
+    132.5,
+    67.5
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.178"
+   ]
+  },
+  {
+   "id": "GS-RASTER-04",
+   "bereich": "RASTER",
+   "aussage": "Standard-Nischenmaß zwischen Arbeitsplatte (Oberkante) und Unterkante Oberschrank ist 542,5 mm.",
+   "werte": [
+    542.5
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.178",
+    "S.179",
+    "S.180"
+   ]
+  },
+  {
+   "id": "GS-RASTER-05",
+   "bereich": "RASTER",
+   "aussage": "Oberschrank-Höhen der Linie 730: 930, 800, 660, 530, 400 mm; Mittelschränke 1200, 1340, 1470 mm; Hochschränke 1530, 1970, 2100, 2240 mm; Gesamthöhen 2114, 2246,5 und 2379 mm.",
+   "werte": [
+    930,
+    800,
+    660,
+    530,
+    400,
+    1200,
+    1340,
+    1470,
+    1530,
+    1970,
+    2100,
+    2240,
+    2114,
+    2246.5,
+    2379
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.178"
+   ]
+  },
+  {
+   "id": "GS-RASTER-06",
+   "bereich": "RASTER",
+   "aussage": "Oberschrank-Höhen der Linie 800: 800, 660, 530, 400, 270 mm; Mittelschränke 1070, 1200, 1340; Hochschränke 1460, 1900, 2040, 2170; Gesamthöhen 2006,5, 2139 und 2271,5 mm.",
+   "werte": [
+    800,
+    660,
+    530,
+    400,
+    270,
+    1070,
+    1200,
+    1340,
+    1460,
+    1900,
+    2040,
+    2170,
+    2006.5,
+    2139,
+    2271.5
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.178"
+   ]
+  },
+  {
+   "id": "GS-RASTER-07",
+   "bereich": "RASTER",
+   "aussage": "Oberschrank-Höhen der Linie 860: 800, 660, 530, 400, 270 mm; Mittelschränke 1070, 1200, 1340; Hochschränke 1530, 1970, 2100, 2240; Gesamthöhen 2044, 2176,5 und 2309 mm.",
+   "werte": [
+    800,
+    660,
+    530,
+    400,
+    270,
+    1070,
+    1200,
+    1340,
+    1530,
+    1970,
+    2100,
+    2240,
+    2044,
+    2176.5,
+    2309
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.178"
+   ]
+  },
+  {
+   "id": "GS-RASTER-08",
+   "bereich": "RASTER",
+   "aussage": "Je Linie gibt es genau drei Gesamthöhen (Oberkante Oberschrank bzw. Hochschrank), die jeweils um 132,5 mm gestuft sind; Oberschrank-Unterkante liegt bei Standardsockel und Standardnische fest (z. B. Linie 730: 1451,5 mm, abgeleitet).",
+   "werte": [
+    132.5,
+    1451.5
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.178"
+   ]
+  },
+  {
+   "id": "GS-RASTER-09",
+   "bereich": "RASTER",
+   "aussage": "Bei der grifflosen Linie 800 reichen Oberschränke bzw. Aufsatzschränke bis 1190 mm Höhe; Zusatzhöhen 270 und 400 mm als Aufsatz über Hoch- und Oberschränken; Gesamthöhen bis 2669 mm, Hochschränke 1900, 2040, 2170 mm.",
+   "werte": [
+    1190,
+    270,
+    400,
+    2669,
+    1900,
+    2040,
+    2170
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.179"
+   ]
+  },
+  {
+   "id": "GS-RASTER-10",
+   "bereich": "RASTER",
+   "aussage": "Die grifflose Linie 800 führt zusätzlich niedrige Unterschränke mit 370, 500 und 660 mm Höhe neben den 800-mm-Korpussen; die Diagramme zeigen dazu abgestufte Arbeitsplattenhöhen (Deutung).",
+   "werte": [
+    370,
+    500,
+    660,
+    800
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.179"
+   ]
+  },
+  {
+   "id": "GS-RASTER-11",
+   "bereich": "RASTER",
+   "aussage": "Die Linie mit 12 mm dünner Front bietet dieselben drei Höhenlinien (730/800/860) und zusätzlich 430 bzw. 500 mm niedrige Unterschränke sowie Aufsatzhöhen von 270/400 mm; Gesamthöhen bis 2776,5 mm (Linie 730) und 2706,5 mm (Linie 860).",
+   "werte": [
+    730,
+    800,
+    860,
+    430,
+    500,
+    270,
+    400,
+    2776.5,
+    2706.5
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.180"
+   ]
+  },
+  {
+   "id": "GS-RASTER-12",
+   "bereich": "RASTER",
+   "aussage": "Hochschrank-Höhen der dünnen Linie: 1970, 2100, 2240 mm (Linien 730/860) bzw. 1900, 2040, 2170 mm (Linie 800).",
+   "werte": [
+    1970,
+    2100,
+    2240,
+    1900,
+    2040,
+    2170
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.180"
+   ]
+  },
+  {
+   "id": "GS-RASTER-13",
+   "bereich": "RASTER",
+   "aussage": "Auf diesen Seiten sind keine Korpusbreiten und -tiefen angegeben; das Raster ist hier nur in der Höhe dargestellt.",
+   "werte": [],
+   "einheit": "mm",
+   "belege": [
+    "S.178",
+    "S.179",
+    "S.180"
+   ]
+  },
+  {
+   "id": "GS-FRONT-01",
+   "bereich": "FRONT",
+   "aussage": "Unterschrank-Frontaufteilung im Diagramm: von einer durchgehenden Front bis zu vier bzw. fünf übereinander liegenden Reihen, immer auf dem 132,5-mm-Modul; Kombinationen mit Tür unten und mehreren Auszugs-/Schubkastenreihen oben sind vorgesehen.",
+   "werte": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "einheit": "Reihen",
+   "belege": [
+    "S.178",
+    "S.180"
+   ]
+  },
+  {
+   "id": "GS-FRONT-02",
+   "bereich": "FRONT",
+   "aussage": "Foto-Beispiele: Unterschrank mit zwei schmalen Schubkastenreihen oben und einer großen Tür-/Auszugsfront darunter; Insel mit zwei Schubkastenreihen über großen Fronten.",
+   "werte": [
+    2
+   ],
+   "einheit": "Reihen",
+   "belege": [
+    "S.127",
+    "S.131"
+   ]
+  },
+  {
+   "id": "GS-FRONT-03",
+   "bereich": "FRONT",
+   "aussage": "Hochschrank-Fronten haben im Foto eine waagerechte Teilfuge im oberen Drittel, die Maserung läuft über die gesamte Schrankhöhe durch.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.126",
+    "S.129",
+    "S.131"
+   ]
+  },
+  {
+   "id": "GS-FRONT-04",
+   "bereich": "FRONT",
+   "aussage": "Bei Furnier- und Dekorfronten mit senkrechter Maserung läuft das Bild über alle Fronten und die ganze Schrankhöhe durchgehend („auf Bild“ gearbeitet).",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.151",
+    "S.163"
+   ]
+  },
+  {
+   "id": "GS-FRONT-05",
+   "bereich": "FRONT",
+   "aussage": "Furnierfronten sind in Eiche, Ulme, Esche oder Nussbaum erhältlich, gebeizt von hell bis dunkel, mit wasserbasiertem Acryllack versiegelt.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.163"
+   ]
+  },
+  {
+   "id": "GS-FRONT-06",
+   "bereich": "FRONT",
+   "aussage": "Eine Struktur-Front hat senkrechte Rillen mit 7,5 mm Breite und 5 mm Abstand (symmetrisch); eine zweite Variante verteilt die Rillen asymmetrisch, sodass das Bild je Frontbreite verschieden ausfällt.",
+   "werte": [
+    7.5,
+    5
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.165"
+   ]
+  },
+  {
+   "id": "GS-FRONT-07",
+   "bereich": "FRONT",
+   "aussage": "Die dünne Frontlinie hat nur 12 mm Frontstärke und ist mit integrierter Griffmulde kombiniert.",
+   "werte": [
+    12
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.169"
+   ]
+  },
+  {
+   "id": "GS-FRONT-08",
+   "bereich": "FRONT",
+   "aussage": "Keramikfront: 16 mm Dreischicht-Spanplatte mit 4 mm Keramik, Kanten auf Gehrung mit kleiner Fase verbunden.",
+   "werte": [
+    16,
+    4
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.175"
+   ]
+  },
+  {
+   "id": "GS-FRONT-09",
+   "bereich": "FRONT",
+   "aussage": "Natursteinfront: 8 mm melaminbeschichtete Trägerplatte mit 12 mm Naturstein, Kanten auf Gehrung gefast.",
+   "werte": [
+    8,
+    12
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.175"
+   ]
+  },
+  {
+   "id": "GS-FRONT-10",
+   "bereich": "FRONT",
+   "aussage": "Acrylglasfront in Metallicfarben: 2 mm transluzente Acrylglasschicht mit gefaster Kante; Aluminiumfront: Holzwerkstoffträger mit eloxiertem Aluminium beidseitig und an den Kanten, Kante gefast.",
+   "werte": [
+    2
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.173"
+   ]
+  },
+  {
+   "id": "GS-FRONT-11",
+   "bereich": "FRONT",
+   "aussage": "Glasfronten verwenden vergütetes Weißglas (matt oder glänzend) mit prismenartig abgeschrägter Glaskante und umlaufender Metallkante in Edelstahloptik.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.167"
+   ]
+  },
+  {
+   "id": "GS-FRONT-12",
+   "bereich": "FRONT",
+   "aussage": "Weitere Fronttypen: Laminat (feinstrukturiert), supermatte Anti-Fingerprint-Oberfläche, Metalloptik handbearbeitet, Metallic-Lack, seidenmatter Acryl mit antibakterieller Oberfläche, Lack in sehr großer Farbauswahl (hochglänzend bis supermatt), handgespachtelter Feinbeton auf lackiertem MDF.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.151",
+    "S.153",
+    "S.155",
+    "S.157",
+    "S.159",
+    "S.171"
+   ]
+  },
+  {
+   "id": "GS-FRONT-13",
+   "bereich": "FRONT",
+   "aussage": "Dieselbe Grundfarbpalette (helle, warme Töne bis tiefes Schwarz) wird über Laminat, Lack, Glas, Arbeitsplatte und Wandverkleidung abgestimmt angeboten; die Zuordnung zu Programmen erfolgt über Fußnoten-Matrix.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.139",
+    "S.151",
+    "S.161",
+    "S.168"
+   ]
+  },
+  {
+   "id": "GS-KORPUS-01",
+   "bereich": "KORPUS",
+   "aussage": "Der Katalog gliedert in vier Korpusgruppen: Unterschränke, Oberschränke (Wandschränke), Mittelschränke (zwischen Ober- und Hochschrank) und Hochschränke; grifflose Linien kennen zusätzlich Aufsatzschränke.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.178",
+    "S.179",
+    "S.180"
+   ]
+  },
+  {
+   "id": "GS-KORPUS-02",
+   "bereich": "KORPUS",
+   "aussage": "Arbeitsplatten-Materialien: Laminat, Keramik, Kompaktstoff (nur 10 mm stark mit sichtbarem schwarzen Kern oder Dekorkante), Glas 12 mm, Massivholz in 20/30/40/60 mm, Naturstein.",
+   "werte": [
+    10,
+    12,
+    20,
+    30,
+    40,
+    60
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.139",
+    "S.143",
+    "S.145",
+    "S.147"
+   ]
+  },
+  {
+   "id": "GS-KORPUS-03",
+   "bereich": "KORPUS",
+   "aussage": "Kompaktstoff ist auch für Seitenwangen und Regalkanten einsetzbar; Spülen werden unterbündig eingeklebt.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.143"
+   ]
+  },
+  {
+   "id": "GS-KORPUS-04",
+   "bereich": "KORPUS",
+   "aussage": "Foto-Sonderelemente: offene Nischenregale zwischen Hochschränken mit Glasböden und Beleuchtung; Glastür-Oberschränke mit schwarzem Metallrahmen; an der Decke abgehängter Regal-/Hängerahmen mit Dunstabzug.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.127",
+    "S.128",
+    "S.132"
+   ]
+  },
+  {
+   "id": "GS-KORPUS-05",
+   "bereich": "KORPUS",
+   "aussage": "Foto: zwei Einbaugeräte nebeneinander mittig in einer Hochschrank-Wand, die Nachbarfronten mit gleichem Furnier laufen rundum an die Geräteblenden.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.129"
+   ]
+  },
+  {
+   "id": "GS-KORPUS-06",
+   "bereich": "KORPUS",
+   "aussage": "Foto: schwarzer, zurückgesetzter Sockel (Schattenfuge) unter Insel und Zeile.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.127",
+    "S.128"
+   ]
+  },
+  {
+   "id": "GS-GRIFF-01",
+   "bereich": "GRIFF",
+   "aussage": "Grifflose Variante mit abgeschrägter Frontkante: obere Griffmulde sitzt direkt unter dem ersten Schubkastenband unter der Arbeitsplatte.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.177"
+   ]
+  },
+  {
+   "id": "GS-GRIFF-02",
+   "bereich": "GRIFF",
+   "aussage": "Zweite grifflose Variante mit gerader, zurückgesetzter Frontkante: bei 800-mm-Korpus liegt die Griffmulde direkt unter der Arbeitsplatte.",
+   "werte": [
+    800
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.177"
+   ]
+  },
+  {
+   "id": "GS-GRIFF-03",
+   "bereich": "GRIFF",
+   "aussage": "Fotos zeigen außerdem einen aufgesetzten Metall-Griffschuh auf Furnierfront und eine durchgehende waagerechte Griffleiste zwischen Auszugsreihe und Türfront; Hochschränke wirken grifflos.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.127",
+    "S.130",
+    "S.131"
+   ]
+  },
+  {
+   "id": "GS-LAYOUT-01",
+   "bereich": "LAYOUT",
+   "aussage": "Foto-Beispiel: Insel mit überstehender Natursteinplatte und seitlicher Platten-Verblendung gegenüber einer Wandzeile aus Hoch- und Unterschränken; Kochfeld in der Zeile, Spüle in zweiter Zeile mit Steinrückwand.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.127",
+    "S.128",
+    "S.133"
+   ]
+  },
+  {
+   "id": "GS-LAYOUT-02",
+   "bereich": "LAYOUT",
+   "aussage": "Foto: Hochschränke rahmen die Zeile ein (Fensterseite und Raumseite), dazwischen Unterschränke mit durchlaufender Platte und Oberschränke mit Glasfronten.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.127",
+    "S.131"
+   ]
+  },
+  {
+   "id": "GS-ANSCHLUSS-01",
+   "bereich": "ANSCHLUSS",
+   "aussage": "Foto: Spüle als unterbündiges Becken in Steinplatte, Armatur auf der Platte; Lichtleiste auf schmaler Konsole zwischen Rückwand und Oberschränken.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.133"
+   ]
+  },
+  {
+   "id": "GS-ANSCHLUSS-02",
+   "bereich": "ANSCHLUSS",
+   "aussage": "Unterbauleuchte und Konsolenboden liegen im Nischenbereich; das Nischenmaß 542,5 mm bleibt dafür frei.",
+   "werte": [
+    542.5
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.131",
+    "S.178"
+   ]
+  },
+  {
+   "id": "GS-REGEL-01",
+   "bereich": "REGEL",
+   "aussage": "Oberschrank-Unterkante ergibt sich aus Sockel + Korpus + Platte + Nische (z. B. Linie 730: 140+730+39+542,5 = 1451,5 mm); Oberkante liegt dann auf einer der drei festen Gesamthöhen.",
+   "werte": [
+    1451.5
+   ],
+   "einheit": "mm",
+   "belege": [
+    "S.178"
+   ]
+  },
+  {
+   "id": "GS-REGEL-02",
+   "bereich": "REGEL",
+   "aussage": "Hochschränke und Oberschränke enden planmäßig auf denselben drei Gesamthöhen je Linie; ungleiche Oberkanten entstehen nur über die Aufsatz- und Mittelschrank-Höhen.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.178",
+    "S.179",
+    "S.180"
+   ]
+  },
+  {
+   "id": "GS-REGEL-03",
+   "bereich": "REGEL",
+   "aussage": "Die Linienwahl (730/800/860) bestimmt gleichzeitig Arbeitshöhe und Sockelstandard; die Arbeitshöhe wird also über die Korpushöhe statt frei eingestellt.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.178"
+   ]
+  },
+  {
+   "id": "GS-REGEL-04",
+   "bereich": "REGEL",
+   "aussage": "Foto-Hinweis: Frontstruktur (Rillen) und Maserung sind so gearbeitet, dass sie über Türen, Teilfugen und Geräteblenden optisch zusammenlaufen.",
+   "werte": [],
+   "einheit": "",
+   "belege": [
+    "S.129",
+    "S.134"
+   ]
+  }
+ ],
+ "vergleich_studio": [
+  "Raster: Katalog hat feste Korpushöhen 730/800/860 (Vielfache von 132,5 mm); Studio plant ohne Raster, Korpus ca. 810 mm, Fugen 1,5 bis 2 mm je Kante statt modularer Frontreihen.",
+  "Sockel/Arbeitshöhe: Katalog liefert drei Sockelstandards (140/100/70, frei 70 bis 200) mit Plattenstärke 39 und daraus 909/939/969 mm; Studio nutzt Sockel ca. 100 und OK Arbeitsplatte ca. 930 mm, also ähnlich der mittleren Linie, aber mm-genau statt aus Katalogstufen.",
+  "Oberschränke: Der Katalog plant ein Nischenmaß von 542,5 mm mit systematischen Oberschrank-, Mittelschrank- und Aufsatzhöhen; das Studio verzichtet meist auf Oberschränke.",
+  "Restfeld: Katalogzeilen füllen Lücken mit Passmodulen im Raster; das Studio löst Restmaße als Funktionsfeld.",
+  "Gestaltung: Katalog arbeitet mit Griffmulden-Systemen und durchlaufender Maserung über das Modul; Studio zeichnet Maßzeichnungen und Drei-Seiten-Ansichten mit eigenem Stil."
+ ],
+ "offen": [
+  "Seitenzählung: gedruckte Seitenzahl ist PDF-Seite minus 1; Belege S.n sind PDF-Seiten.",
+  "Breiten, Tiefen, Innenausstattung, Ecke/Spüle-Korpus und Planungsbeispiele fehlen in diesem Abschnitt (hauptsächlich Oberflächen, Arbeitsplatten, Maßtafeln).",
+  "Zahlen der Maßtafeln aus Diagrammen abgelesen (cm im Original, hier in mm umgerechnet); Linienzuordnung der niedrigen Unterschränke ist Deutung.",
+  "Die meisten Seiten sind Farb-/Materialkarten ohne planungsrelevante Maße und wurden nur kategorisch erfasst."
+ ]
+}

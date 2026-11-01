@@ -1,0 +1,363 @@
+{
+  "runde": "A",
+  "gruppe": "G3",
+  "gelesen": [
+    {"template": "T38", "seiten": "9/9", "art": "Layout", "inhalt": "Vorplanungs-Mappe einer Küche: Deckblatt, Draufsicht 1:25, Ansichten Zeile / Halbinsel Kochseite / Halbinsel Rückseite / Bank / Hochschrankwand, zwei Perspektiven (Linienzeichnung mit Planraster A-C/1-4)."},
+    {"template": "T40", "seiten": "7/7", "art": "Layout", "inhalt": "Vorabzug einer Küche mit Zeile, Insel und Hochschrank-Block: 3 Perspektiven, Grundriss 1:25, Ansichten A (Zeile), B und C (Insel), mit Geräte-/Zubehör-/Materialliste im rechten Textfeld."},
+    {"template": "T41", "seiten": "4/4", "art": "Layout", "inhalt": "Vorabzug einer Edelstahl-Küchennische 1:10: Perspektive, Frontansicht, Frontansicht mit Innenleben, Seitenansicht rechts mit Steckdosenhinweis und Tiefenmaßen."},
+    {"template": "T06", "seiten": "5/5", "art": "Moodboard", "inhalt": "Moodboard Küche: Deckblatt, zwei Materialseiten (heller Quarzstein/greige Fronten bzw. dunkler Naturstein/weißgraue Fronten mit Inspirationsfotos), Geräteseite, Schlussseite."},
+    {"template": "T07", "seiten": "4/4", "art": "Moodboard", "inhalt": "Moodboard Küche: Titelseite, Materialseite (Naturstein-AP, zwei kräftige Lackfarben für Zeile und Insel, Armatur), Geräteseite, Skizze mit geschwungener Insel und gerundetem Hochschrankblock."},
+    {"template": "T08", "seiten": "4/4", "art": "Moodboard", "inhalt": "Moodboard einer Ankleide (keine Küche, aber Insel, Rahmenfronten, Knopfgriffe): Titelseite und drei Materialvarianten V1-V3."},
+    {"template": "T09", "seiten": "6/6", "art": "Moodboard", "inhalt": "Küchenentwurf-Moodboard: Titelseite, Grundriss mit Hochschrankwand/Zeile/zwei Körpern im Raum, zwei Perspektiv-Ansichten, Materialseite, Inspirationsseite (Kassettenfronten, Taschentüren, Lamellen), Geräteseite."}
+  ],
+
+  "kuechen": [
+    {
+      "id": "T38-K1",
+      "belege": ["T38 S.2", "T38 S.3", "T38 S.4", "T38 S.5", "T38 S.6", "T38 S.7", "T38 S.8", "T38 S.9"],
+      "form": "halbinsel",
+      "raum": {
+        "wandbezug": "Zeile an Außenwand in tiefer Nische zwischen Wandpfeilern; Kochfeld-Halbinsel steht senkrecht am linken Zeilenende (Rundung am freien Ende); Hochschrankwand (4010) liegt separat an der gegenüberliegenden Wand; Sitzbank an rechter Seitenwand; Esstisch frei im Raum zwischen Zeile und Hochschrankwand.",
+        "fenster_tuer": "Wandpfeiler/Nischen in der Zeilenwand (Wandmaße 365/380/155/1134/300), Doppelflügeltür in der rechten Wand unten.",
+        "abstand_wand_decke": "Hochschrankwand 2390 ab Boden inkl. Sockel, Fuge 30 zu beiden Seitenwänden; Raumhöhe nicht angegeben.",
+        "freiraum_gang_mm": 790
+      },
+      "laengen_mm": [3270, 2759, 2699, 4010, 2212],
+      "hoehen": {"sockel": 100, "ok_ap": 930, "ap_d": 20, "oberschrank_uk": null, "hochschrank_h": 2390, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": 600, "oberschrank": null, "insel": 1100},
+      "schraenke": [
+        {"pos": 1, "kategorie": "unterschrank", "typ": "US-T2", "b": 950, "h": 807, "t": null, "fronten": "2 Flügeltüren, Push-to-open", "innen": "Einlegeböden, feste Mittelwand; Breite nicht bemaßt, aus Zeichnung geschätzt", "geraet": null},
+        {"pos": 2, "kategorie": "unterschrank", "typ": "US-S1I", "b": 656, "h": 807, "t": null, "fronten": "1 durchgehende Frontauszug-Front", "innen": "4 innenliegende Schübe, Magnet-Clip an oberster Schublade", "geraet": null},
+        {"pos": 3, "kategorie": "unterschrank", "typ": "US-GSP", "b": 600, "h": 807, "t": null, "fronten": "1 Gerätefront", "innen": "Geschirrspüler", "geraet": "gsp"},
+        {"pos": 4, "kategorie": "unterschrank", "typ": "US-SP", "b": 800, "h": 807, "t": null, "fronten": "1 Auszug", "innen": "Müllsystem; Becken 700 x 400 liegt darüber, mittig", "geraet": "spuele"},
+        {"pos": 5, "kategorie": "unterschrank", "typ": "US-S1I", "b": 600, "h": 807, "t": null, "fronten": "1 durchgehende Frontauszug-Front", "innen": "3 innenliegende Schübe, Magnet-Clip an oberster Schublade", "geraet": null},
+        {"pos": 6, "kategorie": "unterschrank", "typ": "US-T1", "b": 470, "h": 807, "t": null, "fronten": "1 Tür", "innen": "Einlegeböden", "geraet": null},
+        {"pos": 7, "kategorie": "sonstiges", "typ": "NEU:Passblende", "b": 70, "h": 807, "t": null, "fronten": "Blende", "innen": "keine; je 70 am Zeilenende (rechts, und links vor dem ersten Schrank)", "geraet": null},
+        {"pos": 8, "kategorie": "insel", "typ": "NEU:Halbinsel-Endkörper-rund", "b": 500, "h": 807, "t": null, "fronten": "geschlossen / gerundet, ohne Beschriftung", "innen": "nicht angegeben", "geraet": null},
+        {"pos": 9, "kategorie": "insel", "typ": "US-S1I", "b": 600, "h": 807, "t": null, "fronten": "1 durchgehende Frontauszug-Front (Halbinsel Kochseite)", "innen": "3 innenliegende Schübe, Magnet-Clip an oberster Schublade", "geraet": null},
+        {"pos": 10, "kategorie": "insel", "typ": "US-KF", "b": 900, "h": 807, "t": null, "fronten": "Blende 150, dann 2 Auszüge 277 und 320 (dazwischen/oben je ca. 30)", "innen": "Blende trägt Bedienknebel und Steckdosen; oberer Auszug mit innenliegendem Schub; Umluftkanal des Kochfelds nimmt Tiefe", "geraet": "kochfeld"},
+        {"pos": 11, "kategorie": "insel", "typ": "US-AP", "b": 270, "h": 807, "t": null, "fronten": "1 schmale Tür", "innen": "Gewürz-/Öl-Auszug (Apothekerprinzip) hinter Tür", "geraet": null},
+        {"pos": 12, "kategorie": "insel", "typ": "US-T1", "b": 380, "h": 807, "t": null, "fronten": "1 Tür", "innen": "Einlegeböden", "geraet": null},
+        {"pos": 13, "kategorie": "insel", "typ": "US-OF", "b": 520, "h": 810, "t": null, "fronten": "offen (Halbinsel Rückseite)", "innen": "3 Fächer ca. 190 / 280 / 280, Böden 19; Eiche Vollholz", "geraet": null},
+        {"pos": 14, "kategorie": "insel", "typ": "US-T1", "b": 535, "h": 810, "t": null, "fronten": "1 Tür, Push-to-open (Rückseite)", "innen": "Einlegeböden; Tiefe prüfen wegen Umluftkanal", "geraet": null},
+        {"pos": 15, "kategorie": "insel", "typ": "US-T1", "b": 535, "h": 810, "t": null, "fronten": "1 Tür, Push-to-open (Rückseite)", "innen": "Einlegeböden; Tiefe prüfen wegen Umluftkanal", "geraet": null},
+        {"pos": 16, "kategorie": "insel", "typ": "US-T1", "b": 535, "h": 810, "t": null, "fronten": "1 Tür, Push-to-open (Rückseite)", "innen": "Einlegeböden", "geraet": null},
+        {"pos": 17, "kategorie": "insel", "typ": "NEU:Endkörper-geschlossen", "b": 420, "h": 810, "t": null, "fronten": "geschlossene Fläche (Rückseite, Richtung Rundung)", "innen": "nicht angegeben", "geraet": null},
+        {"pos": 18, "kategorie": "hochschrank", "typ": "NEU:HS-Putzschrank", "b": 350, "h": 2290, "t": 600, "fronten": "1 Tür (Push-to-open) unten 1752, Aufsatztür oben 540", "innen": "Einlegeboden, Raum für Putzutensilien, Möbelsteckdose für Staubsauger unten, Bodenmaß 1400", "geraet": null},
+        {"pos": 19, "kategorie": "hochschrank", "typ": "NEU:HS-Vorratsauszug", "b": 600, "h": 2290, "t": 600, "fronten": "1 Tür unten, Aufsatztür oben", "innen": "Hochauszug 60 x 170 mit Türregal und Tablaren", "geraet": null},
+        {"pos": 20, "kategorie": "hochschrank", "typ": "NEU:HS-Tür-Böden", "b": 600, "h": 2290, "t": 600, "fronten": "1 Tür unten, Aufsatztür oben", "innen": "Einlegeböden", "geraet": null},
+        {"pos": 21, "kategorie": "hochschrank", "typ": "NEU:HS-Gerätenische-Dampf", "b": 600, "h": 2290, "t": 600, "fronten": "von oben: Lifttür für Mikrowellennische 550 x 260 (Zone 345), Dampfgarer (Zone 600), Weinschublade, Frontauszug (Zone 810); darüber Aufsatztür 540", "innen": "Weinschublade; Frontauszug mit innenliegenden Schüben (Besteck, Stauraum, Papier)", "geraet": "dampfgarer + mikrowelle"},
+        {"pos": 22, "kategorie": "hochschrank", "typ": "NEU:HS-Gerätenische-Backofen", "b": 600, "h": 2290, "t": 600, "fronten": "oben Klappe (Zone 345), Backofen (Zone 600), unten Tür mit Böden (Zone 810); Aufsatztür 540", "innen": "Einlegeböden unten", "geraet": "backofen"},
+        {"pos": 23, "kategorie": "hochschrank", "typ": "NEU:HS-Gefrier", "b": 600, "h": 2290, "t": 600, "fronten": "1 Tür unten mit Stangengriff, Aufsatztür oben", "innen": "Gefrierschrank", "geraet": "gefrierschrank"},
+        {"pos": 24, "kategorie": "hochschrank", "typ": "NEU:HS-Kühl", "b": 600, "h": 2290, "t": 600, "fronten": "1 Tür unten mit Stangengriff, Aufsatztür oben", "innen": "Kühlschrank", "geraet": "kuehlschrank"},
+        {"pos": 25, "kategorie": "sonstiges", "typ": "NEU:Sitzbank-mit-Schrank", "b": 2123, "h": 907, "t": null, "fronten": "links Tür 400 (Einlegeböden), daneben Bank 1723 mit Lehne", "innen": "Sitzhöhe 440, Lehnenoberkante 907 (Lehne 470); Bank Wange 19, Blende 70", "geraet": null}
+      ],
+      "geraete_reihenfolge": "Zeile links→rechts: Flügeltürschrank – Schrank mit 4 Innenschüben – GSP – Spüle über Müllauszug – 3-Schub-Schrank – Türschrank. Halbinsel (Kochseite): Rundung – 3-Schub-Schrank – Kochfeld (Muldenlüfter) – Gewürzauszug – Türschrank. Hochschrankwand: Putzschrank – Vorratsauszug – Böden – Dampfgarer/Mikro-Spalte – Backofen-Spalte – Gefrier – Kühl.",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": "GSP unmittelbar links neben dem Schrank unter dem Becken", "ks_spuele_mm": null},
+      "anschluesse": {
+        "passblenden": "70 an Zeilen- und Halbinselende und an der Bank; Hochschrankwand stattdessen 30 Fuge zur Wand.",
+        "fuellstuecke": "keine gezeichnet.",
+        "stellseiten": "Zwischenwangen 19 zwischen Türfeldern der Halbinsel-Rückseite.",
+        "wand_decken_anschluss": "Hochschrankwand 2390 mit separatem Aufsatzfeld 540 über 1752; Decke nicht dargestellt.",
+        "sockel": "100, an den Frontfugen gestoßen; Halbinselrückseite hat 80 Rückversatz am Ende.",
+        "eckloesung": "keine Eckschränke; Halbinsel schließt senkrecht ans Zeilenende an, freies Ende halbrund."
+      },
+      "griffe": "Zeile: horizontale Griffleiste oben auf der Front (jede Front); Halbinsel und Rückseite, Flügeltür, Putzschrank: Push-to-open; Hochschrank Türen: vertikale Stangengriffe (Kühl/Gefrier und 2 Türpaare), Gerätenischen mit horizontaler Griffleiste.",
+      "material_farbe": "Zeile: Anti-Fingerprint-Laminat in zwei warmen Greige-Tönen, Kanten farbgleich, Auszüge Eiche Vollholz; Hochschrank: Linoleum-Front hell; AP Stein (tbd); offenes Regal und Bank-Variante: Eiche Vollholz; Bank-Variante 1 farbgleich zur Zeile.",
+      "plan_widersprueche": [
+        "Zeile S.3: Höhe 930 gesamt, aber 100 + 807 + 20 = 927 (3 mm); Halbinsel Rückseite S.5 nennt 810 statt 807 bei sonst gleichem Aufbau (100 + 810 + 20 = 930).",
+        "Maßketten summieren nicht exakt: Zeile 656+600+800+600+470+2x70 = 3266 statt 3270; Halbinsel 30+500+600+900+270+380+70 = 2750 statt 2759; Hochschrank 540 + 1752 + 100 = 2392 statt 2390; 810+600+345 = 1755 statt 1752.",
+        "Titelblock nennt Maßstab 1:25, die Ansichten Zeile und Hochschrank sind aber mit ca. 1:20 gezeichnet (Draufsicht 1:25 stimmt).",
+        "Gerätefront des Geschirrspülers in der Zeile mit Kreuz (Auszug-Symbol) gezeichnet, in T40/T41 mit Dreieck (Klappe).",
+        "Halbinsel: Kochseite beginnt mit 500, Rückseite mit offenem Regal 520; Rückseite 3 x 535 statt dem sonst üblichen 600."
+      ]
+    },
+
+    {
+      "id": "T40-K1",
+      "belege": ["T40 S.1", "T40 S.2", "T40 S.3", "T40 S.4", "T40 S.5", "T40 S.6", "T40 S.7"],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Zeile einseitig an der oberen Wand, Hochschrank-Block am rechten Zeilenende (3 Hochschränke, bündig in der Zeile); Insel parallel zur Zeile, frei im Raum, etwa mittig mit ca. 1411 links und 1831 rechts Abstand zu den Seitenwänden.",
+        "fenster_tuer": "Fenster in Zeilenwand 860 breit, 1300 hoch, Unterkante 1000 (70 über AP-OK), nicht über der Spüle sondern links daneben; hohe Fenster/Fenstertür rechte Schmalseite (Brüstung 700, Höhe 2800); Doppelflügeltür und Einzeltür in der Gegenwand.",
+        "abstand_wand_decke": "Hochschrank 3200 hoch bei lichter Raumhöhe 3790, also 590 Luft zur Decke.",
+        "freiraum_gang_mm": 1100
+      },
+      "laengen_mm": [6040, 2798],
+      "hoehen": {"sockel": 100, "ok_ap": 930, "ap_d": 20, "oberschrank_uk": null, "hochschrank_h": 3200, "decke": 3790},
+      "tiefen": {"unterschrank": 650, "hochschrank": 650, "oberschrank": null, "insel": 1204},
+      "schraenke": [
+        {"pos": 1, "kategorie": "unterschrank", "typ": "US-Sn", "b": 580, "h": 810, "t": null, "fronten": "3 Auszüge ca. 185 / 308 / 310", "innen": "Schubkästen Eiche massiv, fingergezinkt, farblos lackiert", "geraet": null},
+        {"pos": 2, "kategorie": "unterschrank", "typ": "US-Sn", "b": 600, "h": 810, "t": null, "fronten": "3 Auszüge ca. 185 / 308 / 310", "innen": "Schubkästen", "geraet": null},
+        {"pos": 3, "kategorie": "unterschrank", "typ": "US-Sn", "b": 600, "h": 810, "t": null, "fronten": "3 Auszüge ca. 185 / 308 / 310", "innen": "Schubkästen", "geraet": null},
+        {"pos": 4, "kategorie": "unterschrank", "typ": "US-Sn", "b": 600, "h": 810, "t": null, "fronten": "3 Auszüge ca. 185 / 308 / 310", "innen": "Schubkästen", "geraet": null},
+        {"pos": 5, "kategorie": "unterschrank", "typ": "US-SP", "b": 600, "h": 810, "t": null, "fronten": "1 Auszug", "innen": "Müllauszug; Unterbau-Becken 50 cm darüber", "geraet": "spuele"},
+        {"pos": 6, "kategorie": "unterschrank", "typ": "US-GSP", "b": 600, "h": 810, "t": null, "fronten": "1 Gerätefront (Klappe)", "innen": "Geschirrspüler", "geraet": "gsp"},
+        {"pos": 7, "kategorie": "unterschrank", "typ": "US-Sn", "b": 600, "h": 810, "t": null, "fronten": "3 Auszüge ca. 185 / 308 / 310", "innen": "Schubkästen", "geraet": null},
+        {"pos": 8, "kategorie": "hochschrank", "typ": "NEU:HS-Kühl-Gefrier", "b": 600, "h": 3100, "t": 650, "fronten": "3 Türen übereinander ca. 806 / 1063 / 1220", "innen": "Türen mit Böden; Kühl-Gefrier-Kombi", "geraet": "kuehl-gefrierkombi"},
+        {"pos": 9, "kategorie": "hochschrank", "typ": "NEU:HS-Gerätenische-Ofen-Dampf", "b": 600, "h": 3100, "t": 650, "fronten": "unten Schub ca. 334, Backofen-Nische ca. 594, Dampfgarer-Nische ca. 458, darüber 1 Tür ca. 1714 mit Böden", "innen": "Ofen/Mikro-Kombi, Kombisteamer, Schub", "geraet": "backofen + dampfgarer"},
+        {"pos": 10, "kategorie": "hochschrank", "typ": "NEU:HS-Ordnungssystem", "b": 600, "h": 3100, "t": 650, "fronten": "3 Türen übereinander ca. 806 / 1063 / 1220", "innen": "Türen mit Böden, Hochschrank-Auszugssystem", "geraet": null},
+        {"pos": 11, "kategorie": "insel", "typ": "US-AP", "b": 330, "h": 810, "t": null, "fronten": "1 Auszug (Apothekerauszug)", "innen": "Apothekerauszug", "geraet": null},
+        {"pos": 12, "kategorie": "insel", "typ": "US-Sn", "b": 600, "h": 810, "t": null, "fronten": "3 Auszüge ca. 185 / 308 / 310", "innen": "Schubkästen", "geraet": null},
+        {"pos": 13, "kategorie": "insel", "typ": "US-KF", "b": 900, "h": 810, "t": null, "fronten": "Kochfeldblende ca. 185, darunter 2 Schübe ca. 308 / 310", "innen": "Schübe", "geraet": "induktionskochfeld"},
+        {"pos": 14, "kategorie": "insel", "typ": "US-Sn", "b": 600, "h": 810, "t": null, "fronten": "3 Auszüge ca. 185 / 308 / 310", "innen": "Schubkästen", "geraet": null},
+        {"pos": 15, "kategorie": "insel", "typ": "US-AP", "b": 330, "h": 810, "t": null, "fronten": "1 Auszug (Apothekerauszug)", "innen": "Apothekerauszug", "geraet": null}
+      ],
+      "geraete_reihenfolge": "Zeile links→rechts: 4 Schubschränke – Spüle über Müllauszug – GSP – Schubschrank – Hochschrank Kühl-Gefrier – Hochschrank Backofen/Dampfgarer – Hochschrank Ordnungssystem. Insel (Kochfeld mittig): Apotheker – Schübe – Kochfeld – Schübe – Apotheker (symmetrisch).",
+      "abstaende": {"spuele_kochfeld_mm": 1700, "kochfeld_wand_mm": null, "gsp_neben_spuele": "GSP unmittelbar rechts neben dem Spülen-/Müllmodul", "ks_spuele_mm": 1500},
+      "anschluesse": {
+        "passblenden": "keine gezeichnet; Zeilen-Modulkette 580 + 9 x 600 = 5980 gegenüber Wandmaß 6040 (60 Differenz, Ausgleich nicht dargestellt).",
+        "fuellstuecke": "nicht dargestellt.",
+        "stellseiten": "Insel: Stellseiten 19 an beiden Enden, Eiche hell furniert; Insel-Korpus 2760 + 2 x 19 = 2798.",
+        "wand_decken_anschluss": "Hochschrank endet 590 unter Decke, Anschluss zur Decke nicht dargestellt.",
+        "sockel": "100, farbgleich mit Zeilenfront lackiert; Blenden ebenfalls farbgleich.",
+        "eckloesung": "keine Ecke; Hochschrank-Block endet an der Seitenwand mit Fensterband."
+      },
+      "griffe": "Griffleiste, bündig auf Front gesetzt: horizontale Leiste am oberen Rand jeder Front (Zeile und Insel); Hochschränke ohne sichtbare Griffe gezeichnet (Push vermutet, nicht beschriftet).",
+      "material_farbe": "Zeile: Front MDF lackiert in warmem Greige, Korpus Dekorspan Grau-Taupe, Sockel und Blenden MDF lackiert farbgleich; Insel: Front und Stellseite MDF furniert Eiche hell; Schubkästen Eiche massiv; AP Naturstein geledert, 20 mm.",
+      "plan_widersprueche": [
+        "Zeilenlänge 6040 stimmt nicht mit der Modulkette 580 + 9 x 600 = 5980 überein (60).",
+        "Schubfronten 184,5 + 308,3 + 309,8 + 100 Sockel + 20 AP = 922,6, angegeben sind 930 (Fugen nicht bemaßt).",
+        "Hochschrank: 806,5 + 1063 + 1220,5 + 100 = 3190 statt 3200; Gerätenische 100 + 333,7 + 594 + 458 + 1714,3 = 3200 stimmt.",
+        "Ansicht C trägt im Plankopf die Bezeichnung Ansicht B (Beschriftungsfehler)."
+      ]
+    },
+
+    {
+      "id": "T41-K1",
+      "belege": ["T41 S.1", "T41 S.2", "T41 S.3", "T41 S.4"],
+      "form": "nische",
+      "raum": {
+        "wandbezug": "Einbau in eine Wandnische, drei 600er-Module zwischen zwei Stellseiten, Nische oben offen (leere Wand über der Arbeitsplatte).",
+        "fenster_tuer": "keine.",
+        "abstand_wand_decke": "Nische 2200 hoch, Stellseiten 2170 (100 Sockel + 825 + 5 + 1235 + 5), oben 5 Fuge unter der Deckplatte; Nischenwand 1235 über der AP.",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [1875, 1800],
+      "hoehen": {"sockel": 100, "ok_ap": 925, "ap_d": 35, "oberschrank_uk": null, "hochschrank_h": 2170, "decke": 2200},
+      "tiefen": {"unterschrank": 574, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [
+        {"pos": 1, "kategorie": "unterschrank", "typ": "US-GSP", "b": 600, "h": 790, "t": null, "fronten": "1 Gerätefront (Klappe, Dreieck-Symbol)", "innen": "Geschirrspüler", "geraet": "gsp"},
+        {"pos": 2, "kategorie": "unterschrank", "typ": "US-SP", "b": 600, "h": 790, "t": null, "fronten": "1 Auszug", "innen": "Müllauszug (unten), Kochendwasser-Technik oben; Unterbau-Becken darüber (Armatur mittig über diesem Modul)", "geraet": "spuele"},
+        {"pos": 3, "kategorie": "unterschrank", "typ": "US-S1I", "b": 600, "h": 790, "t": null, "fronten": "1 Auszug-Front", "innen": "2 innenliegende Schübe 115 / 115 und 1 Auszug 235", "geraet": null}
+      ],
+      "geraete_reihenfolge": "GSP – Spüle über Müllauszug mit Technik – Schubauszug (links→rechts); Kühlschrank steht in der Geräteliste, ist in der Nische aber nicht gezeichnet.",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": "GSP direkt links neben dem Spülenmodul", "ks_spuele_mm": null},
+      "anschluesse": {
+        "passblenden": "keine.",
+        "fuellstuecke": "keine; Randfugen 5 mm zur Wand beidseitig.",
+        "stellseiten": "Stellseiten Edelstahl, Tiefe 600 an der Frontkante, Korpus 574; Vorstand der Stellseite vor der Front ca. 26; je Stellseite 2 Möbelsteckdosen ca. 100 über der AP nahe Wand. Nischenbreite 1875 = 3 x 600 + 2 x ca. 32,5 + 2 x 5.",
+        "wand_decken_anschluss": "5 Fuge Stellseite/Deckplatte; Deckplatte liegt auf den Stellseiten.",
+        "sockel": "100, Rücksprung ca. 90, stößt an den Frontfugen (Edelstahl).",
+        "eckloesung": "keine."
+      },
+      "griffe": "griffmulde (Front-Überstand an der Mulde 15 bemaßt, 35 = AP-Stärke).",
+      "material_farbe": "Edelstahl-Optik silbermatt (Fronten, Stellseiten, Sockel, Arbeitsplatte 35 mm); Korpus Melamin (tbd).",
+      "plan_widersprueche": [
+        "Geräteliste führt einen Kühlschrank, in keiner Ansicht dargestellt.",
+        "Nischenhöhe 2200 gegenüber Stellseitenhöhe 2170 (Differenz nicht erklärt)."
+      ]
+    },
+
+    {
+      "id": "T09-K1",
+      "belege": ["T09 S.2", "T09 S.3", "T09 S.4", "T09 S.5", "T09 S.6"],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Hochschrankwand 4160 breit mit sieben Türachsen und Aufsatzreihe an der Rückwand, rechts daneben Hochschrankgruppe 2050 mit Ofenspalte; davor frei im Raum ein Tisch (ca. 2030 x 950, vermutet) und eine Insel 2700 mit halbrundem linken Ende.",
+        "fenster_tuer": "Raum mit Pfeilern und Wandversprüngen, keine Fenster erkennbar.",
+        "abstand_wand_decke": "nicht bemaßt; Hochschrankwand läuft bis unter die Decke mit zweigeteilter Front (unten ca. 2/3, oben ca. 1/3).",
+        "freiraum_gang_mm": 1000
+      },
+      "laengen_mm": [4160, 2050, 2700, 2030],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": null, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": 940},
+      "schraenke": [
+        {"pos": 1, "kategorie": "hochschrank", "typ": "NEU:HS-Wand-7-Türen", "b": 4160, "h": null, "t": null, "fronten": "7 schmale hohe Türen, jeweils mit Aufsatztür oben (Teilung etwa bei 2/3 Höhe)", "innen": "nicht angegeben", "geraet": null},
+        {"pos": 2, "kategorie": "hochschrank", "typ": "NEU:HS-Gerätegruppe", "b": 2050, "h": null, "t": null, "fronten": "4 Türachsen, in einer Achse Backofen mit Klappe darüber und Schub darunter", "innen": "Backofen, Kühl- und Gefrierschrank nebeneinander laut Geräteseite", "geraet": "backofen"},
+        {"pos": 3, "kategorie": "insel", "typ": "NEU:Insel-halbrund", "b": 2700, "h": null, "t": 940, "fronten": "nicht gezeichnet", "innen": "Muldenlüfter-Kochfeld laut Geräteseite", "geraet": "kochfeld"}
+      ],
+      "geraete_reihenfolge": "Hochschrankwand mit Ofen, Kühl/Gefrier nebeneinander; Kochfeld und Spüle (Einzelbecken) nicht lokalisiert.",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {
+        "passblenden": "nicht erkennbar.",
+        "fuellstuecke": "nicht erkennbar.",
+        "stellseiten": "nicht erkennbar.",
+        "wand_decken_anschluss": "nicht erkennbar.",
+        "sockel": "nicht erkennbar.",
+        "eckloesung": "keine; Insel hat halbrundes Ende (Radius = halbe Tiefe)."
+      },
+      "griffe": "keine Griffe gezeichnet; Inspiration zeigt Kassettenfronten, Taschentüren und vertikale Lamellen.",
+      "material_farbe": "Lackfront Salbei (grüngrau), Weißmarmor als AP/Rückwand, Armatur und Becken in goldenem Messing-Ton, Schalter/Steckdosen aus Porzellan, Parkett Fischgrät geweißt.",
+      "plan_widersprueche": [
+        "Grundriss nur grob lesbar; Gänge 1423 (Wand-Tisch/Insel), 1250 (Tisch-Insel), 1000 (rechte Zeile-Insel), 800 (Insel-Pfeiler) abgelesen, nicht verifiziert."
+      ]
+    },
+
+    {
+      "id": "T07-K1",
+      "belege": ["T07 S.2", "T07 S.3", "T07 S.4"],
+      "form": "insel",
+      "raum": {
+        "wandbezug": "Skizze: Zeile mit Spüle an der Seitenwand, Insel mit Spüle und Kochfeld frei im Raum, Hochschrankblock mit zwei übereinander liegenden Öfen an der rechten Wand.",
+        "fenster_tuer": "eine Tür oder ein Bild links im Hintergrund.",
+        "abstand_wand_decke": "nicht bemaßt.",
+        "freiraum_gang_mm": null
+      },
+      "laengen_mm": [],
+      "hoehen": {"sockel": null, "ok_ap": null, "ap_d": 20, "oberschrank_uk": null, "hochschrank_h": null, "decke": null},
+      "tiefen": {"unterschrank": null, "hochschrank": null, "oberschrank": null, "insel": null},
+      "schraenke": [],
+      "geraete_reihenfolge": "Hochschrankblock: Dampfgarer über Backofen übereinander, darunter Schub, daneben Kühlschrank und Weinklimaschrank (laut Geräteseite); Kochfeld und Spüle in der Insel.",
+      "abstaende": {"spuele_kochfeld_mm": null, "kochfeld_wand_mm": null, "gsp_neben_spuele": null, "ks_spuele_mm": null},
+      "anschluesse": {"passblenden": "keine Angabe.", "fuellstuecke": "keine Angabe.", "stellseiten": "keine Angabe.", "wand_decken_anschluss": "keine Angabe.", "sockel": "keine Angabe.", "eckloesung": "Ecken an Insel und Hochschrankblock abgerundet gezeichnet."},
+      "griffe": "grifflos dargestellt.",
+      "material_farbe": "Zeile kräftiges Gelb, Insel helles Blau (beide MDF lackiert, Front, Sockel, Blende und Stellseite farbgleich je Block), Naturstein-AP weiß geädert 20 mm, Armatur Pull-down und Kochendwasser.",
+      "plan_widersprueche": []
+    }
+  ],
+
+  "wissen": {
+    "griffarten": [
+      {"art": "Griffleiste horizontal, bündig am oberen Frontrand", "wo": "Unterschrank-Fronten der Zeile (T38) bzw. Zeile und Insel (T40), jede Front mit eigener Leiste", "haeufigkeit": 2, "belege": ["T38 S.3", "T38 S.8", "T40 S.1", "T40 S.3", "T40 S.5"]},
+      {"art": "Push-to-open (PTO)", "wo": "Flügeltür, Halbinselrückseite, Putzschrank und Hochschrank-Türfelder, Halbinsel-Kochseite ohne sichtbare Griffe", "haeufigkeit": 1, "belege": ["T38 S.3", "T38 S.5", "T38 S.7"]},
+      {"art": "Stangengriff vertikal", "wo": "Hochschrank-Türen (Kühl/Gefrier, Türpaare), Gerätenischen dazu horizontale Leiste", "haeufigkeit": 1, "belege": ["T38 S.7", "T38 S.9"]},
+      {"art": "Griffmulde", "wo": "Edelstahl-Nische, Front-Überstand an der Mulde 15", "haeufigkeit": 1, "belege": ["T41 S.2"]},
+      {"art": "Knopf (Pilzgriff, Messing dunkel)", "wo": "Ankleide mit Rahmenfronten, drei Knopfformen als Varianten (nicht Küche)", "haeufigkeit": 1, "belege": ["T08 S.2", "T08 S.3", "T08 S.4"]},
+      {"art": "grifflos / nicht gezeichnet", "wo": "Skizze mit gerundeten Körpern, Hochschränke in T40, Entwurf mit Kassettenfronten", "haeufigkeit": 3, "belege": ["T07 S.4", "T40 S.5", "T09 S.3"]}
+    ],
+    "layouts_anordnungen": [
+      {"muster": "Zeile an der Wand plus freistehender Körper (Insel/Halbinsel) mit Kochfeld; Spüle bleibt in der Zeile. Dasselbe Muster in vier von fünf Küchen.", "belege": ["T38 S.2", "T40 S.4", "T09 S.2", "T07 S.4"]},
+      {"muster": "Hochschrank-Block als lange geschlossene Wandfläche (Kühl/Gefrier, Backofen/Dampfgarer, Vorrat, Putzschrank) getrennt von der Arbeitszeile, teilweise ganz auf eigener Wand.", "belege": ["T38 S.7", "T38 S.9", "T09 S.3", "T07 S.4"]},
+      {"muster": "Hochschrankblock in der Zeile: Kühl/Gefrier, Backofen/Dampfgarer und ein Ordnungsschrank als letzte drei 600er am Zeilenende.", "belege": ["T40 S.5"]},
+      {"muster": "Halbrundes freies Ende bei Halbinsel und Insel (Radius = halbe Tiefe); Skizze noch freier, geschwungen.", "belege": ["T38 S.2", "T38 S.8", "T09 S.2", "T07 S.4"]},
+      {"muster": "Küche mit Essplatz: Tisch und/oder Sitzbank direkt vor der Zeile oder am Rand der Küche, Bank als Möbelkörper mit Schrank.", "belege": ["T38 S.2", "T38 S.6", "T09 S.2"]},
+      {"muster": "Kleine Edelstahl-Nische mit drei 600ern: GSP, Spüle mit Müll, Schubauszug.", "belege": ["T41 S.2", "T41 S.3"]},
+      {"muster": "Symmetrische Insel: Apotheker außen, Schübe, 900er Kochfeldschrank in der Mitte.", "belege": ["T40 S.5", "T40 S.6"]}
+    ],
+    "innenausstattung": [
+      {"element": "Frontauszug mit innenliegenden Schüben (3 oder 4)", "kontext": "Eine durchgehende Front, dahinter 3-4 Innenschübe statt mehrerer Fronten; Magnet-Clip an der obersten Schublade", "belege": ["T38 S.3", "T38 S.4", "T41 S.3"]},
+      {"element": "Innenschub-Höhen 115 / 115 / 235 hinter einer Auszugfront", "kontext": "Edelstahl-Nische", "belege": ["T41 S.3"]},
+      {"element": "Müllsystem im breiten Auszug unter Spüle (T38: 800 breit, T40/T41: 600)", "kontext": "Spülenmodul", "belege": ["T38 S.3", "T40 S.5", "T41 S.3"]},
+      {"element": "Kochendwasser-Technik oben im Spülenmodul über dem Müllsystem", "kontext": "Technik und Müll teilen sich ein Modul, Technik oben", "belege": ["T41 S.3"]},
+      {"element": "Apothekerauszug 330 als Inselende", "kontext": "T40 beidseitig; T38 als 270 Gewürzauszug hinter Tür", "belege": ["T40 S.6", "T38 S.4"]},
+      {"element": "Hochschrank-Vorratsauszug 60 x 170 mit Türregal", "kontext": "Hochschrank neben Putzschrank", "belege": ["T38 S.7"]},
+      {"element": "Weinschublade im Hochschrank unter dem Dampfgarer", "kontext": "T38; T07 hat zusätzlich Weinklimaschrank", "belege": ["T38 S.7", "T07 S.3"]},
+      {"element": "Mikrowellennische 550 x 260 hinter Lifttür", "kontext": "oberer Gerätebereich, Zone 345", "belege": ["T38 S.7"]},
+      {"element": "Möbelsteckdose im Putzschrank für Staubsauger; Möbelsteckdosen in der Kochfeldblende und auf Stellseiten (2 je Seite)", "kontext": "Strom in Möbel integriert", "belege": ["T38 S.4", "T38 S.7", "T41 S.4"]},
+      {"element": "Offenes Regal 3 Fächer (190 / 280 / 280) am Halbinselende, Eiche Vollholz", "kontext": "Rückseite Halbinsel", "belege": ["T38 S.5"]},
+      {"element": "Türen mit Einlegeböden als Standardinnenleben der Türschränke", "kontext": "Beschriftung wiederholt sich", "belege": ["T38 S.3", "T38 S.5", "T38 S.7", "T40 S.5"]},
+      {"element": "Hochschrank-Ordnungssystem hinter Türen mit Böden", "kontext": "letzter Hochschrank der Zeile", "belege": ["T40 S.5"]},
+      {"element": "Schubkästen aus Eiche massiv, fingergezinkt, farblos lackiert", "kontext": "Zeile und Insel", "belege": ["T40 S.1"]},
+      {"element": "Taschentüren mit Gerät und Schüben dahinter; vertikale Lamellen", "kontext": "Inspiration", "belege": ["T09 S.5"]}
+    ],
+    "raumstellung": [
+      {"regel_oder_muster": "Zeile steht an der Außenwand/unter dem Fenster; die Armatur muss nicht mittig unter dem Fenster liegen (T40: Spüle liegt ca. 600 rechts neben dem Fenster).", "belege": ["T40 S.5", "T38 S.2"]},
+      {"regel_oder_muster": "Fensterbank liegt 70 über der AP-OK, also Fensterunterkante 1000 ab Boden.", "belege": ["T40 S.5"]},
+      {"regel_oder_muster": "Insel mittig im Raum, die Seitenabstände sind frei (T40 ca. 1411 und 1831), nicht zentriert.", "belege": ["T40 S.4", "T40 S.6"]},
+      {"regel_oder_muster": "Stellseiten und Hochschrank reichen bis zur Wand; zur Seitenwand 30 Fuge (T38 Hochschrankwand) oder 5 Fuge (T41).", "belege": ["T38 S.7", "T41 S.2"]},
+      {"regel_oder_muster": "Hochschrank deutlich unter der Decke endend (T40: 590 Luft bei 3790 lichter Höhe) oder mit Aufsatzreihe bis oben (T09).", "belege": ["T40 S.5", "T09 S.3"]},
+      {"regel_oder_muster": "Hohe Räume (3790) und breite Räume (4570-4835 x 6040) mit Fensterbändern und mehreren Türen; Küche steht frei, nicht in einer kleinen Ecke.", "belege": ["T40 S.4", "T40 S.6"]}
+    ],
+    "raster_masse": [
+      {"beobachtung": "600 ist die klare Häufung der Breite: T40 9 von 10 Zeilenmodulen, T38 Zeile 3 von 7, Hochschrank 6 von 7, T41 3 von 3; Abweichungen sind individuell (580, 656, 800, 470, 535, 520, 420, 380, 350, 330, 270, 900).", "belege": ["T38 S.3", "T38 S.7", "T40 S.5", "T41 S.2"]},
+      {"beobachtung": "Ausgleichsmodule an den Rändern: 580 (T40 Zeilenanfang), 656 und 470 (T38), 350 Putzschrank (T38 Hochschrank), 520/420 an den Halbinselenden; damit wird die Wandlänge aufgenommen statt eines Füllstücks.", "belege": ["T40 S.5", "T38 S.3", "T38 S.5", "T38 S.7"]},
+      {"beobachtung": "Sonderbreiten mit Funktion: Müllauszug 800 (T38), Kochfeldschrank 900 (T38, T40), Apotheker 330 / Gewürz 270.", "belege": ["T38 S.3", "T38 S.4", "T40 S.6"]},
+      {"beobachtung": "Halbinsel Rückseite 3 x 535 mit 19er Zwischenwangen: Raum wird aufgeteilt, keine 600er.", "belege": ["T38 S.5"]},
+      {"beobachtung": "Breiten werden in der Maßkette teils auf Kommastellen genau angegeben (184,5; 308,3; 309,8; 806,5; 1220,5), Fugen rechnen mit.", "belege": ["T40 S.5", "T40 S.6"]}
+    ],
+    "hoehenbereiche": [
+      {"groesse": "sockel", "werte": [100], "belege": ["T38 S.3", "T40 S.5", "T41 S.2"]},
+      {"groesse": "ok_ap", "werte": [930, 930, 925], "belege": ["T38 S.3", "T40 S.5", "T41 S.2"]},
+      {"groesse": "korpus_front_h", "werte": [807, 810, 790], "belege": ["T38 S.3", "T38 S.5", "T40 S.5", "T41 S.2"]},
+      {"groesse": "ap_d", "werte": [20, 20, 35], "belege": ["T38 S.3", "T40 S.5", "T41 S.4"]},
+      {"groesse": "hochschrank", "werte": [2390, 3200, 2170], "belege": ["T38 S.7", "T40 S.5", "T41 S.2"]},
+      {"groesse": "hochschrank_teilung", "werte": [1852, 1970, 906, 930], "belege": ["T38 S.7", "T40 S.5"]},
+      {"groesse": "hochschrank_aufsatz", "werte": [540, 1220], "belege": ["T38 S.7", "T40 S.5"]},
+      {"groesse": "geraetenische_h", "werte": [594, 600, 458, 345, 260], "belege": ["T38 S.7", "T40 S.5"]},
+      {"groesse": "insel_ok", "werte": [930, 910], "belege": ["T40 S.5", "T40 S.7"]},
+      {"groesse": "sitz_bank", "werte": [440, 470, 907], "belege": ["T38 S.6"]},
+      {"groesse": "fenster_bruestung", "werte": [1000, 700], "belege": ["T40 S.5", "T40 S.6"]},
+      {"groesse": "raumhoehe", "werte": [3790], "belege": ["T40 S.5"]}
+    ],
+    "geraete_beziehungen": [
+      {"beziehung": "GSP direkt neben dem Spülenmodul (links in T38 und T41, rechts in T40).", "belege": ["T38 S.3", "T40 S.5", "T41 S.3"]},
+      {"beziehung": "Spüle über dem Müllauszug-Unterschrank, Armatur mittig über dem Modul.", "belege": ["T38 S.3", "T40 S.5", "T41 S.3"]},
+      {"beziehung": "Kochfeld nicht an der Spüle-Zeile, sondern auf Insel/Halbinsel (Muldenlüfter-Kochfeld).", "belege": ["T38 S.4", "T40 S.4", "T09 S.6", "T07 S.4"]},
+      {"beziehung": "Kühl- und Gefrierschrank im Hochschrank am Ende des Blocks oder als Paar nebeneinander.", "belege": ["T38 S.7", "T40 S.5", "T09 S.6"]},
+      {"beziehung": "Backofen und Dampfgarer zusammen in einer Hochschrank-Spalte (übereinander in T40 und T07) bzw. Backofen- und Dampfgarer-Spalte nebeneinander (T38).", "belege": ["T38 S.7", "T40 S.5", "T07 S.4"]},
+      {"beziehung": "Weinlagerung (Schublade im Hochschrank oder Klimaschrank) im Hochschrank beim Backofenbereich.", "belege": ["T38 S.7", "T07 S.3"]},
+      {"beziehung": "Mikrowelle in einer Lifttür-Nische oben im Hochschrank.", "belege": ["T38 S.7"]},
+      {"beziehung": "Unter dem Muldenlüfter-Kochfeld braucht der Umluftkanal Tiefe: Rückseitenschränke dahinter mit Hinweis Tiefe prüfen.", "belege": ["T38 S.5"]}
+    ],
+    "laufwege_ergonomie": [
+      {"beobachtung": "Gang zwischen Zeile und Esstisch 790.", "masse": [790], "belege": ["T38 S.2"]},
+      {"beobachtung": "Gang Zeile-Insel ca. 1100 (aus Plan abgeleitet), Insel zur Gegenwand ca. 1890.", "masse": [1100, 1890], "belege": ["T40 S.4"]},
+      {"beobachtung": "Gänge im Entwurf T09: 1423 Wand zu Tisch/Insel, 1250 zwischen Tisch und Insel, 1000 und 800 an der Insel.", "masse": [1423, 1250, 1000, 800], "belege": ["T09 S.2"]},
+      {"beobachtung": "Engster Wert 790-800, übliche Gänge 1000-1400.", "masse": [790, 800, 1000, 1100, 1250, 1423], "belege": ["T38 S.2", "T09 S.2"]},
+      {"beobachtung": "Spüle zum Kochfeld liegt in T40 ca. 1700 auseinander (Luftlinie über den Gang), nicht im Arbeitsdreieck an einer Zeile.", "masse": [1700], "belege": ["T40 S.4"]},
+      {"beobachtung": "Insel T40: 1204 tief, davon ca. 750 Schubladenseite und ca. 450 geschlossener Rückseitenbereich (abgeleitet).", "masse": [1204], "belege": ["T40 S.4", "T40 S.1"]}
+    ],
+    "anschluesse_blenden_fuellstuecke": [
+      {"detail": "Passblende 70 an Zeilen- und Halbinselenden und an der Bank (T38).", "masse": [70], "belege": ["T38 S.3", "T38 S.4", "T38 S.6"]},
+      {"detail": "Hochschrankwand zwischen Wänden mit 30 Fuge links und rechts.", "masse": [30], "belege": ["T38 S.7"]},
+      {"detail": "Nische: 5 mm Fuge zur Wand rechts und links, 5 oben; Stellseiten ca. 32,5 stark (abgeleitet aus 1875 - 3 x 600 - 2 x 5).", "masse": [5, 32.5], "belege": ["T41 S.2"]},
+      {"detail": "Stellseite steht 26 vor der Front (Tiefe 600 gegenüber Korpus 574).", "masse": [600, 574, 26], "belege": ["T41 S.4"]},
+      {"detail": "Insel-Stellseite 19 an beiden Enden.", "masse": [19], "belege": ["T40 S.6"]},
+      {"detail": "Zwischenwange 19 zwischen den Türfeldern der Halbinsel-Rückseite.", "masse": [19], "belege": ["T38 S.5"]},
+      {"detail": "Sockel 100, in Edelstahl-Nische mit Rücksprung ca. 90 und Stoß an den Frontfugen.", "masse": [100, 90], "belege": ["T41 S.2", "T41 S.4"]},
+      {"detail": "Kochfeld-Ausschnitt in T38 ca. 860 lang.", "masse": [858], "belege": ["T38 S.2"]}
+    ],
+    "stil": [
+      {"merkmal": "Ruhige Greige/Kaschmir-Töne für Fronten mit dunklem oder hellem Naturstein, Eiche hell für Insel und Schubkästen.", "belege": ["T06 S.2", "T06 S.3", "T40 S.1", "T38 S.2"]},
+      {"merkmal": "Naturstein-AP 20 mm, geledert oder poliert, auch in kräftig kontrastierenden Farbkonzepten (Gelb/Blau).", "belege": ["T40 S.1", "T07 S.2"]},
+      {"merkmal": "Edelstahl als Vollmaterial für Fronten, Stellseiten, Sockel und AP (T41).", "belege": ["T41 S.1"]},
+      {"merkmal": "Rahmen- und Kassettenfronten, Riffelglas-Füllungen, Messing dunkel (Knöpfe), Marmor und Salbeigrün im Entwurf-Moodboard.", "belege": ["T08 S.2", "T09 S.4", "T09 S.5"]},
+      {"merkmal": "Geschwungene Körper und gerundete Hochschrankkanten in der Skizze, halbrundes Ende in Plänen.", "belege": ["T07 S.4", "T38 S.8", "T09 S.2"]},
+      {"merkmal": "Sockel, Blenden und Stellseiten farbgleich zur Front, Insel oft in eigenem Material (Eiche furniert statt lackierter Zeile).", "belege": ["T40 S.1", "T07 S.2", "T08 S.2"]},
+      {"merkmal": "Hochschrankfront in anderem Material als Zeile (Linoleum hell gegenüber Laminat).", "belege": ["T38 S.2"]}
+    ],
+    "zeichenstil": [
+      {"merkmal": "A3 quer, Maßstab 1:25 (Ansichten in T38 faktisch ca. 1:20); Detailnische 1:10; Maße in Rot (T38, T41 teils Schwarz/Grau in T40).", "belege": ["T38 S.2", "T38 S.3", "T40 S.4", "T41 S.2"]},
+      {"merkmal": "Blattfolge: Deckblatt, Draufsicht, je eine Ansicht pro Wand/Körper (Zeile, Halbinsel Kochseite, Rückseite, Bank, Hochschrank), dann Perspektiven; T40 mit Perspektiven vorn, dann Grundriss und Ansichten A, B, C mit Schnittmarken.", "belege": ["T38 S.1", "T40 S.1", "T40 S.4"]},
+      {"merkmal": "Beschriftung unter jedem Element mit Funktion und Innenleben (Frontauszug mit n Schüben, Einlegeböden, PTO), Geräte/Zubehör/Material als Liste im Textfeld rechts.", "belege": ["T38 S.3", "T40 S.5", "T41 S.1"]},
+      {"merkmal": "Zeichenkonvention: Kreuz = Auszug/Front, Dreieck = Tür oder Klappe (Spitze an der Anschlagsseite), gestrichelte Innenschübe, Wandschnitt schraffiert.", "belege": ["T38 S.3", "T40 S.5", "T41 S.2", "T41 S.3"]},
+      {"merkmal": "Maßketten unten mit Gesamtmaß, Höhenketten seitlich, Fronthöhen auf Zehntelmillimeter bei T40; Höhenkote APL OK +93 im Plan.", "belege": ["T38 S.3", "T40 S.5", "T40 S.6"]},
+      {"merkmal": "Detailnische mit Frontansicht außen, Frontansicht innen (Schubhöhen 115/115/235, Müllauszug), Seitenansicht mit Tiefen 600/574 und Steckdosenhinweis.", "belege": ["T41 S.2", "T41 S.3", "T41 S.4"]},
+      {"merkmal": "Perspektiven als reine Linienzeichnung (ohne Schatten), mit Planraster A-C/1-4 in T38.", "belege": ["T38 S.8", "T38 S.9", "T40 S.1"]}
+    ],
+    "moodboard_praesentation": [
+      {"merkmal": "Seitentypen: Titelseite, Materialseiten (Fronten, AP, Armatur), Geräteseite, Inspirationsseite, Skizze/Sketch, Abschlussseite.", "belege": ["T06 S.1", "T06 S.4", "T07 S.4", "T09 S.5"]},
+      {"merkmal": "Materialseiten mit Farbfeld bzw. Foto, Name und Code (NCS oder Hersteller-Farbname) darunter; mehrere Varianten V1-V3 mit wechselnder AP oder Griff.", "belege": ["T06 S.2", "T07 S.2", "T08 S.2", "T08 S.3"]},
+      {"merkmal": "Materialkollagen überlappen leicht (Farbfeld über Foto), Geräte in Freistellern mit Typbezeichnung.", "belege": ["T07 S.2", "T07 S.3", "T09 S.4"]},
+      {"merkmal": "Entwurf-Moodboard bringt Grundriss, zwei Ansichten, Materialien, Inspiration (Kassettenfronten, Taschentüren) und Geräte in einer Mappe.", "belege": ["T09 S.2", "T09 S.3", "T09 S.5", "T09 S.6"]},
+      {"merkmal": "Typische Gerätewahl: Kühl-/Gefrierkombi oder Side-by-Side, Backofen plus Dampfgarer, Muldenlüfter-Kochfeld, Einzelbecken Edelstahl oder Messing, Kochendwasser-Armatur.", "belege": ["T06 S.3", "T07 S.3", "T09 S.6", "T40 S.1"]}
+    ],
+    "neue_katalogtypen": [
+      {"vorschlag": "Hochschrank-Typen in der Zeile: HS-Kühl, HS-Gefrier, HS-Gerätenische (Zonen unten 810 / Gerät 594-600 / oben 345; Dampfgarer 458), HS-Vorratsauszug 60 x 170, HS-Putzschrank 350 mit Möbelsteckdose, HS-Ordnungssystem; jeweils Unterteilung in Front unten und Aufsatzfront oben (T38: 1752 + 540; T40: drei Fronten 806 / 1063 / 1220).", "belege": ["T38 S.7", "T40 S.5"]},
+      {"vorschlag": "Hochschrank-Parameter: Sockel 100, Teilfugen fluchten mit der Zeile (T40: Teilung bei ca. 906 bzw. AP-Höhe), Gesamthöhe frei (2390 bis 3200).", "belege": ["T38 S.7", "T40 S.5"]},
+      {"vorschlag": "US-KF erweitern: Blende oben (ca. 150-185) mit Bedienknebeln und Steckdosen, darunter 2 Auszüge; Tiefenwarnung wegen Umluftkanal.", "belege": ["T38 S.4", "T38 S.5", "T40 S.5"]},
+      {"vorschlag": "US-S1I bestätigt: eine durchgehende Front mit 3-4 innenliegenden Schüben, Anzahl und Höhe frei (115 / 115 / 235).", "belege": ["T38 S.3", "T41 S.3"]},
+      {"vorschlag": "US-T2 mit fester Mittelwand und Push-to-open (Flügeltür).", "belege": ["T38 S.3"]},
+      {"vorschlag": "US-SP breit (800) mit Müllsystem; Spüle mittig darüber, Becken 700 x 400.", "belege": ["T38 S.2", "T38 S.3"]},
+      {"vorschlag": "Passblende 70 als eigenes Element (Randabschluss an Zeile, Halbinsel, Bank).", "belege": ["T38 S.3", "T38 S.4", "T38 S.6"]},
+      {"vorschlag": "Halbinsel/Insel mit halbrundem Endkörper (Radius = halbe Tiefe) und geschlossenen Endkörpern 420-500.", "belege": ["T38 S.2", "T38 S.4", "T38 S.5", "T09 S.2"]},
+      {"vorschlag": "Offenes Regal als Körperende (3 Fächer 190 / 280 / 280, Eiche Vollholz) mit Zwischenboden 19.", "belege": ["T38 S.5"]},
+      {"vorschlag": "Sitzbank mit Lehne und Schrank (Sitz 440, Lehne bis 907) als Möbel neben der Küche.", "belege": ["T38 S.6"]},
+      {"vorschlag": "Insel-Typ symmetrisch: Apotheker 330 / Schübe 600 / Kochfeldschrank 900 / Schübe 600 / Apotheker 330 mit Stellseiten 19.", "belege": ["T40 S.6"]},
+      {"vorschlag": "Edelstahl-Nische als Gesamtobjekt: Stellseiten, Deckplatte auf den Stellseiten, Nische oben 1235, 2 Möbelsteckdosen je Stellseite.", "belege": ["T41 S.2", "T41 S.4"]}
+    ],
+    "offen": [
+      "Zeilentiefe und Hochschranktiefe in T40 sind nicht bemaßt (ca. 650 aus dem Plan abgeleitet); T38 Zeilentiefe nicht bemaßt, der Plan zeigt eine tiefe Wandnische, deren Anteil unklar ist.",
+      "Halbinsel in T38 ca. 1100 tief aus dem Plan geschätzt, nicht bemaßt.",
+      "T38 Halbinsel-Endkörper 500 (Kochseite) und 420 (Rückseite): ob Rundung oder Blende, im Plan nicht beschriftet.",
+      "Bedeutung der 30er-Maße in der Fronthöhe der Halbinsel (30 / 150 / 30 / 277 / 320) unklar: Fuge, Griffzone oder Blendenanteil.",
+      "T40 Insel: Aufteilung 1204 Tiefe (Schubseite gegenüber geschlossener Rückseite) nur aus dem Plan abgelesen.",
+      "Das Maß 70 in T40 (AP-OK zu Fensterbank) und die Bedeutung der 1400 im Putzschrank (T38) sind aus Lage abgeleitet.",
+      "T09: Rechteck 2030 x 950 als Esstisch angenommen; Gänge nur abgelesen; Gerätelage (Kochfeld, Spüle) nicht erkennbar.",
+      "T06 und T08 enthalten keine Maße oder Grundrisse; T08 ist eine Ankleide, nur Stil und Griffe verwertbar.",
+      "T41: Kühlschrank in der Geräteliste, nicht gezeichnet; Nischenhöhe 2200 gegen Stellseite 2170 ungeklärt.",
+      "Kein Raster: die 600er-Häufung ist eine Häufung, jede Abweichung ist raumbedingt und mm-genau gesetzt."
+    ]
+  }
+}

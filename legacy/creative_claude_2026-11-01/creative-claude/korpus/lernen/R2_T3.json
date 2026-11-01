@@ -1,0 +1,2419 @@
+{
+ "runde": 2,
+ "teil": 3,
+ "faelle": [
+  {
+   "kueche": "T12-K1",
+   "template": "T12",
+   "form": "insel",
+   "pruefungen": [
+    {
+     "atom": "MAS-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "AP Edelstahl 5"
+    },
+    {
+     "atom": "GER-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle in Wandzeile, Insel ohne Gerät"
+    },
+    {
+     "atom": "GER-005a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kein Einbaukochfeld, Standherd in Nische"
+    },
+    {
+     "atom": "GER-005b",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Standherd in Zeile, Insel ohne Kochfeld"
+    },
+    {
+     "atom": "GER-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Modul zwischen Spüle und Herd"
+    },
+    {
+     "atom": "GER-019a",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Herd mittig in Nische, Spüle links"
+    },
+    {
+     "atom": "GER-021",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Ofen im Herd, Modul dazwischen"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Ofen im Standherd, keine der drei Lagen"
+    },
+    {
+     "atom": "LAY-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeile plus freie Insel"
+    },
+    {
+     "atom": "LAY-010a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Keine Oberschränke, Regalbretter"
+    },
+    {
+     "atom": "LAY-018",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Insel ohne Gerät, offenes Stirnfach"
+    },
+    {
+     "atom": "LAY-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Raumseite der Insel nicht beschrieben"
+    },
+    {
+     "atom": "GRI-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeile grifflos, Insel Mulde, gemischt"
+    },
+    {
+     "atom": "GRI-001b",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "ueberangepasst": true,
+     "notiz": "Eichen-Insel hat Mulde, keine Stange"
+    },
+    {
+     "atom": "GRI-002a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeile grifflos"
+    },
+    {
+     "atom": "GRI-003b",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Messing-Mulde nur an Insel, Zeile grifflos"
+    },
+    {
+     "atom": "GRI-003a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeilenmaterial unbekannt"
+    },
+    {
+     "atom": "GER-003",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Müllsystem nicht beschrieben"
+    }
+   ],
+   "luecken": [
+    "Standherd in gerahmter Nische hat nur Einzelatome (GER-019a, GER-021, BRE-024)",
+    "Insel ohne jedes Gerät als reine Stauraum- oder Arbeitsinsel",
+    "Griffart je Zeile und Insel verschieden",
+    "Messing-Regalbretter und Reling als Oberschrankersatz"
+   ],
+   "aufspalten": [
+    {
+     "atom": "GRI-001b",
+     "vorschlag": "WENN Fronten sind Eiche oder HPL UND im Plan sind Stangen oder Knöpfe gezeichnet DANN sichtbare Griffe; Eichen-Insel mit Griffmulde ist eigener Fall (Griffart je Bauteil, nicht je Frontmaterial)"
+    },
+    {
+     "atom": "GER-010",
+     "vorschlag": "Standherd als eigener Fall: Ofen im Herd, keine HS-, AP- oder Kochfeld-Ofen-Lösung"
+    }
+   ]
+  },
+  {
+   "kueche": "T13-K1",
+   "template": "T13",
+   "form": "U",
+   "pruefungen": [
+    {
+     "atom": "MAS-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Naturstein AP 20"
+    },
+    {
+     "atom": "GER-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld auf Halbinsel"
+    },
+    {
+     "atom": "LAY-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Halbinsel mit Kochfeld; Rundende nicht beschrieben"
+    },
+    {
+     "atom": "GER-013",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld Halbinsel, Öfen im Hochschrank"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Öfen im Hochschrank"
+    },
+    {
+     "atom": "GER-009",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zwei Öfen, kein Dampfgarer"
+    },
+    {
+     "atom": "GER-011a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Lüfterart nicht genannt"
+    },
+    {
+     "atom": "GER-007",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kühlgerät nicht erkennbar"
+    },
+    {
+     "atom": "GER-018",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kaffeestation in Ecke, Augenhöhe unbekannt"
+    },
+    {
+     "atom": "RAU-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle unter Fenster"
+    },
+    {
+     "atom": "RAU-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS-Wand an Fenstertür, eigene Wand"
+    },
+    {
+     "atom": "LAY-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Eigene HS-Wand"
+    },
+    {
+     "atom": "LAY-010a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeile unter Fensterband, keine Oberschränke"
+    },
+    {
+     "atom": "GRI-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Stangengriff horizontal an Auszügen"
+    },
+    {
+     "atom": "GRI-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Vertikale Stange an HS"
+    },
+    {
+     "atom": "GRI-001b",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": true,
+     "notiz": "Stangen und Knöpfe sichtbar"
+    },
+    {
+     "atom": "GRI-002b",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS-Türen mit vertikaler Stange statt PTO"
+    },
+    {
+     "atom": "GRI-007",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Rahmenfronten nicht belegt"
+    },
+    {
+     "atom": "GRI-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Innenschübe nicht beschrieben"
+    },
+    {
+     "atom": "INN-022",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kaffeestation in Ecke, Höhe unbekannt"
+    }
+   ],
+   "luecken": [
+    "U-Form mit Halbinsel-Kochfeld, Seitenwand-Zeile und HS-Wand an Fenstertür",
+    "Zwei Öfen nebeneinander ohne Dampfgarer",
+    "Keine Maße, Kühlgerät nicht erkennbar",
+    "Linoleum mit Stangen und Knöpfen gleichzeitig"
+   ],
+   "aufspalten": [
+    {
+     "atom": "GRI-002b",
+     "vorschlag": "WENN Unterschränke haben Stangengriffe und Plan zeichnet HS-Griffe DANN HS vertikale Stange; PTO nur wenn Plan es beschriftet"
+    }
+   ]
+  },
+  {
+   "kueche": "T14-K1",
+   "template": "T14",
+   "form": "insel",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sockel 100"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "OK AP 930"
+    },
+    {
+     "atom": "MAS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "2880-2950 im Bereich, Start 2700 verfehlt"
+    },
+    {
+     "atom": "MAS-011",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Luft 0 bis ca. 100, im Bereich"
+    },
+    {
+     "atom": "BRE-018",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Nische 1190-1220"
+    },
+    {
+     "atom": "INN-021",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Pocketdoor mit 6 Auszügen"
+    },
+    {
+     "atom": "BRE-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Felder 560-600"
+    },
+    {
+     "atom": "BRE-003b",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Rand 420-510 als Ausgleich"
+    },
+    {
+     "atom": "LAY-014",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zwei Blöcke durch Wandvorsprung, Nische in der Mitte"
+    },
+    {
+     "atom": "LAY-017",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Schrankwand ohne Spüle und Kochfeld"
+    },
+    {
+     "atom": "LAY-018",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Raumseite der Insel nicht beschrieben"
+    },
+    {
+     "atom": "LAY-011",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Abgerundete Stirn der Insel"
+    },
+    {
+     "atom": "LAY-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Wandzeile mit Insel davor"
+    },
+    {
+     "atom": "LAY-010a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Raumhohe Wand ohne Oberschränke"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Ofen im HS"
+    },
+    {
+     "atom": "GRI-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Keine Griffe dargestellt, nicht grifflos werten"
+    },
+    {
+     "atom": "GRI-001a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Griffe nicht dargestellt"
+    },
+    {
+     "atom": "RAU-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Wandvorsprung, Zeile orthogonal"
+    },
+    {
+     "atom": "RAU-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS bis nahe Decke"
+    }
+   ],
+   "luecken": [
+    "Alle Maße aus einer Maßlinie rückgerechnet, Fehler ca. 5 Prozent",
+    "Pocketdoor-Station mit Wandvorsprung zwischen zwei Blöcken",
+    "Insel ohne Gerät mit abgerundeter Stirn ohne Raumseiten-Angabe"
+   ],
+   "aufspalten": [
+    {
+     "atom": "MAS-009",
+     "vorschlag": "Hochschrank-Höhe = Raumhöhe minus Luft; Start 2700 nur bei Raumhöhe ca. 2700 (hier Decke 2950-2980)"
+    }
+   ]
+  },
+  {
+   "kueche": "T14-K2",
+   "template": "T14",
+   "form": "insel",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sockel 100"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "OK AP 930"
+    },
+    {
+     "atom": "MAS-009",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS-Höhe nicht angegeben"
+    },
+    {
+     "atom": "BRE-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sideboardtüren 575-600"
+    },
+    {
+     "atom": "LAY-014",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sideboard in der Mitte"
+    },
+    {
+     "atom": "LAY-017",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Schrankwand ohne Spüle und Kochfeld"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Ofen im rechten HS"
+    },
+    {
+     "atom": "LAY-010a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Schwebende Regalböden statt Oberschränke"
+    },
+    {
+     "atom": "MAS-015",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Regalboden-Höhe über AP bei Rückrechnung unsicher"
+    },
+    {
+     "atom": "GRI-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Keine Griffe dargestellt"
+    },
+    {
+     "atom": "LAY-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Insel davor"
+    },
+    {
+     "atom": "RAU-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Wandvorsprung, Zeile orthogonal"
+    }
+   ],
+   "luecken": [
+    "Sideboard mit zwei schwebenden Regalböden (1590 und 1910) ohne passendes Atom",
+    "Ablageboard versus Regalboden nicht abgegrenzt"
+   ],
+   "aufspalten": []
+  },
+  {
+   "kueche": "T15-K1",
+   "template": "T15",
+   "form": "insel",
+   "pruefungen": [
+    {
+     "atom": "MAS-004",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Edelstahl-Insel, Stärke nicht angegeben"
+    },
+    {
+     "atom": "MAS-006a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeilentiefe 700 am Rand des Bereichs"
+    },
+    {
+     "atom": "MAS-008b",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Block 467 tief"
+    },
+    {
+     "atom": "MAS-016",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Insel 1200 im Bereich"
+    },
+    {
+     "atom": "MAS-017",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Insel 2163/2563 im Bereich"
+    },
+    {
+     "atom": "MAS-019a",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Gang 1900, Soll 1000-1200"
+    },
+    {
+     "atom": "MAS-019b",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Gang 1900, Insel mit Kochfeld"
+    },
+    {
+     "atom": "BRE-014a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kühl-Gefrier 900 am Bereichsende"
+    },
+    {
+     "atom": "GER-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld auf Insel"
+    },
+    {
+     "atom": "GER-011a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Muldenabzug"
+    },
+    {
+     "atom": "GER-008a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS-Block quer neben Spüle, Kühllage offen"
+    },
+    {
+     "atom": "GER-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS-Block quer am Zeilenende"
+    },
+    {
+     "atom": "GER-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle in Wandzeile"
+    },
+    {
+     "atom": "GER-001",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "GSP-Position offen"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Ofen im HS"
+    },
+    {
+     "atom": "GER-013",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld Insel, Ofen HS"
+    },
+    {
+     "atom": "LAY-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeile mit freier Insel gegenüber"
+    },
+    {
+     "atom": "RAU-002",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sitzseite nicht beschrieben"
+    },
+    {
+     "atom": "GRI-003a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Linoleum-Zeile mit Griffmulde"
+    },
+    {
+     "atom": "GRI-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Mulde und grifflose Insel gemischt"
+    }
+   ],
+   "luecken": [
+    "Gang 1900 und 1550-1650 passt zu keinem der beiden Gangatome sauber",
+    "Edelstahl-Insel grifflos mit abgesetzter Kante, Zeile Mulde (umgekehrt zu GRI-003b)",
+    "HS-Block quer als Raumteiler am Zeilenende"
+   ],
+   "aufspalten": [
+    {
+     "atom": "MAS-019a",
+     "vorschlag": "WENN Zeile mit Spüle steht Insel mit Kochfeld gegenüber DANN Gang 1550 bis 1900; Gang 1100 nur wenn Gegenzeile oder Insel beidseitig gekocht wird"
+    },
+    {
+     "atom": "MAS-019b",
+     "vorschlag": "Bedingung schärfen: Insel mit Kochfeld gegenüber Zeile ohne Kochfeld (statt Insel ohne Kochen davor)"
+    }
+   ]
+  },
+  {
+   "kueche": "T15-K2",
+   "template": "T15",
+   "form": "halbinsel",
+   "pruefungen": [
+    {
+     "atom": "MAS-006a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeilentiefe 700"
+    },
+    {
+     "atom": "MAS-008b",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "HS-Block 450-467"
+    },
+    {
+     "atom": "MAS-016",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Tiefe 1200"
+    },
+    {
+     "atom": "MAS-018a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Halbinsel 2586/2688 im Bereich"
+    },
+    {
+     "atom": "MAS-019a",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Gang 1550-1600, Soll 1000-1200"
+    },
+    {
+     "atom": "MAS-019b",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Gang 1550-1600; Insel aber angeschlossen"
+    },
+    {
+     "atom": "MAS-024",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Bankmaß nicht angegeben"
+    },
+    {
+     "atom": "GER-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld auf Halbinsel"
+    },
+    {
+     "atom": "GER-011a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Muldenabzug"
+    },
+    {
+     "atom": "GER-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle in Wandzeile"
+    },
+    {
+     "atom": "GER-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS-Block am Zeilenende"
+    },
+    {
+     "atom": "LAY-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Halbinsel an Zeile herangeführt, Kochfeld darauf"
+    },
+    {
+     "atom": "LAY-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sitzbank als Essplatz"
+    },
+    {
+     "atom": "GRI-003a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Linoleum-Zeile mit Griffmulde"
+    }
+   ],
+   "luecken": [
+    "Halbinsel an Zeile angeschlossen, aber Gang 1550-1600",
+    "Sitzbank im Winkel statt Sideboard"
+   ],
+   "aufspalten": []
+  },
+  {
+   "kueche": "T15-K3",
+   "template": "T15",
+   "form": "insel",
+   "pruefungen": [
+    {
+     "atom": "MAS-006a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeilentiefe 700"
+    },
+    {
+     "atom": "MAS-016",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Tiefe 1200"
+    },
+    {
+     "atom": "MAS-017",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Länge 2688 im Bereich"
+    },
+    {
+     "atom": "MAS-019a",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Gang 1630-1650, Soll 1000-1200"
+    },
+    {
+     "atom": "MAS-019b",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Gang 1630-1650 im Bereich"
+    },
+    {
+     "atom": "MAS-015",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Höhe Regalbrett unbekannt"
+    },
+    {
+     "atom": "GER-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld auf Insel"
+    },
+    {
+     "atom": "GER-011a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Muldenabzug"
+    },
+    {
+     "atom": "LAY-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Insel ohne Verbindung parallel"
+    },
+    {
+     "atom": "LAY-010a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Leiste/Regalbrett statt Oberschränke"
+    },
+    {
+     "atom": "RAU-002",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sitzseite nicht beschrieben"
+    },
+    {
+     "atom": "GRI-003a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Linoleum-Zeile mit Griffmulde"
+    }
+   ],
+   "luecken": [
+    "Wie K1, keine neuen Lücken außer Leiste über Zeile"
+   ],
+   "aufspalten": []
+  },
+  {
+   "kueche": "T16-K1",
+   "template": "T16",
+   "form": "L",
+   "pruefungen": [
+    {
+     "atom": "INN-016",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Sockelfreiraum mind. 100 für Saugroboter"
+    },
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sockel ca. 100"
+    },
+    {
+     "atom": "GER-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld auf Insel"
+    },
+    {
+     "atom": "GER-011a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Muldenlüfter-Kochfeld"
+    },
+    {
+     "atom": "GER-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle in Wandzeile"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Ofen im Hochschrank"
+    },
+    {
+     "atom": "GER-013",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld Insel, Ofen HS"
+    },
+    {
+     "atom": "GER-008a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kühlgerät nicht genannt"
+    },
+    {
+     "atom": "LAY-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "L-Zeile mit freier Insel"
+    },
+    {
+     "atom": "LAY-009",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Esstisch frei, Einbau-Sitz unbekannt"
+    },
+    {
+     "atom": "INN-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Auszüge immer Eiche"
+    },
+    {
+     "atom": "GRI-004a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Weiße Griffleiste in Eichenfront"
+    },
+    {
+     "atom": "GRI-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Fugenbetont, Leiste"
+    },
+    {
+     "atom": "GRI-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sets 2/3 ohne Griffe dargestellt"
+    },
+    {
+     "atom": "ANS-009",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Ecke nicht beschrieben"
+    }
+   ],
+   "luecken": [
+    "Saugroboter-Fach im Sockel",
+    "Bogendurchgang zum Wohnzimmer und freier Esstisch",
+    "Hochregal mit 5 Fächern und Ofen-HS mit Doppelflügeltür"
+   ],
+   "aufspalten": []
+  },
+  {
+   "kueche": "T28-K1",
+   "template": "T28",
+   "form": "insel",
+   "pruefungen": [
+    {
+     "atom": "GER-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld auf Insel"
+    },
+    {
+     "atom": "GER-011a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Muldenlüftung"
+    },
+    {
+     "atom": "GER-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle in Nische der Wandzeile"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Ofen im HS"
+    },
+    {
+     "atom": "GER-013",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld Insel, Ofen HS"
+    },
+    {
+     "atom": "GER-018",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kaffeevollautomat im HS neben Backofen"
+    },
+    {
+     "atom": "INN-022",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Regalböden darüber nicht beschrieben"
+    },
+    {
+     "atom": "LAY-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Wand mit freier Insel davor"
+    },
+    {
+     "atom": "LAY-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Theke mit Überstand oder offenes Regal"
+    },
+    {
+     "atom": "LAY-010a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Raumhohe Schrankwand"
+    },
+    {
+     "atom": "LAY-004a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS links und rechts der Nische"
+    },
+    {
+     "atom": "GRI-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Grifflos mit Fugen"
+    },
+    {
+     "atom": "GRI-002a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Grifflos in Inselküche"
+    },
+    {
+     "atom": "GRI-005b",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS grifflos"
+    },
+    {
+     "atom": "MAS-025",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Überstand ohne Maß"
+    }
+   ],
+   "luecken": [
+    "Keine Maße, nur Renderbilder",
+    "Spüle in Nische zwischen zwei Hochschränken"
+   ],
+   "aufspalten": []
+  },
+  {
+   "kueche": "T28-K3",
+   "template": "T28",
+   "form": "zeile",
+   "pruefungen": [
+    {
+     "atom": "LAY-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Pantry mit Hochschränken"
+    },
+    {
+     "atom": "LAY-010a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Offene Regalfelder statt Oberschränke"
+    },
+    {
+     "atom": "LAY-004b",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS an einem Ende, anderes Ende offenes Feld"
+    },
+    {
+     "atom": "MAS-028",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Fliesenspiegelhöhe unbekannt"
+    },
+    {
+     "atom": "GRI-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Grifflos"
+    },
+    {
+     "atom": "GRI-005b",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS grifflos"
+    },
+    {
+     "atom": "INN-002",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Müll nicht beschrieben"
+    },
+    {
+     "atom": "ANS-006",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Offene Felder ohne Maß"
+    }
+   ],
+   "luecken": [
+    "Spülenschrank zwischen zwei offenen Feldern",
+    "Offener Unterbau mit flachen Schubkästen",
+    "Zeile ohne Kochfeld, aber mit Spüle (zwischen LAY-006 und LAY-017)"
+   ],
+   "aufspalten": []
+  },
+  {
+   "kueche": "T30-K1",
+   "template": "T30",
+   "form": "insel",
+   "pruefungen": [
+    {
+     "atom": "GER-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld auf Insel"
+    },
+    {
+     "atom": "GER-011a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Muldenlüftung auf Insel"
+    },
+    {
+     "atom": "GER-020",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spiegelrückwand über Zeile, Kochfeld aber Muldenlüfter"
+    },
+    {
+     "atom": "GER-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle in Wandzeile"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Ofen im HS"
+    },
+    {
+     "atom": "GER-013",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld Insel, Ofen HS"
+    },
+    {
+     "atom": "LAY-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeile mit freier Insel"
+    },
+    {
+     "atom": "LAY-010a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeile mit Spiegelrückwand"
+    },
+    {
+     "atom": "LAY-010b",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Oberschrankband nur an Nebenwand"
+    },
+    {
+     "atom": "GRI-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Alle Fronten grifflos"
+    },
+    {
+     "atom": "GRI-002a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Grifflos in Inselküche"
+    },
+    {
+     "atom": "GRI-005b",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS grifflos"
+    },
+    {
+     "atom": "INN-013",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "LED nicht beschrieben"
+    },
+    {
+     "atom": "FRO-009",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeldblende nicht beschrieben"
+    }
+   ],
+   "luecken": [
+    "Zwei Front-Varianten ohne Maße",
+    "Insel mit 3 Spalten x 2 Reihen Auszüge"
+   ],
+   "aufspalten": [
+    {
+     "atom": "GER-020",
+     "vorschlag": "WENN Kochfeld liegt in der Zeile unter Oberschrank oder Spiegel DANN Haube; Kochfeld auf Insel hat Muldenlüfter (GER-011a), Spiegel über Zeile ist kein Kriterium"
+    }
+   ]
+  },
+  {
+   "kueche": "T07-K1",
+   "template": "T07",
+   "form": "insel",
+   "pruefungen": [
+    {
+     "atom": "MAS-003",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "AP-Material unbekannt"
+    },
+    {
+     "atom": "GER-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Hauptspüle in Wandzeile, zweites Becken in Insel"
+    },
+    {
+     "atom": "GER-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld auf Insel"
+    },
+    {
+     "atom": "GER-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Dampfgarer über Backofen"
+    },
+    {
+     "atom": "INN-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Schub unter Backofen"
+    },
+    {
+     "atom": "INN-009",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Wärmeschublade nicht benannt"
+    },
+    {
+     "atom": "INN-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Weinschrank im Geräte-HS"
+    },
+    {
+     "atom": "GER-013",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld Insel, Ofen HS"
+    },
+    {
+     "atom": "GER-007",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Lage des Kühl-HS unbekannt"
+    },
+    {
+     "atom": "GER-011a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Lüfterart nicht genannt"
+    },
+    {
+     "atom": "LAY-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeile mit Insel davor"
+    },
+    {
+     "atom": "LAY-011",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Geschwungene Insel"
+    }
+   ],
+   "luecken": [
+    "Zweites Becken in der Insel (GER-004 sagt Spüle nur in Wandzeile)",
+    "Geschwungene Insel statt Rechteck oder Rundende",
+    "Nur Skizze, keine Maße"
+   ],
+   "aufspalten": [
+    {
+     "atom": "GER-004",
+     "vorschlag": "WENN Insel und Spüle DANN Hauptspüle in der Wandzeile; zweites Becken oder Barspüle auf der Insel zulässig"
+    }
+   ]
+  },
+  {
+   "kueche": "T29-K1",
+   "template": "T29",
+   "form": "zweizeilig",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sockel 100"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "OK AP 940 im Bereich"
+    },
+    {
+     "atom": "MAS-003",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "AP-Material unbekannt"
+    },
+    {
+     "atom": "MAS-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "UK 820 im Bereich"
+    },
+    {
+     "atom": "MAS-006a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Tiefe 605"
+    },
+    {
+     "atom": "MAS-008a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS-Tiefe 590"
+    },
+    {
+     "atom": "MAS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS 2800 im Bereich"
+    },
+    {
+     "atom": "MAS-011",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Luft zur Decke unbekannt"
+    },
+    {
+     "atom": "MAS-019a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Gang Zeile bis Gegenzeile 1070-1100"
+    },
+    {
+     "atom": "MAS-024",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Bank 1615"
+    },
+    {
+     "atom": "BRE-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "600er Module"
+    },
+    {
+     "atom": "BRE-002a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "900er Auszüge und Kochfeldschrank"
+    },
+    {
+     "atom": "BRE-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeldschrank 900"
+    },
+    {
+     "atom": "BRE-008a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle 600, im Bereich"
+    },
+    {
+     "atom": "BRE-003b",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Regal 250 am Zeilenende"
+    },
+    {
+     "atom": "GER-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "GSP neben Spüle"
+    },
+    {
+     "atom": "GER-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Abfall/Orga neben Spüle"
+    },
+    {
+     "atom": "GER-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Module zwischen Spüle und Kochfeld"
+    },
+    {
+     "atom": "GER-017",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Spüle zu Kochfeld 1550-1590"
+    },
+    {
+     "atom": "GER-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Hochkühlschrank in Gegenwand-Gruppe"
+    },
+    {
+     "atom": "GER-008a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kühlschrank nicht an Spüle"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Ofen im HS"
+    },
+    {
+     "atom": "GER-013",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld Zeile, Ofen HS"
+    },
+    {
+     "atom": "GER-018",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Coffee-Corner über Unterbau-Kühl"
+    },
+    {
+     "atom": "LAY-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS-Gruppe auf Gegenwand"
+    },
+    {
+     "atom": "LAY-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sitzbank als Essplatz"
+    },
+    {
+     "atom": "LAY-012",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Zeile in Rundung, Bank in Rundung"
+    },
+    {
+     "atom": "LAY-016",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Zeile folgt Rundwand"
+    },
+    {
+     "atom": "LAY-010a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Oberschränke unter Bogenfenstern unbekannt"
+    },
+    {
+     "atom": "RAU-003",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spülenlage zum Fenster unbekannt"
+    },
+    {
+     "atom": "ANS-011c",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Grundriss 5015 zu Ansicht 4750"
+    },
+    {
+     "atom": "ANS-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Offenes 250er Regal als Abschluss"
+    },
+    {
+     "atom": "ANS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Restfeld als Regal 250"
+    },
+    {
+     "atom": "ANS-008",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sockelrücksprung unbekannt"
+    },
+    {
+     "atom": "GRI-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeile grifflos"
+    },
+    {
+     "atom": "GRI-002b",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS-Gruppe mit Stangen, Zeile grifflos"
+    },
+    {
+     "atom": "GRI-005a",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kurze schwarze Stange, nicht Edelstahl"
+    },
+    {
+     "atom": "GRI-005b",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS in grifflos Zeile mit Stangen"
+    },
+    {
+     "atom": "INN-022",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kaffeestation auf AP über Unterbau-Kühl"
+    }
+   ],
+   "luecken": [
+    "Kochfeld und Spüle beide in einer Zeile mit Abstand 1550-1590",
+    "Rundwand mit Bogenfenstern und Bank in Rundung",
+    "Schwarze Stangen am HS bei grifflos Zeile (Griffart folgt Bauteil)"
+   ],
+   "aufspalten": [
+    {
+     "atom": "GRI-005b",
+     "vorschlag": "WENN Zeile grifflos UND Plan zeichnet Stangen am HS DANN Stange am HS; grifflos nur bei beschriftetem PTO (Griffart je Bauteil nach Plan)"
+    },
+    {
+     "atom": "GRI-005a",
+     "vorschlag": "Material nicht Edelstahl festlegen, sondern Griff am HS in Kontrastfarbe; Edelstahl nur als Häufigkeit"
+    }
+   ]
+  },
+  {
+   "kueche": "T34-K1",
+   "template": "T34",
+   "form": "zweizeilig",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sockel 81 im Bereich, Start verfehlt"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "OK AP 928/935"
+    },
+    {
+     "atom": "MAS-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Edelstahl 5"
+    },
+    {
+     "atom": "MAS-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "UK 847 am Bereichsende"
+    },
+    {
+     "atom": "MAS-006a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Tiefe 640"
+    },
+    {
+     "atom": "MAS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS 3570-3575 am Bereichsende"
+    },
+    {
+     "atom": "MAS-011",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Luft ca. 25-55"
+    },
+    {
+     "atom": "MAS-016",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Insel 1153"
+    },
+    {
+     "atom": "MAS-017",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Insel 2440"
+    },
+    {
+     "atom": "MAS-019a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Gang 1150-1160"
+    },
+    {
+     "atom": "BRE-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "600er Module"
+    },
+    {
+     "atom": "BRE-002a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle/Müll und Kochfeld 900"
+    },
+    {
+     "atom": "BRE-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeldschrank 900"
+    },
+    {
+     "atom": "BRE-008a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spülenschrank 900 im Bereich"
+    },
+    {
+     "atom": "BRE-009a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Apotheker 280 und 300"
+    },
+    {
+     "atom": "BRE-014a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kühl-Gefrier 779 im Bereich"
+    },
+    {
+     "atom": "BRE-003a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Auszug 300 am Inselende"
+    },
+    {
+     "atom": "BRE-003b",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Apotheker 280 am Zeilenende"
+    },
+    {
+     "atom": "GER-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "GSP neben Spüle"
+    },
+    {
+     "atom": "GER-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle in Wandzeile"
+    },
+    {
+     "atom": "GER-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld auf Insel"
+    },
+    {
+     "atom": "GER-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kühl-HS in der Ecke"
+    },
+    {
+     "atom": "GER-008a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Schrank zwischen GSP und Kühl-HS"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Ofen unter Kochfeld"
+    },
+    {
+     "atom": "GER-014a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kombi 900 Kochfeld über Ofen"
+    },
+    {
+     "atom": "GER-011a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Lüfterart nicht genannt"
+    },
+    {
+     "atom": "GER-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Müll im Spülenschrank"
+    },
+    {
+     "atom": "INN-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle/Müll 900"
+    },
+    {
+     "atom": "INN-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Apothekerauszug vorhanden"
+    },
+    {
+     "atom": "LAY-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Zeile mit freier Insel"
+    },
+    {
+     "atom": "LAY-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Insel Raumseite 4 Türen"
+    },
+    {
+     "atom": "FRO-017a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Tiefe Raumseite unbekannt"
+    },
+    {
+     "atom": "RAU-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Insel parallel zur Zeile"
+    },
+    {
+     "atom": "RAU-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS knapp unter Decke"
+    },
+    {
+     "atom": "RAU-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Raumhöhe 3600"
+    },
+    {
+     "atom": "ANS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Apotheker als Funktionsfeld"
+    },
+    {
+     "atom": "FRO-014",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Fugenlage nicht angegeben"
+    },
+    {
+     "atom": "LAY-003",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Gegenwand nicht beschrieben"
+    },
+    {
+     "atom": "GRI-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "PTO"
+    },
+    {
+     "atom": "GRI-002a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "PTO in Inselküche"
+    },
+    {
+     "atom": "GRI-002b",
+     "ergebnis": "gegen",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kühl-HS mit Stange, sonst PTO"
+    },
+    {
+     "atom": "GRI-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Vertikale Edelstahlstange am Kühl-HS"
+    }
+   ],
+   "luecken": [
+    "Raumhöhe 3600 mit HS 3575 (MAS-009 und RAU-008 nur bedingt abgedeckt)",
+    "Kühl-Gefrier-HS 779 neben Apotheker 280",
+    "Fuge 847 auf OK Unterschrank nicht belegbar"
+   ],
+   "aufspalten": [
+    {
+     "atom": "MAS-001",
+     "vorschlag": "Start 100 beibehalten; T34 mit 81 liegt im Bereich, Bereichsatom reicht"
+    }
+   ]
+  },
+  {
+   "kueche": "T37-K1",
+   "template": "T37",
+   "form": "halbinsel",
+   "pruefungen": [
+    {
+     "atom": "MAS-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sockel 100"
+    },
+    {
+     "atom": "MAS-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "OK AP 930"
+    },
+    {
+     "atom": "MAS-003",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "AP-Material unbekannt"
+    },
+    {
+     "atom": "MAS-005",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "UK 810"
+    },
+    {
+     "atom": "MAS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS 2376 im Bereich"
+    },
+    {
+     "atom": "MAS-018a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Halbinsel 2750"
+    },
+    {
+     "atom": "MAS-024",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Bank 1723 am Bereichsende"
+    },
+    {
+     "atom": "BRE-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeldschrank 900"
+    },
+    {
+     "atom": "BRE-008a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle 800"
+    },
+    {
+     "atom": "BRE-009a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Apotheker 250"
+    },
+    {
+     "atom": "BRE-011a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Auszug 250 neben Kochfeld"
+    },
+    {
+     "atom": "BRE-012",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Putzschrank 540 am Bereichsende"
+    },
+    {
+     "atom": "BRE-013",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Barnische 1000"
+    },
+    {
+     "atom": "BRE-014a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kühl 600"
+    },
+    {
+     "atom": "BRE-016",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Breite Flügeltürschrank unbekannt"
+    },
+    {
+     "atom": "BRE-006",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "3 Türen à 535"
+    },
+    {
+     "atom": "ANS-002a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Wandabstand 30"
+    },
+    {
+     "atom": "ANS-004",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Blende zwischen Geräten nicht angegeben"
+    },
+    {
+     "atom": "ANS-001a",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": true,
+     "notiz": "Passblende 70"
+    },
+    {
+     "atom": "ANS-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Apotheker 250 und Tür 400"
+    },
+    {
+     "atom": "ANS-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Flügeltürschrank in der Ecke"
+    },
+    {
+     "atom": "GER-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "GSP neben Spüle"
+    },
+    {
+     "atom": "GER-003",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Innenauszug neben Spüle nicht benannt"
+    },
+    {
+     "atom": "GER-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spüle in Wandzeile"
+    },
+    {
+     "atom": "GER-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld auf Halbinsel"
+    },
+    {
+     "atom": "GER-007",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kühl/Gefrier am Wandende"
+    },
+    {
+     "atom": "GER-008a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kühl nicht an Spüle"
+    },
+    {
+     "atom": "GER-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Steamer neben Backofen"
+    },
+    {
+     "atom": "GER-010",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Ofen im HS"
+    },
+    {
+     "atom": "GER-011a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Lüfterart nicht genannt"
+    },
+    {
+     "atom": "GER-012",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Lüfterart nicht genannt"
+    },
+    {
+     "atom": "GER-013",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Kochfeld Halbinsel, Ofen HS"
+    },
+    {
+     "atom": "GER-016",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Gefrier und Kühl nebeneinander"
+    },
+    {
+     "atom": "LAY-002",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Halbinsel mit Rundende, Kochfeld darauf"
+    },
+    {
+     "atom": "LAY-003",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS-Wand gegenüber"
+    },
+    {
+     "atom": "LAY-008",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Rückseite offenes Regal und Türen"
+    },
+    {
+     "atom": "LAY-009",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Sitzbank"
+    },
+    {
+     "atom": "LAY-011",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Rundende"
+    },
+    {
+     "atom": "LAY-010a",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Oberschränke nicht beschrieben"
+    },
+    {
+     "atom": "RAU-001",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Wandabstand 30"
+    },
+    {
+     "atom": "RAU-004",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS auf eigener Wand"
+    },
+    {
+     "atom": "RAU-006",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Raumhöhe unbekannt"
+    },
+    {
+     "atom": "RAU-003",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Spülenlage unbekannt"
+    },
+    {
+     "atom": "INN-018",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "Auszug 250 neben Kochfeld"
+    },
+    {
+     "atom": "INN-017",
+     "ergebnis": "nicht_pruefbar",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Putzschrank-Innenleben unbekannt"
+    },
+    {
+     "atom": "GRI-001b",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": true,
+     "notiz": "Stangen sichtbar"
+    },
+    {
+     "atom": "GRI-002b",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "HS-Türen PTO beschriftet"
+    },
+    {
+     "atom": "GRI-005a",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Stangen an Kühl/Gefrier"
+    },
+    {
+     "atom": "GRI-006",
+     "ergebnis": "treffer",
+     "zirkulaer": false,
+     "ueberangepasst": false,
+     "notiz": "Horizontale Stangen an Unterschränken"
+    },
+    {
+     "atom": "GRI-009",
+     "ergebnis": "treffer",
+     "zirkulaer": true,
+     "ueberangepasst": false,
+     "notiz": "PTO beschriftet und Stangen gezeichnet"
+    }
+   ],
+   "luecken": [
+    "Barnische 1000 in der HS-Wand",
+    "Grundriss unleserlich, nur Strichzeichnung",
+    "Stange an Kühl/Gefrier und PTO an übrigem HS in einer Wand"
+   ],
+   "aufspalten": []
+  }
+ ]
+}

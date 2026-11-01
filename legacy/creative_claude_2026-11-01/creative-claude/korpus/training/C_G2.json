@@ -1,0 +1,237 @@
+{"runde":"C","gruppe":"G2",
+"gelesen":[
+{"template":"T32","seiten":"9/9","art":"Layout","inhalt":"Küche L-Form: 3 Perspektiven, Grundriss, Ansichten A (Zeile) und B (Hochschrankzeile) jeweils mit Innenaufteilung, Geräte-/Material-Liste rechts"},
+{"template":"T33","seiten":"8/8","art":"Layout","inhalt":"Küche mit Kochinsel: 4 Perspektiven, Grundriss mit Maßketten, Ansichten A (Zeile), B und C (Insel-Längsseiten)"},
+{"template":"T35","seiten":"9/9","art":"Layout","inhalt":"Küche mit Halbinsel und Hochschrankwand: Deckblatt, Draufsicht, Ansichten Zeile, Halbinsel, Rückseite Halbinsel, Bank, Hochschrank, 2 Perspektiven"},
+{"template":"T36","seiten":"11/11","art":"Layout","inhalt":"Küche mit Halbinsel und Bar: Deckblatt, 4 Perspektiven, Draufsicht mit Geräteliste, Ansichten Hochschrank, Halbinsel, Bar, Zeile, Rückseitenblatt"},
+{"template":"T39","seiten":"2/2","art":"Layout","inhalt":"Halbinsel-Detail: Ansicht Rechts (2654) und Ansicht Links (Summe 2759), Maßstab 1:20, Blätter 11/12 und 12/12"}
+],
+"kuechen":[
+{"id":"T32-K1","belege":["T32 S.5","T32 S.6","T32 S.7","T32 S.8","T32 S.9"],
+"form":"L",
+"raum":{"wandbezug":"Zeile an linker Wand (3784) plus Hochschrankzeile an Unterwand (2144), L-Ecke","fenster_tuer":"Terrassentür-artig neben Zeile (Perspektive), Schacht oben links im Grundriss","abstand_wand_decke":"Hochschrank bis 2600, 36 mm Luft zur Decke (Ansicht B)","freiraum_gang_mm":null},
+"laengen_mm":[3784,2144],
+"hoehen":{"sockel":100,"ok_ap":870,"ap_d":40,"oberschrank_uk":null,"hochschrank_h":2502,"decke":2600},
+"tiefen":{"unterschrank":600,"hochschrank":600,"oberschrank":null,"insel":null},
+"schraenke":[
+{"pos":1,"kategorie":"sonstiges","typ":"NEU:Wand/Eckbereich (429, kein Schrank gelesen)","b":429,"h":null,"t":null,"fronten":"keine","innen":"-","geraet":null},
+{"pos":2,"kategorie":"unterschrank","typ":"NEU:Kochfeld-Unterschrank 950 mit Schubzone","b":950,"h":730,"t":600,"fronten":"3 Schübe Vollholz, Blende oben","innen":"Schubkästen","geraet":"kochfeld"},
+{"pos":3,"kategorie":"unterschrank","typ":"US-SP","b":600,"h":730,"t":600,"fronten":"Blende oben, Auszug unten","innen":"Müllsystem zwei Behälter","geraet":"spuele"},
+{"pos":4,"kategorie":"unterschrank","typ":"US-GSP","b":600,"h":730,"t":600,"fronten":"integriert, Griffmulde","innen":"-","geraet":"gsp"},
+{"pos":5,"kategorie":"unterschrank","typ":"US-Sn","b":364,"h":730,"t":600,"fronten":"3 Auszüge 127/241/241","innen":"Schubkästen","geraet":null},
+{"pos":6,"kategorie":"hochschrank","typ":"NEU:Kühl-/Gefrierkombi-Hochschrank","b":600,"h":2502,"t":600,"fronten":"Tür, zweiteilige Front","innen":"Einlegeböden","geraet":"ks/tk"},
+{"pos":7,"kategorie":"hochschrank","typ":"US-BO","b":600,"h":2502,"t":600,"fronten":"Backofen oben, 4 Schübe darunter (177/177/110/425)","innen":"Vollholz-Schübe","geraet":"backofen"},
+{"pos":8,"kategorie":"hochschrank","typ":"US-AP","b":450,"h":2502,"t":600,"fronten":"Apothekerauszug (Vollauszug)","innen":"Apotheker-Auszüge","geraet":null},
+{"pos":9,"kategorie":"hochschrank","typ":"US-AP","b":450,"h":2502,"t":600,"fronten":"Apothekerauszug (Vollauszug)","innen":"Apotheker-Auszüge","geraet":null}
+],
+"geraete_reihenfolge":"Ansicht A (Zeile, links→rechts): Kochfeld-Zone 950 – Müllsystem 600 – Spüle 600 mit Kochendwasser-Zubehör – Geschirrspüler 600 – Auszugsblock 364. Ansicht B: Kühl/Gefrier 600 – Backofen 600 – Apotheker 450+450",
+"abstaende":{"spuele_kochfeld_mm":null,"kochfeld_wand_mm":null,"gsp_neben_spuele":"direkt rechts neben Spüle","ks_spuele_mm":null},
+"anschluesse":{"passblenden":"30 mm an beiden Zeilen-Enden (A), 22 mm an Hochschrankzeile (B)","fuellstuecke":"Blende über Spüle und Kochfeldzone","stellseiten":"nicht bemaßt","wand_decken_anschluss":"Hochschrank bis 2600, 36 mm Luft; Zeile ohne Oberschrank","sockel":"100 mm, durchgehend","eckloesung":"L-Ecke; Eckausbildung nicht eindeutig"},
+"griffe":"griffmulde (Zeile, gefräst, horizontal durchlaufend); Hochschrank ohne sichtbaren Griff",
+"material_farbe":"Zeile Eiche 3-Schicht 20/26 mm, horizontal gemasert, Kanten offen; Hochschrank Linoleum grün auf MDF; Korpus Zeile hell grau, Hochschrank dunkel; Arbeitsplatte Edelstahl 5 mm; Rückwand Fliese grau gemustert 120x120",
+"plan_widersprueche":["Ansicht A gesamt 3784 vs Innenaufteilung 3790.4 (6.4 mm)","Front-Stack Zeile 204/310/310 (Summe 824) vs Innenaufteilung 730 plus AP 40","Kochfeld-Beschriftung über 950er Einheit, Kochfeld-Breite nicht separat bemaßt","Grundriss oben Summe 6265.6 vs Gesamt 6255.1 (10.5 mm); unten 5953.3 vs 5963.3 (10 mm)"]},
+
+{"id":"T33-K1","belege":["T33 S.1","T33 S.5","T33 S.6","T33 S.7","T33 S.8"],
+"form":"insel",
+"raum":{"wandbezug":"Zeile an langer Wand (6040), Insel frei im Raum, Regal und Sitzbank an Schmalseite rechts","fenster_tuer":"Fenster/Fenstertür in Zeilenwand mittig oberhalb Schübe (BRH und Maße noch in Abstimmung)","abstand_wand_decke":"Hochschrank bis 3050, 650 Luft zur Decke (lichte Raumhöhe 3700)","freiraum_gang_mm":1528},
+"laengen_mm":[6040,2798,2650],
+"hoehen":{"sockel":100,"ok_ap":907,"ap_d":20,"oberschrank_uk":null,"hochschrank_h":2950,"decke":3700},
+"tiefen":{"unterschrank":600,"hochschrank":600,"oberschrank":null,"insel":1104},
+"schraenke":[
+{"pos":1,"kategorie":"hochschrank","typ":"NEU:Stauraum Staubsauger","b":350,"h":2950,"t":600,"fronten":"Tür mit Einlegeböden","innen":"Böden","geraet":null},
+{"pos":2,"kategorie":"hochschrank","typ":"NEU:Kühl-Gefrier-Kombi Tür+Böden","b":600,"h":2950,"t":600,"fronten":"Tür, zweiteilig 1066/1077","innen":"Geräteeinbau","geraet":"kgk"},
+{"pos":3,"kategorie":"unterschrank","typ":"US-Sn","b":600,"h":907,"t":600,"fronten":"3 Schübe 353/269.5/164.5","innen":"Vollholz-Schübe","geraet":null},
+{"pos":4,"kategorie":"unterschrank","typ":"US-Sn","b":600,"h":907,"t":600,"fronten":"3 Schübe 353/269.5/164.5","innen":"Vollholz-Schübe","geraet":null},
+{"pos":5,"kategorie":"unterschrank","typ":"US-SP","b":600,"h":907,"t":600,"fronten":"Auszug Müll, Blende/ Front","innen":"Müllsystem 2 Behälter","geraet":"spuele"},
+{"pos":6,"kategorie":"unterschrank","typ":"US-GSP","b":600,"h":907,"t":600,"fronten":"Geschirrspüler vollintegriert","innen":"-","geraet":"gsp"},
+{"pos":7,"kategorie":"unterschrank","typ":"US-Sn","b":950,"h":907,"t":600,"fronten":"3 Schübe","innen":"Vollholz-Schübe","geraet":null},
+{"pos":8,"kategorie":"hochschrank","typ":"NEU:Backofen mit Kompaktofen und Schub","b":600,"h":2950,"t":600,"fronten":"Tür mit Einlegeböden, Schub unten","innen":"Geräte-Einbau","geraet":"backofen"},
+{"pos":9,"kategorie":"hochschrank","typ":"NEU:Stauraum Lebensmittel","b":600,"h":2950,"t":600,"fronten":"Tür mit Einlegeböden","innen":"Böden","geraet":null},
+{"pos":10,"kategorie":"nischenregal","typ":"NEU:Offenes Regal mit Sitzbank Eiche","b":500,"h":2950,"t":500,"fronten":"offen","innen":"Fachböden 5","geraet":null},
+{"pos":11,"kategorie":"insel","typ":"US-AP","b":330,"h":907,"t":1104,"fronten":"Apothekerauszug 2x Vollholz","innen":"Vollholzschub","geraet":null},
+{"pos":12,"kategorie":"insel","typ":"US-Sn","b":600,"h":907,"t":1104,"fronten":"3 Schubzonen 184.5/309.3/309.8","innen":"Vollholz-Schübe","geraet":null},
+{"pos":13,"kategorie":"insel","typ":"US-KF","b":900,"h":907,"t":1104,"fronten":"Schübe unter Kochfeld","innen":"-","geraet":"kochfeld"},
+{"pos":14,"kategorie":"insel","typ":"US-Sn","b":600,"h":907,"t":1104,"fronten":"3 Schubzonen","innen":"Vollholz-Schübe","geraet":null},
+{"pos":15,"kategorie":"insel","typ":"US-AP","b":330,"h":907,"t":1104,"fronten":"Apothekerauszug 2x Vollholz","innen":"Vollholzschub","geraet":null}
+],
+"geraete_reihenfolge":"Zeile (links→rechts): Stauraum 350 – Kühl-Gefrier 600 – Schübe 600+600 – Spüle/Müllauszug 600 – Geschirrspüler 600 – Schübe 950 – Backofen/Kompaktofen 600 – Stauraum 600 – Regal+Bank 500. Insel: Apotheker 330 – Schübe 600 – Kochfeld 900 – Schübe 600 – Apotheker 330",
+"abstaende":{"spuele_kochfeld_mm":null,"kochfeld_wand_mm":1100,"gsp_neben_spuele":"direkt rechts neben Spüle","ks_spuele_mm":1800},
+"anschluesse":{"passblenden":"19 mm Seitenblenden an Insel-Enden","fuellstuecke":"keine gelesen","stellseiten":"Insel-Stellseite MDF furniert Eiche hell","wand_decken_anschluss":"Hochschrank bis 3050, Luft 650","sockel":"100 mm HPL, Zeile und Insel","eckloesung":"Regal+Bank an Schmalseite, keine Eckschranklösung"},
+"griffe":"Knöpfe an Schüben (rund); kurze Stangengriffe horizontal an Türen und Hochschrank; Griffleiste horizontal am Backofen",
+"material_farbe":"Zeile Front HPL nach Abstimmung (Farbe offen), Korpus Dekospan; Schübe Eiche Vollholz fingergezinkt; Regal und Bank Eiche hell; Insel Front MDF furniert Eiche hell; Arbeitsplatte Naturstein hell 20 mm",
+"plan_widersprueche":["Grundriss-Maßkette oben Segmente 6000 vs Gesamt 6040","Insel-Mittelteil Ansicht B 900 vs Grundriss-Segmente 600/600 (Summe 2460 vs Länge 2802)","Ansicht B rechts 1530 vs Ansicht C links 1630","Ansicht A linke Teilmaße 1077/1066/607 (Summe 2750) vs OK 3050, Bezug unklar","Fensterdaten BRH und Maße laut Plan-Hinweis noch in Abstimmung"]},
+
+{"id":"T35-K1","belege":["T35 S.2","T35 S.3","T35 S.4","T35 S.5","T35 S.6","T35 S.7","T35 S.8","T35 S.9"],
+"form":"halbinsel",
+"raum":{"wandbezug":"Zeile oben (Wand), Halbinsel links, Hochschrankwand unten (4010), Sitzbank rechte Wand (1723)","fenster_tuer":"Tür unten rechts (Schwenk), Fenster nicht gelesen","abstand_wand_decke":"Hochschrank OK 2395, Decke grob 2460","freiraum_gang_mm":1105},
+"laengen_mm":[3266,2750,4010,1723],
+"hoehen":{"sockel":100,"ok_ap":910,"ap_d":20,"oberschrank_uk":null,"hochschrank_h":2395,"decke":2460},
+"tiefen":{"unterschrank":600,"hochschrank":600,"oberschrank":null,"insel":null},
+"schraenke":[
+{"pos":1,"kategorie":"unterschrank","typ":"NEU:Flügeltür-Element mit Mittelwand","b":965,"h":910,"t":600,"fronten":"Flügeltür, Einlegeböden","innen":"Einlegeböden","geraet":null},
+{"pos":2,"kategorie":"unterschrank","typ":"US-Sn","b":656,"h":910,"t":600,"fronten":"Frontauszug 4 innenliegende Schübe, Clip-On","innen":"innenliegende Schübe","geraet":null},
+{"pos":3,"kategorie":"unterschrank","typ":"US-GSP","b":600,"h":910,"t":600,"fronten":"Geschirrspüler integriert","innen":"-","geraet":"gsp"},
+{"pos":4,"kategorie":"unterschrank","typ":"US-SP","b":800,"h":910,"t":600,"fronten":"Auszug mit Müllsystem","innen":"Müllsystem","geraet":"spuele"},
+{"pos":5,"kategorie":"unterschrank","typ":"US-Sn","b":600,"h":910,"t":600,"fronten":"Frontauszug 3 innenliegende Schübe, Clip-On","innen":"innenliegende Schübe","geraet":null},
+{"pos":6,"kategorie":"unterschrank","typ":"US-T2","b":470,"h":910,"t":600,"fronten":"Tür mit Einlegeboden","innen":"Einlegeboden","geraet":null},
+{"pos":7,"kategorie":"insel","typ":"NEU:Halbinsel Schubblock 3 Schübe","b":500,"h":910,"t":1105,"fronten":"3 Schübe (Halbinsel-Seite), Beschriftung fehlt","innen":"-","geraet":null},
+{"pos":8,"kategorie":"insel","typ":"US-KF","b":900,"h":910,"t":1105,"fronten":"Kochfeld-Blende mit Bedienknebeln und Steckdosen, 2 Auszüge","innen":"oben innenliegender Schub","geraet":"kochfeld"},
+{"pos":9,"kategorie":"insel","typ":"NEU:Kochzusatzgerät Einheit","b":270,"h":910,"t":1105,"fronten":"Gerät","innen":"-","geraet":"sonstiges"},
+{"pos":10,"kategorie":"insel","typ":"US-T2","b":380,"h":910,"t":1105,"fronten":"Tür mit Einlegeböden","innen":"Einlegeböden","geraet":null},
+{"pos":11,"kategorie":"hochschrank","typ":"NEU:Putzschrank Tür PTO","b":350,"h":2395,"t":600,"fronten":"Tür PTO","innen":"Einlegeböden","geraet":null},
+{"pos":12,"kategorie":"hochschrank","typ":"NEU:Putzschrank Tür PTO","b":600,"h":2395,"t":600,"fronten":"Tür PTO","innen":"Einlegeböden","geraet":null},
+{"pos":13,"kategorie":"hochschrank","typ":"NEU:Schrank mit Einlegeböden","b":600,"h":2395,"t":600,"fronten":"Tür PTO","innen":"Einlegeböden","geraet":null},
+{"pos":14,"kategorie":"hochschrank","typ":"NEU:Klappe mit Steamer und Weinschublade","b":600,"h":2395,"t":600,"fronten":"Klappe, Tür","innen":"Weinschublade","geraet":"steamer"},
+{"pos":15,"kategorie":"hochschrank","typ":"NEU:Lifttür Mikrowelle und Backofen","b":600,"h":2395,"t":600,"fronten":"Lifttür, Tür PTO","innen":"Einlegeböden","geraet":"backofen"},
+{"pos":16,"kategorie":"hochschrank","typ":"NEU:Gefrierschrank Nische","b":600,"h":2395,"t":600,"fronten":"Tür PTO","innen":"-","geraet":"gefrier"},
+{"pos":17,"kategorie":"hochschrank","typ":"NEU:Kühlschrank Nische","b":600,"h":2395,"t":600,"fronten":"Tür PTO","innen":"-","geraet":"kuehl"},
+{"pos":18,"kategorie":"nischenregal","typ":"NEU:Sitzbank mit Lehne","b":1723,"h":910,"t":500,"fronten":"Sitzhöhe 440, Lehne bis 910","innen":"-","geraet":null}
+],
+"geraete_reihenfolge":"Zeile oben (links→rechts): Flügeltür-Element – Schübe 656 – Geschirrspüler – Spüle mit Müllauszug 800 – Schübe 600 – Tür 470. Halbinsel: Schubblock 500 – Kochfeld 900 – Kochzusatzgerät 270 – Tür 380. Hochschrankwand: Putzschrank – Steamer/Combair – Gefrierschrank – Kühlschrank",
+"abstaende":{"spuele_kochfeld_mm":null,"kochfeld_wand_mm":null,"gsp_neben_spuele":"links neben Spüle (600)","ks_spuele_mm":null},
+"anschluesse":{"passblenden":"nicht bemaßt","fuellstuecke":"Blende über Halbinsel-Kochfeld mit Steckdosen","stellseiten":"Rückseite Halbinsel: offenes Regal Eiche + 3 Türen 535 mit Einlegeböden","wand_decken_anschluss":"Hochschrank OK 2395; Umluft-Kanal: Tiefe prüfen (Plan-Hinweis)","sockel":"100 mm","eckloesung":"Halbinsel an Zeile oben links"},
+"griffe":"Stangengriff horizontal an Zeile-Auszügen; Halbinsel laut Ansicht Clip-On Magnet, Perspektive zeigt Stangen; Hochschrank laut Ansicht PTO, Perspektive zeigt vertikale Stangen",
+"material_farbe":"Zeile Span mit matter Kunstharzfront grau, Kanten farbgleich; Auszüge Eiche Vollholz; Hochschrank Span Edelstahl-Optik; Arbeitsplatte Stein (Auswahl offen); Bank Variante grau oder Eiche Vollholz; offenes Regal Eiche Vollholz; Armatur Kochendwasser schwarz matt",
+"plan_widersprueche":["Halbinsel-Länge Plan 2698 vs Ansicht-Summe 2750 (52 mm)","Kochfeld-Zone Plan-Maß 858 vs Ansicht 900","Halbinsel-Griffart Clip-On (Ansicht) vs Stangengriffe (Perspektive)","Hochschrank-Griffart PTO (Ansicht) vs vertikale Stangengriffe (Perspektive)","OK Halbinsel 901 vs Zeile 910 (9 mm)","Flügeltür-Breite nicht bemaßt"]},
+
+{"id":"T36-K1","belege":["T36 S.2","T36 S.3","T36 S.4","T36 S.5","T36 S.6","T36 S.7","T36 S.8","T36 S.9","T36 S.10"],
+"form":"halbinsel",
+"raum":{"wandbezug":"Zeile an hinterer Wand mit Wandpfeilern, Halbinsel mit Bar nach links, Hochschrankwand gegenüber, Sitzbank an rechter Wand","fenster_tuer":"nicht gelesen","abstand_wand_decke":"Wandpfeiler über Zeile, kein Oberschrank","freiraum_gang_mm":2218},
+"laengen_mm":[2656,4360],
+"hoehen":{"sockel":null,"ok_ap":null,"ap_d":null,"oberschrank_uk":null,"hochschrank_h":null,"decke":null},
+"tiefen":{"unterschrank":622,"hochschrank":null,"oberschrank":null,"insel":1105},
+"schraenke":[
+{"pos":1,"kategorie":"unterschrank","typ":"NEU:Halbinsel-Ende offene Regalböden","b":null,"h":null,"t":null,"fronten":"offen, 3 Ebenen im Rund","innen":"Regalböden","geraet":null},
+{"pos":2,"kategorie":"unterschrank","typ":"NEU:Zeilen-Tür mit Griffleiste","b":null,"h":null,"t":null,"fronten":"Tür, horizontale Griffleiste oben","innen":"-","geraet":null},
+{"pos":3,"kategorie":"unterschrank","typ":"US-GSP","b":null,"h":null,"t":null,"fronten":"Geschirrspüler","innen":"-","geraet":"gsp"},
+{"pos":4,"kategorie":"unterschrank","typ":"US-SP","b":null,"h":null,"t":null,"fronten":"Spüle mit Kochendwasser-Armatur","innen":"-","geraet":"spuele"},
+{"pos":5,"kategorie":"unterschrank","typ":"NEU:Zeilen-Tür mit Griffleiste","b":null,"h":null,"t":null,"fronten":"Tür","innen":"-","geraet":null},
+{"pos":6,"kategorie":"insel","typ":"NEU:Halbinsel-Schubblock 3 Schübe","b":null,"h":null,"t":null,"fronten":"3 Schübe","innen":"-","geraet":null},
+{"pos":7,"kategorie":"insel","typ":"US-KF","b":null,"h":null,"t":null,"fronten":"Kochfeld Downdraft mit Unterbau","innen":"-","geraet":"kochfeld"},
+{"pos":8,"kategorie":"insel","typ":"NEU:Weinschublade Halbinsel","b":null,"h":null,"t":null,"fronten":"Schublade","innen":"Weinflaschen","geraet":"wein"},
+{"pos":9,"kategorie":"hochschrank","typ":"NEU:Kühlschrank Nische","b":600,"h":null,"t":null,"fronten":"Tür mit Griffstange vertikal","innen":"-","geraet":"kuehl"},
+{"pos":10,"kategorie":"hochschrank","typ":"NEU:Gefrierschrank Nische","b":600,"h":null,"t":null,"fronten":"Tür mit Griffstange vertikal","innen":"-","geraet":"gefrier"},
+{"pos":11,"kategorie":"hochschrank","typ":"US-BO","b":600,"h":null,"t":null,"fronten":"Backofen mit Griffleiste","innen":"-","geraet":"backofen"},
+{"pos":12,"kategorie":"hochschrank","typ":"NEU:Steamer","b":600,"h":null,"t":null,"fronten":"Front mit Griffleiste","innen":"-","geraet":"steamer"},
+{"pos":13,"kategorie":"nischenregal","typ":"NEU:Barnische mit Steckdosen und offenen Böden","b":1000,"h":null,"t":null,"fronten":"offen mit Schubläden","innen":"Fachböden","geraet":null},
+{"pos":14,"kategorie":"hochschrank","typ":"NEU:Putzschrank","b":480,"h":null,"t":null,"fronten":"Tür","innen":"-","geraet":null},
+{"pos":15,"kategorie":"hochschrank","typ":"NEU:Putzschrank","b":480,"h":null,"t":null,"fronten":"Tür","innen":"-","geraet":null}
+],
+"geraete_reihenfolge":"Zeile (Ansicht): Halbinsel-Ende Regal – Tür – Geschirrspüler – Spüle mit Armatur – Tür – Tür. Hochschrankwand (Draufsicht): Kühlschrank – Gefrierschrank – Backofen – Steamer – Barnische 1000 – Putzschrank 480 – 480",
+"abstaende":{"spuele_kochfeld_mm":null,"kochfeld_wand_mm":null,"gsp_neben_spuele":"links neben Spüle","ks_spuele_mm":null},
+"anschluesse":{"passblenden":"nicht bemaßt","fuellstuecke":"nicht bemaßt","stellseiten":"nicht bemaßt","wand_decken_anschluss":"Wandpfeiler bis Decke über Zeile","sockel":"Sockel Zeile sichtbar, Maß nicht angegeben","eckloesung":"Halbinsel mit Halbkreis-Endung, Radius grob 550"},
+"griffe":"horizontale Griffleiste oben an Zeilen-Türen; lange vertikale Stangengriffe an Hochschrank-Türen; horizontale Griffleisten an Schüben",
+"material_farbe":"nicht angegeben (nur Linienzeichnung)",
+"plan_widersprueche":["Keine Höhenmaße in den Ansichten, Höhen nicht prüfbar","Draufsicht Zeilen-Tiefe 622 am rechten Ende, Bezug nicht eindeutig"]},
+
+{"id":"T39-K1","belege":["T39 S.11","T39 S.12"],
+"form":"halbinsel",
+"raum":{"wandbezug":"Halbinsel-Ansichten Rechts und Links, Zuordnung zu Projekt nicht eindeutig","fenster_tuer":"keine","abstand_wand_decke":"nicht bemaßt","freiraum_gang_mm":null},
+"laengen_mm":[2654,2759],
+"hoehen":{"sockel":null,"ok_ap":null,"ap_d":null,"oberschrank_uk":null,"hochschrank_h":null,"decke":null},
+"tiefen":{"unterschrank":null,"hochschrank":null,"oberschrank":null,"insel":null},
+"schraenke":[
+{"pos":1,"kategorie":"unterschrank","typ":"NEU:Ansicht Rechts 3 Schübe Regal-Einheit","b":502,"h":null,"t":null,"fronten":"Offenes Fach mit 3 Böden links","innen":"Böden","geraet":null},
+{"pos":2,"kategorie":"unterschrank","typ":"NEU:Tür-Einheit","b":501,"h":null,"t":null,"fronten":"Tür","innen":"-","geraet":null},
+{"pos":3,"kategorie":"unterschrank","typ":"NEU:Tür-Einheit","b":502,"h":null,"t":null,"fronten":"Tür","innen":"-","geraet":null},
+{"pos":4,"kategorie":"unterschrank","typ":"NEU:Tür-Einheit","b":502,"h":null,"t":null,"fronten":"Tür","innen":"-","geraet":null},
+{"pos":5,"kategorie":"unterschrank","typ":"NEU:Endeinheit","b":603,"h":null,"t":null,"fronten":"Tür","innen":"-","geraet":null},
+{"pos":6,"kategorie":"unterschrank","typ":"NEU:Ansicht Links Tür-Einheit","b":603,"h":null,"t":null,"fronten":"Tür mit Griffleiste","innen":"-","geraet":null},
+{"pos":7,"kategorie":"unterschrank","typ":"NEU:Ansicht Links Tür-Einheit","b":597,"h":null,"t":null,"fronten":"Tür","innen":"-","geraet":null},
+{"pos":8,"kategorie":"unterschrank","typ":"NEU:Ansicht Links Schub-Einheit","b":897,"h":null,"t":null,"fronten":"3 Schübe","innen":"Schubkästen","geraet":null},
+{"pos":9,"kategorie":"unterschrank","typ":"NEU:Ansicht Links Tür-Einheit","b":297,"h":null,"t":null,"fronten":"Tür mit Griffleiste","innen":"-","geraet":null},
+{"pos":10,"kategorie":"unterschrank","typ":"NEU:Ansicht Links Tür-Einheit","b":297,"h":null,"t":null,"fronten":"Tür mit Griffleiste","innen":"-","geraet":null}
+],
+"geraete_reihenfolge":"Ansicht Rechts: Fach – Tür – Tür – Tür – Endeinheit. Ansicht Links: Tür – Tür – Schub-Einheit 897 – Tür – Tür – Endstück 68",
+"abstaende":{"spuele_kochfeld_mm":null,"kochfeld_wand_mm":null,"gsp_neben_spuele":null,"ks_spuele_mm":null},
+"anschluesse":{"passblenden":"30 mm Fuge zur Wand (Ansicht Rechts)","fuellstuecke":"keine","stellseiten":"nicht bemaßt","wand_decken_anschluss":"nicht bemaßt","sockel":"nicht bemaßt","eckloesung":"nicht bemaßt"},
+"griffe":"Griffleiste horizontal an Türen (Ansicht Links)",
+"material_farbe":"nicht angegeben",
+"plan_widersprueche":["Ansicht Rechts 2654 vs Summe Einzelmaße 2640 (grob)","Ansicht Links Summe 2759 weicht von Rechts ab, Zuordnung zu einer Küche ungeklärt"]}
+],
+"wissen":{
+"griffarten":[
+{"art":"Griffmulde gefräst, horizontal durchlaufend","wo":"Zeile, Fronten (T32)","haeufigkeit":1,"belege":["T32 S.6"]},
+{"art":"Knopf rund","wo":"Schübe Zeile und Insel (T33)","haeufigkeit":2,"belege":["T33 S.2","T33 S.5"]},
+{"art":"kurze Stangengriffe horizontal","wo":"Türen Hochschrank und Zeile (T33, T35, T36)","haeufigkeit":3,"belege":["T33 S.1","T35 S.3","T36 S.2"]},
+{"art":"lange vertikale Stangengriffe","wo":"Hochschrank-Türen (T36, T35 Perspektive)","haeufigkeit":2,"belege":["T36 S.7","T35 S.9"]},
+{"art":"Griffleiste horizontal oben an Fronten","wo":"Zeile (T35, T36)","haeufigkeit":2,"belege":["T35 S.3","T36 S.10"]},
+{"art":"Clip-On Magnet (griffloses Öffnen)","wo":"Schübe Halbinsel (T35)","haeufigkeit":1,"belege":["T35 S.4"]},
+{"art":"PTO (Push-to-open)","wo":"Hochschrank-Türen (T35)","haeufigkeit":1,"belege":["T35 S.7"]}
+],
+"layouts_anordnungen":[
+{"muster":"L: Zeile mit Halbinsel-Ende, Hochschrankzeile in L-Ecke","belege":["T32 S.5","T36 S.2"]},
+{"muster":"Zeile an Wand mit Kochinsel frei im Raum, Gang Zeile-Insel 1100","belege":["T33 S.5"]},
+{"muster":"U-artig: Zeile oben, Halbinsel links, Hochschrankwand unten","belege":["T35 S.2"]},
+{"muster":"Halbinsel mit Halbkreis-Endung und Barhockern gegenüber Esstisch","belege":["T36 S.2","T36 S.9"]}
+],
+"innenausstattung":[
+{"element":"Vollholz-Schübe fingergezinkt","kontext":"Zeile, Insel, Halbinsel","belege":["T32 S.7","T33 S.7","T35 S.3"]},
+{"element":"Apotheker-Auszüge 450 oder 330 Breite","kontext":"Hochschrankzeile bzw. Insel-Enden","belege":["T32 S.9","T33 S.5"]},
+{"element":"Müllsystem zwei Behälter im Auszug","kontext":"Unterschrank neben Spüle, 600 bis 800 breit","belege":["T32 S.7","T33 S.5","T35 S.3"]},
+{"element":"Weinschublade","kontext":"Hochschrank oder Halbinsel","belege":["T35 S.2","T36 S.5"]},
+{"element":"Steckdosen und Bedienknebel in Blende","kontext":"über Kochfeld Halbinsel","belege":["T35 S.4","T36 S.8"]},
+{"element":"offene Fachböden","kontext":"Regal, Hochschrank-Oberteil, Barnische","belege":["T32 S.9","T33 S.7","T36 S.7"]},
+{"element":"Umluft-Kanal, Tiefe prüfen","kontext":"hinter Hochschrank und Regal","belege":["T35 S.5","T35 S.7"]}
+],
+"raumstellung":[
+{"regel_oder_muster":"Zeile an längster Wand, Insel mit Gang 1100 zur Zeile","belege":["T33 S.5"]},
+{"regel_oder_muster":"Esstisch mit Gang von 2218 zur Halbinsel","belege":["T36 S.6"]},
+{"regel_oder_muster":"Sitzbank oder Regal an Schmalseite","belege":["T33 S.5","T35 S.6"]}
+],
+"raster_masse":[
+{"beobachtung":"Schrankbreiten vorwiegend 600, dazu 450, 480, 500, 950, 1000; Einzelmaße wie 502/501/603 zeigen freie Aufteilung","belege":["T32 S.9","T33 S.5","T35 S.7","T36 S.6","T39 S.11"]}
+],
+"hoehenbereiche":[
+{"groesse":"sockel","werte":[100],"belege":["T32 S.8","T33 S.6","T35 S.3"]},
+{"groesse":"ok_ap","werte":[870,907,910],"belege":["T32 S.8","T33 S.6","T35 S.3"]},
+{"groesse":"hochschrank","werte":[2395,2502,2950],"belege":["T32 S.9","T33 S.7","T35 S.7"]},
+{"groesse":"decke","werte":[2460,2600,3700],"belege":["T32 S.9","T33 S.6","T35 S.3"]}
+],
+"geraete_beziehungen":[
+{"beziehung":"Geschirrspüler direkt neben Spüle","belege":["T32 S.7","T33 S.5","T35 S.3","T36 S.10"]},
+{"beziehung":"Kühl und Gefrier als Nische am Ende der Hochschrankwand","belege":["T33 S.7","T35 S.7","T36 S.6"]},
+{"beziehung":"Backofen und Kompaktofen oder Steamer übereinander im Hochschrank","belege":["T33 S.7","T35 S.7","T36 S.7"]},
+{"beziehung":"Kochfeld mit Downdraft in Halbinsel oder Insel","belege":["T33 S.5","T35 S.4","T36 S.5"]}
+],
+"laufwege_ergonomie":[
+{"beobachtung":"Gang Zeile zu Insel","masse":[1100],"belege":["T33 S.5"]},
+{"beobachtung":"Gang Halbinsel zu Esstisch","masse":[2218],"belege":["T36 S.6"]},
+{"beobachtung":"Durchgang an Insel","masse":[1528,1200],"belege":["T33 S.5"]},
+{"beobachtung":"Gang Zeile zu Tisch","masse":[790],"belege":["T35 S.2"]}
+],
+"anschluesse_blenden_fuellstuecke":[
+{"detail":"Passblende an Schrankenden","masse":[19,22,30],"belege":["T32 S.7","T32 S.9","T33 S.6"]},
+{"detail":"Sockel durchgehend","masse":[100],"belege":["T32 S.8","T33 S.6","T35 S.3"]},
+{"detail":"Arbeitsplatte Stärke","masse":[5,20,40],"belege":["T32 S.5","T33 S.6","T32 S.8"]}
+],
+"stil":[
+{"merkmal":"Eiche hell (Vollholz, Furnier) mit Naturstein hell oder Edelstahl","belege":["T32 S.1","T33 S.8","T35 S.3"]},
+{"merkmal":"grau matte Front, Kanten farbgleich","belege":["T35 S.2"]},
+{"merkmal":"dunkles Grün oder Schwarz für Hochschrank-Front","belege":["T32 S.1"]},
+{"merkmal":"schwarze Wandleuchten und Pendelleuchte über Insel","belege":["T33 S.1","T33 S.2"]}
+],
+"zeichenstil":[
+{"merkmal":"Perspektive als Strichzeichnung, Ansichten M 1:25 mit Maßlinien in mm","belege":["T32 S.2","T35 S.3","T36 S.2"]},
+{"merkmal":"Diagonalkreuz im Frontfeld als Frontkennzeichnung","belege":["T32 S.8","T33 S.6","T35 S.7"]},
+{"merkmal":"Wandflächen grau gefüllt oder schraffiert","belege":["T32 S.5","T35 S.2"]},
+{"merkmal":"Geräte- und Materialliste rechts im Plankopf-Bereich","belege":["T32 S.5","T33 S.1"]},
+{"merkmal":"Hinweise in Pink für offene Abstimmung","belege":["T33 S.5","T33 S.6"]}
+],
+"moodboard_praesentation":[
+{"merkmal":"Sequenz: Deckblatt, Grundriss, Ansichten Zeile und Halbinsel, Perspektiven, Hochschrank","belege":["T35 S.1","T35 S.9"]},
+{"merkmal":"Sequenz: Perspektiven zuerst, dann Draufsicht und Ansichten","belege":["T36 S.2","T36 S.6"]},
+{"merkmal":"Doppelblatt Innenaufteilung neben Zeilen-Ansicht","belege":["T32 S.7","T32 S.9"]}
+],
+"neue_katalogtypen":[
+{"vorschlag":"Halbinsel mit Halbkreis-Endung und offenen Regalböden","belege":["T36 S.10"]},
+{"vorschlag":"Hochschrank-Stapel Kühl, Gefrier, Backofen, Steamer, Weinschublade","belege":["T35 S.7","T36 S.6"]},
+{"vorschlag":"Apotheker-Auszug 330 an Insel-Enden","belege":["T33 S.7"]}
+],
+"offen":[
+"T32: Spüle-Kochfeld-Abstand und KS-Spüle-Abstand nicht bemaßt",
+"T33: Fensterdaten BRH und Maße in Abstimmung",
+"T35: Griffart Halbinsel und Hochschrank widersprüchlich, Decke nicht bemaßt",
+"T36: keine Höhenmaße, Fenster nicht lesbar",
+"T39: Zuordnung zu Projekt nicht eindeutig, Länge rechts und links unterschiedlich"
+]}}
