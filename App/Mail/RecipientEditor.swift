@@ -1,3 +1,4 @@
+import AppKit
 import Core
 import Design
 import Mail
@@ -185,5 +186,186 @@ private struct RowRemove: View {
         .buttonStyle(PressScaleButtonStyle(scale: Tokens.Scale.pressStrong))
         .help(appearance.text("mail.compose.remove"))
         .onHover { hovering = $0 }
+    }
+}
+
+struct RecipientRow<Trailing: View>: View {
+    @Environment(\.appearance) private var appearance
+    let label: Text
+    let initials: String
+    let title: String
+    let detail: String
+    let help: String
+    @ViewBuilder let trailing: Trailing
+    @State private var hovering = false
+
+    var body: some View {
+        HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+            label
+                .designText(\.inkTertiary, size: Tokens.TextSize.small)
+                .frame(width: CGFloat(Tokens.Size.recipientLabelColumn), alignment: .leading)
+            Mark(size: .small) {
+                if initials.isEmpty { Glyph.small(.person) } else { Text(verbatim: initials) }
+            }
+            VStack(alignment: .leading, spacing: 0) {
+                Text(verbatim: title).designText().lineLimit(1).frame(height: CGFloat(SheetValues.conversationLine))
+                if !detail.isEmpty {
+                    Text(verbatim: detail).designText(\.inkTertiary, size: Tokens.TextSize.small).lineLimit(1)
+                        .frame(height: CGFloat(SheetValues.conversationLine))
+                }
+            }
+            Spacer(minLength: 0)
+            trailing
+        }
+        .padding(.leading, CGFloat(Tokens.Spacing.step8))
+        .padding(.trailing, CGFloat(Tokens.Spacing.step4))
+        .frame(height: CGFloat(Tokens.Spacing.step44))
+        .background(RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.field)).fill(hovering ? appearance.color(\.hover) : Color.clear))
+        .contentShape(Rectangle())
+        .help(Text(verbatim: help))
+        .onHover { hovering = $0 }
+    }
+}
+
+extension RecipientRow where Trailing == EmptyView {
+    init(label: Text, initials: String, title: String, detail: String, help: String) {
+        self.init(label: label, initials: initials, title: title, detail: detail, help: help) { EmptyView() }
+    }
+}
+
+extension Suggestion {
+    var entry: String { name.isEmpty ? address : "\"" + name + "\" <" + address + ">" }
+}
+
+struct SuggestionRow: View {
+    @Environment(\.appearance) private var appearance
+    let item: Suggestion
+    let action: () -> Void
+    @State private var hovering = false
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: CGFloat(Tokens.Spacing.step12)) {
+                Mark(size: .small) {
+                    if item.initials.isEmpty { Glyph.small(.person) } else { Text(verbatim: item.initials) }
+                }
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(verbatim: item.name.isEmpty ? item.shown : item.name).designText().lineLimit(1)
+                        .frame(height: CGFloat(SheetValues.conversationLine))
+                    Text(verbatim: item.shown).designText(\.inkTertiary, size: Tokens.TextSize.small).lineLimit(1)
+                        .frame(height: CGFloat(SheetValues.conversationLine))
+                }
+                Spacer(minLength: 0)
+                appearance.text(item.tag.key).designText(\.inkTertiary, size: Tokens.TextSize.small).lineLimit(1)
+            }
+            .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+            .frame(height: CGFloat(Tokens.Size.suggestionRowHeight))
+            .background(RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.field)).fill(hovering ? appearance.color(\.hover) : Color.clear))
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .help(Text(verbatim: item.address))
+        .onHover { hovering = $0 }
+    }
+}
+
+struct RecipientDetail: View {
+    @Environment(\.appearance) private var appearance
+    let session: AppSession
+    let card: OpenMessage
+    @State private var open = false
+
+    var body: some View {
+        let people = card.recipients
+        VStack(spacing: 0) {
+            HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+                Group {
+                    if open {
+                        Color.clear
+                    } else {
+                        appearance.text("mail.read.to").designText(\.inkTertiary, size: Tokens.TextSize.small)
+                    }
+                }
+                .frame(width: CGFloat(Tokens.Spacing.step40), alignment: .leading)
+                Disclosure(open: open, help: appearance.string(open ? "mail.read.less" : "mail.read.all")) {
+                    if open {
+                        SmallText(text: Text(verbatim: appearance.format("mail.read.count", Format.number(people.all.count))))
+                    } else {
+                        Text(verbatim: people.summary)
+                            .designText(\.ink, size: Tokens.TextSize.body, weight: .medium)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                        if let more = people.more {
+                            SmallText(text: Text(verbatim: appearance.format("mail.read.more", Format.number(more))))
+                        }
+                    }
+                } action: { toggle() }
+                Spacer(minLength: 0)
+            }
+            .padding(.leading, CGFloat(Tokens.Size.edge))
+            .padding(.trailing, CGFloat(Tokens.Spacing.step8))
+            .frame(height: CGFloat(Tokens.Spacing.step36))
+            if open {
+                ScrollView {
+                    VStack(spacing: 0) {
+                        ForEach(Array(people.all.enumerated()), id: \.offset) { index, person in
+                            PersonRow(session: session, card: card, person: person, group: people.group(at: index))
+                        }
+                    }
+                    .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+                    .padding(.bottom, CGFloat(Tokens.Spacing.step8))
+                }
+                .frame(maxHeight: CGFloat(Tokens.Size.recipientListMaxHeight))
+                .fixedSize(horizontal: false, vertical: true)
+                .transition(.opacity)
+            }
+        }
+        .padding(.vertical, CGFloat(Tokens.Spacing.step4))
+        .animation(appearance.ease(Tokens.Duration.recipientList), value: open)
+        .accessibilityElement(children: .contain)
+    }
+
+    private func toggle() {
+        open.toggle()
+        session.inbox.toggleRecipients(card.id)
+    }
+}
+
+struct PersonRow: View {
+    @Environment(\.appearance) private var appearance
+    let session: AppSession
+    let card: OpenMessage
+    let person: Participant
+    let group: RecipientGroup
+    @State private var anchor = AnchorBox()
+
+    private var label: Text {
+        switch group {
+        case .to: appearance.text("mail.read.to")
+        case .cc: appearance.text("mail.read.cc")
+        case .none: Text(verbatim: "")
+        }
+    }
+
+    var body: some View {
+        RecipientRow(label: label, initials: person.initials, title: person.label, detail: person.detail, help: person.full)
+            .background(AnchorMarker(box: anchor))
+            .onTapGesture { menu() }
+    }
+
+    private func menu() {
+        let entries = session.personEntries(name: person.name, address: person.address, appearance: appearance)
+        anchor.showMenu(entries)
+    }
+}
+
+struct SmallText: View {
+    let text: Text
+    var tone: KeyPath<Colors, ColorValue> = \.inkTertiary
+
+    var body: some View {
+        text
+            .designText(tone, size: Tokens.TextSize.small)
+            .lineLimit(1)
     }
 }

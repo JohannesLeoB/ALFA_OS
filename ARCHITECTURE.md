@@ -149,28 +149,28 @@ Which Swift file draws each element of the design master (Mail and Settings, com
 
 | Area | Bow element | Bow | Built in |
 |---|---|---|---|
-| Mail | switch-glass über Kopf und Liste (nicht über Deck) | Mail 14, Mail 925 | `App/Mail/FolderLane.swift`, `App/Mail/View+SwitchGlass.swift` |
-| Mail | lane-header 44, gap 8, Polster 0 8 0 16 | Mail 16 | `App/Mail/FolderLane.swift`, `App/Components/LaneRow.swift` |
+| Mail | switch-glass über Kopf und Liste (nicht über Deck) | Mail 14, Mail 925 | `App/Mail/InboxLane.swift` |
+| Mail | lane-header 44, gap 8, Polster 0 8 0 16 | Mail 16 | `App/Mail/InboxLane.swift`, `App/Components/LaneRow.swift` |
 | Mail | scroll-line (Haarlinie line beim Scrollen) | Mail 16 | `App/Components/LaneRow.swift` |
-| Mail | account-title: Name medium, Tooltip Adresse, Rechtsklick „Angezeigt als“ (Name/local@/@domain) | Mail 17, Mail 688-691 | `App/Mail/AccountTitle.swift`, `App/Mail/MailboxMenu.swift` |
-| Mail | Faltknopf „Postfach falten“ (nur wenn ›1 Bahn offen) | Mail 18, Mail 705 | `App/Mail/FolderLane.swift` |
-| Mail | lane-content Polster 8 | Mail 20 | `App/Mail/FolderLane.swift` |
+| Mail | account-title: Name medium, Tooltip Adresse, Rechtsklick „Angezeigt als“ (Name/local@/@domain) | Mail 17, Mail 688-691 | `App/Mail/AccountDeck.swift` |
+| Mail | Faltknopf „Postfach falten“ (nur wenn ›1 Bahn offen) | Mail 18, Mail 705 | `App/Mail/InboxLane.swift` |
+| Mail | lane-content Polster 8 | Mail 20 | `App/Mail/InboxLane.swift` |
 | Mail | list-row Ordner: 36 hoch, gap 20, Polster 0 8, Radius row … | Mail 24-26, Mail 683 | `App/Components/LaneRow.swift` |
-| Mail | counter Ordner (min 20, Polster 0 4, klein, tabellarisch; gewählt on-inv-2 …) | Mail 27, Mail 683 | `App/Mail/FolderLane.swift`, `App/Components/LaneRow.swift` |
-| Mail | list-section-header „Labels“ (32, unten bündig, Polster 0 8 8, klein ink-3) | Mail 22, Mail 684 | `App/Mail/FolderLane.swift` |
-| Mail | Label-Zeilen (tag-Symbol, ohne Zähler) | Mail 685 | `App/Mail/FolderLane.swift` |
-| Mail | Postausgang als Ordnerzeile, Zähler rot bei Fehler | Mail 447, Mail 683 | `App/Mail/FolderLane.swift`, `Sources/Mail/State/InboxState+Presentation.swift` |
-| Mail | account-deck: Höhe Kopf + 44·n, Höhe animiert deckOpen/deckClose | Mail 32, Mail 694-697 | `App/Mail/AccountDeck.swift`, `App/Mail/Deck.swift` |
-| Mail | account-card (Fläche LEVELS grau Stufe k, Tinte, Radius nur unten …) | Mail 33, Mail 699, Mail 624-633, B:31-33 | `App/Mail/AccountCard.swift`, `App/Mail/AccountDeck.swift`, `App/Components/CardFace.swift` |
-| Mail | card-header der Konto-Karte (44, Polster 0 48 0 6, Marke 28 mr 12 Ring 22 % …) | Mail 33 | `App/Mail/MailboxRow.swift`, `App/Mail/DeckRow.swift`, `App/Mail/Deck.swift` |
-| Mail | account-alert Punkt 8, signal, −1/−1 | Mail 33, Mail 36 | `App/Mail/AccountAlert.swift` |
-| Mail | Konto-Karte Hover hebt 4 px (nicht die letzte), 320 ms Feder | Mail 33 (style-hover), Mail 699 | `App/Mail/AccountCard.swift` |
-| Mail | Wechsel-Geist (Karte steigt, Fläche → lane, Ring → Schatten, blendet aus) | Mail 34, Mail 700-704 | `App/Mail/MailboxGhost.swift`, `App/Mail/AccountDeck.swift` |
-| Mail | lane-footer im Modus „Kopf“: „Neue Mail“-Kopf 44, Fläche lane … | Mail 35, Mail 694-698 | `App/Mail/AccountDeck.swift`, `App/Mail/ComposeHead.swift` |
-| Mail | Marke „Neue Mail“ (28, Ring 22 %, Hover Fläche hover + Ring ink-3), Druck .98 | Mail 35 | `App/Mail/ComposeHead.swift` |
-| Mail | Absendername rechts daneben (klein, Deckkraft cardMeta, rechts 48 frei) | Mail 35, Mail 692 | `App/Mail/ComposeHead.swift` |
-| Mail | Deck-Schalter (28, rechts 8 oben 8, ink-3, Ring line-strong …) | Mail 36, Mail 697 | `App/Mail/AccountDeck.swift`, `App/Mail/EnvelopeButton.swift` |
-| Mail | envelope-stack (3 Umschläge 14×10 r2, Klappe, Versatz, Federzeiten) | Mail 36, Mail 695-696 | `App/Mail/EnvelopeStack.swift` |
+| Mail | counter Ordner (min 20, Polster 0 4, klein, tabellarisch; gewählt on-inv-2 …) | Mail 27, Mail 683 | `App/Mail/InboxLane.swift`, `App/Components/LaneRow.swift` |
+| Mail | list-section-header „Labels“ (32, unten bündig, Polster 0 8 8, klein ink-3) | Mail 22, Mail 684 | `App/Mail/InboxLane.swift` |
+| Mail | Label-Zeilen (tag-Symbol, ohne Zähler) | Mail 685 | `App/Mail/InboxLane.swift` |
+| Mail | Postausgang als Ordnerzeile, Zähler rot bei Fehler | Mail 447, Mail 683 | `App/Mail/InboxLane.swift`, `Sources/Mail/State/InboxState+Presentation.swift` |
+| Mail | account-deck: Höhe Kopf + 44·n, Höhe animiert deckOpen/deckClose | Mail 32, Mail 694-697 | `App/Mail/AccountDeck.swift` |
+| Mail | account-card (Fläche LEVELS grau Stufe k, Tinte, Radius nur unten …) | Mail 33, Mail 699, Mail 624-633, B:31-33 | `App/Mail/AccountDeck.swift`, `App/Components/CardFace.swift` |
+| Mail | card-header der Konto-Karte (44, Polster 0 48 0 6, Marke 28 mr 12 Ring 22 % …) | Mail 33 | `App/Mail/AccountDeck.swift` |
+| Mail | account-alert Punkt 8, signal, −1/−1 | Mail 33, Mail 36 | `App/Mail/AccountDeck.swift` |
+| Mail | Konto-Karte Hover hebt 4 px (nicht die letzte), 320 ms Feder | Mail 33 (style-hover), Mail 699 | `App/Mail/AccountDeck.swift` |
+| Mail | Wechsel-Geist (Karte steigt, Fläche → lane, Ring → Schatten, blendet aus) | Mail 34, Mail 700-704 | `App/Mail/AccountDeck.swift` |
+| Mail | lane-footer im Modus „Kopf“: „Neue Mail“-Kopf 44, Fläche lane … | Mail 35, Mail 694-698 | `App/Mail/AccountDeck.swift`, `App/Mail/DraftEditor.swift` |
+| Mail | Marke „Neue Mail“ (28, Ring 22 %, Hover Fläche hover + Ring ink-3), Druck .98 | Mail 35 | `App/Mail/DraftEditor.swift` |
+| Mail | Absendername rechts daneben (klein, Deckkraft cardMeta, rechts 48 frei) | Mail 35, Mail 692 | `App/Mail/DraftEditor.swift` |
+| Mail | Deck-Schalter (28, rechts 8 oben 8, ink-3, Ring line-strong …) | Mail 36, Mail 697 | `App/Mail/AccountDeck.swift` |
+| Mail | envelope-stack (3 Umschläge 14×10 r2, Klappe, Versatz, Federzeiten) | Mail 36, Mail 695-696 | `App/Mail/AccountDeck.swift` |
 | Mail | Tooltip Deck-Schalter | Mail 697 („Postfächer zeigen · neue Mail in …“) | `App/Mail/AccountDeck.swift` |
 | Mail | Alarmpunkt am Deck-Schalter (zu, andere ungelesen) | Mail 36, Mail 697 | `App/Mail/AccountDeck.swift` |
 | Mail | Streifen gefaltete linke Bahn: Ordner + „Neue Mail“ (Akzent) … | Mail 653-655 | `Sources/Mail/State/InboxState+Presentation.swift` |
@@ -207,11 +207,11 @@ Which Swift file draws each element of the design master (Mail and Settings, com
 | Mail | Trennlinie (links 56, rechts 8; nicht an/vor gewählter Zeile) | Mail 135, Mail 752 | `App/Components/LaneRow.swift`, `App/Mail/MessageLane.swift` |
 | Mail | „Mehr laden“/„Lädt …“ (quiet, 28, oben 16 unten 8) | Mail 140, Mail 739 | `App/Mail/MessageLane.swift` |
 | Mail | Listenfenster 60 + 120, Platzhalter 88 je Zeile | Mail 743-744 | `App/Mail/MessageLane.swift` |
-| Mail | Kachelraster (minmax 232, gap 8, Polster 8) | Mail 80, Mail 768, Mail 801 | `App/Mail/MessageTiles.swift`, `App/Components/OverviewGrid.swift` |
+| Mail | Kachelraster (minmax 232, gap 8, Polster 8) | Mail 80, Mail 768, Mail 801 | `App/Mail/StackLane.swift`, `App/Components/OverviewGrid.swift` |
 | Mail | Kachel (176, Radius row, well, Ring ink-3 gewählt / line, Hover −2 px) | Mail 82, Mail 812-814 | `App/Components/OverviewGrid.swift` |
 | Mail | Kachelkopf (Marke + Ungelesen-Punkt mit Ring well, Titel medium …) | Mail 83-88 | `App/Components/OverviewGrid.swift` |
 | Mail | Kachelinhalt (Betreff 2 Zeilen 1.35, Vorschau ink-2 4 Zeilen 1.5 …) | Mail 89-92 | `App/Components/OverviewGrid.swift` |
-| Mail | Kachelaktionen Antworten/Archivieren/Papierkorb (lane, Ring, unten rechts …) | Mail 93, Mail 801 | `App/Mail/MessageTiles.swift`, `App/Components/OverviewGrid.swift` |
+| Mail | Kachelaktionen Antworten/Archivieren/Papierkorb (lane, Ring, unten rechts …) | Mail 93, Mail 801 | `App/Mail/StackLane.swift`, `App/Components/OverviewGrid.swift` |
 | Mail | Streifen gefaltete Mitte (Initialen, Punkt ungelesen, n = (h−24−96)/36) | Mail 656-660 | `Sources/Mail/State/InboxState+Presentation.swift` |
 | Mail | switch-glass | Mail 145 | `App/Mail/InboxLane.swift` |
 | Mail | Stapelkopf 44, gap 4, Polster 0 8, zwei Gruppen, Teiler 1×20 Rand 0 4 | Mail 147-151 | `App/Components/MenuPanel.swift` |
@@ -222,37 +222,37 @@ Which Swift file draws each element of the design master (Mail and Settings, com
 | Mail | hintere Karte Hover −4 px (stackLift) | Mail 785, Mail 916 | `App/Components/CardFace.swift` |
 | Mail | Übersicht offen: Karten blenden aus und sinken 8 px | Mail 785 (tf: translateY(8px)), … | `App/Components/CardFace.swift` |
 | Mail | card-header 44, gap 8, Polster 0 8, Haarlinie nur vorn | Mail 156 | `App/Components/CardFace.swift` |
-| Mail | Kartenmarke (28, mr 12, Ring 22 %; Entwurf compose, ohne Initialen person) | Mail 157-160, Mail 790 | `App/Components/CardFace.swift`, `App/Mail/MessageCard+Head.swift` |
-| Mail | Kartentitel (Nachricht Name, vorn Klick → Personenmenü …) | Mail 161, Mail 781, Mail 796 | `App/Mail/MessageCard+Head.swift` |
-| Mail | Meta vorn Nachricht: Adresse Mitte 36, klein, .72 | Mail 162, Mail 782, Mail 785 | `App/Mail/MessageCard+Head.swift` |
-| Mail | Meta hintere Nachricht: Datum | Mail 162 (keine Farbe, …) | `App/Mail/MessageCard+Head.swift` |
-| Mail | Meta Entwurf vorn: Status („Entwurf gesichert“, „Sendet …“, „Nicht gesendet“ …) | Mail 162, Mail 782 | `App/Mail/MessageCard+Head.swift` |
-| Mail | Meta Entwurf hinten „und N weitere“ | Mail 782 | `App/Mail/MessageCard+Head.swift` |
-| Mail | Anheften (nur Vorschaukarte, „Anheften · bleibt im Stapel“, .7 → 1 + hover) | Mail 164, Mail 795 | `App/Mail/MessageCard+Head.swift`, `App/Components/CardFace.swift` |
-| Mail | Schließen (.7 → 1, ohne Fläche; während „Sichert …“ gesperrt) | Mail 165, Mail 792 | `App/Mail/MessageCard+Head.swift` |
-| Mail | Empfängerzeile Lesen (36, „An“ 40, Disclosure 28 −8/8, Chevron 12 ink-3 …) | Mail 171-175, Mail 818 | `App/Mail/RecipientDetail.swift`, `App/Components/Chip.swift` |
-| Mail | Empfängerliste (44, Spalten 40/24, An/Cc, Marke 24 ink-2 lane Ring, max 308 …) | Mail 176 | `App/Mail/RecipientDetail.swift`, `App/Mail/RecipientRow.swift` |
-| Mail | Lesebogen (Rand 0 8 8, Polster 16 8 24, Radius row, sheet/sheet-ink, hell) | Mail 179 | `App/Mail/SheetDetail.swift` |
-| Mail | Schrift des Lesebogens | Mail 179 (font-family: …) | `App/Mail/SheetDetail.swift`, `App/Mail/ThreadItemRow.swift`, `App/Mail/AttachmentRow.swift`, `App/Components/Notice.swift` |
-| Mail | Betreff (title 18, 1.25, medium, tracking title) | Mail 180 | `App/Mail/SheetDetail.swift` |
-| Mail | „N Nachrichten in dieser Unterhaltung“ (klein, sheet-ink-3, oben 4) | Mail 181, Mail 822 | `App/Mail/SheetDetail.swift` |
-| Mail | Hinweis „Externe Bilder blockiert“ + „Bilder laden“ (sheet-well, Rand 16 −8 0) | Mail 182-187 | `App/Mail/SheetDetail.swift`, `App/Components/Notice.swift`, `App/Components/TextButton.swift` |
+| Mail | Kartenmarke (28, mr 12, Ring 22 %; Entwurf compose, ohne Initialen person) | Mail 157-160, Mail 790 | `App/Components/CardFace.swift`, `App/Mail/MessageLane.swift` |
+| Mail | Kartentitel (Nachricht Name, vorn Klick → Personenmenü …) | Mail 161, Mail 781, Mail 796 | `App/Mail/MessageLane.swift` |
+| Mail | Meta vorn Nachricht: Adresse Mitte 36, klein, .72 | Mail 162, Mail 782, Mail 785 | `App/Mail/MessageLane.swift` |
+| Mail | Meta hintere Nachricht: Datum | Mail 162 (keine Farbe, …) | `App/Mail/MessageLane.swift` |
+| Mail | Meta Entwurf vorn: Status („Entwurf gesichert“, „Sendet …“, „Nicht gesendet“ …) | Mail 162, Mail 782 | `App/Mail/MessageLane.swift` |
+| Mail | Meta Entwurf hinten „und N weitere“ | Mail 782 | `App/Mail/MessageLane.swift` |
+| Mail | Anheften (nur Vorschaukarte, „Anheften · bleibt im Stapel“, .7 → 1 + hover) | Mail 164, Mail 795 | `App/Mail/MessageLane.swift`, `App/Components/CardFace.swift` |
+| Mail | Schließen (.7 → 1, ohne Fläche; während „Sichert …“ gesperrt) | Mail 165, Mail 792 | `App/Mail/MessageLane.swift` |
+| Mail | Empfängerzeile Lesen (36, „An“ 40, Disclosure 28 −8/8, Chevron 12 ink-3 …) | Mail 171-175, Mail 818 | `App/Mail/RecipientEditor.swift`, `App/Components/Chip.swift` |
+| Mail | Empfängerliste (44, Spalten 40/24, An/Cc, Marke 24 ink-2 lane Ring, max 308 …) | Mail 176 | `App/Mail/RecipientEditor.swift` |
+| Mail | Lesebogen (Rand 0 8 8, Polster 16 8 24, Radius row, sheet/sheet-ink, hell) | Mail 179 | `App/Mail/StackLane.swift` |
+| Mail | Schrift des Lesebogens | Mail 179 (font-family: …) | `App/Mail/StackLane.swift`, `App/Mail/ThreadItemRow.swift`, `App/Components/Notice.swift` |
+| Mail | Betreff (title 18, 1.25, medium, tracking title) | Mail 180 | `App/Mail/StackLane.swift` |
+| Mail | „N Nachrichten in dieser Unterhaltung“ (klein, sheet-ink-3, oben 4) | Mail 181, Mail 822 | `App/Mail/StackLane.swift` |
+| Mail | Hinweis „Externe Bilder blockiert“ + „Bilder laden“ (sheet-well, Rand 16 −8 0) | Mail 182-187 | `App/Mail/StackLane.swift`, `App/Components/Notice.swift`, `App/Components/TextButton.swift` |
 | Mail | Verlaufskopf (Name medium als Knopf → Menü, Datum klein sheet-ink-3 …) | Mail 189-190, Mail 828 | `App/Mail/ThreadItemRow.swift` |
 | Mail | Verlaufstrenner (oben 16, ab 2. Eintrag 16 + Haarlinie) | Mail 189, Mail 830 | `App/Mail/ThreadItemRow.swift` |
 | Mail | Verlaufstext (pre-wrap) | Mail 191 | `App/Mail/ThreadItemRow.swift` |
-| Mail | image-tile (2 Spalten, Seitenverhältnis imageTile …) | Mail 192-196, Mail 831 | `App/Mail/WebBody.swift`, `Sources/Mail/Logic/HTMLEngine.swift` |
+| Mail | image-tile (2 Spalten, Seitenverhältnis imageTile …) | Mail 192-196, Mail 831 | `App/Mail/ThreadItemRow.swift`, `Sources/Mail/Logic/HTMLEngine.swift` |
 | Mail | quote-toggle (24, Polster 0 8, klein medium, tracking control, sheet-ink-2 …) | Mail 198 | `App/Mail/ThreadItemRow.swift` |
 | Mail | Zitat (links 12, Balken 2 sheet-line, sheet-ink-3) | Mail 199 | `App/Mail/ThreadItemRow.swift` |
-| Mail | Anhangzeilen Lesen (40, gap 12, Kapsel, Hover sheet-well …) | Mail 202-212, Mail 832 | `App/Mail/ThreadItemRow.swift`, `App/Mail/AttachmentRow.swift` |
-| Mail | card-footer (44, Haarlinie oben, Gruppen gap 4, Polster 0 8) | Mail 285-289 | `App/Mail/MessageCard+Foot.swift` |
-| Mail | Farbe der Fußknöpfe (Drucken, Als PDF sichern, In Projektordner sichern …) | Mail 286, Mail 288, Mail 878 (neutral …) | `App/Mail/MessageCard+Foot.swift` |
-| Mail | „Senden“ (Akzent, Text ab 300, aus .4) | Mail 288, Mail 892 | `App/Mail/MessageCard+Foot.swift`, `App/Mail/StackLane.swift` |
+| Mail | Anhangzeilen Lesen (40, gap 12, Kapsel, Hover sheet-well …) | Mail 202-212, Mail 832 | `App/Mail/ThreadItemRow.swift` |
+| Mail | card-footer (44, Haarlinie oben, Gruppen gap 4, Polster 0 8) | Mail 285-289 | `App/Mail/MessageLane.swift` |
+| Mail | Farbe der Fußknöpfe (Drucken, Als PDF sichern, In Projektordner sichern …) | Mail 286, Mail 288, Mail 878 (neutral …) | `App/Mail/MessageLane.swift` |
+| Mail | „Senden“ (Akzent, Text ab 300, aus .4) | Mail 288, Mail 892 | `App/Mail/MessageLane.swift`, `App/Mail/StackLane.swift` |
 | Mail | drop-overlay „Loslassen hängt an“ (8 innen, Radius notice, gestrichelt ink-3 …) | Mail 222-224 | `App/Mail/DraftEditor.swift` |
 | Mail | Hinweis „Nicht gesendet“ + „Erneut senden“ | Mail 226-231, Mail 853 | `App/Mail/DraftEditor.swift` |
 | Mail | Hinweis „Senden braucht die Schreibfreigabe“ (warning) | Mail 858 | `App/Mail/DraftEditor.swift` |
 | Mail | Hinweis „Mail zu groß“ + „Anhänge ändern“ | Mail 854 | `App/Mail/DraftEditor.swift` |
 | Mail | Hinweise „Entwurf nicht gesichert“ (Server/Anmeldung) | Mail 855-856 | `App/Mail/DraftEditor.swift` |
-| Mail | Von-Zeile (44, Etikett 48, ohne Abstand, Knopf −8/8 …) | Mail 233-237 | `App/Mail/DraftEditor.swift`, `App/Mail/AddressButton.swift` |
+| Mail | Von-Zeile (44, Etikett 48, ohne Abstand, Knopf −8/8 …) | Mail 233-237 | `App/Mail/DraftEditor.swift`, `App/Mail/ThreadItemRow.swift` |
 | Mail | Von-Menü (Konten ✓, Trenner, „Keine Signatur“, Signaturname ✓ …) | Mail 840 | `App/Mail/DraftEditor.swift` |
 | Mail | An-Zeile (44, Etikett 40, Chips gap 4, Eingabe min 64 links 4) | Mail 239-248 | `App/Mail/RecipientEditor.swift` |
 | Mail | Chip (24, Polster 0 4 0 8, Ring line-strong, Entfernen 16 mit 10er Kreuz ink-3) | Mail 243 | `App/Components/Chip.swift` |
@@ -261,32 +261,32 @@ Which Swift file draws each element of the design master (Mail and Settings, com
 | Mail | offene Sammelzeile („N Empfänger“, „Weniger zeigen“) | Mail 245 | `App/Mail/RecipientEditor.swift` |
 | Mail | Empfängerliste mit Entfernen (24, Hover ink + sel, .92) | Mail 252 | `App/Mail/RecipientEditor.swift` |
 | Mail | Eingabezeile (36, gestrichelter Kreis 24 mit +, „Empfänger hinzufügen“) | Mail 252 | `App/Mail/RecipientEditor.swift` |
-| Mail | Vorschläge (44, Spalten 24/1fr/auto, gap 12, Tag „Kontakt“/„Absender“) | Mail 249-251, Mail 837 | `App/Mail/RecipientEditor.swift`, `App/Mail/SuggestionRow.swift` |
+| Mail | Vorschläge (44, Spalten 24/1fr/auto, gap 12, Tag „Kontakt“/„Absender“) | Mail 249-251, Mail 837 | `App/Mail/RecipientEditor.swift` |
 | Mail | Cc/Bcc-Zeilen („Kopie“/„Blindkopie“) | Mail 841 | `App/Mail/RecipientEditor.swift` |
 | Mail | Betreffzeile (44, Etikett 40, gap 8, medium, links 4) | Mail 256-260 | `App/Mail/DraftEditor.swift` |
-| Mail | Schreibbogen (Rand 8, min 192, Radius row, sheet; Text min 120, Polster 16 8 8 …) | Mail 262-263 | `App/Mail/DraftEditor.swift`, `App/Mail/BodyEditor.swift` |
+| Mail | Schreibbogen (Rand 8, min 192, Radius row, sheet; Text min 120, Polster 16 8 8 …) | Mail 262-263 | `App/Mail/DraftEditor.swift` |
 | Mail | mail-signature (24-px-Strich sheet-line-strong, Name medium sheet-ink …) | Mail 264-268 | `Sources/Mail/State/InboxState+Draft.swift` |
 | Mail | Anhang-Chips im Entwurf (Polster 0 16 8 …) | Mail 270-274, Mail 848 | `App/Mail/DraftEditor.swift` |
-| Mail | formatting-bar (44, gap 4, Polster 0 8, Haarlinie oben, 6 Knöpfe ink-2) | Mail 276-280, Mail 846 | `App/Mail/FormatRow.swift` |
-| Mail | card-overview (lane, über den Karten, blendet ein) | Mail 294, Mail 799 | `App/Mail/StackLane.swift`, `App/Mail/OverviewList.swift`, `App/Components/CardFace.swift` |
-| Mail | Übersichtsraster (176, minmax 232, gap 8) | Mail 295-297 | `App/Mail/OverviewList.swift`, `App/Components/OverviewGrid.swift` |
+| Mail | formatting-bar (44, gap 4, Polster 0 8, Haarlinie oben, 6 Knöpfe ink-2) | Mail 276-280, Mail 846 | `App/Mail/DraftEditor.swift` |
+| Mail | card-overview (lane, über den Karten, blendet ein) | Mail 294, Mail 799 | `App/Mail/StackLane.swift`, `App/Components/CardFace.swift` |
+| Mail | Übersichtsraster (176, minmax 232, gap 8) | Mail 295-297 | `App/Mail/StackLane.swift`, `App/Components/OverviewGrid.swift` |
 | Mail | Eintritt der Übersichtskacheln | Mail 297, Mail 802 (Verzug 24 ms × …) | `App/Components/OverviewGrid.swift` |
 | Mail | heiße/andere Kachel (−3 px 1.012 / .988, .55, Schatten) | Mail 802 | `App/Components/OverviewGrid.swift` |
-| Mail | Entwurfskachel (Datum „Entwurf“, Betreff oder „Ohne Betreff“, Text als Vorschau …) | Mail 806 | `App/Mail/OverviewList.swift` |
-| Mail | Schließen und Aktionen an Übersichtskacheln | Mail 302, Mail 308, Mail 801 | `App/Mail/OverviewList.swift` |
+| Mail | Entwurfskachel (Datum „Entwurf“, Betreff oder „Ohne Betreff“, Text als Vorschau …) | Mail 806 | `App/Mail/StackLane.swift` |
+| Mail | Schließen und Aktionen an Übersichtskacheln | Mail 302, Mail 308, Mail 801 | `App/Mail/StackLane.swift` |
 | Mail | Streifen gefaltete rechte Bahn (ohne Karten „Neue Mail“ …) | Mail 661-665 | `Sources/Mail/State/InboxState+Presentation.swift` |
-| Mail | toast (28, Polster 0 12, Kapsel inv, klein, gap 12, Fehlersymbol −4, sh-float) | Mail 314 | `App/Components/Notice.swift`, `App/Mail/MailToast.swift` |
+| Mail | toast (28, Polster 0 12, Kapsel inv, klein, gap 12, Fehlersymbol −4, sh-float) | Mail 314 | `App/Components/Notice.swift`, `App/Mail/InboxLane.swift` |
 | Mail | Toast-Knopf „Rückgängig“/„Erneut versuchen“ (20, Polster 0 8, control …) | Mail 314, B:112-113 | `App/Components/Notice.swift` |
 | Mail | Toast nach „In Projektordner sichern“ | Mail 510 | `Sources/Mail/State/InboxState+Move.swift`, `Sources/Mail/Model/InboxFilter.swift` |
 | Mail | anchored-menu (Polster 4, Radius contextMenu, menu, sh-float …) | Mail 323-329, B:152 | `App/Components/MenuPanel.swift` |
 | Mail | Später senden: Zeitwahl im Entwurf („Später senden“, Datum und Uhrzeit, „Planen“, „Abbrechen“) | 2910 Mail 230 | `App/Mail/DraftEditor.swift` |
-| Mail | Menüeintrag „Später senden …“ unter „Mehr“ des Entwurfs | 2910 Mail 903 | `App/Mail/MessageCard+Foot.swift` |
+| Mail | Menüeintrag „Später senden …“ unter „Mehr“ des Entwurfs | 2910 Mail 903 | `App/Mail/MessageLane.swift` |
 | Mail | Ordner „Später senden“ (Uhr-Symbol), Hinweis „Geplante Mails gehen nur raus, solange ALFA läuft“, Zeilen | 2910 Mail 458, Mail 752, Mail 778 | `Sources/Mail/State/InboxState+Presentation.swift`, `App/Mail/MessageLane.swift`, `App/Mail/InboxRow.swift` |
-| Mail | card-notice Mailingliste („Diese E-Mail stammt von einer Mailingliste“, „Abmelden“ mit Rückfrage, sonst „Website aufrufen“) | 2910 Mail 182 | `App/Mail/SheetDetail.swift` |
-| Mail | Menüeintrag „Verschieben nach …“ (the bow draws no folder list) | 2910 Mail 894 | `App/Mail/MoveFolderList.swift` |
-| Mail | Menüeintrag „Original anzeigen“ (the bow draws no window for the source) | 2910 Mail 895 | `App/Mail/SourceWindow.swift` |
-| Mail | Menü „Aus Projektordner“ im Entwurfsfuß und „Mail in Projektordner sichern“ (Projekt, Ordner, Datei, „Kein Projektordner gewählt“) | 2910 Mail 523, Mail 864, Mail 900, Bausteine 144-152 | `App/Mail/ProjectFolderList.swift` |
-| Mail | Verlaufstext der Mail als HTML im Lesebogen | Mail 191 | `App/Mail/WebBody.swift`, `Sources/Mail/Logic/HTMLEngine.swift` |
+| Mail | card-notice Mailingliste („Diese E-Mail stammt von einer Mailingliste“, „Abmelden“ mit Rückfrage, sonst „Website aufrufen“) | 2910 Mail 182 | `App/Mail/StackLane.swift` |
+| Mail | Menüeintrag „Verschieben nach …“ (the bow draws no folder list) | 2910 Mail 894 | `App/Mail/AppSession+Mail.swift` |
+| Mail | Menüeintrag „Original anzeigen“ (the bow draws no window for the source) | 2910 Mail 895 | `App/Mail/AppSession+Mail.swift` |
+| Mail | Menü „Aus Projektordner“ im Entwurfsfuß und „Mail in Projektordner sichern“ (Projekt, Ordner, Datei, „Kein Projektordner gewählt“) | 2910 Mail 523, Mail 864, Mail 900, Bausteine 144-152 | `App/Mail/AppSession+Mail.swift` |
+| Mail | Verlaufstext der Mail als HTML im Lesebogen | Mail 191 | `App/Mail/ThreadItemRow.swift`, `Sources/Mail/Logic/HTMLEngine.swift` |
 | Settings | Leading lane header (no title, fold button only) | Einstellungen 16-20, … | `App/Settings/SettingsPane.swift` |
 | Settings | Group rows Ich/Firma/Dateiordner/Verbindungen/Schutz und System with symbols | Einstellungen 25-29, … | `App/Settings/SettingsPane.swift`, `App/Components/LaneRow.swift` |
 | Settings | Failure counter on Verbindungen | Einstellungen 28, Einstellungen 390 | `App/Settings/SettingsPane.swift` |
