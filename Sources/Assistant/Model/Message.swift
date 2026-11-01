@@ -42,7 +42,7 @@ public struct AttachmentRef: Codable, Sendable, Equatable {
     var relativePath: String
     var sha256: String
 
-    public init(fileName: String, mimeType: String, byteCount: Int, relativePath: String, sha256: String) {
+    init(fileName: String, mimeType: String, byteCount: Int, relativePath: String, sha256: String) {
         self.fileName = fileName
         self.mimeType = mimeType
         self.byteCount = byteCount
@@ -75,12 +75,12 @@ public enum ContentBlock: Codable, Sendable, Equatable {
 
 public struct Message: Codable, Sendable, Equatable, Identifiable {
     public var id: UUID
-    public var role: MessageRole
+    var role: MessageRole
     var blocks: [ContentBlock]
     public var status: TurnStatus
-    public var createdAt: Date
+    var createdAt: Date
 
-    public init(id: UUID = UUID(), role: MessageRole, blocks: [ContentBlock], status: TurnStatus = .complete,
+    init(id: UUID = UUID(), role: MessageRole, blocks: [ContentBlock], status: TurnStatus = .complete,
                 createdAt: Date = Date()) {
         self.id = id
         self.role = role
@@ -89,11 +89,11 @@ public struct Message: Codable, Sendable, Equatable, Identifiable {
         self.createdAt = createdAt
     }
 
-    public static func text(_ text: String, role: MessageRole, status: TurnStatus = .complete) -> Message {
+    static func text(_ text: String, role: MessageRole, status: TurnStatus = .complete) -> Message {
         Message(role: role, blocks: [.text(text)], status: status)
     }
 
-    public var text: String {
+    var text: String {
         blocks.compactMap { if case .text(let value) = $0 { value } else { nil } }.joined(separator: "\n")
     }
 }
@@ -161,7 +161,7 @@ public struct MemorySummary: Sendable, Equatable {
     }
 }
 
-public struct ConversationContext: Sendable {
+struct ConversationContext: Sendable {
     var focusedProjectID: String?
     var focusedDriveFolderID: String?
     var focusedTaskListID: String?
@@ -170,7 +170,7 @@ public struct ConversationContext: Sendable {
     var profile: UserProfile?
     var actorUserID: String
 
-    public init(focusedProjectID: String? = nil, focusedDriveFolderID: String? = nil, focusedTaskListID: String? = nil,
+    init(focusedProjectID: String? = nil, focusedDriveFolderID: String? = nil, focusedTaskListID: String? = nil,
                 signals: [Signal] = [], projects: [ProjectEntry] = [], profile: UserProfile? = nil,
                 actorUserID: String = "assistant") {
         self.focusedProjectID = focusedProjectID
@@ -187,7 +187,7 @@ public struct ConversationContext: Sendable {
     }
 }
 
-public enum Signal: Sendable, Equatable {
+enum Signal: Sendable, Equatable {
     case projectFocused(projectID: String)
     case driveFileAdded(projectID: String, fileName: String)
     case offerDetected(projectID: String, label: String)
@@ -212,7 +212,7 @@ public enum Signal: Sendable, Equatable {
     }
 }
 
-public struct ProjectEntry: Sendable, Equatable {
+struct ProjectEntry: Sendable, Equatable {
     let projectNumber: String
     let title: String
     let customerName: String?

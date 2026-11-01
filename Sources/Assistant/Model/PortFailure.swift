@@ -16,7 +16,7 @@ extension PortFailure {
     }
 }
 
-public enum ClaudeFailure: Error, Sendable, Equatable {
+enum ClaudeFailure: Error, Sendable, Equatable {
     case notConnected
     case invalidResponse
     case httpError(Int)

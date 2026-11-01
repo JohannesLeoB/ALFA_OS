@@ -195,12 +195,12 @@ public struct EstimateBreakdownLine: Codable, Sendable, Equatable {
 }
 
 public struct EstimateOverride: Sendable, Equatable {
-    public var carcassCount: Int?
-    public var frontExecution: String?
-    public var drawersLegrabox: Int?
-    public var drawersSolid: Int?
-    public var workshop: String?
-    public var distanceKm: Double?
+    var carcassCount: Int?
+    var frontExecution: String?
+    var drawersLegrabox: Int?
+    var drawersSolid: Int?
+    var workshop: String?
+    var distanceKm: Double?
 
     public init(carcassCount: Int? = nil, frontExecution: String? = nil,
                 drawersLegrabox: Int? = nil, drawersSolid: Int? = nil,
@@ -213,7 +213,7 @@ public struct EstimateOverride: Sendable, Equatable {
         self.distanceKm = distanceKm
     }
 
-    public var isEmpty: Bool {
+    var isEmpty: Bool {
         carcassCount == nil && frontExecution == nil && drawersLegrabox == nil
             && drawersSolid == nil && workshop == nil && distanceKm == nil
     }
@@ -285,9 +285,9 @@ public struct CostEstimate: Sendable, Equatable {
     public let midNet: Double
     public let confidence: Double
     public let evidenceCount: Int
-    public let costFloor: Double
-    public let costFloorRatio: Double
-    public let topEvidence: [PriceEvidence]
+    let costFloor: Double
+    let costFloorRatio: Double
+    let topEvidence: [PriceEvidence]
     public let modelLabel: Notice?
     public let hints: [Notice]
     public let lines: [EstimateBreakdownLine]
@@ -385,13 +385,13 @@ struct PriceBand: Equatable, Sendable {
 }
 
 public struct PriceEvidence: Sendable, Equatable {
-    public let supplier: String
-    public let document: String
-    public let page: Int?
-    public let originalQuote: String
-    public let netPrice: Double
+    let supplier: String
+    let document: String
+    let page: Int?
+    let originalQuote: String
+    let netPrice: Double
 
-    public init(supplier: String, document: String, page: Int?, originalQuote: String, netPrice: Double) {
+    init(supplier: String, document: String, page: Int?, originalQuote: String, netPrice: Double) {
         self.supplier = supplier
         self.document = document
         self.page = page
@@ -414,7 +414,7 @@ public struct Notice: Codable, Equatable, Sendable {
         self = notice
     }
 
-    public var json: String {
+    var json: String {
         guard let data = try? JSONEncoder().encode(self) else { return "" }
         return String(decoding: data, as: UTF8.self)
     }

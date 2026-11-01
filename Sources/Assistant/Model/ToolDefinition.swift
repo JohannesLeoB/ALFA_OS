@@ -219,22 +219,22 @@ public enum PrivacyCategory: String, CaseIterable, Codable, Sendable, Equatable 
 public struct PrivacySettings: Codable, Equatable, Sendable {
     public var disabled: Set<PrivacyCategory>
 
-    public init(disabled: Set<PrivacyCategory> = []) {
+    init(disabled: Set<PrivacyCategory> = []) {
         self.disabled = disabled
     }
 
-    public static let closed = PrivacySettings(disabled: Set(PrivacyCategory.allCases))
+    static let closed = PrivacySettings(disabled: Set(PrivacyCategory.allCases))
 
     public func shares(_ category: PrivacyCategory) -> Bool {
         disabled.contains(category) == false
     }
 }
 
-public struct PrivacySnapshot: Sendable, Equatable {
+struct PrivacySnapshot: Sendable, Equatable {
     var choices: PrivacyChoices
     var settings: PrivacySettings
 
-    public init(choices: PrivacyChoices = PrivacyChoices(), settings: PrivacySettings = PrivacySettings()) {
+    init(choices: PrivacyChoices = PrivacyChoices(), settings: PrivacySettings = PrivacySettings()) {
         self.choices = choices
         self.settings = settings
     }

@@ -42,7 +42,7 @@ public final class ConversationEngine {
         categoryObserver?(registry.categories)
     }
 
-    public func observeCategories(_ observer: @escaping @MainActor (Set<PrivacyCategory>) -> Void) {
+    func observeCategories(_ observer: @escaping @MainActor (Set<PrivacyCategory>) -> Void) {
         categoryObserver = observer
         observer(registry.categories)
     }
@@ -503,7 +503,7 @@ public enum UsageEngine {
     static let million = 1_000_000.0
     static let secondsPerDay = 86_400.0
 
-    public static func price(_ text: String) -> Double? {
+    static func price(_ text: String) -> Double? {
         let cleaned = text.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: ",", with: ".")
         guard let value = Double(cleaned), value > 0 else { return nil }
         return value

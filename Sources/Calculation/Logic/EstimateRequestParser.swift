@@ -242,7 +242,7 @@ enum NumberParser {
     }
 }
 
-public extension Dictionary where Key == String, Value == String {
+extension Dictionary where Key == String, Value == String {
     func decimal(_ key: String) -> Decimal {
         NumberParser.decimal(string(key)) ?? 0
     }

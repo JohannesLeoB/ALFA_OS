@@ -20,12 +20,12 @@ public struct ChatRequest: Sendable {
 }
 
 public struct Reply: Sendable, Equatable {
-    public let text: String
+    let text: String
     let toolUses: [ToolUse]
     let stopReason: String?
     public let usage: TokenUsage?
 
-    public init(text: String, toolUses: [ToolUse], stopReason: String?, usage: TokenUsage? = nil) {
+    init(text: String, toolUses: [ToolUse], stopReason: String?, usage: TokenUsage? = nil) {
         self.text = text
         self.toolUses = toolUses
         self.stopReason = stopReason
@@ -230,7 +230,7 @@ public struct UsageTotals: Equatable, Sendable {
     public var calls: Int
     public var since: Date?
 
-    public init(input: Int = 0, output: Int = 0, calls: Int = 0, since: Date? = nil) {
+    init(input: Int = 0, output: Int = 0, calls: Int = 0, since: Date? = nil) {
         self.input = input
         self.output = output
         self.calls = calls

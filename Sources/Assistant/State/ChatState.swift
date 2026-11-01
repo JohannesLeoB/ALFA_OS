@@ -16,7 +16,7 @@ public final class ChatState {
     }
 
     public var draft = ""
-    public private(set) var scope = ConversationScope.home
+    private(set) var scope = ConversationScope.home
     public private(set) var pending: [Pending] = []
     private(set) var busy = false
     public private(set) var note: Note?

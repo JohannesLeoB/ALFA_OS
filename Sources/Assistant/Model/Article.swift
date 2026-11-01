@@ -2,11 +2,11 @@ import Foundation
 
 public struct Article: Sendable, Equatable {
     public let id: String
-    public let articleNumber: String
+    let articleNumber: String
     public let manufacturer: String?
-    public let summary: String?
-    public let purchaseNet: Double?
-    public let saleNet: Double?
+    let summary: String?
+    let purchaseNet: Double?
+    let saleNet: Double?
 
     public init(id: String, articleNumber: String, manufacturer: String? = nil, summary: String? = nil,
                 purchaseNet: Double? = nil, saleNet: Double? = nil) {
@@ -25,11 +25,11 @@ public struct StockItem: Sendable, Equatable {
     public let id: String
     public let label: String
     public let manufacturer: String?
-    public let category: String?
-    public let articleNumber: String?
-    public let quantity: Int?
-    public let purchaseNet: Double?
-    public let saleNet: Double?
+    let category: String?
+    let articleNumber: String?
+    let quantity: Int?
+    let purchaseNet: Double?
+    let saleNet: Double?
 
     public init(id: String, label: String, manufacturer: String? = nil, category: String? = nil,
                 articleNumber: String? = nil, quantity: Int? = nil, purchaseNet: Double? = nil, saleNet: Double? = nil) {
@@ -70,7 +70,7 @@ struct SampleListing: Sendable, Equatable {
 
 public struct ShipmentStatus: Sendable, Equatable {
     public let number: String
-    public let statusLabel: String
+    let statusLabel: String
     public let detail: String?
 
     public init(number: String, statusLabel: String, detail: String? = nil) {
@@ -84,8 +84,8 @@ public struct ReceiptEntry: Sendable, Equatable {
     public let kind: String
     public let number: String
     public let projectNumber: String
-    public let customerName: String?
-    public let createdAt: Date
+    let customerName: String?
+    let createdAt: Date
 
     public init(kind: String, number: String, projectNumber: String, customerName: String? = nil, createdAt: Date) {
         self.kind = kind
@@ -98,7 +98,7 @@ public struct ReceiptEntry: Sendable, Equatable {
 
 public struct TimeReport: Sendable, Equatable {
     public struct Entry: Sendable, Equatable {
-        public let start: Date
+        let start: Date
         public let customer: String
         public let service: String
         public let seconds: Int
@@ -132,9 +132,9 @@ public struct TaskItem: Sendable, Equatable {
     public let id: String
     public let name: String
     public let status: String
-    public let isUrgent: Bool
+    let isUrgent: Bool
     public let dueDate: Date?
-    public let assignee: String?
+    let assignee: String?
 
     public init(id: String, name: String, status: String, isUrgent: Bool = false, dueDate: Date? = nil,
                 assignee: String? = nil) {
@@ -149,7 +149,7 @@ public struct TaskItem: Sendable, Equatable {
 
 public struct TaskMember: Sendable, Equatable {
     public let id: String
-    public let username: String
+    let username: String
 
     public init(id: String, username: String) {
         self.id = id

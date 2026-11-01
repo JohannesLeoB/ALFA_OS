@@ -1,4 +1,4 @@
-public enum AttachmentKind: Equatable, Sendable {
+enum AttachmentKind: Equatable, Sendable {
     case image, pdf, text
 
     init?(mimeType mime: String) {

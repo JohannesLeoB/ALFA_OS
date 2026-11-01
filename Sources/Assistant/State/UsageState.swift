@@ -6,7 +6,7 @@ public final class UsageState {
     public private(set) var totals = UsageTotals()
     public private(set) var inputPrice = ""
     public private(set) var outputPrice = ""
-    public private(set) var now = Date()
+    private(set) var now = Date()
 
     @ObservationIgnored private let store: any UsagePort
     @ObservationIgnored private let calendar: Calendar

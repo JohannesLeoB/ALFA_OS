@@ -35,7 +35,7 @@ public struct OfferListing: Sendable, Equatable {
     }
 
     public let outgoing: [Offer]
-    public let incoming: [Offer]
+    let incoming: [Offer]
 
     public init(outgoing: [Offer] = [], incoming: [Offer] = []) {
         self.outgoing = outgoing
@@ -62,9 +62,9 @@ public struct DriveLink: Codable, Sendable, Equatable, Identifiable {
 public struct CalendarEntry: Sendable, Equatable {
     public let id: String
     public let title: String
-    public let startsAt: Date?
+    let startsAt: Date?
     public let isAllDay: Bool
-    public let location: String?
+    let location: String?
     var calendarTitle: String
 
     public init(id: String, title: String, startsAt: Date?, isAllDay: Bool = false, location: String? = nil,
@@ -90,10 +90,10 @@ public struct CalendarRef: Sendable, Equatable {
 
 public struct MailHit: Sendable, Equatable {
     public let id: String
-    public let subject: String
+    let subject: String
     public let from: String
-    public let receivedAt: Date?
-    public let labels: [String]
+    let receivedAt: Date?
+    let labels: [String]
     public let snippet: String
     public let attachmentNames: [String]
 
@@ -109,17 +109,17 @@ public struct MailHit: Sendable, Equatable {
     }
 }
 
-public struct Contact: Sendable, Equatable, Identifiable {
+struct Contact: Sendable, Equatable, Identifiable {
     public let id: String
     public var name: String
-    public var organization: String?
-    public var email: String?
-    public var phone: String?
-    public var address: String?
-    public var category: String?
-    public var project: String?
+    var organization: String?
+    var email: String?
+    var phone: String?
+    var address: String?
+    var category: String?
+    var project: String?
 
-    public init(id: String, name: String, organization: String? = nil, email: String? = nil, phone: String? = nil,
+    init(id: String, name: String, organization: String? = nil, email: String? = nil, phone: String? = nil,
                 address: String? = nil, category: String? = nil, project: String? = nil) {
         self.id = id
         self.name = name
@@ -140,10 +140,10 @@ public struct Contact: Sendable, Equatable, Identifiable {
 }
 
 public struct GoogleContact: Sendable, Equatable {
-    public let displayName: String
-    public let organization: String?
-    public let email: String?
-    public let phone: String?
+    let displayName: String
+    let organization: String?
+    let email: String?
+    let phone: String?
 
     public init(displayName: String, organization: String? = nil, email: String? = nil, phone: String? = nil) {
         self.displayName = displayName
