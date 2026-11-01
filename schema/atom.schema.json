@@ -6,7 +6,7 @@
   "properties": {
     "id": {"type": "string", "pattern": "^ATM-[A-Z]{3}-[0-9]{4}$"},
     "kind": {"enum": ["rule", "dimension", "pattern", "style", "fact", "problem", "solution", "trick"]},
-    "domain": {"enum": ["carcass", "drawer", "front", "board", "edge", "hardware", "appliance", "layout", "drawing"]},
+    "domain": {"enum": ["carcass", "drawer", "front", "board", "edge", "hardware", "appliance", "layout", "drawing", "production", "data", "skill"]},
     "concepts": {"type": "array", "items": {"type": "string", "pattern": "^CON-[A-Z0-9-]+$"}},
     "statement_en": {"type": "string"},
     "statement_de": {"type": "string"},
