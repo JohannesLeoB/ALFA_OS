@@ -36,7 +36,8 @@ public final class MailboxStore: MailboxPort {
                 names: @escaping @MainActor (Inlet.ID) -> SenderNames = { _ in SenderNames() },
                 serverCopy: @escaping @MainActor (Inlet.ID) -> ServerCopy = { _ in .standard },
                 attachmentDirectory: URL = FileManager.default.temporaryDirectory,
-                attachmentSettings: @escaping @MainActor () -> MailStoreSettings = { MailStoreSettings() }) {
+                attachmentSettings: @escaping @MainActor () -> MailStoreSettings = { MailStoreSettings() },
+                attachmentRenew: @escaping @MainActor (Data) -> Void = { _ in }) {
         self.access = access
         self.database = database
         self.outboxStore = outbox
@@ -45,7 +46,8 @@ public final class MailboxStore: MailboxPort {
         self.range = range
         self.names = names
         self.serverCopy = serverCopy
-        self.attachments = AttachmentFileStore(database: database, directory: attachmentDirectory, now: now, settings: attachmentSettings)
+        self.attachments = AttachmentFileStore(database: database, directory: attachmentDirectory, now: now, settings: attachmentSettings,
+                                               renew: attachmentRenew)
         outbox.mirror = self
         watcher = Task { [weak self] in
             guard let stream = self?.access.events else { return }

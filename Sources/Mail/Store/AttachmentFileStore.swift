@@ -14,6 +14,19 @@ public enum AttachmentFolder {
         var stale = false
         return try? URL(resolvingBookmarkData: bookmark, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &stale)
     }
+
+    static func access(_ bookmark: Data) -> FolderAccess? {
+        var stale = false
+        guard let url = try? URL(resolvingBookmarkData: bookmark, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &stale),
+              url.startAccessingSecurityScopedResource() else { return nil }
+        return FolderAccess(url: url, renewed: stale ? Self.bookmark(for: url) : nil) { url.stopAccessingSecurityScopedResource() }
+    }
+}
+
+struct FolderAccess: Sendable {
+    let url: URL
+    let renewed: Data?
+    let stop: @Sendable () -> Void
 }
 
 public enum AttachmentSourceStore {
@@ -29,20 +42,27 @@ final class AttachmentFileStore {
     private let now: @Sendable () -> Date
     let settings: @MainActor () -> MailStoreSettings
     private let cap: @MainActor (MailStoreSettings) -> Int?
-    private let resolve: @MainActor (Data) -> URL?
-    private var scopes: [Data: URL] = [:]
+    private let resolve: @MainActor (Data) -> FolderAccess?
+    private let renew: @MainActor (Data) -> Void
+    private var scopes: [Data: FolderAccess] = [:]
     private var moving = false
 
     init(database: SQLiteStore, directory: URL, now: @escaping @Sendable () -> Date = { Date() },
          settings: @escaping @MainActor () -> MailStoreSettings = { MailStoreSettings() },
          cap: @escaping @MainActor (MailStoreSettings) -> Int? = { $0.limit.bytes },
-         resolve: @escaping @MainActor (Data) -> URL? = { AttachmentFolder.url(for: $0) }) {
+         resolve: @escaping @MainActor (Data) -> FolderAccess? = { AttachmentFolder.access($0) },
+         renew: @escaping @MainActor (Data) -> Void = { _ in }) {
         self.database = database
         self.directory = directory
         self.now = now
         self.settings = settings
         self.cap = cap
         self.resolve = resolve
+        self.renew = renew
+    }
+
+    isolated deinit {
+        for access in scopes.values { access.stop() }
     }
 
     var enabled: Bool { settings().attachments && !moving }
@@ -50,16 +70,29 @@ final class AttachmentFileStore {
     var limit: Int? { cap(settings()) }
 
     func root() -> URL? {
-        root(for: settings().folder)
+        if !moving { release() }
+        return root(for: settings().folder)
     }
 
     func root(for bookmark: Data?) -> URL? {
         guard let bookmark else { return directory.appendingPathComponent(AttachmentFolder.name, isDirectory: true) }
-        if let known = scopes[bookmark] { return known.appendingPathComponent(AttachmentFolder.name, isDirectory: true) }
-        guard let url = resolve(bookmark) else { return nil }
-        _ = url.startAccessingSecurityScopedResource()
-        scopes[bookmark] = url
-        return url.appendingPathComponent(AttachmentFolder.name, isDirectory: true)
+        if let known = scopes[bookmark] { return known.url.appendingPathComponent(AttachmentFolder.name, isDirectory: true) }
+        guard let access = resolve(bookmark) else { return nil }
+        if let renewed = access.renewed, settings().folder == bookmark { renew(renewed) }
+        if let renewed = access.renewed, settings().folder == renewed {
+            scopes[renewed] = access
+        } else {
+            scopes[bookmark] = access
+        }
+        return access.url.appendingPathComponent(AttachmentFolder.name, isDirectory: true)
+    }
+
+    private func release() {
+        let current = settings().folder
+        for (bookmark, access) in scopes where bookmark != current {
+            access.stop()
+            scopes[bookmark] = nil
+        }
     }
 
     func files(inlet: String? = nil) -> [StoredAttachment] {
@@ -157,19 +190,19 @@ final class AttachmentFileStore {
     }
 
     func move(to bookmark: Data?, commit: @MainActor () -> Void) async -> Bool {
-        guard let target = root(for: bookmark) else { return false }
-        guard let source = root() else { return files().isEmpty ? finish(commit) : false }
-        guard source.standardizedFileURL != target.standardizedFileURL else { return finish(commit) }
         moving = true
+        defer {
+            moving = false
+            release()
+        }
+        guard let target = root(for: bookmark) else { return false }
+        guard let source = root(for: settings().folder) else { return files().isEmpty ? finish(commit) : false }
+        guard source.standardizedFileURL != target.standardizedFileURL else { return finish(commit) }
         let paths = files().map(\.path)
         let moved = await Task.detached { Self.relocate(paths, from: source, to: target) }.value
-        guard moved else {
-            moving = false
-            return false
-        }
+        guard moved else { return false }
         try? FileManager.default.removeItem(at: source)
         commit()
-        moving = false
         return true
     }
 

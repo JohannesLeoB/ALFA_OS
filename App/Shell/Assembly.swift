@@ -75,7 +75,8 @@ final class Assembly {
                                    },
                                    serverCopy: { [settings] inlet in settings.serverCopy(inlet) },
                                    attachmentDirectory: directory,
-                                   attachmentSettings: { [settings] in settings.mailStore })
+                                   attachmentSettings: { [settings] in settings.mailStore },
+                                   attachmentRenew: { [settings] bookmark in settings.setStoreFolder(bookmark) })
         let inbox = InboxState(mailbox: mailbox, outbox: outbox, contacts: ContactState(book: ContactStore(defaults: defaults)),
                                directory: ContactSourceState(settings: settingStore),
                                signatures: { [settings] inlet in settings.signature(inlet) },

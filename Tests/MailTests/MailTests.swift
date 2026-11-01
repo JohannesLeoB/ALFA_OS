@@ -4942,6 +4942,15 @@ private final class Setting {
     var cap: Int?
 }
 
+private final class StopCount: @unchecked Sendable {
+    private let lock = NSLock()
+    private var count = 0
+
+    var value: Int { lock.withLock { count } }
+
+    func add() { lock.withLock { count += 1 } }
+}
+
 final class AttachmentFileTests: XCTestCase {
     private static let epoch = Date(timeIntervalSince1970: 1_800_000_000)
 
@@ -5006,7 +5015,8 @@ final class AttachmentFileTests: XCTestCase {
         let database = try SQLiteStore.inMemory()
         let store = AttachmentFileStore(database: database, directory: base, now: { Self.epoch }, settings: { setting.value },
                                         cap: { _ in setting.cap },
-                                        resolve: { URL(fileURLWithPath: String(decoding: $0, as: UTF8.self), isDirectory: true) })
+                                        resolve: { FolderAccess(url: URL(fileURLWithPath: String(decoding: $0, as: UTF8.self), isDirectory: true),
+                                                                renewed: nil) {} })
         return (store, database)
     }
 
@@ -5130,6 +5140,41 @@ final class AttachmentFileTests: XCTestCase {
         XCTAssertEqual(try XCTUnwrap(store.root()).standardizedFileURL, before.standardizedFileURL)
         let again = await store.data("a", message: "m1", attachment: "1")
         XCTAssertEqual(again, Data([5, 6]))
+    }
+
+    @MainActor
+    func testFolderAccessStopsOnFolderChangeAndRenewsAStaleBookmark() async throws {
+        let base = try directory()
+        let target = try directory()
+        defer {
+            try? FileManager.default.removeItem(at: base)
+            try? FileManager.default.removeItem(at: target)
+        }
+        let stale = Data("stale".utf8)
+        let fresh = Data(target.path.utf8)
+        let setting = Setting()
+        setting.value.folder = stale
+        let stops = StopCount()
+        var renewed: [Data] = []
+        let store = AttachmentFileStore(database: try SQLiteStore.inMemory(), directory: base, now: { Self.epoch }, settings: { setting.value },
+                                        cap: { _ in setting.cap },
+                                        resolve: { bookmark in
+                                            FolderAccess(url: target, renewed: bookmark == stale ? fresh : nil) { stops.add() }
+                                        },
+                                        renew: { bookmark in
+                                            renewed.append(bookmark)
+                                            setting.value.folder = bookmark
+                                        })
+        XCTAssertNotNil(store.root())
+        XCTAssertEqual(renewed, [fresh])
+        XCTAssertNotNil(store.root())
+        XCTAssertEqual(stops.value, 0)
+        let moved = await store.move(to: nil) { setting.value.folder = nil }
+        XCTAssertTrue(moved)
+        XCTAssertEqual(stops.value, 1)
+        let refused = AttachmentFileStore(database: try SQLiteStore.inMemory(), directory: base, settings: { MailStoreSettings(folder: fresh) },
+                                          resolve: { _ in nil })
+        XCTAssertNil(refused.root())
     }
 
     func testAFolderBookmarkResolvesBackToItsFolder() throws {
