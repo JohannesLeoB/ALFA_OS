@@ -36,3 +36,8 @@ Anheften (`mail.symbolButton.pin.aria`), Stapel-Knopf (`mail.button.s015`), Als 
 - 349 von 422 Master-Texten sind in der App (gleicher Schlüssel oder gleichlautender Alias); 72 gehören zu nicht gebauten Elementen oder sind Beispieldaten. Deutsch blieb unverändert, Englisch an 8 Schlüsseln angeglichen (`cfd793d1`).
 - Vermutlich Fehler im Master: `shell.assistantCard.kind.appointment` hat als Englisch „Termin“. Die App behält „Appointment“.
 - Bewusst abweichend: `mail.toast.projectSaved` und `mail.attachment.copied` nennen im Master Unterordner („Korrespondenz“, „Anhänge“), die der Code nicht anlegt. Gibt es diese Unterordner, oder gilt der Projektordner selbst?
+
+## G · Nachtrag 02.11.
+- Johannes hat Design am 02.11. aufgefordert, die offenen Punkte aus A bis F, die 26 Fragen vom 01.11. und die Aufträge A, T, M1 bis M9 nachzuarbeiten, jeden Punkt selbst zu prüfen und einen neuen Master als ZIP an ihn zu liefern. "Fertig" gilt nur mit Beleg (Datei, Bogen, Prüfung).
+- Figma: Johannes hat im Team ALFA die Datei „ALFA Design Master 2026-10-31“ anlegen lassen (https://www.figma.com/design/G98qkDuf4BxH6iKPt7s2ri). Sie enthält nur Grundlagen aus `contract/`: 64 Farben hell, 64 dunkel, Grund LightGray, 325 Maße, 9 Textstile in Geist, 15 Effektstile. Keine Bögen, keine Texte, keine Easing-Kurven. Der Plan erlaubt eine Betriebsart je Sammlung, darum sind hell, dunkel und grau getrennte Sammlungen. Gültiger Master bleibt das ZIP vom 31.10.
+- Mail, linke Bahn: Code hat festgestellt, dass beim Ziehen die Untergrenze 224 nicht greift (Tokens `mailLaneMinimumLeft` 224, `mailLaneMaximumLeft` 280). Code behebt das. Frage an Design: gilt 224 bis 280 weiter?
