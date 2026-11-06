@@ -1,4 +1,6 @@
-# AGENTS.md
+STALE AND HISTORIC - DONT BELIEVE THESE StONEAGED WORDS BELOW:
+
+
 
 Rules for every change to this repository. The schema lives in [ARCHITECTURE.md](ARCHITECTURE.md#schema); `utils/check.py` enforces the rules marked (check) there; the others are reviewed.
 
